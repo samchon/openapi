@@ -1,4 +1,4 @@
-export namespace OpenApiV3 {
+export namespace OpenApiV3_1 {
   export type Method =
     | "get"
     | "post"
@@ -13,17 +13,22 @@ export namespace OpenApiV3 {
     DOCUMENTS
   ----------------------------------------------------------- */
   export interface IDocument {
-    openapi: `3.0.${number}`;
+    openapi: `3.1.${number}`;
     servers?: IServer[];
     info?: IDocument.IInfo;
     components?: IComponents;
     paths?: Record<string, IPathItem>;
+    webhooks?: Record<
+      string,
+      IJsonSchema.IReference<`#/components/pathItems/${string}`> | IPathItem
+    >;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
   }
   export namespace IDocument {
     export interface IInfo {
       title: string;
+      summary?: string;
       description?: string;
       termsOfService?: string;
       contact?: IContact;
@@ -41,6 +46,7 @@ export namespace OpenApiV3 {
     }
     export interface ILicense {
       name: string;
+      identifier?: string;
       /** @format email */ url?: string;
     }
   }
@@ -53,7 +59,7 @@ export namespace OpenApiV3 {
   export namespace IServer {
     export interface IVariable {
       default: string;
-      enum?: string[];
+      /** @minItems 1 */ enum?: string[];
       description?: string;
     }
   }
@@ -70,7 +76,7 @@ export namespace OpenApiV3 {
     servers?: IServer[];
     summary?: string;
     description?: string;
-  } & Partial<Record<Method, IOperation | undefined>>;
+  } & Partial<Record<Method, IOperation>>;
 
   export interface IOperation {
     operationId?: string;
@@ -125,6 +131,7 @@ export namespace OpenApiV3 {
   ----------------------------------------------------------- */
   export interface IComponents {
     schemas?: Record<string, IJsonSchema>;
+    pathItems?: Record<string, IPathItem>;
     responses?: Record<string, IOperation.IResponse>;
     parameters?: Record<string, IOperation.IParameter>;
     requestBodies?: Record<string, IOperation.IRequestBody>;
@@ -133,6 +140,8 @@ export namespace OpenApiV3 {
   }
 
   export type IJsonSchema =
+    | IJsonSchema.IMixed
+    | IJsonSchema.IConstant
     | IJsonSchema.IBoolean
     | IJsonSchema.IInteger
     | IJsonSchema.INumber
@@ -146,6 +155,26 @@ export namespace OpenApiV3 {
     | IJsonSchema.IAnyOf
     | IJsonSchema.IOneOf;
   export namespace IJsonSchema {
+    export interface IMixed
+      extends IConstant,
+        Omit<IBoolean, "type" | "default" | "enum">,
+        Omit<INumber, "type" | "default" | "enum">,
+        Omit<IString, "type" | "default" | "enum">,
+        Omit<IArray, "type">,
+        Omit<IObject, "type">,
+        IOneOf,
+        IAnyOf,
+        IAllOf {
+      type: Array<
+        "boolean" | "integer" | "number" | "string" | "array" | "object"
+      >;
+      default?: any[];
+      enum?: any[];
+    }
+
+    export interface IConstant extends __IAttribute {
+      constant: boolean | number | string;
+    }
     export interface IBoolean extends __ISignificant<"boolean"> {
       default?: boolean;
       enum?: boolean[];
@@ -155,8 +184,8 @@ export namespace OpenApiV3 {
       /** @type int */ enum?: number[];
       /** @type int */ minimum?: number;
       /** @type int */ maximum?: number;
-      /** @type int */ exclusiveMinimum?: boolean;
-      /** @type int */ exclusiveMaximum?: boolean;
+      /** @type int */ exclusiveMinimum?: number | boolean;
+      /** @type int */ exclusiveMaximum?: number | boolean;
       /** @type uint */ multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {
@@ -164,11 +193,12 @@ export namespace OpenApiV3 {
       enum?: number[];
       minimum?: number;
       maximum?: number;
-      exclusiveMinimum?: boolean;
-      exclusiveMaximum?: boolean;
+      exclusiveMinimum?: number | boolean;
+      exclusiveMaximum?: number | boolean;
       multipleOf?: number;
     }
     export interface IString extends __ISignificant<"string"> {
+      contentMediaType?: string;
       default?: string;
       enum?: string[];
       format?:
@@ -201,11 +231,27 @@ export namespace OpenApiV3 {
       /** @type uint */ maxLength?: number;
     }
 
+    export interface IUnknown extends __IAttribute {
+      type?: undefined;
+    }
+    export interface INullOnly extends __ISignificant<"null"> {}
+    export interface IAllOf extends __IAttribute {
+      allOf: IJsonSchema[];
+    }
+    export interface IAnyOf extends __IAttribute {
+      anyOf: IJsonSchema[];
+    }
+    export interface IOneOf extends __IAttribute {
+      oneOf: IJsonSchema[];
+    }
+
     export interface IArray extends __ISignificant<"array"> {
       item: IJsonSchema;
-      uniqueItems?: boolean;
+      prefixItems?: IJsonSchema[];
       /** @type uint */ minItems?: number;
       /** @type uint */ maxItems?: number;
+      unevaluatedItems?: boolean | IJsonSchema;
+      uniqueItems?: boolean;
     }
     export interface IObject extends __ISignificant<"object"> {
       properties: Record<string, IJsonSchema>;
@@ -218,25 +264,8 @@ export namespace OpenApiV3 {
       $ref: Key;
     }
 
-    export interface IUnknown extends __IAttribute {
-      type?: undefined;
-    }
-    export interface INullOnly extends __IAttribute {
-      type: "null";
-    }
-    export interface IAllOf extends __IAttribute {
-      allOf: IJsonSchema[];
-    }
-    export interface IAnyOf extends __IAttribute {
-      anyOf: IJsonSchema[];
-    }
-    export interface IOneOf extends __IAttribute {
-      oneOf: IJsonSchema[];
-    }
-
     export interface __ISignificant<Type extends string> extends __IAttribute {
       type: Type;
-      nullable?: boolean;
     }
     export interface __IAttribute {
       title?: string;
