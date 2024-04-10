@@ -5,7 +5,12 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "rimraf lib && tsc"
+    "prepare": "ts-patch install",
+    "build": "npm run build:main && npm run build:test",
+    "build:main": "rimraf lib && tsc",
+    "build:test": "rimraf bin && tsc -p tsconfig.test.json",
+    "dev": "npm run build:test -- --watch",
+    "test": "node bin/test"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +18,10 @@
   "devDependencies": {
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "typescript": "^5.4.3"
+    "ts-patch": "^3.1.2",
+    "typescript": "^5.4.3",
+    "typescript-transform-paths": "^3.4.7",
+    "typia": "^5.5.10"
   },
   "files": [
     "lib",

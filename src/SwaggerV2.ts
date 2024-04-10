@@ -1,9 +1,9 @@
 /**
- * OpenAPI 3.0 definition.
+ * Swagger v2.0 definition.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export namespace OpenApiV3 {
+export namespace SwaggerV2 {
   export type Method =
     | "get"
     | "post"
@@ -20,19 +20,24 @@ export namespace OpenApiV3 {
   export const is = (input: any): input is IDocument =>
     typeof input === "object" &&
     input !== null &&
-    typeof input.openapi === "string" &&
-    input.openapi.startsWith("3.0");
+    typeof input.swagger === "string" &&
+    input.swagger.startsWith("2.0");
 
   /* -----------------------------------------------------------
     DOCUMENTS
   ----------------------------------------------------------- */
   export interface IDocument {
-    openapi: "3.0" | `3.0.${number}`;
-    servers?: IServer[];
-    info?: IDocument.IInfo;
-    components?: IComponents;
-    paths?: Record<string, IPathItem>;
+    swagger: "2.0" | `2.0.${number}`;
+    host?: string;
+    basePath?: string;
+    consumes?: string[];
+    produces?: string[];
+    definitions?: Record<string, IJsonSchema>;
+    parameters?: Record<string, IOperation.IParameter>;
+    responses?: Record<string, IOperation.IResponse>;
+    securityDefinitions?: Record<string, ISecurityDefinition>;
     security?: Record<string, string[]>[];
+    paths?: Record<string, IPathItem>;
     tags?: IDocument.ITag[];
   }
   export namespace IDocument {
@@ -44,10 +49,6 @@ export namespace OpenApiV3 {
       license?: ILicense;
       version: string;
     }
-    export interface ITag {
-      name: string;
-      description?: string;
-    }
     export interface IContact {
       name?: string;
       url?: string;
@@ -57,51 +58,32 @@ export namespace OpenApiV3 {
       name: string;
       url?: string;
     }
-  }
-
-  export interface IServer {
-    url: string;
-    description?: string;
-    variables?: Record<string, IServer.IVariable>;
-  }
-  export namespace IServer {
-    export interface IVariable {
-      default: string;
-      enum?: string[];
+    export interface ITag {
+      name: string;
       description?: string;
     }
   }
 
   /* -----------------------------------------------------------
-    PATH ITEMS
+    OPERATORS
   ----------------------------------------------------------- */
   export type IPathItem = {
     parameters?: Array<
-      | IOperation.IParameter
-      | IJsonSchema.IReference<`#/components/headers/${string}`>
-      | IJsonSchema.IReference<`#/components/parameters/${string}`>
+      IOperation.IParameter | IJsonSchema.IReference<`#/parameters/${string}`>
     >;
-    servers?: IServer[];
-    summary?: string;
-    description?: string;
   } & Partial<Record<Method, IOperation | undefined>>;
 
   export interface IOperation {
     operationId?: string;
     parameters?: Array<
       | IOperation.IParameter
-      | IJsonSchema.IReference<`#/components/headers/${string}`>
-      | IJsonSchema.IReference<`#/components/parameters/${string}`>
+      | IJsonSchema.IReference<`#/definitions/parameters/${string}`>
     >;
-    requestBody?:
-      | IOperation.IRequestBody
-      | IJsonSchema.IReference<`#/components/requestBodies/${string}`>;
     responses?: Record<
       string,
       | IOperation.IResponse
-      | IJsonSchema.IReference<`#/components/responses/${string}`>
+      | IJsonSchema.IReference<`#/definitions/responses/${string}`>
     >;
-    servers?: IServer[];
     summary?: string;
     description?: string;
     security?: Record<string, string[]>[];
@@ -109,44 +91,29 @@ export namespace OpenApiV3 {
     deprecated?: boolean;
   }
   export namespace IOperation {
-    export interface IParameter {
-      name?: string;
-      in: "path" | "query" | "header" | "cookie";
+    export type IParameter = IGeneralParameter | IBodyParameter;
+    export type IGeneralParameter = IJsonSchema & {
+      name: string;
+      in: string;
+      description?: string;
+    };
+    export interface IBodyParameter {
       schema: IJsonSchema;
-      required?: boolean;
-      description?: string;
-    }
-    export interface IRequestBody {
+      name: string;
+      in: string;
       description?: string;
       required?: boolean;
-      content?: Record<string, IMediaType>;
     }
     export interface IResponse {
-      content?: Record<string, IMediaType>;
-      headers?: Record<
-        string,
-        | IOperation.IParameter
-        | IJsonSchema.IReference<`#/components/headers/${string}`>
-      >;
       description?: string;
-    }
-    export interface IMediaType {
+      headers?: Record<string, IJsonSchema>;
       schema?: IJsonSchema;
     }
   }
 
   /* -----------------------------------------------------------
-    SCHEMA DEFINITIONS
+    DEFINITIONS
   ----------------------------------------------------------- */
-  export interface IComponents {
-    schemas?: Record<string, IJsonSchema>;
-    responses?: Record<string, IOperation.IResponse>;
-    parameters?: Record<string, IOperation.IParameter>;
-    requestBodies?: Record<string, IOperation.IRequestBody>;
-    securitySchemes?: Record<string, ISecurityScheme>;
-    headers?: Record<string, IOperation.IParameter>;
-  }
-
   export type IJsonSchema =
     | IJsonSchema.IBoolean
     | IJsonSchema.IInteger
@@ -243,15 +210,15 @@ export namespace OpenApiV3 {
       allOf: IJsonSchema[];
     }
     export interface IAnyOf extends __IAttribute {
-      anyOf: IJsonSchema[];
+      "x-anyOf": IJsonSchema[];
     }
     export interface IOneOf extends __IAttribute {
-      oneOf: IJsonSchema[];
+      "x-oneOf": IJsonSchema[];
     }
 
     export interface __ISignificant<Type extends string> extends __IAttribute {
       type: Type;
-      nullable?: boolean;
+      "x-nullable"?: boolean;
     }
     export interface __IAttribute {
       title?: string;
@@ -260,53 +227,54 @@ export namespace OpenApiV3 {
     }
   }
 
-  export type ISecurityScheme =
-    | ISecurityScheme.IApiKey
-    | ISecurityScheme.IHttpBasic
-    | ISecurityScheme.IHttpBearer
-    | ISecurityScheme.IOAuth2
-    | ISecurityScheme.IOpenId;
-  export namespace ISecurityScheme {
+  export type ISecurityDefinition =
+    | ISecurityDefinition.IApiKey
+    | ISecurityDefinition.IBasic
+    | ISecurityDefinition.IOauth2Implicit
+    | ISecurityDefinition.IOauth2AccessCode
+    | ISecurityDefinition.IOauth2Password
+    | ISecurityDefinition.IOauth2Application;
+  export namespace ISecurityDefinition {
     export interface IApiKey {
       type: "apiKey";
       in?: "header" | "query" | "cookie";
       name?: string;
       description?: string;
     }
-    export interface IHttpBasic {
-      type: "http";
-      schema: "basic";
+    export interface IBasic {
+      type: "basic";
+      name?: string;
       description?: string;
     }
-    export interface IHttpBearer {
-      type: "http";
-      schema: "bearer";
-      bearerFormat?: string;
-      description?: string;
-    }
-    export interface IOAuth2 {
+
+    export interface IOauth2Implicit {
       type: "oauth2";
-      flows: IOAuth2.IFlowSet;
+      flow: "implicit";
+      authorizationUrl?: string;
+      scopes?: Record<string, string>;
       description?: string;
     }
-    export interface IOpenId {
-      type: "openIdConnect";
-      openIdConnectUrl: string;
+    export interface IOauth2AccessCode {
+      type: "oauth2";
+      flow: "accessCode";
+      authorizationUrl?: string;
+      tokenUrl?: string;
+      scopes?: Record<string, string>;
       description?: string;
     }
-    export namespace IOAuth2 {
-      export interface IFlowSet {
-        authorizationCode?: IFlow;
-        implicit?: Omit<IFlow, "tokenUrl">;
-        password?: Omit<IFlow, "authorizationUrl">;
-        clientCredentials?: Omit<IFlow, "authorizationUrl">;
-      }
-      export interface IFlow {
-        authorizationUrl?: string;
-        tokenUrl?: string;
-        refreshUrl?: string;
-        scopes?: Record<string, string>;
-      }
+    export interface IOauth2Password {
+      type: "oauth2";
+      flow: "password";
+      tokenUrl?: string;
+      scopes?: Record<string, string>;
+      description?: string;
+    }
+    export interface IOauth2Application {
+      type: "oauth2";
+      flow: "application";
+      tokenUrl?: string;
+      scopes?: Record<string, string>;
+      description?: string;
     }
   }
 }
