@@ -1,17 +1,30 @@
+import { OpenApiV3 } from "./OpenApiV3";
+import { OpenApiV3_1 } from "./OpenApiV3_1";
+import { SwaggerV2 } from "./SwaggerV2";
+import { OpenApiV3Converter } from "./internal/OpenApiV3Converter";
+import { OpenApiV3_1Converter } from "./internal/OpenApiV3_1Converter";
+import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
+
 /**
- * OpenAPI v3.1 definition.
+ * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export namespace OpenApiV3_1 {
+export namespace OpenApi {
   /**
-   * @internal
+   * Convert Swagger or OpenAPI document into emended OpenAPI v3.1 document.
+   *
+   * @param input Swagger or OpenAPI document to convert
+   * @returns Emended OpenAPI v3.1 document
    */
-  export const is = (input: any): input is IDocument =>
-    typeof input === "object" &&
-    input !== null &&
-    typeof input.openapi === "string" &&
-    input.openapi.startsWith("3.1");
+  export const convert = (
+    input: SwaggerV2.IDocument | OpenApiV3.IDocument | OpenApiV3_1.IDocument,
+  ): IDocument => {
+    if (OpenApiV3_1.is(input)) return OpenApiV3_1Converter.convert(input);
+    else if (OpenApiV3.is(input)) return OpenApiV3Converter.convert(input);
+    else if (SwaggerV2.is(input)) return SwaggerV2Converter.convert(input);
+    throw new TypeError("Unrecognized Swagger/OpenAPI version.");
+  };
 
   export type Method =
     | "get"
@@ -24,7 +37,7 @@ export namespace OpenApiV3_1 {
     | "trace";
 
   /* -----------------------------------------------------------
-    DOCUMENTS
+    PATH ITEMS
   ----------------------------------------------------------- */
   export interface IDocument {
     openapi: `3.1.${number}`;
@@ -82,11 +95,6 @@ export namespace OpenApiV3_1 {
     OPERATORS
   ----------------------------------------------------------- */
   export type IPathItem = {
-    parameters?: Array<
-      | IOperation.IParameter
-      | IJsonSchema.IReference<`#/components/headers/${string}`>
-      | IJsonSchema.IReference<`#/components/parameters/${string}`>
-    >;
     servers?: IServer[];
     summary?: string;
     description?: string;
@@ -155,7 +163,6 @@ export namespace OpenApiV3_1 {
   }
 
   export type IJsonSchema =
-    | IJsonSchema.IMixed
     | IJsonSchema.IConstant
     | IJsonSchema.IBoolean
     | IJsonSchema.IInteger
@@ -164,119 +171,60 @@ export namespace OpenApiV3_1 {
     | IJsonSchema.IArray
     | IJsonSchema.IObject
     | IJsonSchema.IReference
-    | IJsonSchema.IUnknown
+    | IJsonSchema.IOneOf
     | IJsonSchema.INullOnly
-    | IJsonSchema.IAllOf
-    | IJsonSchema.IAnyOf
-    | IJsonSchema.IOneOf;
+    | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
-    export interface IMixed
-      extends IConstant,
-        Omit<IBoolean, "type" | "default" | "enum">,
-        Omit<INumber, "type" | "default" | "enum">,
-        Omit<IString, "type" | "default" | "enum">,
-        Omit<IArray, "type">,
-        Omit<IObject, "type">,
-        IOneOf,
-        IAnyOf,
-        IAllOf {
-      type: Array<
-        "boolean" | "integer" | "number" | "string" | "array" | "object"
-      >;
-      default?: any[];
-      enum?: any[];
-    }
-
     export interface IConstant extends __IAttribute {
       const: boolean | number | string;
     }
     export interface IBoolean extends __ISignificant<"boolean"> {
       default?: boolean;
-      enum?: boolean[];
     }
     export interface IInteger extends __ISignificant<"integer"> {
       /** @type int */ default?: number;
-      /** @type int */ enum?: number[];
       /** @type int */ minimum?: number;
       /** @type int */ maximum?: number;
-      /** @type int */ exclusiveMinimum?: number | boolean;
-      /** @type int */ exclusiveMaximum?: number | boolean;
+      /** @type int */ exclusiveMinimum?: boolean;
+      /** @type int */ exclusiveMaximum?: boolean;
       /** @type uint */ multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {
       default?: number;
-      enum?: number[];
       minimum?: number;
       maximum?: number;
-      exclusiveMinimum?: number | boolean;
-      exclusiveMaximum?: number | boolean;
+      exclusiveMinimum?: boolean;
+      exclusiveMaximum?: boolean;
       multipleOf?: number;
     }
-    export interface IString extends __ISignificant<"string"> {
-      contentMediaType?: string;
-      default?: string;
-      enum?: string[];
-      format?:
-        | "binary"
-        | "byte"
-        | "password"
-        | "regex"
-        | "uuid"
-        | "email"
-        | "hostname"
-        | "idn-email"
-        | "idn-hostname"
-        | "iri"
-        | "iri-reference"
-        | "ipv4"
-        | "ipv6"
-        | "uri"
-        | "uri-reference"
-        | "uri-template"
-        | "url"
-        | "date-time"
-        | "date"
-        | "time"
-        | "duration"
-        | "json-pointer"
-        | "relative-json-pointer"
-        | (string & {});
-      pattern?: string;
-      /** @type uint */ minLength?: number;
-      /** @type uint */ maxLength?: number;
-    }
-
-    export interface IUnknown extends __IAttribute {
-      type?: undefined;
-    }
-    export interface INullOnly extends __ISignificant<"null"> {}
-    export interface IAllOf extends __IAttribute {
-      allOf: IJsonSchema[];
-    }
-    export interface IAnyOf extends __IAttribute {
-      anyOf: IJsonSchema[];
-    }
-    export interface IOneOf extends __IAttribute {
-      oneOf: IJsonSchema[];
-    }
+    export interface IString extends __ISignificant<"string"> {}
 
     export interface IArray extends __ISignificant<"array"> {
-      items: IJsonSchema | IJsonSchema[];
+      items?: IJsonSchema;
+      /** @type uint */ minItems?: number;
+      /** @type uint */ maxItems?: number;
+    }
+    export interface ITuple extends __ISignificant<"array"> {
       prefixItems?: IJsonSchema[];
-      uniqueItems?: boolean;
       additionalItems?: boolean | IJsonSchema;
       /** @type uint */ minItems?: number;
       /** @type uint */ maxItems?: number;
     }
     export interface IObject extends __ISignificant<"object"> {
       properties?: Record<string, IJsonSchema>;
-      required?: string[];
       additionalProperties?: boolean | IJsonSchema;
-      maxProperties?: number;
-      minProperties?: number;
+      required?: string[];
     }
     export interface IReference<Key = string> extends __IAttribute {
       $ref: Key;
+    }
+
+    export interface IOneOf extends __IAttribute {
+      oneOf: Exclude<IJsonSchema, IJsonSchema.IOneOf>[];
+    }
+    export interface INullOnly extends __ISignificant<"null"> {}
+    export interface IUnknown extends __IAttribute {
+      type?: undefined;
     }
 
     export interface __ISignificant<Type extends string> extends __IAttribute {
@@ -285,7 +233,6 @@ export namespace OpenApiV3_1 {
     export interface __IAttribute {
       title?: string;
       description?: string;
-      deprecated?: boolean;
     }
   }
 

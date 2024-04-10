@@ -1,0 +1,1 @@
+OpenAPI definitions and converters for [typia](https://github.com/samchon/typia) and [nestia](https://github.com/samchon/nestia).
