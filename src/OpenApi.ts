@@ -43,7 +43,7 @@ export namespace OpenApi {
     openapi: `3.1.${number}`;
     servers?: IServer[];
     info?: IDocument.IInfo;
-    components?: IComponents;
+    components: IComponents;
     paths?: Record<string, IPathItem>;
     webhooks?: Record<
       string,
@@ -102,19 +102,11 @@ export namespace OpenApi {
 
   export interface IOperation {
     operationId?: string;
-    parameters?: Array<
-      | IOperation.IParameter
-      | IJsonSchema.IReference<`#/components/headers/${string}`>
-      | IJsonSchema.IReference<`#/components/parameters/${string}`>
-    >;
+    parameters: Array<IOperation.IParameter>;
     requestBody?:
       | IOperation.IRequestBody
       | IJsonSchema.IReference<`#/components/requestBodies/${string}`>;
-    responses?: Record<
-      string,
-      | IOperation.IResponse
-      | IJsonSchema.IReference<`#/components/responses/${string}`>
-    >;
+    responses?: Record<string, IOperation.IResponse>;
     servers?: IServer[];
     summary?: string;
     description?: string;
@@ -137,11 +129,7 @@ export namespace OpenApi {
     }
     export interface IResponse {
       content?: Record<string, IMediaType>;
-      headers?: Record<
-        string,
-        | IOperation.IParameter
-        | IJsonSchema.IReference<`#/components/headers/${string}`>
-      >;
+      headers?: Record<string, IOperation.IParameter>;
       description?: string;
     }
     export interface IMediaType {
@@ -153,13 +141,8 @@ export namespace OpenApi {
     SCHEMA DEFINITIONS
   ----------------------------------------------------------- */
   export interface IComponents {
-    schemas?: Record<string, IJsonSchema>;
-    pathItems?: Record<string, IPathItem>;
-    responses?: Record<string, IOperation.IResponse>;
-    parameters?: Record<string, IOperation.IParameter>;
-    requestBodies?: Record<string, IOperation.IRequestBody>;
+    schemas: Record<string, IJsonSchema>;
     securitySchemes?: Record<string, ISecurityScheme>;
-    headers?: Record<string, IOperation.IParameter>;
   }
 
   export type IJsonSchema =
@@ -172,7 +155,7 @@ export namespace OpenApi {
     | IJsonSchema.IObject
     | IJsonSchema.IReference
     | IJsonSchema.IOneOf
-    | IJsonSchema.INullOnly
+    | IJsonSchema.INull
     | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
     export interface IConstant extends __IAttribute {
@@ -197,16 +180,49 @@ export namespace OpenApi {
       exclusiveMaximum?: boolean;
       multipleOf?: number;
     }
-    export interface IString extends __ISignificant<"string"> {}
+    export interface IString extends __ISignificant<"string"> {
+      contentMediaType?: string;
+      default?: string;
+      enum?: string[];
+      format?:
+        | "binary"
+        | "byte"
+        | "password"
+        | "regex"
+        | "uuid"
+        | "email"
+        | "hostname"
+        | "idn-email"
+        | "idn-hostname"
+        | "iri"
+        | "iri-reference"
+        | "ipv4"
+        | "ipv6"
+        | "uri"
+        | "uri-reference"
+        | "uri-template"
+        | "url"
+        | "date-time"
+        | "date"
+        | "time"
+        | "duration"
+        | "json-pointer"
+        | "relative-json-pointer"
+        | (string & {});
+      pattern?: string;
+      /** @type uint */ minLength?: number;
+      /** @type uint */ maxLength?: number;
+    }
 
     export interface IArray extends __ISignificant<"array"> {
-      items?: IJsonSchema;
+      items: IJsonSchema;
       /** @type uint */ minItems?: number;
       /** @type uint */ maxItems?: number;
     }
     export interface ITuple extends __ISignificant<"array"> {
-      prefixItems?: IJsonSchema[];
-      additionalItems?: boolean | IJsonSchema;
+      items: never;
+      prefixItems: IJsonSchema[];
+      additionalItems: boolean | IJsonSchema;
       /** @type uint */ minItems?: number;
       /** @type uint */ maxItems?: number;
     }
@@ -222,7 +238,7 @@ export namespace OpenApi {
     export interface IOneOf extends __IAttribute {
       oneOf: Exclude<IJsonSchema, IJsonSchema.IOneOf>[];
     }
-    export interface INullOnly extends __ISignificant<"null"> {}
+    export interface INull extends __ISignificant<"null"> {}
     export interface IUnknown extends __IAttribute {
       type?: undefined;
     }
@@ -233,6 +249,7 @@ export namespace OpenApi {
     export interface __IAttribute {
       title?: string;
       description?: string;
+      deprecated?: boolean;
     }
   }
 
@@ -251,12 +268,12 @@ export namespace OpenApi {
     }
     export interface IHttpBasic {
       type: "http";
-      schema: "basic";
+      scheme: "basic";
       description?: string;
     }
     export interface IHttpBearer {
       type: "http";
-      schema: "bearer";
+      scheme: "bearer";
       bearerFormat?: string;
       description?: string;
     }

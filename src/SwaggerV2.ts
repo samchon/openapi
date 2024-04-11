@@ -28,6 +28,7 @@ export namespace SwaggerV2 {
   ----------------------------------------------------------- */
   export interface IDocument {
     swagger: "2.0" | `2.0.${number}`;
+    info?: IDocument.IInfo;
     host?: string;
     basePath?: string;
     consumes?: string[];
