@@ -131,7 +131,7 @@ export namespace OpenApiV3_1 {
       content?: Record<string, IMediaType>;
       headers?: Record<
         string,
-        | IOperation.IParameter
+        | Omit<IOperation.IParameter, "in">
         | IJsonSchema.IReference<`#/components/headers/${string}`>
       >;
       description?: string;
@@ -151,7 +151,7 @@ export namespace OpenApiV3_1 {
     parameters?: Record<string, IOperation.IParameter>;
     requestBodies?: Record<string, IOperation.IRequestBody>;
     securitySchemes?: Record<string, ISecurityScheme>;
-    headers?: Record<string, IOperation.IParameter>;
+    headers?: Record<string, Omit<IOperation.IParameter, "in">>;
   }
 
   export type IJsonSchema =
@@ -165,7 +165,7 @@ export namespace OpenApiV3_1 {
     | IJsonSchema.IObject
     | IJsonSchema.IReference
     | IJsonSchema.IUnknown
-    | IJsonSchema.INullOnly
+    | IJsonSchema.INull
     | IJsonSchema.IAllOf
     | IJsonSchema.IAnyOf
     | IJsonSchema.IOneOf;
@@ -249,7 +249,7 @@ export namespace OpenApiV3_1 {
     export interface IUnknown extends __IAttribute {
       type?: undefined;
     }
-    export interface INullOnly extends __ISignificant<"null"> {}
+    export interface INull extends __ISignificant<"null"> {}
     export interface IAllOf extends __IAttribute {
       allOf: IJsonSchema[];
     }
@@ -304,12 +304,12 @@ export namespace OpenApiV3_1 {
     }
     export interface IHttpBasic {
       type: "http";
-      schema: "basic";
+      scheme: "basic";
       description?: string;
     }
     export interface IHttpBearer {
       type: "http";
-      schema: "bearer";
+      scheme: "bearer";
       bearerFormat?: string;
       description?: string;
     }

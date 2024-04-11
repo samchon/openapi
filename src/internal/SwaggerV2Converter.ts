@@ -3,7 +3,8 @@ import { SwaggerV2 } from "../SwaggerV2";
 
 export namespace SwaggerV2Converter {
   export const convert = (input: SwaggerV2.IDocument): OpenApi.IDocument => ({
-    ...input,
+    openapi: "3.1.0",
+    info: input.info,
     components: convertComponents(input),
     paths: input.paths
       ? Object.fromEntries(
@@ -14,7 +15,15 @@ export namespace SwaggerV2Converter {
             ),
         )
       : undefined,
-    openapi: "3.1.0",
+    servers: input.host
+      ? [
+          {
+            url: input.host,
+          },
+        ]
+      : undefined,
+    security: input.security,
+    tags: input.tags,
   });
 
   /* -----------------------------------------------------------
@@ -155,13 +164,11 @@ export namespace SwaggerV2Converter {
   const convertComponents = (
     input: SwaggerV2.IDocument,
   ): OpenApi.IComponents => ({
-    schemas: input.definitions
-      ? Object.fromEntries(
-          Object.entries(input.definitions)
-            .filter(([_, v]) => v !== undefined)
-            .map(([key, value]) => [key, convertSchema(value)]),
-        )
-      : undefined,
+    schemas: Object.fromEntries(
+      Object.entries(input.definitions ?? {})
+        .filter(([_, v]) => v !== undefined)
+        .map(([key, value]) => [key, convertSchema(value)]),
+    ),
     securitySchemes: input.securityDefinitions
       ? Object.fromEntries(
           Object.entries(input.securityDefinitions)
@@ -178,7 +185,7 @@ export namespace SwaggerV2Converter {
     else if (input.type === "basic")
       return {
         type: "http",
-        schema: "basic",
+        scheme: "basic",
         description: input.description,
       };
     else if (input.type === "oauth2")
@@ -301,7 +308,7 @@ export namespace SwaggerV2Converter {
     visit(input);
     if (
       nullable.value === true &&
-      !union.some((e) => (e as OpenApi.IJsonSchema.INullOnly).type === "null")
+      !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
     )
       union.push({ type: "null" });
     return {

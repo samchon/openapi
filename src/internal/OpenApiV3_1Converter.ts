@@ -4,9 +4,7 @@ import { OpenApiV3_1 } from "../OpenApiV3_1";
 export namespace OpenApiV3_1Converter {
   export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => ({
     ...input,
-    components: input.components
-      ? convertComponents(input.components)
-      : undefined,
+    components: convertComponents(input.components ?? {}),
     paths: input.paths
       ? Object.fromEntries(
           Object.entries(input.paths)
@@ -81,11 +79,17 @@ export namespace OpenApiV3_1Converter {
       parameters: [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
         .map((p) => {
           if (!TypeChecker.isReference(p)) return convertParameter(p);
-          const found: OpenApiV3_1.IOperation.IParameter | undefined =
-            p.$ref.startsWith("#/components/headers/")
-              ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
-              : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
-          return found !== undefined ? convertParameter(found) : undefined!;
+          const found:
+            | Omit<OpenApiV3_1.IOperation.IParameter, "in">
+            | undefined = p.$ref.startsWith("#/components/headers/")
+            ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
+            : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
+          return found !== undefined
+            ? convertParameter({
+                ...found,
+                in: "header",
+              })
+            : undefined!;
         })
         .filter((_, v) => v !== undefined),
       requestBody: input.requestBody
@@ -152,9 +156,12 @@ export namespace OpenApiV3_1Converter {
                       key,
                       (() => {
                         if (TypeChecker.isReference(value) === false)
-                          return convertParameter(value);
+                          return convertParameter({
+                            ...value,
+                            in: "header",
+                          });
                         const found:
-                          | OpenApiV3_1.IOperation.IParameter
+                          | Omit<OpenApiV3_1.IOperation.IParameter, "in">
                           | undefined = value.$ref.startsWith(
                           "#/components/headers/",
                         )
@@ -163,7 +170,7 @@ export namespace OpenApiV3_1Converter {
                             ]
                           : undefined;
                         return found !== undefined
-                          ? convertParameter(found)
+                          ? convertParameter({ ...found, in: "header" })
                           : undefined!;
                       })(),
                     ] as const,
@@ -197,13 +204,11 @@ export namespace OpenApiV3_1Converter {
   const convertComponents = (
     input: OpenApiV3_1.IComponents,
   ): OpenApi.IComponents => ({
-    schemas: input.schemas
-      ? Object.fromEntries(
-          Object.entries(input.schemas ?? {})
-            .filter(([_, v]) => v !== undefined)
-            .map(([key, value]) => [key, convertSchema(value)] as const),
-        )
-      : undefined,
+    schemas: Object.fromEntries(
+      Object.entries(input.schemas ?? {})
+        .filter(([_, v]) => v !== undefined)
+        .map(([key, value]) => [key, convertSchema(value)] as const),
+    ),
     securitySchemes: input.securitySchemes,
   });
   const convertSchema = (
@@ -360,33 +365,42 @@ export namespace OpenApiV3_1Converter {
           union.push({
             ...schema,
             ...{
-              items: undefined,
+              items: undefined!,
               prefixItems: schema.items.map(convertSchema),
               additionalItems:
                 typeof schema.additionalItems === "object" &&
                 schema.additionalItems !== null
                   ? convertSchema(schema.additionalItems)
-                  : schema.additionalItems,
+                  : schema.additionalItems ?? false,
             },
-          });
+          } satisfies OpenApi.IJsonSchema.ITuple);
         else if (Array.isArray(schema.prefixItems))
           union.push({
             ...schema,
             ...{
-              items: undefined,
+              items: undefined!,
               prefixItems: schema.prefixItems.map(convertSchema),
               additionalItems:
                 typeof schema.additionalItems === "object" &&
                 schema.additionalItems !== null
                   ? convertSchema(schema.additionalItems)
-                  : schema.additionalItems,
+                  : schema.additionalItems ?? false,
+            },
+          });
+        else if (schema.items === undefined)
+          union.push({
+            ...schema,
+            ...{
+              items: undefined!,
+              prefixItems: [],
+              additionalItems: false,
             },
           });
         else
           union.push({
             ...schema,
             ...{
-              items: schema.items ? convertSchema(schema.items) : undefined,
+              items: convertSchema(schema.items),
               prefixItems: undefined,
               additionalItems: undefined,
             },
@@ -473,8 +487,8 @@ export namespace OpenApiV3_1Converter {
       (schema as OpenApiV3_1.IJsonSchema.IAnyOf).anyOf !== undefined;
     export const isNullOnly = (
       schema: OpenApiV3_1.IJsonSchema,
-    ): schema is OpenApiV3_1.IJsonSchema.INullOnly =>
-      (schema as OpenApiV3_1.IJsonSchema.INullOnly).type === "null";
+    ): schema is OpenApiV3_1.IJsonSchema.INull =>
+      (schema as OpenApiV3_1.IJsonSchema.INull).type === "null";
     export const isMixed = (
       schema: OpenApiV3_1.IJsonSchema,
     ): schema is OpenApiV3_1.IJsonSchema.IMixed =>

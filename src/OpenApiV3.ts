@@ -125,7 +125,7 @@ export namespace OpenApiV3 {
       content?: Record<string, IMediaType>;
       headers?: Record<
         string,
-        | IOperation.IParameter
+        | Omit<IOperation.IParameter, "in">
         | IJsonSchema.IReference<`#/components/headers/${string}`>
       >;
       description?: string;
@@ -144,7 +144,7 @@ export namespace OpenApiV3 {
     parameters?: Record<string, IOperation.IParameter>;
     requestBodies?: Record<string, IOperation.IRequestBody>;
     securitySchemes?: Record<string, ISecurityScheme>;
-    headers?: Record<string, IOperation.IParameter>;
+    headers?: Record<string, Omit<IOperation.IParameter, "in">>;
   }
 
   export type IJsonSchema =
@@ -275,12 +275,12 @@ export namespace OpenApiV3 {
     }
     export interface IHttpBasic {
       type: "http";
-      schema: "basic";
+      scheme: "basic";
       description?: string;
     }
     export interface IHttpBearer {
       type: "http";
-      schema: "bearer";
+      scheme: "bearer";
       bearerFormat?: string;
       description?: string;
     }
