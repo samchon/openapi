@@ -1,7 +1,7 @@
 {
   "name": "@samchon/openapi",
-  "version": "0.1.4",
-  "description": "",
+  "version": "0.1.5",
+  "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
@@ -12,9 +12,22 @@
     "dev": "npm run build:test -- --watch",
     "test": "node bin/test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "swagger",
+    "openapi",
+    "typia",
+    "nestia"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samchon/openapi"
+  },
+  "author": "Jeongho Nam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samchon/openapi/issues"
+  },
+  "homepage": "https://github.com/samchon/openapi",
   "devDependencies": {
     "@types/node": "^20.12.7",
     "prettier": "^3.2.5",

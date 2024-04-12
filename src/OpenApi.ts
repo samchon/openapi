@@ -18,9 +18,9 @@ import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
  * In that case, `OpenApi` remains only the third way, so that makes `typia` and
  * `nestia` (especially `@nestia/editor`) to be simple and easy to implement.
  *
- * 1. `type: ["string", "null"]`
- * 2. `type: "string", nullable: true`
- * 3. `oneOf: [{ type: "string" }, { type: "null" }]`
+ * 1. `{ type: ["string", "null"] }`
+ * 2. `{ type: "string", nullable: true }`
+ * 3. `{ oneOf: [{ type: "string" }, { type: "null" }] }`
  *
  * Here is the entire list of differences between OpenAPI v3.1 and emended `OpenApi`.
  *
@@ -78,6 +78,7 @@ export namespace OpenApi {
     >;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
+    "x-samchon-emended"?: boolean;
   }
   export namespace IDocument {
     export interface IInfo {
