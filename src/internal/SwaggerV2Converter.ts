@@ -24,6 +24,7 @@ export namespace SwaggerV2Converter {
       : undefined,
     security: input.security,
     tags: input.tags,
+    "x-samchon-emended": true,
   });
 
   /* -----------------------------------------------------------
