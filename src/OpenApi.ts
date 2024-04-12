@@ -179,6 +179,7 @@ export namespace OpenApi {
     | IJsonSchema.INumber
     | IJsonSchema.IString
     | IJsonSchema.IArray
+    | IJsonSchema.ITuple
     | IJsonSchema.IObject
     | IJsonSchema.IReference
     | IJsonSchema.IOneOf
