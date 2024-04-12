@@ -278,9 +278,13 @@ export namespace OpenApiV3_1 {
     export interface IReference<Key = string> extends __IAttribute {
       $ref: Key;
     }
+    export interface IRecursiveReference extends __IAttribute {
+      $recursiveRef: string;
+    }
 
     export interface __ISignificant<Type extends string> extends __IAttribute {
       type: Type;
+      nullable?: boolean;
     }
     export interface __IAttribute {
       title?: string;
