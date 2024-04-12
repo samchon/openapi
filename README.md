@@ -50,7 +50,8 @@ import { OpenApi, SwaggerV2, OpenApiV3, OpenApiV3_1 } from "@samchon/openapi";
 const input: 
   | SwaggerV2.IDocument
   | OpenApiV3.IDocument
-  | OpenApiV3_1.IDocument = { ... };
+  | OpenApiV3_1.IDocument
+  | OpenApi.IDocument = { ... };
 
 // you can convert it to emended OpenAPI v3.1
 const output: OpenApi.IDocument = OpenApi.convert(input);

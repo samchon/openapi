@@ -45,7 +45,11 @@ export namespace OpenApi {
    * @returns Emended OpenAPI v3.1 document
    */
   export const convert = (
-    input: SwaggerV2.IDocument | OpenApiV3.IDocument | OpenApiV3_1.IDocument,
+    input:
+      | SwaggerV2.IDocument
+      | OpenApiV3.IDocument
+      | OpenApiV3_1.IDocument
+      | OpenApi.IDocument,
   ): IDocument => {
     if (OpenApiV3_1.is(input)) return OpenApiV3_1Converter.convert(input);
     else if (OpenApiV3.is(input)) return OpenApiV3Converter.convert(input);
