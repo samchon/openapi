@@ -2,29 +2,34 @@ import { OpenApi } from "../OpenApi";
 import { OpenApiV3_1 } from "../OpenApiV3_1";
 
 export namespace OpenApiV3_1Converter {
-  export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => ({
-    ...input,
-    components: convertComponents(input.components ?? {}),
-    paths: input.paths
-      ? Object.fromEntries(
-          Object.entries(input.paths)
-            .filter(([_, v]) => v !== undefined)
-            .map(
-              ([key, value]) => [key, convertPathItem(input)(value)] as const,
-            ),
-        )
-      : undefined,
-    webhooks: input.webhooks
-      ? Object.fromEntries(
-          Object.entries(input.webhooks)
-            .filter(([_, v]) => v !== undefined)
-            .map(
-              ([key, value]) => [key, convertWebhooks(input)(value)!] as const,
-            )
-            .filter(([_, value]) => value !== undefined),
-        )
-      : undefined,
-  });
+  export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => {
+    if (input["x-samchon-emended"] === true) return input as OpenApi.IDocument;
+    return {
+      ...input,
+      components: convertComponents(input.components ?? {}),
+      paths: input.paths
+        ? Object.fromEntries(
+            Object.entries(input.paths)
+              .filter(([_, v]) => v !== undefined)
+              .map(
+                ([key, value]) => [key, convertPathItem(input)(value)] as const,
+              ),
+          )
+        : undefined,
+      webhooks: input.webhooks
+        ? Object.fromEntries(
+            Object.entries(input.webhooks)
+              .filter(([_, v]) => v !== undefined)
+              .map(
+                ([key, value]) =>
+                  [key, convertWebhooks(input)(value)!] as const,
+              )
+              .filter(([_, value]) => value !== undefined),
+          )
+        : undefined,
+      "x-samchon-emended": true,
+    };
+  };
 
   /* -----------------------------------------------------------
     OPERATORS
