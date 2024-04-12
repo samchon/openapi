@@ -8,6 +8,33 @@ import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
  *
+ * `OpenApi` is a namespace containing functions and interfaces for emended
+ * OpenAPI v3.1 specification. The keyword "emended" means that `OpenApi` is
+ * not a direct OpenAPI v3.1 specification ({@link OpenApiV3_1}), but a little
+ * bit shrinked to remove ambiguous and duplicated expressions of OpenAPI v3.1
+ * for the convenience of `typia` and `nestia`.
+ *
+ * For example, when representing nullable type, OpenAPI v3.1 supports three ways.
+ * In that case, `OpenApi` remains only the third way, so that makes `typia` and
+ * `nestia` (especially `@nestia/editor`) to be simple and easy to implement.
+ *
+ * 1. `type: ["string", "null"]`
+ * 2. `type: "string", nullable: true`
+ * 3. `oneOf: [{ type: "string" }, { type: "null" }]`
+ *
+ * Here is the entire list of differences between OpenAPI v3.1 and emended `OpenApi`.
+ *
+ * - Operation
+ *   - Merged {@link OpenApiV3_1.IPathItem.parameters} to {@link OpenApi.IOperation.parameters}
+ *   - Resolved {@link OpenApi.IJsonSchema.IReference references} of {@link OpenApiV3_1.IOperation} mebers
+ * - JSON Schema
+ *   - Decomposed mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
+ *   - Resolved nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
+ *   - Array type utilizes only single {@link OpenAPI.IJsonSchema.IArray.items}
+ *   - Tuple type utilizes only {@link OpenApi.IJsonSchema.ITuple.prefixItems}
+ *   - Merged {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link OpenApi.IJsonSchema.IOneOf}
+ *   - Merged {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link OpenApi.IJsonSchema.IReference}
+ *
  * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace OpenApi {
@@ -152,6 +179,7 @@ export namespace OpenApi {
     | IJsonSchema.INumber
     | IJsonSchema.IString
     | IJsonSchema.IArray
+    | IJsonSchema.ITuple
     | IJsonSchema.IObject
     | IJsonSchema.IReference
     | IJsonSchema.IOneOf
@@ -220,7 +248,6 @@ export namespace OpenApi {
       /** @type uint */ maxItems?: number;
     }
     export interface ITuple extends __ISignificant<"array"> {
-      items: never;
       prefixItems: IJsonSchema[];
       additionalItems: boolean | IJsonSchema;
       /** @type uint */ minItems?: number;

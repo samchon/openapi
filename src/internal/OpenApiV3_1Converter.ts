@@ -224,7 +224,15 @@ export namespace OpenApiV3_1Converter {
         ),
       ),
     };
+    const nullable: { value: boolean } = { value: false };
+
     const visit = (schema: OpenApiV3_1.IJsonSchema): void => {
+      // NULLABLE PROPERTY
+      if (
+        (schema as OpenApiV3_1.IJsonSchema.__ISignificant<any>).nullable ===
+        true
+      )
+        nullable.value ||= true;
       // MIXED TYPE CASE
       if (TypeChecker.isMixed(schema)) {
         if (schema.const !== undefined)
@@ -407,7 +415,7 @@ export namespace OpenApiV3_1Converter {
           });
       }
       // OBJECT TYPE CASE
-      else if (TypeChecker.isObject(schema)) {
+      else if (TypeChecker.isObject(schema))
         union.push({
           ...schema,
           ...{
@@ -428,12 +436,24 @@ export namespace OpenApiV3_1Converter {
               : undefined,
           },
         });
-      }
+      else if (TypeChecker.isRecursiveReference(schema))
+        union.push({
+          ...schema,
+          ...{
+            $ref: schema.$recursiveRef,
+            $recursiveRef: undefined,
+          },
+        });
       // THE OTHERS
       else union.push(schema);
     };
 
     visit(input);
+    if (
+      nullable.value === true &&
+      !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
+    )
+      union.push({ type: "null" });
     return {
       ...(union.length === 0
         ? { type: undefined }
@@ -477,6 +497,11 @@ export namespace OpenApiV3_1Converter {
       schema: OpenApiV3_1.IJsonSchema,
     ): schema is OpenApiV3_1.IJsonSchema.IReference =>
       (schema as OpenApiV3_1.IJsonSchema.IReference).$ref !== undefined;
+    export const isRecursiveReference = (
+      schema: OpenApiV3_1.IJsonSchema,
+    ): schema is OpenApiV3_1.IJsonSchema.IRecursiveReference =>
+      (schema as OpenApiV3_1.IJsonSchema.IRecursiveReference).$recursiveRef !==
+      undefined;
     export const isOneOf = (
       schema: OpenApiV3_1.IJsonSchema,
     ): schema is OpenApiV3_1.IJsonSchema.IOneOf =>

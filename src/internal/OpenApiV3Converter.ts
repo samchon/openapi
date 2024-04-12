@@ -204,6 +204,7 @@ export namespace OpenApiV3Converter {
       ),
     };
     const visit = (schema: OpenApiV3.IJsonSchema): void => {
+      // NULLABLE PROPERTY
       if (
         (schema as OpenApiV3.IJsonSchema.__ISignificant<any>).nullable === true
       )
