@@ -8,7 +8,11 @@ console.log("Test OpenAPI conversion");
 
 const validate = (
   title: string,
-  document: SwaggerV2.IDocument | OpenApiV3.IDocument | OpenApiV3_1.IDocument,
+  document:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument
+    | OpenApi.IDocument,
 ): OpenApi.IDocument => {
   console.log("  -", title);
   console.log("    - type assertion");
