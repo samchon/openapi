@@ -38,7 +38,6 @@ export namespace OpenApiV3_1 {
     >;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
-    "x-samchon-emended"?: boolean;
   }
   export namespace IDocument {
     export interface IInfo {

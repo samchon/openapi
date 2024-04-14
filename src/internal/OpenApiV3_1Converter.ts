@@ -3,7 +3,8 @@ import { OpenApiV3_1 } from "../OpenApiV3_1";
 
 export namespace OpenApiV3_1Converter {
   export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => {
-    if (input["x-samchon-emended"] === true) return input as OpenApi.IDocument;
+    if ((input as OpenApi.IDocument)["x-samchon-emended"] === true)
+      return input as OpenApi.IDocument;
     return {
       ...input,
       components: convertComponents(input.components ?? {}),
