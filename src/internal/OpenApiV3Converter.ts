@@ -185,11 +185,13 @@ export namespace OpenApiV3Converter {
   const convertComponents = (
     input: OpenApiV3.IComponents,
   ): OpenApi.IComponents => ({
-    schemas: Object.fromEntries(
-      Object.entries(input.schemas ?? {})
-        .filter(([_, v]) => v !== undefined)
-        .map(([key, value]) => [key, convertSchema(value)]),
-    ),
+    schemas: input.schemas
+      ? Object.fromEntries(
+          Object.entries(input.schemas)
+            .filter(([_, v]) => v !== undefined)
+            .map(([key, value]) => [key, convertSchema(value)]),
+        )
+      : undefined,
     securitySchemes: input.securitySchemes,
   });
   const convertSchema = (input: OpenApiV3.IJsonSchema): OpenApi.IJsonSchema => {

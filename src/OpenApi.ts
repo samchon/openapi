@@ -173,7 +173,7 @@ export namespace OpenApi {
     SCHEMA DEFINITIONS
   ----------------------------------------------------------- */
   export interface IComponents {
-    schemas: Record<string, IJsonSchema>;
+    schemas?: Record<string, IJsonSchema>;
     securitySchemes?: Record<string, ISecurityScheme>;
   }
 

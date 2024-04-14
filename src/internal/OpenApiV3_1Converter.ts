@@ -209,11 +209,13 @@ export namespace OpenApiV3_1Converter {
   const convertComponents = (
     input: OpenApiV3_1.IComponents,
   ): OpenApi.IComponents => ({
-    schemas: Object.fromEntries(
-      Object.entries(input.schemas ?? {})
-        .filter(([_, v]) => v !== undefined)
-        .map(([key, value]) => [key, convertSchema(value)] as const),
-    ),
+    schemas: input.schemas
+      ? Object.fromEntries(
+          Object.entries(input.schemas)
+            .filter(([_, v]) => v !== undefined)
+            .map(([key, value]) => [key, convertSchema(value)] as const),
+        )
+      : undefined,
     securitySchemes: input.securitySchemes,
   });
   const convertSchema = (
