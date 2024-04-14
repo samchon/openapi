@@ -23,7 +23,7 @@ export namespace OpenApiV3Converter {
   ----------------------------------------------------------- */
   const convertPathItem =
     (doc: OpenApiV3.IDocument) =>
-    (pathItem: OpenApiV3.IPathItem): OpenApi.IPathItem => ({
+    (pathItem: OpenApiV3.IPath): OpenApi.IPath => ({
       ...(pathItem as any),
       ...(pathItem.get
         ? { get: convertOperation(doc)(pathItem)(pathItem.get) }
@@ -52,24 +52,28 @@ export namespace OpenApiV3Converter {
     });
   const convertOperation =
     (doc: OpenApiV3.IDocument) =>
-    (pathItem: OpenApiV3.IPathItem) =>
+    (pathItem: OpenApiV3.IPath) =>
     (input: OpenApiV3.IOperation): OpenApi.IOperation => ({
       ...input,
-      parameters: [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
-        .map((p) => {
-          if (!TypeChecker.isReference(p)) return convertParameter(p);
-          const found: Omit<OpenApiV3.IOperation.IParameter, "in"> | undefined =
-            p.$ref.startsWith("#/components/headers/")
-              ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
-              : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
-          return found !== undefined
-            ? convertParameter({
-                ...found,
-                in: "header",
+      parameters:
+        pathItem.parameters !== undefined && input.parameters !== undefined
+          ? [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
+              .map((p) => {
+                if (!TypeChecker.isReference(p)) return convertParameter(p);
+                const found:
+                  | Omit<OpenApiV3.IOperation.IParameter, "in">
+                  | undefined = p.$ref.startsWith("#/components/headers/")
+                  ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
+                  : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
+                return found !== undefined
+                  ? convertParameter({
+                      ...found,
+                      in: "header",
+                    })
+                  : undefined!;
               })
-            : undefined!;
-        })
-        .filter((_, v) => v !== undefined),
+              .filter((_, v) => v !== undefined)
+          : undefined,
       requestBody: input.requestBody
         ? convertRequestBody(doc)(input.requestBody)
         : undefined,
