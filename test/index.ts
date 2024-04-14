@@ -39,10 +39,21 @@ const iterate = async (directory: string): Promise<void> => {
   }
 };
 const main = async (): Promise<void> => {
+  // TEST CONVERSION
+  const NORMALIZED: string = `${__dirname}/../../examples/normalized`;
   try {
-    await fs.promises.mkdir(`${__dirname}/../../examples/normalized`);
+    await fs.promises.mkdir(NORMALIZED);
   } catch {}
   await iterate(`${__dirname}/../../examples`);
+
+  // TYPE ASSERTIONS
+  for (const file of await fs.promises.readdir(NORMALIZED)) {
+    const document: OpenApi.IDocument = JSON.parse(
+      await fs.promises.readFile(`${NORMALIZED}/${file}`, "utf8"),
+    );
+    typia.assert<OpenApi.IDocument>(document);
+    typia.assert<OpenApiV3_1.IDocument>(document);
+  }
 };
 main().catch((exp) => {
   console.error(exp);

@@ -82,7 +82,7 @@ export namespace OpenApi {
     >;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
-    "x-samchon-emended"?: boolean;
+    "x-samchon-emended": true;
   }
   export namespace IDocument {
     export interface IInfo {
