@@ -226,7 +226,6 @@ export namespace OpenApi {
     export interface IString extends __ISignificant<"string"> {
       contentMediaType?: string;
       default?: string;
-      enum?: string[];
       format?:
         | "binary"
         | "byte"
