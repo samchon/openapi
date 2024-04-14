@@ -31,14 +31,13 @@ export namespace OpenApiV3_1 {
     servers?: IServer[];
     info?: IDocument.IInfo;
     components?: IComponents;
-    paths?: Record<string, IPathItem>;
+    paths?: Record<string, IPath>;
     webhooks?: Record<
       string,
-      IJsonSchema.IReference<`#/components/pathItems/${string}`> | IPathItem
+      IJsonSchema.IReference<`#/components/pathItems/${string}`> | IPath
     >;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
-    "x-samchon-emended"?: boolean;
   }
   export namespace IDocument {
     export interface IInfo {
@@ -82,7 +81,7 @@ export namespace OpenApiV3_1 {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export type IPathItem = {
+  export type IPath = {
     parameters?: Array<
       | IOperation.IParameter
       | IJsonSchema.IReference<`#/components/headers/${string}`>
@@ -147,7 +146,7 @@ export namespace OpenApiV3_1 {
   ----------------------------------------------------------- */
   export interface IComponents {
     schemas?: Record<string, IJsonSchema>;
-    pathItems?: Record<string, IPathItem>;
+    pathItems?: Record<string, IPath>;
     responses?: Record<string, IOperation.IResponse>;
     parameters?: Record<string, IOperation.IParameter>;
     requestBodies?: Record<string, IOperation.IRequestBody>;

@@ -3,7 +3,8 @@ import { OpenApiV3_1 } from "../OpenApiV3_1";
 
 export namespace OpenApiV3_1Converter {
   export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => {
-    if (input["x-samchon-emended"] === true) return input as OpenApi.IDocument;
+    if ((input as OpenApi.IDocument)["x-samchon-emended"] === true)
+      return input as OpenApi.IDocument;
     return {
       ...input,
       components: convertComponents(input.components ?? {}),
@@ -38,18 +39,18 @@ export namespace OpenApiV3_1Converter {
     (doc: OpenApiV3_1.IDocument) =>
     (
       webhook:
-        | OpenApiV3_1.IPathItem
+        | OpenApiV3_1.IPath
         | OpenApiV3_1.IJsonSchema.IReference<`#/components/pathItems/${string}`>,
-    ): OpenApi.IPathItem | undefined => {
+    ): OpenApi.IPath | undefined => {
       if (!TypeChecker.isReference(webhook))
         return convertPathItem(doc)(webhook);
-      const found: OpenApiV3_1.IPathItem | undefined =
+      const found: OpenApiV3_1.IPath | undefined =
         doc.components?.pathItems?.[webhook.$ref.split("/").pop() ?? ""];
       return found ? convertPathItem(doc)(found) : undefined;
     };
   const convertPathItem =
     (doc: OpenApiV3_1.IDocument) =>
-    (pathItem: OpenApiV3_1.IPathItem): OpenApi.IPathItem => ({
+    (pathItem: OpenApiV3_1.IPath): OpenApi.IPath => ({
       ...(pathItem as any),
       ...(pathItem.get
         ? { get: convertOperation(doc)(pathItem)(pathItem.get) }
@@ -78,25 +79,28 @@ export namespace OpenApiV3_1Converter {
     });
   const convertOperation =
     (doc: OpenApiV3_1.IDocument) =>
-    (pathItem: OpenApiV3_1.IPathItem) =>
+    (pathItem: OpenApiV3_1.IPath) =>
     (input: OpenApiV3_1.IOperation): OpenApi.IOperation => ({
       ...input,
-      parameters: [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
-        .map((p) => {
-          if (!TypeChecker.isReference(p)) return convertParameter(p);
-          const found:
-            | Omit<OpenApiV3_1.IOperation.IParameter, "in">
-            | undefined = p.$ref.startsWith("#/components/headers/")
-            ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
-            : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
-          return found !== undefined
-            ? convertParameter({
-                ...found,
-                in: "header",
+      parameters:
+        pathItem.parameters !== undefined || input.parameters === undefined
+          ? [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
+              .map((p) => {
+                if (!TypeChecker.isReference(p)) return convertParameter(p);
+                const found:
+                  | Omit<OpenApiV3_1.IOperation.IParameter, "in">
+                  | undefined = p.$ref.startsWith("#/components/headers/")
+                  ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
+                  : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
+                return found !== undefined
+                  ? convertParameter({
+                      ...found,
+                      in: "header",
+                    })
+                  : undefined!;
               })
-            : undefined!;
-        })
-        .filter((_, v) => v !== undefined),
+              .filter((_, v) => v !== undefined)
+          : undefined,
       requestBody: input.requestBody
         ? convertRequestBody(doc)(input.requestBody)
         : undefined,
@@ -209,11 +213,13 @@ export namespace OpenApiV3_1Converter {
   const convertComponents = (
     input: OpenApiV3_1.IComponents,
   ): OpenApi.IComponents => ({
-    schemas: Object.fromEntries(
-      Object.entries(input.schemas ?? {})
-        .filter(([_, v]) => v !== undefined)
-        .map(([key, value]) => [key, convertSchema(value)] as const),
-    ),
+    schemas: input.schemas
+      ? Object.fromEntries(
+          Object.entries(input.schemas)
+            .filter(([_, v]) => v !== undefined)
+            .map(([key, value]) => [key, convertSchema(value)] as const),
+        )
+      : undefined,
     securitySchemes: input.securitySchemes,
   });
   const convertSchema = (

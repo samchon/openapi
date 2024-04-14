@@ -31,7 +31,7 @@ export namespace OpenApiV3 {
     servers?: IServer[];
     info?: IDocument.IInfo;
     components?: IComponents;
-    paths?: Record<string, IPathItem>;
+    paths?: Record<string, IPath>;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
   }
@@ -75,7 +75,7 @@ export namespace OpenApiV3 {
   /* -----------------------------------------------------------
     PATH ITEMS
   ----------------------------------------------------------- */
-  export type IPathItem = {
+  export type IPath = {
     parameters?: Array<
       | IOperation.IParameter
       | IJsonSchema.IReference<`#/components/headers/${string}`>
@@ -170,8 +170,8 @@ export namespace OpenApiV3 {
       /** @type int */ enum?: number[];
       /** @type int */ minimum?: number;
       /** @type int */ maximum?: number;
-      /** @type int */ exclusiveMinimum?: boolean;
-      /** @type int */ exclusiveMaximum?: boolean;
+      exclusiveMinimum?: boolean;
+      exclusiveMaximum?: boolean;
       /** @type uint */ multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {

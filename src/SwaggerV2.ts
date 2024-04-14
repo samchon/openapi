@@ -38,7 +38,7 @@ export namespace SwaggerV2 {
     responses?: Record<string, IOperation.IResponse>;
     securityDefinitions?: Record<string, ISecurityDefinition>;
     security?: Record<string, string[]>[];
-    paths?: Record<string, IPathItem>;
+    paths?: Record<string, IPath>;
     tags?: IDocument.ITag[];
   }
   export namespace IDocument {
@@ -68,7 +68,7 @@ export namespace SwaggerV2 {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export type IPathItem = {
+  export type IPath = {
     parameters?: Array<
       IOperation.IParameter | IJsonSchema.IReference<`#/parameters/${string}`>
     >;
@@ -138,8 +138,8 @@ export namespace SwaggerV2 {
       /** @type int */ enum?: number[];
       /** @type int */ minimum?: number;
       /** @type int */ maximum?: number;
-      /** @type int */ exclusiveMinimum?: boolean;
-      /** @type int */ exclusiveMaximum?: boolean;
+      exclusiveMinimum?: boolean;
+      exclusiveMaximum?: boolean;
       /** @type uint */ multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {

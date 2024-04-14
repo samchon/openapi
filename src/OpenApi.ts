@@ -25,7 +25,7 @@ import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
  * Here is the entire list of differences between OpenAPI v3.1 and emended `OpenApi`.
  *
  * - Operation
- *   - Merged {@link OpenApiV3_1.IPathItem.parameters} to {@link OpenApi.IOperation.parameters}
+ *   - Merged {@link OpenApiV3_1.IPath.parameters} to {@link OpenApi.IOperation.parameters}
  *   - Resolved {@link OpenApi.IJsonSchema.IReference references} of {@link OpenApiV3_1.IOperation} mebers
  * - JSON Schema
  *   - Decomposed mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
@@ -75,10 +75,10 @@ export namespace OpenApi {
     servers?: IServer[];
     info?: IDocument.IInfo;
     components: IComponents;
-    paths?: Record<string, IPathItem>;
+    paths?: Record<string, IPath>;
     webhooks?: Record<
       string,
-      IJsonSchema.IReference<`#/components/pathItems/${string}`> | IPathItem
+      IJsonSchema.IReference<`#/components/pathItems/${string}`> | IPath
     >;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
@@ -126,7 +126,7 @@ export namespace OpenApi {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export type IPathItem = {
+  export type IPath = {
     servers?: IServer[];
     summary?: string;
     description?: string;
@@ -134,10 +134,8 @@ export namespace OpenApi {
 
   export interface IOperation {
     operationId?: string;
-    parameters: Array<IOperation.IParameter>;
-    requestBody?:
-      | IOperation.IRequestBody
-      | IJsonSchema.IReference<`#/components/requestBodies/${string}`>;
+    parameters?: IOperation.IParameter[];
+    requestBody?: IOperation.IRequestBody;
     responses?: Record<string, IOperation.IResponse>;
     servers?: IServer[];
     summary?: string;
@@ -152,28 +150,40 @@ export namespace OpenApi {
       in: "path" | "query" | "header" | "cookie";
       schema: IJsonSchema;
       required?: boolean;
+      title?: string;
       description?: string;
     }
     export interface IRequestBody {
       description?: string;
       required?: boolean;
-      content?: Record<string, IMediaType>;
+      content?: IContent;
+      "x-nestia-encrypted"?: boolean;
     }
     export interface IResponse {
-      content?: Record<string, IMediaType>;
+      content?: IContent;
       headers?: Record<string, IOperation.IParameter>;
       description?: string;
+      "x-nestia-encrypted"?: boolean;
     }
+
+    export type IContent = Partial<Record<ContentType, IMediaType>>;
     export interface IMediaType {
       schema?: IJsonSchema;
     }
+    export type ContentType =
+      | "text/plain"
+      | "application/json"
+      | "application/x-www-form-url-encoded"
+      | "multipart/form-data"
+      | "*/*"
+      | (string & {});
   }
 
   /* -----------------------------------------------------------
     SCHEMA DEFINITIONS
   ----------------------------------------------------------- */
   export interface IComponents {
-    schemas: Record<string, IJsonSchema>;
+    schemas?: Record<string, IJsonSchema>;
     securitySchemes?: Record<string, ISecurityScheme>;
   }
 
@@ -201,8 +211,8 @@ export namespace OpenApi {
       /** @type int */ default?: number;
       /** @type int */ minimum?: number;
       /** @type int */ maximum?: number;
-      /** @type int */ exclusiveMinimum?: boolean;
-      /** @type int */ exclusiveMaximum?: boolean;
+      exclusiveMinimum?: boolean;
+      exclusiveMaximum?: boolean;
       /** @type uint */ multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {
@@ -216,7 +226,6 @@ export namespace OpenApi {
     export interface IString extends __ISignificant<"string"> {
       contentMediaType?: string;
       default?: string;
-      enum?: string[];
       format?:
         | "binary"
         | "byte"

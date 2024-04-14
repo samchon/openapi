@@ -32,7 +32,7 @@ export namespace SwaggerV2Converter {
   ----------------------------------------------------------- */
   const convertPathItem =
     (doc: SwaggerV2.IDocument) =>
-    (pathItem: SwaggerV2.IPathItem): OpenApi.IPathItem => ({
+    (pathItem: SwaggerV2.IPath): OpenApi.IPath => ({
       ...(pathItem as any),
       ...(pathItem.get
         ? { get: convertOperation(doc)(pathItem)(pathItem.get) }
@@ -61,22 +61,26 @@ export namespace SwaggerV2Converter {
     });
   const convertOperation =
     (doc: SwaggerV2.IDocument) =>
-    (pathItem: SwaggerV2.IPathItem) =>
+    (pathItem: SwaggerV2.IPath) =>
     (input: SwaggerV2.IOperation): OpenApi.IOperation => ({
       ...input,
-      parameters: (
-        [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
-          .map((p) =>
-            TypeChecker.isReference(p)
-              ? doc.parameters?.[p.$ref.split("/").pop() ?? ""]!
-              : p,
-          )
-          .filter(
-            (p) =>
-              p !== undefined &&
-              (p as SwaggerV2.IOperation.IBodyParameter).schema === undefined,
-          ) as SwaggerV2.IOperation.IGeneralParameter[]
-      ).map(convertParameter),
+      parameters:
+        pathItem.parameters !== undefined || input.parameters !== undefined
+          ? (
+              [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
+                .map((p) =>
+                  TypeChecker.isReference(p)
+                    ? doc.parameters?.[p.$ref.split("/").pop() ?? ""]!
+                    : p,
+                )
+                .filter(
+                  (p) =>
+                    p !== undefined &&
+                    (p as SwaggerV2.IOperation.IBodyParameter).schema ===
+                      undefined,
+                ) as SwaggerV2.IOperation.IGeneralParameter[]
+            ).map(convertParameter)
+          : undefined,
       requestBody: (() => {
         const found: SwaggerV2.IOperation.IBodyParameter | undefined =
           input.parameters?.find((p) => {
@@ -165,11 +169,13 @@ export namespace SwaggerV2Converter {
   const convertComponents = (
     input: SwaggerV2.IDocument,
   ): OpenApi.IComponents => ({
-    schemas: Object.fromEntries(
-      Object.entries(input.definitions ?? {})
-        .filter(([_, v]) => v !== undefined)
-        .map(([key, value]) => [key, convertSchema(value)]),
-    ),
+    schemas: input.definitions
+      ? Object.fromEntries(
+          Object.entries(input.definitions)
+            .filter(([_, v]) => v !== undefined)
+            .map(([key, value]) => [key, convertSchema(value)]),
+        )
+      : undefined,
     securitySchemes: input.securityDefinitions
       ? Object.fromEntries(
           Object.entries(input.securityDefinitions)
