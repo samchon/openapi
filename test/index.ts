@@ -51,6 +51,7 @@ const main = async (): Promise<void> => {
     const document: OpenApi.IDocument = JSON.parse(
       await fs.promises.readFile(`${NORMALIZED}/${file}`, "utf8"),
     );
+    if (file === "shopping.json") typia.assertEquals(document);
     typia.assert<OpenApi.IDocument>(document);
     typia.assert<OpenApiV3_1.IDocument>(document);
   }

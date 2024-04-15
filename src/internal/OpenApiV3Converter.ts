@@ -186,7 +186,7 @@ export namespace OpenApiV3Converter {
   /* -----------------------------------------------------------
     DEFINITIONS
   ----------------------------------------------------------- */
-  const convertComponents = (
+  export const convertComponents = (
     input: OpenApiV3.IComponents,
   ): OpenApi.IComponents => ({
     schemas: input.schemas
@@ -198,7 +198,9 @@ export namespace OpenApiV3Converter {
       : undefined,
     securitySchemes: input.securitySchemes,
   });
-  const convertSchema = (input: OpenApiV3.IJsonSchema): OpenApi.IJsonSchema => {
+  export const convertSchema = (
+    input: OpenApiV3.IJsonSchema,
+  ): OpenApi.IJsonSchema => {
     const nullable: { value: boolean } = { value: false };
     const union: OpenApi.IJsonSchema[] = [];
     const attribute: OpenApi.IJsonSchema.__IAttribute = {
@@ -243,7 +245,7 @@ export namespace OpenApiV3Converter {
         union.push({
           ...schema,
           ...{
-            properites: schema.properties
+            properties: schema.properties
               ? Object.fromEntries(
                   Object.entries(schema.properties)
                     .filter(([_, v]) => v !== undefined)
@@ -273,12 +275,13 @@ export namespace OpenApiV3Converter {
         ? { type: undefined }
         : union.length === 1
           ? { ...union[0] }
-          : { oneOf: union }),
+          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
       ...attribute,
+      ...{ nullable: undefined },
     };
   };
 
-  namespace TypeChecker {
+  export namespace TypeChecker {
     export const isBoolean = (
       schema: OpenApiV3.IJsonSchema,
     ): schema is OpenApiV3.IJsonSchema.IBoolean =>
