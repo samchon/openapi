@@ -470,8 +470,9 @@ export namespace OpenApiV3_1Converter {
         ? { type: undefined }
         : union.length === 1
           ? { ...union[0] }
-          : { oneOf: union }),
+          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
       ...attribute,
+      ...{ nullable: undefined },
     };
   };
 

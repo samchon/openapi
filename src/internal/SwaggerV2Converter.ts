@@ -257,6 +257,7 @@ export namespace SwaggerV2Converter {
       ),
     };
     const visit = (schema: SwaggerV2.IJsonSchema): void => {
+      // NULLABLE PROPERTY
       if (
         (schema as SwaggerV2.IJsonSchema.__ISignificant<any>)["x-nullable"] ===
         true
@@ -289,7 +290,7 @@ export namespace SwaggerV2Converter {
         union.push({
           ...schema,
           ...{
-            properites: schema.properties
+            properties: schema.properties
               ? Object.fromEntries(
                   Object.entries(schema.properties)
                     .filter(([_, v]) => v !== undefined)
@@ -323,8 +324,9 @@ export namespace SwaggerV2Converter {
         ? { type: undefined }
         : union.length === 1
           ? { ...union[0] }
-          : { oneOf: union }),
+          : { oneOf: union.map((u) => ({ ...u, "x-nullable": undefined })) }),
       ...attribute,
+      ...{ "x-nullable": undefined },
     };
   };
 
