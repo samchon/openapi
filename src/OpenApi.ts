@@ -267,7 +267,7 @@ export namespace OpenApi {
     }
     export interface ITuple extends __ISignificant<"array"> {
       prefixItems: IJsonSchema[];
-      additionalItems: boolean | IJsonSchema;
+      additionalItems?: boolean | IJsonSchema;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
