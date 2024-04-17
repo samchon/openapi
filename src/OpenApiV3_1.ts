@@ -195,13 +195,17 @@ export namespace OpenApiV3_1 {
       enum?: boolean[];
     }
     export interface IInteger extends __ISignificant<"integer"> {
-      /** @type int */ default?: number;
-      /** @type int */ enum?: number[];
-      /** @type int */ minimum?: number;
-      /** @type int */ maximum?: number;
-      /** @type int */ exclusiveMinimum?: number | boolean;
-      /** @type int */ exclusiveMaximum?: number | boolean;
-      /** @type uint */ multipleOf?: number;
+      /** @type int64 */ default?: number;
+      /** @type int64 */ enum?: number[];
+      /** @type int64 */ minimum?: number;
+      /** @type int64 */ maximum?: number;
+      /** @type int64 */ exclusiveMinimum?: number | boolean;
+      /** @type int64 */ exclusiveMaximum?: number | boolean;
+      /**
+       * @type uint64
+       * @exclusiveMinimum 0
+       */
+      multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {
       default?: number;
@@ -210,7 +214,7 @@ export namespace OpenApiV3_1 {
       maximum?: number;
       exclusiveMinimum?: number | boolean;
       exclusiveMaximum?: number | boolean;
-      multipleOf?: number;
+      /** @exclusiveMinimum 0 */ multipleOf?: number;
     }
     export interface IString extends __ISignificant<"string"> {
       contentMediaType?: string;
@@ -242,8 +246,8 @@ export namespace OpenApiV3_1 {
         | "relative-json-pointer"
         | (string & {});
       pattern?: string;
-      /** @type uint */ minLength?: number;
-      /** @type uint */ maxLength?: number;
+      /** @type uint64 */ minLength?: number;
+      /** @type uint64 */ maxLength?: number;
     }
 
     export interface IUnknown extends __IAttribute {
@@ -265,8 +269,8 @@ export namespace OpenApiV3_1 {
       prefixItems?: IJsonSchema[];
       uniqueItems?: boolean;
       additionalItems?: boolean | IJsonSchema;
-      /** @type uint */ minItems?: number;
-      /** @type uint */ maxItems?: number;
+      /** @type uint64 */ minItems?: number;
+      /** @type uint64 */ maxItems?: number;
     }
     export interface IObject extends __ISignificant<"object"> {
       properties?: Record<string, IJsonSchema>;
