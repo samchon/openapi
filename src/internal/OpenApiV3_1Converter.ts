@@ -390,7 +390,7 @@ export namespace OpenApiV3_1Converter {
                 typeof schema.additionalItems === "object" &&
                 schema.additionalItems !== null
                   ? convertSchema(schema.additionalItems)
-                  : schema.additionalItems ?? false,
+                  : schema.additionalItems,
             },
           } satisfies OpenApi.IJsonSchema.ITuple);
         else if (Array.isArray(schema.prefixItems))
@@ -403,7 +403,7 @@ export namespace OpenApiV3_1Converter {
                 typeof schema.additionalItems === "object" &&
                 schema.additionalItems !== null
                   ? convertSchema(schema.additionalItems)
-                  : schema.additionalItems ?? false,
+                  : schema.additionalItems,
             },
           });
         else if (schema.items === undefined)
@@ -412,7 +412,6 @@ export namespace OpenApiV3_1Converter {
             ...{
               items: undefined!,
               prefixItems: [],
-              additionalItems: false,
             },
           });
         else
