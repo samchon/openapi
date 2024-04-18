@@ -2,8 +2,10 @@ import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
 import { OpenApiV3Converter } from "./internal/OpenApiV3Converter";
+import { OpenApiV3Downgrader } from "./internal/OpenApiV3Downgrader";
 import { OpenApiV3_1Converter } from "./internal/OpenApiV3_1Converter";
 import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
+import { SwaggerV2Downgrader } from "./internal/SwaggerV2Downgrader";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -38,6 +40,16 @@ import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace OpenApi {
+  export type Method =
+    | "get"
+    | "post"
+    | "put"
+    | "delete"
+    | "options"
+    | "head"
+    | "patch"
+    | "trace";
+
   /**
    * Convert Swagger or OpenAPI document into emended OpenAPI v3.1 document.
    *
@@ -57,15 +69,41 @@ export namespace OpenApi {
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
   };
 
-  export type Method =
-    | "get"
-    | "post"
-    | "put"
-    | "delete"
-    | "options"
-    | "head"
-    | "patch"
-    | "trace";
+  /**
+   * Downgrade to Swagger v2.0 document.
+   *
+   * Downgrade the given document (emeneded OpenAPI v3.1) into Swagger v2.0.
+   *
+   * @param document Emended OpenAPI v3.1 document to downgrade
+   * @param version Version to downgrade
+   * @returns Swagger v2.0 document
+   */
+  export function downgrade(
+    document: IDocument,
+    version: "2.0",
+  ): SwaggerV2.IDocument;
+  export function downgrade(
+    document: IDocument,
+    version: "3.0",
+  ): OpenApiV3.IDocument;
+
+  /**
+   * Downgrade to OpenAPI v2.3 document.
+   *
+   * Downgrade the given document (emeneded OpenAPI v3.1) into OpenAPI v3.0.
+   *
+   * @param document Emended OpenAPI v3.1 document to downgrade
+   * @param version Version to downgrade
+   * @returns OpenAPI v3.0 document
+   */
+  export function downgrade(
+    document: IDocument,
+    version: string,
+  ): SwaggerV2.IDocument | OpenApiV3.IDocument {
+    if (version === "2.0") return SwaggerV2Downgrader.downgrade(document);
+    else if (version === "3.0") return OpenApiV3Downgrader.downgrade(document);
+    throw new TypeError("Unrecognized Swagger/OpenAPI version.");
+  }
 
   /* -----------------------------------------------------------
     PATH ITEMS

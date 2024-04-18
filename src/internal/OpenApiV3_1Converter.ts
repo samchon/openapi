@@ -83,7 +83,7 @@ export namespace OpenApiV3_1Converter {
     (input: OpenApiV3_1.IOperation): OpenApi.IOperation => ({
       ...input,
       parameters:
-        pathItem.parameters !== undefined || input.parameters === undefined
+        pathItem.parameters !== undefined || input.parameters !== undefined
           ? [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
               .map((p) => {
                 if (!TypeChecker.isReference(p)) return convertParameter(p);

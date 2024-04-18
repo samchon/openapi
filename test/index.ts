@@ -4,7 +4,7 @@ import typia from "typia";
 
 import { OpenApi, OpenApiV3, OpenApiV3_1, SwaggerV2 } from "../src";
 
-console.log("Test OpenAPI conversion");
+const CONVERTED: string = `${__dirname}/../../examples/converted`;
 
 const validate = (
   title: string,
@@ -18,43 +18,56 @@ const validate = (
   console.log("    - type assertion");
   typia.assert(document);
 
-  console.log("    - conversion");
+  console.log("    - convert to emended v3.1");
   return typia.assert(OpenApi.convert(document));
 };
 const iterate = async (directory: string): Promise<void> => {
   for (const file of await fs.promises.readdir(directory)) {
     const location: string = `${directory}/${file}`;
     const stat: fs.Stats = await fs.promises.stat(location);
+    const name: string = file.substring(0, file.length - 5);
+
     if (stat.isDirectory() === true) await iterate(location);
     else if (file.endsWith(".json") === true) {
-      const normalized: OpenApi.IDocument = await validate(
+      const document: OpenApi.IDocument = await validate(
         path.resolve(location),
         JSON.parse(await fs.promises.readFile(location, "utf8")),
       );
       await fs.promises.writeFile(
-        `${__dirname}/../../examples/normalized/${file}`,
-        JSON.stringify(normalized, null, 2),
+        `${CONVERTED}/${name}-v31.json`,
+        JSON.stringify(document, null, 2),
+      );
+
+      console.log(`    - downgrade to v2.0`);
+
+      const v20: SwaggerV2.IDocument = OpenApi.downgrade(document, "2.0");
+      typia.assert(v20);
+      typia.assert(OpenApi.convert(v20));
+      await fs.promises.writeFile(
+        `${CONVERTED}/${name}-v20.json`,
+        JSON.stringify(v20, null, 2),
+      );
+
+      console.log(`    - downgrade to v3.0`);
+
+      const v30: OpenApiV3.IDocument = OpenApi.downgrade(document, "3.0");
+      typia.assert(v30);
+      typia.assert(OpenApi.convert(v30));
+      await fs.promises.writeFile(
+        `${CONVERTED}/${name}-v30.json`,
+        JSON.stringify(v30, null, 2),
       );
     }
   }
 };
 const main = async (): Promise<void> => {
-  // TEST CONVERSION
-  const NORMALIZED: string = `${__dirname}/../../examples/normalized`;
   try {
-    await fs.promises.mkdir(NORMALIZED);
+    await fs.promises.mkdir(CONVERTED);
   } catch {}
-  await iterate(`${__dirname}/../../examples`);
-
-  // TYPE ASSERTIONS
-  for (const file of await fs.promises.readdir(NORMALIZED)) {
-    const document: OpenApi.IDocument = JSON.parse(
-      await fs.promises.readFile(`${NORMALIZED}/${file}`, "utf8"),
-    );
-    if (file === "shopping.json") typia.assertEquals(document);
-    typia.assert<OpenApi.IDocument>(document);
-    typia.assert<OpenApiV3_1.IDocument>(document);
-  }
+  console.log("Test OpenAPI conversion");
+  await iterate(`${__dirname}/../../examples/v2.0`);
+  await iterate(`${__dirname}/../../examples/v3.0`);
+  await iterate(`${__dirname}/../../examples/v3.1`);
 };
 main().catch((exp) => {
   console.error(exp);

@@ -76,6 +76,7 @@ export namespace SwaggerV2Converter {
                 .filter(
                   (p) =>
                     p !== undefined &&
+                    p.in !== "body" &&
                     (p as SwaggerV2.IOperation.IBodyParameter).schema ===
                       undefined,
                 ) as SwaggerV2.IOperation.IGeneralParameter[]
