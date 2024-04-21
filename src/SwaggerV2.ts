@@ -125,7 +125,6 @@ export namespace SwaggerV2 {
     | IJsonSchema.IReference
     | IJsonSchema.IUnknown
     | IJsonSchema.INullOnly
-    | IJsonSchema.IAllOf
     | IJsonSchema.IAnyOf
     | IJsonSchema.IOneOf;
   export namespace IJsonSchema {

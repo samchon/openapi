@@ -48,6 +48,7 @@ export namespace OpenApiV3_1Converter {
         doc.components?.pathItems?.[webhook.$ref.split("/").pop() ?? ""];
       return found ? convertPathItem(doc)(found) : undefined;
     };
+
   const convertPathItem =
     (doc: OpenApiV3_1.IDocument) =>
     (pathItem: OpenApiV3_1.IPath): OpenApi.IPath => ({
@@ -77,6 +78,7 @@ export namespace OpenApiV3_1Converter {
         ? { trace: convertOperation(doc)(pathItem)(pathItem.trace) }
         : undefined),
     });
+
   const convertOperation =
     (doc: OpenApiV3_1.IDocument) =>
     (pathItem: OpenApiV3_1.IPath) =>
@@ -86,14 +88,15 @@ export namespace OpenApiV3_1Converter {
         pathItem.parameters !== undefined || input.parameters !== undefined
           ? [...(pathItem.parameters ?? []), ...(input.parameters ?? [])]
               .map((p) => {
-                if (!TypeChecker.isReference(p)) return convertParameter(p);
+                if (!TypeChecker.isReference(p))
+                  return convertParameter(doc.components ?? {})(p);
                 const found:
                   | Omit<OpenApiV3_1.IOperation.IParameter, "in">
                   | undefined = p.$ref.startsWith("#/components/headers/")
                   ? doc.components?.headers?.[p.$ref.split("/").pop() ?? ""]
                   : doc.components?.parameters?.[p.$ref.split("/").pop() ?? ""];
                 return found !== undefined
-                  ? convertParameter({
+                  ? convertParameter(doc.components ?? {})({
                       ...found,
                       in: "header",
                     })
@@ -115,12 +118,15 @@ export namespace OpenApiV3_1Converter {
           )
         : undefined,
     });
-  const convertParameter = (
-    input: OpenApiV3_1.IOperation.IParameter,
-  ): OpenApi.IOperation.IParameter => ({
-    ...input,
-    schema: convertSchema(input.schema),
-  });
+
+  const convertParameter =
+    (components: OpenApiV3_1.IComponents) =>
+    (
+      input: OpenApiV3_1.IOperation.IParameter,
+    ): OpenApi.IOperation.IParameter => ({
+      ...input,
+      schema: convertSchema(components)(input.schema),
+    });
   const convertRequestBody =
     (doc: OpenApiV3_1.IDocument) =>
     (
@@ -136,9 +142,12 @@ export namespace OpenApiV3_1Converter {
       }
       return {
         ...input,
-        content: input.content ? convertContent(input.content) : undefined,
+        content: input.content
+          ? convertContent(doc.components ?? {})(input.content)
+          : undefined,
       };
     };
+
   const convertResponse =
     (doc: OpenApiV3_1.IDocument) =>
     (
@@ -154,7 +163,9 @@ export namespace OpenApiV3_1Converter {
       }
       return {
         ...input,
-        content: input.content ? convertContent(input.content) : undefined,
+        content: input.content
+          ? convertContent(doc.components ?? {})(input.content)
+          : undefined,
         headers: input.headers
           ? Object.fromEntries(
               Object.entries(input.headers)
@@ -165,7 +176,7 @@ export namespace OpenApiV3_1Converter {
                       key,
                       (() => {
                         if (TypeChecker.isReference(value) === false)
-                          return convertParameter({
+                          return convertParameter(doc.components ?? {})({
                             ...value,
                             in: "header",
                           });
@@ -179,7 +190,10 @@ export namespace OpenApiV3_1Converter {
                             ]
                           : undefined;
                         return found !== undefined
-                          ? convertParameter({ ...found, in: "header" })
+                          ? convertParameter(doc.components ?? {})({
+                              ...found,
+                              in: "header",
+                            })
                           : undefined!;
                       })(),
                     ] as const,
@@ -189,23 +203,28 @@ export namespace OpenApiV3_1Converter {
           : undefined,
       };
     };
-  const convertContent = (
-    record: Record<string, OpenApiV3_1.IOperation.IMediaType>,
-  ): Record<string, OpenApi.IOperation.IMediaType> =>
-    Object.fromEntries(
-      Object.entries(record)
-        .filter(([_, v]) => v !== undefined)
-        .map(
-          ([key, value]) =>
-            [
-              key,
-              {
-                ...value,
-                schema: value.schema ? convertSchema(value.schema) : undefined,
-              },
-            ] as const,
-        ),
-    );
+
+  const convertContent =
+    (components: OpenApiV3_1.IComponents) =>
+    (
+      record: Record<string, OpenApiV3_1.IOperation.IMediaType>,
+    ): Record<string, OpenApi.IOperation.IMediaType> =>
+      Object.fromEntries(
+        Object.entries(record)
+          .filter(([_, v]) => v !== undefined)
+          .map(
+            ([key, value]) =>
+              [
+                key,
+                {
+                  ...value,
+                  schema: value.schema
+                    ? convertSchema(components)(value.schema)
+                    : undefined,
+                },
+              ] as const,
+          ),
+      );
 
   /* -----------------------------------------------------------
     DEFINITIONS
@@ -217,263 +236,324 @@ export namespace OpenApiV3_1Converter {
       ? Object.fromEntries(
           Object.entries(input.schemas)
             .filter(([_, v]) => v !== undefined)
-            .map(([key, value]) => [key, convertSchema(value)] as const),
+            .map(([key, value]) => [key, convertSchema(input)(value)] as const),
         )
       : undefined,
     securitySchemes: input.securitySchemes,
   });
-  const convertSchema = (
-    input: OpenApiV3_1.IJsonSchema,
-  ): OpenApi.IJsonSchema => {
-    const union: OpenApi.IJsonSchema[] = [];
-    const attribute: OpenApi.IJsonSchema.__IAttribute = {
-      title: input.title,
-      description: input.description,
-      ...Object.fromEntries(
-        Object.entries(input).filter(
-          ([key, value]) => key.startsWith("x-") && value !== undefined,
+
+  const convertSchema =
+    (components: OpenApiV3_1.IComponents) =>
+    (input: OpenApiV3_1.IJsonSchema): OpenApi.IJsonSchema => {
+      const union: OpenApi.IJsonSchema[] = [];
+      const attribute: OpenApi.IJsonSchema.__IAttribute = {
+        title: input.title,
+        description: input.description,
+        ...Object.fromEntries(
+          Object.entries(input).filter(
+            ([key, value]) => key.startsWith("x-") && value !== undefined,
+          ),
         ),
-      ),
-    };
-    const nullable: { value: boolean } = { value: false };
+      };
+      const nullable: { value: boolean } = { value: false };
 
-    const visit = (schema: OpenApiV3_1.IJsonSchema): void => {
-      // NULLABLE PROPERTY
+      const visit = (schema: OpenApiV3_1.IJsonSchema): void => {
+        // NULLABLE PROPERTY
+        if (
+          (schema as OpenApiV3_1.IJsonSchema.__ISignificant<any>).nullable ===
+          true
+        )
+          nullable.value ||= true;
+        // MIXED TYPE CASE
+        if (TypeChecker.isMixed(schema)) {
+          if (schema.const !== undefined)
+            visit({
+              ...schema,
+              ...{
+                type: undefined,
+                oneOf: undefined,
+                allOf: undefined,
+              },
+            });
+          if (schema.oneOf !== undefined)
+            visit({
+              ...schema,
+              ...{
+                type: undefined,
+                const: undefined,
+                allOf: undefined,
+              },
+            });
+          if (schema.anyOf !== undefined)
+            visit({
+              ...schema,
+              ...{
+                type: undefined,
+                const: undefined,
+                oneOf: undefined,
+              },
+            });
+          for (const type of schema.type)
+            if (type === "boolean" || type === "number" || type === "string")
+              visit({
+                ...schema,
+                ...{
+                  enum: schema.enum?.length
+                    ? schema.enum.filter((x) => typeof x === type)
+                    : undefined,
+                },
+                type: type as any,
+              });
+            else if (type === "integer")
+              visit({
+                ...schema,
+                ...{
+                  enum: schema.enum?.length
+                    ? schema.enum.filter((x) => Number.isInteger(x))
+                    : undefined,
+                },
+                type: type as any,
+              });
+            else visit({ ...schema, type: type as any });
+        }
+        // UNION TYPE CASE
+        else if (TypeChecker.isOneOf(schema)) schema.oneOf.forEach(visit);
+        else if (TypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
+        else if (TypeChecker.isAllOf(schema))
+          union.push(convertAllOfSchema(components)(schema));
+        // ATOMIC TYPE CASE (CONSIDER ENUM VALUES)
+        else if (TypeChecker.isBoolean(schema))
+          if (schema.enum?.length)
+            for (const value of schema.enum)
+              union.push({
+                const: value,
+                ...({
+                  ...schema,
+                  type: undefined as any,
+                  enum: undefined,
+                  default: undefined,
+                } satisfies OpenApiV3_1.IJsonSchema.IBoolean as any),
+              } satisfies OpenApi.IJsonSchema.IConstant);
+          else
+            union.push({
+              ...schema,
+              ...{
+                enum: undefined,
+              },
+            });
+        else if (TypeChecker.isInteger(schema) || TypeChecker.isNumber(schema))
+          if (schema.enum?.length)
+            for (const value of schema.enum)
+              union.push({
+                const: value,
+                ...({
+                  ...schema,
+                  type: undefined as any,
+                  enum: undefined,
+                  default: undefined,
+                  minimum: undefined,
+                  maximum: undefined,
+                  exclusiveMinimum: undefined,
+                  exclusiveMaximum: undefined,
+                  multipleOf: undefined,
+                } satisfies OpenApiV3_1.IJsonSchema.IInteger as any),
+              } satisfies OpenApi.IJsonSchema.IConstant);
+          else
+            union.push({
+              ...schema,
+              ...{
+                enum: undefined,
+              },
+              ...(typeof schema.exclusiveMinimum === "number"
+                ? {
+                    minimum: schema.exclusiveMinimum,
+                    exclusiveMinimum: true,
+                  }
+                : {
+                    exclusiveMinimum: schema.exclusiveMinimum,
+                  }),
+              ...(typeof schema.exclusiveMaximum === "number"
+                ? {
+                    maximum: schema.exclusiveMaximum,
+                    exclusiveMaximum: true,
+                  }
+                : {
+                    exclusiveMaximum: schema.exclusiveMaximum,
+                  }),
+            });
+        else if (TypeChecker.isString(schema))
+          if (schema.enum?.length)
+            for (const value of schema.enum)
+              union.push({
+                const: value,
+                ...({
+                  ...schema,
+                  type: undefined as any,
+                  enum: undefined,
+                  default: undefined,
+                } satisfies OpenApiV3_1.IJsonSchema.IString as any),
+              } satisfies OpenApi.IJsonSchema.IConstant);
+          else
+            union.push({
+              ...schema,
+              ...{
+                enum: undefined,
+              },
+            });
+        // ARRAY TYPE CASE (CONSIDER TUPLE)
+        else if (TypeChecker.isArray(schema)) {
+          if (Array.isArray(schema.items))
+            union.push({
+              ...schema,
+              ...{
+                items: undefined!,
+                prefixItems: schema.items.map(convertSchema(components)),
+                additionalItems:
+                  typeof schema.additionalItems === "object" &&
+                  schema.additionalItems !== null
+                    ? convertSchema(components)(schema.additionalItems)
+                    : schema.additionalItems,
+              },
+            } satisfies OpenApi.IJsonSchema.ITuple);
+          else if (Array.isArray(schema.prefixItems))
+            union.push({
+              ...schema,
+              ...{
+                items: undefined!,
+                prefixItems: schema.prefixItems.map(convertSchema(components)),
+                additionalItems:
+                  typeof schema.additionalItems === "object" &&
+                  schema.additionalItems !== null
+                    ? convertSchema(components)(schema.additionalItems)
+                    : schema.additionalItems,
+              },
+            });
+          else if (schema.items === undefined)
+            union.push({
+              ...schema,
+              ...{
+                items: undefined!,
+                prefixItems: [],
+              },
+            });
+          else
+            union.push({
+              ...schema,
+              ...{
+                items: convertSchema(components)(schema.items),
+                prefixItems: undefined,
+                additionalItems: undefined,
+              },
+            });
+        }
+        // OBJECT TYPE CASE
+        else if (TypeChecker.isObject(schema))
+          union.push({
+            ...schema,
+            ...{
+              properties: schema.properties
+                ? Object.fromEntries(
+                    Object.entries(schema.properties)
+                      .filter(([_, v]) => v !== undefined)
+                      .map(
+                        ([key, value]) =>
+                          [key, convertSchema(components)(value)] as const,
+                      ),
+                  )
+                : undefined,
+              additionalProperties: schema.additionalProperties
+                ? typeof schema.additionalProperties === "object" &&
+                  schema.additionalProperties !== null
+                  ? convertSchema(components)(schema.additionalProperties)
+                  : schema.additionalProperties
+                : undefined,
+            },
+          });
+        else if (TypeChecker.isRecursiveReference(schema))
+          union.push({
+            ...schema,
+            ...{
+              $ref: schema.$recursiveRef,
+              $recursiveRef: undefined,
+            },
+          });
+        // THE OTHERS
+        else union.push(schema);
+      };
+
+      visit(input);
       if (
-        (schema as OpenApiV3_1.IJsonSchema.__ISignificant<any>).nullable ===
-        true
+        nullable.value === true &&
+        !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
       )
-        nullable.value ||= true;
-      // MIXED TYPE CASE
-      if (TypeChecker.isMixed(schema)) {
-        if (schema.const !== undefined)
-          visit({
-            ...schema,
-            ...{
-              type: undefined,
-              oneOf: undefined,
-              allOf: undefined,
-            },
-          });
-        if (schema.oneOf !== undefined)
-          visit({
-            ...schema,
-            ...{
-              type: undefined,
-              const: undefined,
-              allOf: undefined,
-            },
-          });
-        if (schema.anyOf !== undefined)
-          visit({
-            ...schema,
-            ...{
-              type: undefined,
-              const: undefined,
-              oneOf: undefined,
-            },
-          });
-        for (const type of schema.type)
-          if (type === "boolean" || type === "number" || type === "string")
-            visit({
-              ...schema,
-              ...{
-                enum: schema.enum?.length
-                  ? schema.enum.filter((x) => typeof x === type)
-                  : undefined,
-              },
-              type: type as any,
-            });
-          else if (type === "integer")
-            visit({
-              ...schema,
-              ...{
-                enum: schema.enum?.length
-                  ? schema.enum.filter((x) => Number.isInteger(x))
-                  : undefined,
-              },
-              type: type as any,
-            });
-          else visit({ ...schema, type: type as any });
-      }
-      // UNION TYPE CASE
-      else if (TypeChecker.isOneOf(schema)) schema.oneOf.forEach(visit);
-      else if (TypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
-      // ATOMIC TYPE CASE (CONSIDER ENUM VALUES)
-      else if (TypeChecker.isBoolean(schema))
-        if (schema.enum?.length)
-          for (const value of schema.enum)
-            union.push({
-              const: value,
-              ...({
-                ...schema,
-                type: undefined as any,
-                enum: undefined,
-                default: undefined,
-              } satisfies OpenApiV3_1.IJsonSchema.IBoolean as any),
-            } satisfies OpenApi.IJsonSchema.IConstant);
-        else
-          union.push({
-            ...schema,
-            ...{
-              enum: undefined,
-            },
-          });
-      else if (TypeChecker.isInteger(schema) || TypeChecker.isNumber(schema))
-        if (schema.enum?.length)
-          for (const value of schema.enum)
-            union.push({
-              const: value,
-              ...({
-                ...schema,
-                type: undefined as any,
-                enum: undefined,
-                default: undefined,
-                minimum: undefined,
-                maximum: undefined,
-                exclusiveMinimum: undefined,
-                exclusiveMaximum: undefined,
-                multipleOf: undefined,
-              } satisfies OpenApiV3_1.IJsonSchema.IInteger as any),
-            } satisfies OpenApi.IJsonSchema.IConstant);
-        else
-          union.push({
-            ...schema,
-            ...{
-              enum: undefined,
-            },
-            ...(typeof schema.exclusiveMinimum === "number"
-              ? {
-                  minimum: schema.exclusiveMinimum,
-                  exclusiveMinimum: true,
-                }
-              : {
-                  exclusiveMinimum: schema.exclusiveMinimum,
-                }),
-            ...(typeof schema.exclusiveMaximum === "number"
-              ? {
-                  maximum: schema.exclusiveMaximum,
-                  exclusiveMaximum: true,
-                }
-              : {
-                  exclusiveMaximum: schema.exclusiveMaximum,
-                }),
-          });
-      else if (TypeChecker.isString(schema))
-        if (schema.enum?.length)
-          for (const value of schema.enum)
-            union.push({
-              const: value,
-              ...({
-                ...schema,
-                type: undefined as any,
-                enum: undefined,
-                default: undefined,
-              } satisfies OpenApiV3_1.IJsonSchema.IString as any),
-            } satisfies OpenApi.IJsonSchema.IConstant);
-        else
-          union.push({
-            ...schema,
-            ...{
-              enum: undefined,
-            },
-          });
-      // ARRAY TYPE CASE (CONSIDER TUPLE)
-      else if (TypeChecker.isArray(schema)) {
-        if (Array.isArray(schema.items))
-          union.push({
-            ...schema,
-            ...{
-              items: undefined!,
-              prefixItems: schema.items.map(convertSchema),
-              additionalItems:
-                typeof schema.additionalItems === "object" &&
-                schema.additionalItems !== null
-                  ? convertSchema(schema.additionalItems)
-                  : schema.additionalItems,
-            },
-          } satisfies OpenApi.IJsonSchema.ITuple);
-        else if (Array.isArray(schema.prefixItems))
-          union.push({
-            ...schema,
-            ...{
-              items: undefined!,
-              prefixItems: schema.prefixItems.map(convertSchema),
-              additionalItems:
-                typeof schema.additionalItems === "object" &&
-                schema.additionalItems !== null
-                  ? convertSchema(schema.additionalItems)
-                  : schema.additionalItems,
-            },
-          });
-        else if (schema.items === undefined)
-          union.push({
-            ...schema,
-            ...{
-              items: undefined!,
-              prefixItems: [],
-            },
-          });
-        else
-          union.push({
-            ...schema,
-            ...{
-              items: convertSchema(schema.items),
-              prefixItems: undefined,
-              additionalItems: undefined,
-            },
-          });
-      }
-      // OBJECT TYPE CASE
-      else if (TypeChecker.isObject(schema))
-        union.push({
-          ...schema,
-          ...{
-            properties: schema.properties
-              ? Object.fromEntries(
-                  Object.entries(schema.properties)
-                    .filter(([_, v]) => v !== undefined)
-                    .map(
-                      ([key, value]) => [key, convertSchema(value)] as const,
-                    ),
-                )
-              : undefined,
-            additionalProperties: schema.additionalProperties
-              ? typeof schema.additionalProperties === "object" &&
-                schema.additionalProperties !== null
-                ? convertSchema(schema.additionalProperties)
-                : schema.additionalProperties
-              : undefined,
-          },
-        });
-      else if (TypeChecker.isRecursiveReference(schema))
-        union.push({
-          ...schema,
-          ...{
-            $ref: schema.$recursiveRef,
-            $recursiveRef: undefined,
-          },
-        });
-      // THE OTHERS
-      else union.push(schema);
+        union.push({ type: "null" });
+      return {
+        ...(union.length === 0
+          ? { type: undefined }
+          : union.length === 1
+            ? { ...union[0] }
+            : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
+        ...attribute,
+        ...{ nullable: undefined },
+      };
     };
 
-    visit(input);
-    if (
-      nullable.value === true &&
-      !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
-    )
-      union.push({ type: "null" });
-    return {
-      ...(union.length === 0
-        ? { type: undefined }
-        : union.length === 1
-          ? { ...union[0] }
-          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
-      ...attribute,
-      ...{ nullable: undefined },
+  const convertAllOfSchema =
+    (components: OpenApiV3_1.IComponents) =>
+    (input: OpenApiV3_1.IJsonSchema.IAllOf): OpenApi.IJsonSchema => {
+      const objects: Array<OpenApiV3_1.IJsonSchema.IObject | null> =
+        input.allOf.map((schema) => retrieveObject(components)(schema));
+      if (objects.some((obj) => obj === null))
+        return {
+          type: undefined,
+          ...{
+            allOf: undefined,
+          },
+        };
+      return {
+        ...input,
+        type: "object",
+        properties: Object.fromEntries(
+          objects
+            .map((o) => Object.entries(o?.properties ?? {}))
+            .flat()
+            .map(
+              ([key, value]) =>
+                [key, convertSchema(components)(value)] as const,
+            ),
+        ),
+        ...{
+          allOf: undefined,
+        },
+      };
     };
-  };
+
+  const retrieveObject =
+    (components: OpenApiV3_1.IComponents) =>
+    (
+      input: OpenApiV3_1.IJsonSchema,
+      visited: Set<OpenApiV3_1.IJsonSchema> = new Set(),
+    ): OpenApiV3_1.IJsonSchema.IObject | null => {
+      if (TypeChecker.isObject(input))
+        return input.properties !== undefined && !input.additionalProperties
+          ? input
+          : null;
+      else if (visited.has(input)) return null;
+      else visited.add(input);
+
+      if (TypeChecker.isReference(input))
+        return retrieveObject(components)(
+          components.schemas?.[input.$ref.split("/").pop() ?? ""] ?? {},
+          visited,
+        );
+      else if (TypeChecker.isRecursiveReference(input))
+        return retrieveObject(components)(
+          components.schemas?.[input.$recursiveRef.split("/").pop() ?? ""] ??
+            {},
+          visited,
+        );
+      return null;
+    };
 
   namespace TypeChecker {
     export const isConstant = (
@@ -513,14 +593,18 @@ export namespace OpenApiV3_1Converter {
     ): schema is OpenApiV3_1.IJsonSchema.IRecursiveReference =>
       (schema as OpenApiV3_1.IJsonSchema.IRecursiveReference).$recursiveRef !==
       undefined;
-    export const isOneOf = (
+    export const isAllOf = (
       schema: OpenApiV3_1.IJsonSchema,
-    ): schema is OpenApiV3_1.IJsonSchema.IOneOf =>
-      (schema as OpenApiV3_1.IJsonSchema.IOneOf).oneOf !== undefined;
+    ): schema is OpenApiV3_1.IJsonSchema.IAllOf =>
+      (schema as OpenApiV3_1.IJsonSchema.IAllOf).allOf !== undefined;
     export const isAnyOf = (
       schema: OpenApiV3_1.IJsonSchema,
     ): schema is OpenApiV3_1.IJsonSchema.IAnyOf =>
       (schema as OpenApiV3_1.IJsonSchema.IAnyOf).anyOf !== undefined;
+    export const isOneOf = (
+      schema: OpenApiV3_1.IJsonSchema,
+    ): schema is OpenApiV3_1.IJsonSchema.IOneOf =>
+      (schema as OpenApiV3_1.IJsonSchema.IOneOf).oneOf !== undefined;
     export const isNullOnly = (
       schema: OpenApiV3_1.IJsonSchema,
     ): schema is OpenApiV3_1.IJsonSchema.INull =>
