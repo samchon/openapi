@@ -59,6 +59,7 @@ export namespace SwaggerV2Converter {
         ? { trace: convertOperation(doc)(pathItem)(pathItem.trace) }
         : undefined),
     });
+
   const convertOperation =
     (doc: SwaggerV2.IDocument) =>
     (pathItem: SwaggerV2.IPath) =>
@@ -104,6 +105,7 @@ export namespace SwaggerV2Converter {
           )
         : undefined,
     });
+
   const convertParameter = (
     input: SwaggerV2.IOperation.IGeneralParameter,
   ): OpenApi.IOperation.IParameter => ({
@@ -123,6 +125,7 @@ export namespace SwaggerV2Converter {
       },
     },
   });
+
   const convertResponse =
     (doc: SwaggerV2.IDocument) =>
     (
@@ -186,6 +189,7 @@ export namespace SwaggerV2Converter {
         )
       : undefined,
   });
+
   const convertSecurityScheme = (
     input: SwaggerV2.ISecurityDefinition,
   ): OpenApi.ISecurityScheme => {
@@ -245,6 +249,7 @@ export namespace SwaggerV2Converter {
       else return undefined!;
     return undefined!;
   };
+
   const convertSchema = (input: SwaggerV2.IJsonSchema): OpenApi.IJsonSchema => {
     const nullable: { value: boolean } = { value: false };
     const union: OpenApi.IJsonSchema[] = [];
