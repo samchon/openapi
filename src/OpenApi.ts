@@ -30,12 +30,13 @@ import { SwaggerV2Downgrader } from "./internal/SwaggerV2Downgrader";
  *   - Merged {@link OpenApiV3_1.IPath.parameters} to {@link OpenApi.IOperation.parameters}
  *   - Resolved {@link OpenApi.IJsonSchema.IReference references} of {@link OpenApiV3_1.IOperation} mebers
  * - JSON Schema
- *   - Decomposed mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
- *   - Resolved nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
+ *   - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
+ *   - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
  *   - Array type utilizes only single {@link OpenAPI.IJsonSchema.IArray.items}
  *   - Tuple type utilizes only {@link OpenApi.IJsonSchema.ITuple.prefixItems}
- *   - Merged {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link OpenApi.IJsonSchema.IOneOf}
- *   - Merged {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link OpenApi.IJsonSchema.IReference}
+ *   - Merge {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link OpenApi.IJsonSchema.IOneOf}
+ *   - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link OpenApi.IJsonSchema.IReference}
+ *   - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link OpenApi.IJsonSchema.IObject}
  *
  * @author Jeongho Nam - https://github.com/samchon
  */

@@ -26,15 +26,16 @@ For example, when representing nullable type, OpenAPI v3.1 supports three ways. 
 Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
 
   - Operation
-    - Merged `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
+    - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
     - Resolved references of `OpenApiV3_1.IOperation` mebers
   - JSON Schema
-    - Decomposed mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
+    - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
     - Resolved nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
     - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
     - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
-    - Merged `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
-    - Merged `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
+    - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
+    - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
+    - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
 
 
 
