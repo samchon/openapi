@@ -258,26 +258,27 @@ export namespace OpenApiV3Downgrader {
         const insert = (value: any): void => {
           const matched: OpenApiV3.IJsonSchema.INumber | undefined = union.find(
             (u) =>
-              (u as OpenApiV3.IJsonSchema.__ISignificant<any>).type === value,
+              (u as OpenApiV3.IJsonSchema.__ISignificant<any>).type ===
+              typeof value,
           ) as OpenApiV3.IJsonSchema.INumber | undefined;
           if (matched !== undefined) {
             matched.enum ??= [];
             matched.enum.push(value);
           } else union.push({ type: typeof value as "number", enum: [value] });
-          if (OpenApiTypeChecker.isConstant(schema)) insert(schema.const);
-          else if (OpenApiTypeChecker.isOneOf(schema))
-            schema.oneOf.forEach(insert);
         };
+        if (OpenApiTypeChecker.isConstant(schema)) insert(schema.const);
+        else if (OpenApiTypeChecker.isOneOf(schema))
+          for (const u of schema.oneOf)
+            if (OpenApiTypeChecker.isConstant(u)) insert(u.const);
       };
 
       visit(input);
       visitConstant(input);
-      if (nullable)
+      if (nullable === true)
         for (const u of union)
           if (OpenApiTypeChecker.isReference(u))
             downgradeNullableReference(collection)(u);
           else (u as OpenApiV3.IJsonSchema.IArray).nullable = true;
-
       if (nullable === true && union.length === 0)
         return { type: "null", ...attribute };
       return {
