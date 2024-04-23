@@ -3,6 +3,8 @@ import path from "path";
 import typia from "typia";
 
 import { OpenApi, OpenApiV3, OpenApiV3_1, SwaggerV2 } from "../src";
+import { test_downgrade_v30 } from "./features/test_downgrade_v30";
+import { test_downgrade_v20 } from "./features/test_downgrade_v20";
 
 const CONVERTED: string = `${__dirname}/../../examples/converted`;
 
@@ -68,6 +70,9 @@ const main = async (): Promise<void> => {
   await iterate(`${__dirname}/../../examples/v2.0`);
   await iterate(`${__dirname}/../../examples/v3.0`);
   await iterate(`${__dirname}/../../examples/v3.1`);
+
+  test_downgrade_v20();
+  test_downgrade_v30();
 };
 main().catch((exp) => {
   console.error(exp);
