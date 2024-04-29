@@ -115,6 +115,7 @@ export namespace SwaggerV2Downgrader {
       ({
         ...downgradeSchema(collection)(input.schema),
         ...input,
+        required: (input.schema as any)?.required,
         schema: undefined,
         name: input.name ?? `p${i}`,
       }) as any;
