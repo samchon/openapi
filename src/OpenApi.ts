@@ -301,12 +301,14 @@ export namespace OpenApi {
 
     export interface IArray extends __ISignificant<"array"> {
       items: IJsonSchema;
+      uniqueItems?: boolean;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
     export interface ITuple extends __ISignificant<"array"> {
       prefixItems: IJsonSchema[];
       additionalItems?: boolean | IJsonSchema;
+      uniqueItems?: boolean;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
