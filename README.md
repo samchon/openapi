@@ -27,10 +27,10 @@ Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
 
   - Operation
     - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
-    - Resolved references of `OpenApiV3_1.IOperation` mebers
+    - Resolve references of `OpenApiV3_1.IOperation` members
   - JSON Schema
     - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
-    - Resolved nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
+    - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
     - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
     - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
     - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
