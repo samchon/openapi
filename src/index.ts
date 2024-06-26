@@ -1,3 +1,5 @@
+export * from "./IMigrateRoute";
+export * from "./IMigrateDocument";
 export * from "./OpenApi";
 
 export * from "./SwaggerV2";

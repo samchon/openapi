@@ -45,7 +45,13 @@ npm install @samchon/openapi
 ```
 
 ```typescript
-import { OpenApi, SwaggerV2, OpenApiV3, OpenApiV3_1 } from "@samchon/openapi";
+import {
+  OpenApi,
+  SwaggerV2,
+  OpenApiV3,
+  OpenApiV3_1,
+  IMigrateDocument,
+} from "@samchon/openapi";
 
 // original Swagger/OpenAPI document
 const input: 
@@ -64,6 +70,11 @@ const v3: OpenApiV3 = OpenApi.downgrade(output, "3.0");
 // you can utilize it like below
 OpenApi.downgrade(OpenApi.convert(v2), "3.0");
 OpenApi.downgrade(OpenApi.convert(v3), "2.0");
+
+// also supports openapi generator libraries
+const migrate: IMigrateDocument = OpenApi.migrate(
+  OpenApi.convert(input),
+);
 ```
 
 

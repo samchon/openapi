@@ -1,6 +1,8 @@
+import { IMigrateDocument } from "./IMigrateDocument";
 import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
+import { MigrateConverter } from "./internal/MigrateConverter";
 import { OpenApiV3Converter } from "./internal/OpenApiV3Converter";
 import { OpenApiV3Downgrader } from "./internal/OpenApiV3Downgrader";
 import { OpenApiV3_1Converter } from "./internal/OpenApiV3_1Converter";
@@ -57,18 +59,18 @@ export namespace OpenApi {
    * @param input Swagger or OpenAPI document to convert
    * @returns Emended OpenAPI v3.1 document
    */
-  export const convert = (
+  export function convert(
     input:
       | SwaggerV2.IDocument
       | OpenApiV3.IDocument
       | OpenApiV3_1.IDocument
       | OpenApi.IDocument,
-  ): IDocument => {
+  ): IDocument {
     if (OpenApiV3_1.is(input)) return OpenApiV3_1Converter.convert(input);
     else if (OpenApiV3.is(input)) return OpenApiV3Converter.convert(input);
     else if (SwaggerV2.is(input)) return SwaggerV2Converter.convert(input);
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
-  };
+  }
 
   /**
    * Downgrade to Swagger v2.0 document.
@@ -104,6 +106,10 @@ export namespace OpenApi {
     if (version === "2.0") return SwaggerV2Downgrader.downgrade(document);
     else if (version === "3.0") return OpenApiV3Downgrader.downgrade(document);
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
+  }
+
+  export function migrate(document: IDocument): IMigrateDocument {
+    return MigrateConverter.convert(document);
   }
 
   /* -----------------------------------------------------------
