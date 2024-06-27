@@ -8,9 +8,10 @@ import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
 export namespace MigrateConverter {
   export const convert = (document: OpenApi.IDocument): IMigrateDocument => {
     const errors: IMigrateDocument.IError[] = [];
-    const entire: Array<IMigrateRoute | null> = Object.entries(
-      document.paths ?? {},
-    )
+    const entire: Array<IMigrateRoute | null> = Object.entries({
+      ...(document.paths ?? {}),
+      ...(document.webhooks ?? {}),
+    })
       .map(([path, collection]) =>
         (["head", "get", "post", "put", "patch", "delete"] as const)
           .filter((method) => collection[method] !== undefined)

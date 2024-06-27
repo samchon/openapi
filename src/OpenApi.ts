@@ -121,10 +121,7 @@ export namespace OpenApi {
     info?: IDocument.IInfo;
     components: IComponents;
     paths?: Record<string, IPath>;
-    webhooks?: Record<
-      string,
-      IJsonSchema.IReference<`#/components/pathItems/${string}`> | IPath
-    >;
+    webhooks?: Record<string, IPath>;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
     "x-samchon-emended": true;
