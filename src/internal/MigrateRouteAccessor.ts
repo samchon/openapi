@@ -76,9 +76,10 @@ export namespace MigrateRouteAccessor {
     };
 
   const getName = (op: IMigrateRoute): string => {
-    if (op.parameters.length === 0) return op.method;
+    const method = op.method === "delete" ? "erase" : op.method;
+    if (op.parameters.length === 0) return method;
     return (
-      op.method +
+      method +
       "By" +
       op.parameters.map((p) => StringUtil.capitalize(p.key)).join("And")
     );
