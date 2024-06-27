@@ -4,7 +4,7 @@ import { Escaper } from "../utils/Escaper";
 import { StringUtil } from "../utils/StringUtil";
 import { OpenApiTypeChecker } from "./OpenApiTypeChecker";
 
-export namespace MigrateOperationConverter {
+export namespace MigrateRouteConverter {
   export interface IProps {
     document: OpenApi.IDocument;
     method: "head" | "get" | "post" | "put" | "patch" | "delete";
