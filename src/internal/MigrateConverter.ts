@@ -3,7 +3,7 @@ import { IMigrateDocument } from "../IMigrateDocument";
 import { OpenApi } from "../OpenApi";
 import { StringUtil } from "../utils/StringUtil";
 import { MigrateOperationConverter } from "./MigrateOperationConverter";
-import { MigrateRouteNamespacer } from "./MigrateRouteNamespacer";
+import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
 
 export namespace MigrateConverter {
   export const convert = (document: OpenApi.IDocument): IMigrateDocument => {
@@ -40,7 +40,7 @@ export namespace MigrateConverter {
     const operations: IMigrateRoute[] = entire.filter(
       (o): o is IMigrateRoute => !!o,
     );
-    MigrateRouteNamespacer.overwrite(operations);
+    MigrateRouteAccessor.overwrite(operations);
     return {
       routes: operations,
       errors,

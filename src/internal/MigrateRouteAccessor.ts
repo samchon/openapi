@@ -3,7 +3,7 @@ import { Escaper } from "../utils/Escaper";
 import { MapUtil } from "../utils/MapUtil";
 import { StringUtil } from "../utils/StringUtil";
 
-export namespace MigrateRouteNamespacer {
+export namespace MigrateRouteAccessor {
   export const overwrite = (routes: IMigrateRoute[]): void => {
     const dict: Map<string, IElement> = collect((op) =>
       op.emendedPath
@@ -14,10 +14,12 @@ export namespace MigrateRouteNamespacer {
     )(routes);
     for (const props of dict.values())
       props.entries.forEach((entry, i) => {
-        entry.alias = StringUtil.escapeDuplicate([
-          ...props.children,
-          ...props.entries.filter((_, j) => i !== j).map((e) => e.alias),
-        ])(entry.alias);
+        entry.alias = StringUtil.escapeDuplicate(
+          [
+            ...props.children,
+            ...props.entries.filter((_, j) => i !== j).map((e) => e.alias),
+          ].map(StringUtil.normalize),
+        )(StringUtil.normalize(entry.alias));
         entry.route.accessor = [...props.namespace, entry.alias];
 
         const parameters: { name: string; key: string }[] = [
