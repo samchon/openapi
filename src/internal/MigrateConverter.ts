@@ -2,7 +2,7 @@ import { IMigrateRoute } from "../IMigrateRoute";
 import { IMigrateDocument } from "../IMigrateDocument";
 import { OpenApi } from "../OpenApi";
 import { StringUtil } from "../utils/StringUtil";
-import { MigrateOperationConverter } from "./MigrateOperationConverter";
+import { MigrateRouteConverter } from "./MigrateRouteConverter";
 import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
 
 export namespace MigrateConverter {
@@ -18,7 +18,7 @@ export namespace MigrateConverter {
           .map((method) => {
             const operation: OpenApi.IOperation = collection[method]!;
             const migrated: IMigrateRoute | string[] =
-              MigrateOperationConverter.convert({
+              MigrateRouteConverter.convert({
                 document,
                 method,
                 path,

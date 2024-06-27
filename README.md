@@ -15,7 +15,7 @@ OpenAPI definitions and converters (for [typia](https://github.com/samchon/typia
   2. [OpenAPI v3.0](https://github.com/samchon/openapi/blob/master/src/OpenApiV3.ts)
   3. [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
 
-Also, `@samchon/openapi` provides emended OpenAPI v3.1 definition and its converter/inverter from above versions for convenient development. The keyword "emended" means that [`OpenApi`](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts) is not a direct OpenAPI v3.1 specification (OpenApiV3_1), but a little bit shrinked to remove ambiguous and duplicated expressions of OpenAPI v3.1 for the convenience of typia and nestia
+Also, `@samchon/openapi` provides emended OpenAPI v3.1 definition and its converter/inverter from above versions for convenient development. The keyword "emended" means that [`OpenApi`](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts) is not a direct OpenAPI v3.1 specification ([`OpenApiV3_1`](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)), but a little bit shrinked to remove ambiguous and duplicated expressions of OpenAPI v3.1 for the convenience of `typia` and `nestia`.
 
 For example, when representing nullable type, OpenAPI v3.1 supports three ways. In that case, OpenApi remains only the third way, so that makes `typia` and `nestia` (especially [`@nestia/editor`](https://nestia.io/docs/editor/)) to be simple and easy to implement.
 
@@ -36,6 +36,9 @@ Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
     - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
     - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
     - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
+
+Additionally, `@samchon/openapi` provides [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for OpenAPI generators.
+
 
 
 
@@ -71,10 +74,8 @@ const v3: OpenApiV3 = OpenApi.downgrade(output, "3.0");
 OpenApi.downgrade(OpenApi.convert(v2), "3.0");
 OpenApi.downgrade(OpenApi.convert(v3), "2.0");
 
-// also supports openapi generator libraries
-const migrate: IMigrateDocument = OpenApi.migrate(
-  OpenApi.convert(input),
-);
+// also helps openapi generator libraries
+const migrate: IMigrateDocument = OpenApi.migrate(output);
 ```
 
 
