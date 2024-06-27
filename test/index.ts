@@ -2,7 +2,13 @@ import fs from "fs";
 import path from "path";
 import typia from "typia";
 
-import { OpenApi, OpenApiV3, OpenApiV3_1, SwaggerV2 } from "../src";
+import {
+  IMigrateDocument,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "../src";
 import { test_downgrade_v30 } from "./features/test_downgrade_v30";
 import { test_downgrade_v20 } from "./features/test_downgrade_v20";
 
@@ -41,7 +47,6 @@ const iterate = async (directory: string): Promise<void> => {
       );
 
       console.log(`    - downgrade to v2.0`);
-
       const v20: SwaggerV2.IDocument = OpenApi.downgrade(document, "2.0");
       typia.assert(v20);
       typia.assert(OpenApi.convert(v20));
@@ -51,13 +56,20 @@ const iterate = async (directory: string): Promise<void> => {
       );
 
       console.log(`    - downgrade to v3.0`);
-
       const v30: OpenApiV3.IDocument = OpenApi.downgrade(document, "3.0");
       typia.assert(v30);
       typia.assert(OpenApi.convert(v30));
       await fs.promises.writeFile(
         `${CONVERTED}/${name}-v30.json`,
         JSON.stringify(v30, null, 2),
+      );
+
+      console.log(`    - migration`);
+      const result: IMigrateDocument = OpenApi.migrate(document);
+      typia.assert(result);
+      await fs.promises.writeFile(
+        `${CONVERTED}/${name}-migration.json`,
+        JSON.stringify(result, null, 2),
       );
     }
   }

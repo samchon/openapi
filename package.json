@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "0.1.22",
+  "version": "0.2.1",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -29,14 +29,14 @@
   },
   "homepage": "https://github.com/samchon/openapi",
   "devDependencies": {
-    "@nestia/e2e": "^0.4.3",
+    "@nestia/e2e": "^0.6.0",
     "@types/node": "^20.12.7",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "ts-patch": "^3.1.2",
-    "typescript": "^5.4.3",
+    "typescript": "5.4.5",
     "typescript-transform-paths": "^3.4.7",
-    "typia": "^6.0.3"
+    "typia": "^6.2.2"
   },
   "files": [
     "lib",
