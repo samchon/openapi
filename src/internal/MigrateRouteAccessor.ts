@@ -1,17 +1,23 @@
 import { IMigrateRoute } from "../IMigrateRoute";
+import { OpenApi } from "../OpenApi";
 import { Escaper } from "../utils/Escaper";
 import { MapUtil } from "../utils/MapUtil";
 import { StringUtil } from "../utils/StringUtil";
 
 export namespace MigrateRouteAccessor {
-  export const overwrite = (routes: IMigrateRoute[]): void => {
-    const dict: Map<string, IElement> = collect((op) =>
+  export const overwrite = <
+    Schema extends OpenApi.IJsonSchema,
+    Operation extends OpenApi.IOperation<Schema>,
+  >(
+    routes: IMigrateRoute<Schema, Operation>[],
+  ): void => {
+    const dict: Map<string, IElement<Schema, Operation>> = collect((op) =>
       op.emendedPath
         .split("/")
         .filter((str) => !!str.length && str[0] !== ":")
         .map(StringUtil.normalize)
         .map((str) => (Escaper.variable(str) ? str : `_${str}`)),
-    )(routes);
+    )(routes) as Map<string, IElement<Schema, Operation>>;
     for (const props of dict.values())
       props.entries.forEach((entry, i) => {
         entry.alias = StringUtil.escapeDuplicate(
@@ -40,12 +46,21 @@ export namespace MigrateRouteAccessor {
   };
 
   const collect =
-    (getter: (r: IMigrateRoute) => string[]) =>
-    (routes: IMigrateRoute[]): Map<string, IElement> => {
-      const dict: Map<string, IElement> = new Map();
+    <
+      Schema extends OpenApi.IJsonSchema,
+      Operation extends OpenApi.IOperation<Schema>,
+    >(
+      getter: (r: IMigrateRoute<Schema, Operation>) => string[],
+    ) =>
+    (
+      routes: IMigrateRoute<Schema, Operation>[],
+    ): Map<string, IElement<Schema, Operation>> => {
+      const dict: Map<string, IElement<Schema, Operation>> = new Map();
       for (const r of routes) {
         const namespace: string[] = getter(r);
-        let last: IElement = MapUtil.take(dict)(namespace.join("."))(() => ({
+        let last: IElement<Schema, Operation> = MapUtil.take(dict)(
+          namespace.join("."),
+        )(() => ({
           namespace,
           children: new Set(),
           entries: [],
@@ -56,13 +71,13 @@ export namespace MigrateRouteAccessor {
         });
         namespace.slice(0, -1).forEach((_i, i, array) => {
           const partial: string[] = namespace.slice(0, array.length - i);
-          const element: IElement = MapUtil.take(dict)(partial.join("."))(
-            () => ({
-              namespace: partial,
-              children: new Set(),
-              entries: [],
-            }),
-          );
+          const element: IElement<Schema, Operation> = MapUtil.take(dict)(
+            partial.join("."),
+          )(() => ({
+            namespace: partial,
+            children: new Set(),
+            entries: [],
+          }));
           element.children.add(last.namespace.at(-1)!);
         });
         const top = MapUtil.take(dict)("")(() => ({
@@ -75,7 +90,12 @@ export namespace MigrateRouteAccessor {
       return dict;
     };
 
-  const getName = (op: IMigrateRoute): string => {
+  const getName = <
+    Schema extends OpenApi.IJsonSchema,
+    Operation extends OpenApi.IOperation<Schema>,
+  >(
+    op: IMigrateRoute<Schema, Operation>,
+  ): string => {
     const method = op.method === "delete" ? "erase" : op.method;
     if (op.parameters.length === 0) return method;
     return (
@@ -85,13 +105,19 @@ export namespace MigrateRouteAccessor {
     );
   };
 
-  interface IElement {
+  interface IElement<
+    Schema extends OpenApi.IJsonSchema,
+    Operation extends OpenApi.IOperation<Schema>,
+  > {
     namespace: string[];
-    entries: IEntry[];
+    entries: IEntry<Schema, Operation>[];
     children: Set<string>;
   }
-  interface IEntry {
-    route: IMigrateRoute;
+  interface IEntry<
+    Schema extends OpenApi.IJsonSchema,
+    Operation extends OpenApi.IOperation<Schema>,
+  > {
+    route: IMigrateRoute<Schema, Operation>;
     alias: string;
   }
 }

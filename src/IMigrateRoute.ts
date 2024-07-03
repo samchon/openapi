@@ -13,7 +13,10 @@ import { OpenApi } from "./OpenApi";
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IMigrateRoute {
+export interface IMigrateRoute<
+  Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
+> {
   /**
    * Method of the route.
    *
@@ -61,7 +64,7 @@ export interface IMigrateRoute {
    * the reason why the `delete` is a reserved keyword in many programming
    * languages.
    *
-   * - Exxample 1
+   * - Example 1
    *   - path: `POST /shopping/sellers/sales`
    *   - accessor: `shopping.sellers.sales.post`
    * - Example 2
@@ -73,7 +76,7 @@ export interface IMigrateRoute {
   /**
    * List of path parameters.
    */
-  parameters: IMigrateRoute.IParameter[];
+  parameters: IMigrateRoute.IParameter<Schema>[];
 
   /**
    * Metadata of headers.
@@ -90,7 +93,7 @@ export interface IMigrateRoute {
    * forcibly, its property {@link IMigrateRoute.IHeaders.name name} and
    * {@link IMigrateRoute.IHeaders.key key} are always "headers".
    */
-  headers: IMigrateRoute.IHeaders | null;
+  headers: IMigrateRoute.IHeaders<Schema> | null;
 
   /**
    * Metadata of query values.
@@ -107,7 +110,7 @@ export interface IMigrateRoute {
    * forcibly, its property {@link IMigrateRoute.IQuery.name name} and
    * {@link IMigrateRoute.IQuery.key key} are always "headers".
    */
-  query: IMigrateRoute.IQuery | null;
+  query: IMigrateRoute.IQuery<Schema> | null;
 
   /**
    * Metadata of request body.
@@ -118,7 +121,7 @@ export interface IMigrateRoute {
    * If the `body` property is `null`, it means the operation does not require
    * the request body data.
    */
-  body: IMigrateRoute.IBody | null;
+  body: IMigrateRoute.IBody<Schema> | null;
 
   /**
    * Metadata of response body for success case.
@@ -129,7 +132,7 @@ export interface IMigrateRoute {
    * If the `success` property is `null`, it means the operation does not have
    * the response body data. In other words, the RPC function would return `void`.
    */
-  success: IMigrateRoute.IBody | null;
+  success: IMigrateRoute.IBody<Schema> | null;
 
   /**
    * Metadata of response body for exceptional status cases.
@@ -142,7 +145,7 @@ export interface IMigrateRoute {
    * stringified number, but sometimes it could be a string like "default",
    * because the OpenAPI document allows the status code to be a string.
    */
-  exceptions: Record<string, IMigrateRoute.IException>;
+  exceptions: Record<string, IMigrateRoute.IException<Schema>>;
 
   /**
    * Description comment for the route function.
@@ -166,26 +169,34 @@ export interface IMigrateRoute {
    * The `operation` is a function returning the original
    * {@link OpenApi.IOperation} from the {@link OpenAPI} document.
    */
-  operation: () => OpenApi.IOperation;
+  operation: () => Operation;
 }
 export namespace IMigrateRoute {
-  export interface IParameter {
+  export interface IParameter<
+    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  > {
     name: string;
     key: string;
-    schema: OpenApi.IJsonSchema;
+    schema: Schema;
     description?: string;
   }
-  export interface IHeaders {
+  export interface IHeaders<
+    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  > {
     name: string; // headers
     key: string; // headers
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    schema: Schema;
   }
-  export interface IQuery {
+  export interface IQuery<
+    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  > {
     name: string;
     key: string;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    schema: Schema;
   }
-  export interface IBody {
+  export interface IBody<
+    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  > {
     name: string;
     key: string;
     type:
@@ -193,11 +204,13 @@ export namespace IMigrateRoute {
       | "application/json"
       | "application/x-www-form-urlencoded"
       | "multipart/form-data";
-    schema: OpenApi.IJsonSchema;
+    schema: Schema;
     "x-nestia-encrypted"?: boolean;
   }
-  export interface IException {
+  export interface IException<
+    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  > {
     description?: string;
-    schema: OpenApi.IJsonSchema;
+    schema: Schema;
   }
 }
