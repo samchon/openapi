@@ -311,8 +311,6 @@ export namespace OpenApi {
 
       /**
        * The URL pointing to the contact information.
-       *
-       * @format uri
        */
       url?: string;
 
@@ -342,8 +340,6 @@ export namespace OpenApi {
 
       /**
        * A URL to the license used for the API.
-       *
-       * @format uri
        */
       url?: string;
     }
@@ -355,8 +351,6 @@ export namespace OpenApi {
   export interface IServer {
     /**
      * A URL to the target host.
-     *
-     * @format uri
      */
     url: string;
 
