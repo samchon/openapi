@@ -14,26 +14,32 @@ import { OpenApi } from "./OpenApi";
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IMigrateDocument {
+export interface IMigrateDocument<
+  Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
+  Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
+> {
   /**
    * List of routes for migration.
    */
-  routes: IMigrateRoute[];
+  routes: IMigrateRoute<Schema, Operation>[];
 
   /**
    * List of errors occurred during the migration.
    */
-  errors: IMigrateDocument.IError[];
+  errors: IMigrateDocument.IError<Operation>[];
 }
 export namespace IMigrateDocument {
   /**
    * Error of migration in the operation level.
    */
-  export interface IError {
+  export interface IError<
+    Operation extends
+      OpenApi.IOperation<any> = OpenApi.IOperation<OpenApi.IJsonSchema>,
+  > {
     /**
      * Target operation causing the error.
      */
-    operation: () => OpenApi.IOperation;
+    operation: () => Operation;
 
     /**
      * Method of the operation.

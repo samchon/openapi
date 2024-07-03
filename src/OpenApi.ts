@@ -59,16 +59,25 @@ export namespace OpenApi {
    * @param input Swagger or OpenAPI document to convert
    * @returns Emended OpenAPI v3.1 document
    */
-  export function convert(
+  export function convert<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  >(
     input:
       | SwaggerV2.IDocument
       | OpenApiV3.IDocument
       | OpenApiV3_1.IDocument
-      | OpenApi.IDocument,
-  ): IDocument {
-    if (OpenApiV3_1.is(input)) return OpenApiV3_1Converter.convert(input);
-    else if (OpenApiV3.is(input)) return OpenApiV3Converter.convert(input);
-    else if (SwaggerV2.is(input)) return SwaggerV2Converter.convert(input);
+      | OpenApi.IDocument<Schema, Operation>,
+  ): IDocument<Schema, Operation> {
+    if (OpenApiV3_1.is(input))
+      return OpenApiV3_1Converter.convert(input) as IDocument<
+        Schema,
+        Operation
+      >;
+    else if (OpenApiV3.is(input))
+      return OpenApiV3Converter.convert(input) as IDocument<Schema, Operation>;
+    else if (SwaggerV2.is(input))
+      return SwaggerV2Converter.convert(input) as IDocument<Schema, Operation>;
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
   }
 
@@ -81,17 +90,16 @@ export namespace OpenApi {
    * @param version Version to downgrade
    * @returns Swagger v2.0 document
    */
-  export function downgrade(
-    document: IDocument,
+  export function downgrade<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  >(
+    document: IDocument<Schema, Operation>,
     version: "2.0",
   ): SwaggerV2.IDocument;
-  export function downgrade(
-    document: IDocument,
-    version: "3.0",
-  ): OpenApiV3.IDocument;
 
   /**
-   * Downgrade to OpenAPI v2.3 document.
+   * Downgrade to OpenAPI v3.0 document.
    *
    * Downgrade the given document (emeneded OpenAPI v3.1) into OpenAPI v3.0.
    *
@@ -99,8 +107,19 @@ export namespace OpenApi {
    * @param version Version to downgrade
    * @returns OpenAPI v3.0 document
    */
-  export function downgrade(
-    document: IDocument,
+  export function downgrade<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  >(
+    document: IDocument<Schema, Operation>,
+    version: "3.0",
+  ): OpenApiV3.IDocument;
+
+  export function downgrade<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  >(
+    document: IDocument<Schema, Operation>,
     version: string,
   ): SwaggerV2.IDocument | OpenApiV3.IDocument {
     if (version === "2.0") return SwaggerV2Downgrader.downgrade(document);
@@ -108,20 +127,28 @@ export namespace OpenApi {
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
   }
 
-  export function migrate(document: IDocument): IMigrateDocument {
+  export function migrate<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  >(
+    document: IDocument<Schema, Operation>,
+  ): IMigrateDocument<Schema, Operation> {
     return MigrateConverter.convert(document);
   }
 
   /* -----------------------------------------------------------
     PATH ITEMS
   ----------------------------------------------------------- */
-  export interface IDocument {
+  export interface IDocument<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  > {
     openapi: `3.1.${number}`;
     servers?: IServer[];
     info?: IDocument.IInfo;
-    components: IComponents;
-    paths?: Record<string, IPath>;
-    webhooks?: Record<string, IPath>;
+    components: IComponents<Schema>;
+    paths?: Record<string, IPath<Schema, Operation>>;
+    webhooks?: Record<string, IPath<Schema, Operation>>;
     security?: Record<string, string[]>[];
     tags?: IDocument.ITag[];
     "x-samchon-emended": true;
@@ -168,17 +195,20 @@ export namespace OpenApi {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export type IPath = {
+  export type IPath<
+    Schema extends IJsonSchema = IJsonSchema,
+    Operation extends IOperation<Schema> = IOperation<Schema>,
+  > = {
     servers?: IServer[];
     summary?: string;
     description?: string;
-  } & Partial<Record<Method, IOperation>>;
+  } & Partial<Record<Method, Operation>>;
 
-  export interface IOperation {
+  export interface IOperation<Schema extends IJsonSchema = IJsonSchema> {
     operationId?: string;
-    parameters?: IOperation.IParameter[];
-    requestBody?: IOperation.IRequestBody;
-    responses?: Record<string, IOperation.IResponse>;
+    parameters?: IOperation.IParameter<Schema>[];
+    requestBody?: IOperation.IRequestBody<Schema>;
+    responses?: Record<string, IOperation.IResponse<Schema>>;
     servers?: IServer[];
     summary?: string;
     description?: string;
@@ -187,30 +217,32 @@ export namespace OpenApi {
     deprecated?: boolean;
   }
   export namespace IOperation {
-    export interface IParameter {
+    export interface IParameter<Schema extends IJsonSchema = IJsonSchema> {
       name?: string;
       in: "path" | "query" | "header" | "cookie";
-      schema: IJsonSchema;
+      schema: Schema;
       required?: boolean;
       title?: string;
       description?: string;
     }
-    export interface IRequestBody {
+    export interface IRequestBody<Schema extends IJsonSchema = IJsonSchema> {
       description?: string;
       required?: boolean;
-      content?: IContent;
+      content?: IContent<Schema>;
       "x-nestia-encrypted"?: boolean;
     }
-    export interface IResponse {
-      content?: IContent;
-      headers?: Record<string, IOperation.IParameter>;
+    export interface IResponse<Schema extends IJsonSchema = IJsonSchema> {
+      content?: IContent<Schema>;
+      headers?: Record<string, IOperation.IParameter<Schema>>;
       description?: string;
       "x-nestia-encrypted"?: boolean;
     }
 
-    export type IContent = Partial<Record<ContentType, IMediaType>>;
-    export interface IMediaType {
-      schema?: IJsonSchema;
+    export type IContent<Schema extends IJsonSchema = IJsonSchema> = Partial<
+      Record<ContentType, IMediaType<Schema>>
+    >;
+    export interface IMediaType<Schema extends IJsonSchema = IJsonSchema> {
+      schema?: Schema;
     }
     export type ContentType =
       | "text/plain"
@@ -224,8 +256,8 @@ export namespace OpenApi {
   /* -----------------------------------------------------------
     SCHEMA DEFINITIONS
   ----------------------------------------------------------- */
-  export interface IComponents {
-    schemas?: Record<string, IJsonSchema>;
+  export interface IComponents<Schema extends IJsonSchema = IJsonSchema> {
+    schemas?: Record<string, Schema>;
     securitySchemes?: Record<string, ISecurityScheme>;
   }
 
@@ -302,30 +334,34 @@ export namespace OpenApi {
       /** @type uint64 */ maxLength?: number;
     }
 
-    export interface IArray extends __ISignificant<"array"> {
-      items: IJsonSchema;
+    export interface IArray<Schema extends IJsonSchema = IJsonSchema>
+      extends __ISignificant<"array"> {
+      items: Schema;
       uniqueItems?: boolean;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
-    export interface ITuple extends __ISignificant<"array"> {
-      prefixItems: IJsonSchema[];
-      additionalItems?: boolean | IJsonSchema;
+    export interface ITuple<Schema extends IJsonSchema = IJsonSchema>
+      extends __ISignificant<"array"> {
+      prefixItems: Schema[];
+      additionalItems?: boolean | Schema;
       uniqueItems?: boolean;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
-    export interface IObject extends __ISignificant<"object"> {
-      properties?: Record<string, IJsonSchema>;
-      additionalProperties?: boolean | IJsonSchema;
+    export interface IObject<Schema extends IJsonSchema = IJsonSchema>
+      extends __ISignificant<"object"> {
+      properties?: Record<string, Schema>;
+      additionalProperties?: boolean | Schema;
       required?: string[];
     }
     export interface IReference<Key = string> extends __IAttribute {
       $ref: Key;
     }
 
-    export interface IOneOf extends __IAttribute {
-      oneOf: Exclude<IJsonSchema, IJsonSchema.IOneOf>[];
+    export interface IOneOf<Schema extends IJsonSchema = IJsonSchema>
+      extends __IAttribute {
+      oneOf: Exclude<Schema, IJsonSchema.IOneOf>[];
     }
     export interface INull extends __ISignificant<"null"> {}
     export interface IUnknown extends __IAttribute {

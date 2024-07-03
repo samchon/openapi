@@ -6,40 +6,46 @@ import { MigrateRouteConverter } from "./MigrateRouteConverter";
 import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
 
 export namespace MigrateConverter {
-  export const convert = (document: OpenApi.IDocument): IMigrateDocument => {
-    const errors: IMigrateDocument.IError[] = [];
-    const entire: Array<IMigrateRoute | null> = Object.entries({
-      ...(document.paths ?? {}),
-      ...(document.webhooks ?? {}),
-    })
-      .map(([path, collection]) =>
-        (["head", "get", "post", "put", "patch", "delete"] as const)
-          .filter((method) => collection[method] !== undefined)
-          .map((method) => {
-            const operation: OpenApi.IOperation = collection[method]!;
-            const migrated: IMigrateRoute | string[] =
-              MigrateRouteConverter.convert({
-                document,
-                method,
-                path,
-                emendedPath: StringUtil.reJoinWithDecimalParameters(path),
-                operation,
-              });
-            if (Array.isArray(migrated)) {
-              errors.push({
-                method,
-                path,
-                operation: () => operation,
-                messages: migrated,
-              });
-              return null;
-            }
-            return migrated;
-          }),
-      )
-      .flat();
-    const operations: IMigrateRoute[] = entire.filter(
-      (o): o is IMigrateRoute => !!o,
+  export const convert = <
+    Schema extends OpenApi.IJsonSchema,
+    Operation extends OpenApi.IOperation<Schema>,
+  >(
+    document: OpenApi.IDocument<Schema, Operation>,
+  ): IMigrateDocument<Schema, Operation> => {
+    const errors: IMigrateDocument.IError<Operation>[] = [];
+    const entire: Array<IMigrateRoute<Schema, Operation> | null> =
+      Object.entries({
+        ...(document.paths ?? {}),
+        ...(document.webhooks ?? {}),
+      })
+        .map(([path, collection]) =>
+          (["head", "get", "post", "put", "patch", "delete"] as const)
+            .filter((method) => collection[method] !== undefined)
+            .map((method) => {
+              const operation: Operation = collection[method]!;
+              const migrated: IMigrateRoute<Schema, Operation> | string[] =
+                MigrateRouteConverter.convert({
+                  document,
+                  method,
+                  path,
+                  emendedPath: StringUtil.reJoinWithDecimalParameters(path),
+                  operation,
+                }) as IMigrateRoute<Schema, Operation> | string[];
+              if (Array.isArray(migrated)) {
+                errors.push({
+                  method,
+                  path,
+                  operation: () => operation,
+                  messages: migrated,
+                });
+                return null;
+              }
+              return migrated;
+            }),
+        )
+        .flat();
+    const operations: IMigrateRoute<Schema, Operation>[] = entire.filter(
+      (o): o is IMigrateRoute<Schema, Operation> => !!o,
     );
     MigrateRouteAccessor.overwrite(operations);
     return {
