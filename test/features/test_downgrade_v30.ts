@@ -1,6 +1,6 @@
-import { OpenApi, OpenApiV3 } from "../../src";
-import { OpenApiV3Downgrader } from "../../src/internal/OpenApiV3Downgrader";
 import { TestValidator } from "@nestia/e2e";
+import { OpenApi, OpenApiV3 } from "@samchon/openapi";
+import { OpenApiV3Downgrader } from "@samchon/openapi/lib/internal/OpenApiV3Downgrader";
 
 export const test_downgrade_v30 = () => {
   const schema: OpenApi.IJsonSchema = {
