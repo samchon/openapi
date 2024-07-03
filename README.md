@@ -19,23 +19,23 @@ Also, `@samchon/openapi` provides emended OpenAPI v3.1 definition and its conver
 
 For example, when representing nullable type, OpenAPI v3.1 supports three ways. In that case, OpenApi remains only the third way, so that makes `typia` and `nestia` (especially [`@nestia/editor`](https://nestia.io/docs/editor/)) to be simple and easy to implement.
 
-  - `{ type: ["string", "null"] }`
-  - `{ type: "string", nullable: true }`
-  - `{ oneOf: [{ type: "string" }, { type: "null" }] }`
+- `{ type: ["string", "null"] }`
+- `{ type: "string", nullable: true }`
+- `{ oneOf: [{ type: "string" }, { type: "null" }] }`
 
 Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
 
-  - Operation
-    - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
-    - Resolve references of `OpenApiV3_1.IOperation` members
-  - JSON Schema
-    - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
-    - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
-    - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
-    - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
-    - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
-    - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
-    - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
+- Operation
+  - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
+  - Resolve references of `OpenApiV3_1.IOperation` members
+- JSON Schema
+  - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
+  - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
+  - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
+  - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
+  - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
+  - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
+  - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
 
 Additionally, `@samchon/openapi` provides [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for OpenAPI generators.
 
@@ -80,7 +80,8 @@ const migrate: IMigrateDocument = OpenApi.migrate(output);
 
 
 
+
 ## Related Projects
-  - `typia`: https://github.com/samchon/typia
-  - `nestia`: https://github.com/samchon/nestia
-  - `@nestia/editor`: https://nestia.io/docs/editor
+- `typia`: https://github.com/samchon/typia
+- `nestia`: https://github.com/samchon/nestia
+- `@wrtnio/openai-function-schema`: https://github.com/wrtnio/openai-function-schema

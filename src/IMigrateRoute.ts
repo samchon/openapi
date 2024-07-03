@@ -172,21 +172,58 @@ export interface IMigrateRoute<
   operation: () => Operation;
 }
 export namespace IMigrateRoute {
+  /**
+   * Metadata of path parameter.
+   */
   export interface IParameter<
     Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   > {
+    /**
+     * Name of the path parameter.
+     */
     name: string;
+
+    /**
+     * Key of the path parameter.
+     */
     key: string;
+
+    /**
+     * Metadata of path parameter data type.
+     */
     schema: Schema;
+
+    /**
+     * Description comment for the path parameter.
+     */
     description?: string;
   }
+
+  /**
+   * Metadata of headers.
+   */
   export interface IHeaders<
     Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   > {
-    name: string; // headers
-    key: string; // headers
+    /**
+     * Name of the headers parameter.
+     */
+    name: string;
+
+    /**
+     * Key of the headers parameter.
+     */
+    key: string;
+
+    /**
+     * Metadata of headers data type.
+     */
     schema: Schema;
   }
+
+  /**
+   * Metadata of query values.
+   */
   export interface IQuery<
     Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   > {
@@ -194,23 +231,57 @@ export namespace IMigrateRoute {
     key: string;
     schema: Schema;
   }
+
+  /**
+   * Metadata of request/response body.
+   */
   export interface IBody<
     Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   > {
+    /**
+     * Name of the body parameter.
+     */
     name: string;
+
+    /**
+     * Key of the body parameter.
+     */
     key: string;
+
+    /**
+     * Content type of the body.
+     */
     type:
       | "text/plain"
       | "application/json"
       | "application/x-www-form-urlencoded"
       | "multipart/form-data";
+
+    /**
+     * Metadata of response body data type.
+     */
     schema: Schema;
+
+    /**
+     * Whether the body is encrypted or not.
+     */
     "x-nestia-encrypted"?: boolean;
   }
+
+  /**
+   * Metadata of response body for exceptional status cases.
+   */
   export interface IException<
     Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   > {
+    /**
+     * Description comment for the exception.
+     */
     description?: string;
+
+    /**
+     * Metadata of response body data type.
+     */
     schema: Schema;
   }
 }
