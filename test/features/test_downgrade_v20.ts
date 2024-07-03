@@ -1,6 +1,6 @@
-import { OpenApi, SwaggerV2 } from "../../src";
 import { TestValidator } from "@nestia/e2e";
-import { SwaggerV2Downgrader } from "../../src/internal/SwaggerV2Downgrader";
+import { OpenApi, SwaggerV2 } from "@samchon/openapi";
+import { SwaggerV2Downgrader } from "@samchon/openapi/lib/internal/SwaggerV2Downgrader";
 
 export const test_downgrade_v20 = () => {
   const schema: OpenApi.IJsonSchema = {

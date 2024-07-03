@@ -1,16 +1,16 @@
-import fs from "fs";
-import path from "path";
-import typia from "typia";
-
 import {
   IMigrateDocument,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
   SwaggerV2,
-} from "../src";
-import { test_downgrade_v30 } from "./features/test_downgrade_v30";
+} from "@samchon/openapi";
+import fs from "fs";
+import path from "path";
+import typia from "typia";
+
 import { test_downgrade_v20 } from "./features/test_downgrade_v20";
+import { test_downgrade_v30 } from "./features/test_downgrade_v30";
 
 const CONVERTED: string = `${__dirname}/../../examples/converted`;
 
