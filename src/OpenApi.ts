@@ -396,7 +396,7 @@ export namespace OpenApi {
    * Path item.
    *
    * `OpenApi.IPath` represents a path item of emended OpenAPI v3.1,
-   * collecting multiple method operations in a signgle path.
+   * collecting multiple method operations in a single path.
    */
   export interface IPath<
     Schema extends IJsonSchema = IJsonSchema,
@@ -787,7 +787,7 @@ export namespace OpenApi {
     }
 
     /**
-     * Array type.
+     * Array type info.
      */
     export interface IArray<Schema extends IJsonSchema = IJsonSchema>
       extends __ISignificant<"array"> {
@@ -986,6 +986,32 @@ export namespace OpenApi {
        * List of the union types.
        */
       oneOf: Exclude<Schema, IJsonSchema.IOneOf>[];
+
+      /**
+       * Discriminator info of the union type.
+       */
+      discriminator?: IOneOf.IDiscriminator;
+    }
+    export namespace IOneOf {
+      /**
+       * Discriminator info of the union type.
+       */
+      export interface IDiscriminator {
+        /**
+         * Property name for the discriminator.
+         */
+        propertyName: string;
+
+        /**
+         * Mapping of the discriminator value to the schema name.
+         *
+         * This property is valid only for {@link IReference} typed
+         * {@link IOneOf.oneof} elements. Therefore, `key` of `mapping` is
+         * the discriminator value, and `value` of `mapping` is the
+         * schema name like `#/components/schemas/SomeObject`.
+         */
+        mapping?: Record<string, string>;
+      }
     }
 
     /**
