@@ -262,6 +262,13 @@ export namespace OpenApiV3_1 {
     }
     export interface IOneOf extends __IAttribute {
       oneOf: IJsonSchema[];
+      discriminator?: IOneOf.IDiscriminator;
+    }
+    export namespace IOneOf {
+      export interface IDiscriminator {
+        propertyName: string;
+        mapping?: Record<string, string>;
+      }
     }
 
     export interface IArray extends __ISignificant<"array"> {

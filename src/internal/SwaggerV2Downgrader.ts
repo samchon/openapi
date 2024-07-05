@@ -291,6 +291,7 @@ export namespace SwaggerV2Downgrader {
             ? { ...union[0] }
             : { "x-oneOf": union.map((u) => ({ ...u, nullable: undefined })) }),
         ...attribute,
+        ...(union.length > 1 ? { discriminator: undefined } : {}),
       };
     };
 
