@@ -1,8 +1,8 @@
 import { IMigrateRoute } from "../IMigrateRoute";
 import { OpenApi } from "../OpenApi";
+import { OpenApiTypeChecker } from "../OpenApiTypeChecker";
 import { Escaper } from "../utils/Escaper";
 import { StringUtil } from "../utils/StringUtil";
-import { OpenApiTypeChecker } from "./OpenApiTypeChecker";
 
 export namespace MigrateRouteConverter {
   export interface IProps {

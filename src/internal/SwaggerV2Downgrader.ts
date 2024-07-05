@@ -1,6 +1,6 @@
 import { OpenApi } from "../OpenApi";
+import { OpenApiTypeChecker } from "../OpenApiTypeChecker";
 import { SwaggerV2 } from "../SwaggerV2";
-import { OpenApiTypeChecker } from "./OpenApiTypeChecker";
 
 export namespace SwaggerV2Downgrader {
   export interface IComponentsCollection {
