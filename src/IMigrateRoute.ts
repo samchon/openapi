@@ -161,7 +161,7 @@ export interface IMigrateRoute<
    * 5. Tag names are added with `@tag` tag.
    * 6. If {@link OpenApi.IOperation.deprecated}, `@deprecated` tag is added.
    */
-  comment?: () => string;
+  comment: () => string;
 
   /**
    * Original operation from the OpenAPI document.
@@ -169,7 +169,7 @@ export interface IMigrateRoute<
    * The `operation` is a function returning the original
    * {@link OpenApi.IOperation} from the {@link OpenAPI} document.
    */
-  operation?: () => Operation;
+  operation: () => Operation;
 }
 export namespace IMigrateRoute {
   /**
