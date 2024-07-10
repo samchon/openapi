@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
@@ -30,11 +30,12 @@
   },
   "homepage": "https://github.com/samchon/openapi",
   "devDependencies": {
-    "@nestia/e2e": "^0.6.0",
+    "@nestia/e2e": "^0.7.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^20.12.7",
+    "chalk": "^4.1.2",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "rollup": "^4.18.1",
