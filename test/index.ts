@@ -1,11 +1,23 @@
 import { DynamicExecutor } from "@nestia/e2e";
+import chalk from "chalk";
 
 const main = async (): Promise<void> => {
   // DO TEST
   const report: DynamicExecutor.IReport = await DynamicExecutor.validate({
     prefix: "test_",
+    location: __dirname + "/features",
     parameters: () => [],
-  })(__dirname + "/features");
+    onComplete: (exec) => {
+      const trace = (str: string) =>
+        console.log(`  - ${chalk.green(exec.name)}: ${str}`);
+      if (exec.error === null) {
+        const elapsed: number =
+          new Date(exec.completed_at).getTime() -
+          new Date(exec.started_at).getTime();
+        trace(`${chalk.yellow(elapsed.toLocaleString())} ms`);
+      } else trace(chalk.red(exec.error.name));
+    },
+  });
 
   // REPORT EXCEPTIONS
   const exceptions: Error[] = report.executions

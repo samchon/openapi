@@ -39,7 +39,7 @@ export namespace IMigrateDocument {
     /**
      * Target operation causing the error.
      */
-    operation: () => Operation;
+    operation?: () => Operation;
 
     /**
      * Method of the operation.
