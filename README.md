@@ -37,7 +37,7 @@ Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
   - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
   - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
 
-Additionally, `@samchon/openapi` provides [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for OpenAPI generators.
+Additionally, `@samchon/openapi` provides [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for OpenAPI generators. If you're developing TypeScript, [`@nestia/editor`](https://nestia.io/docs/editor) would be the best project utilizing the [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for the OpenAPI SDK generation. Otherwise, you wanna utilize OpenAPI document for OpenAI function calling, [`@wrtnio/openai-function-schema`](https://github.com/wrtnio/openai-function-schema/) has been prepared for you.
 
 
 

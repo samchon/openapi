@@ -5930,12 +5930,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "Target sale's ",
+            "title": "Target sale's ID",
+            "description": "Target sale's ID to update.\nNote that, you have to specify only the sale ID of your own.",
             "required": true
           }
         ],
         "requestBody": {
-          "description": "New information of the sale",
+          "description": "New information of the sale.\nNote that, your input data would entirely modify the sale, so that have to be careful if you only want the partial updating.",
           "content": {
             "application/json": {
               "schema": {
