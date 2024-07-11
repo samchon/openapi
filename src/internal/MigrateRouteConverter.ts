@@ -82,7 +82,21 @@ export namespace MigrateRouteConverter {
           OpenApiTypeChecker.isString(p.schema) ||
           OpenApiTypeChecker.isArray(p.schema),
       );
-      if (objects.length === 1 && primitives.length === 0) return objects[0];
+      const out = (elem: {
+        schema: OpenApi.IJsonSchema;
+        title?: string;
+        description?: string;
+      }) =>
+        ({
+          ...elem,
+          name: type,
+          key: type,
+          title: () => elem.title,
+          description: () => elem.description,
+        }) satisfies IMigrateRoute.IHeaders;
+
+      if (objects.length === 1 && primitives.length === 0)
+        return out(parameters[0]);
       else if (objects.length > 1) {
         failures.push(`${type} typed parameters must be only one object type`);
         return false;
@@ -127,37 +141,39 @@ export namespace MigrateRouteConverter {
       ];
       return parameters.length === 0
         ? null
-        : emplaceReference({
-            document: props.document,
-            name:
-              StringUtil.pascal(`I/Api/${props.path}`) +
-              "." +
-              StringUtil.pascal(`${props.method}/${type}`),
-            schema: {
-              type: "object",
-              properties: Object.fromEntries([
-                ...new Map<string, OpenApi.IJsonSchema>(
-                  entire
-                    .map((o) =>
-                      Object.entries(o.properties ?? {}).map(
-                        ([name, schema]) =>
-                          [
-                            name,
-                            {
-                              ...schema,
-                              description:
-                                schema.description ?? schema.description,
-                            } as OpenApi.IJsonSchema,
-                          ] as const,
-                      ),
-                    )
-                    .flat(),
-                ),
-              ]),
-              required: [
-                ...new Set(entire.map((o) => o.required ?? []).flat()),
-              ],
-            },
+        : out({
+            schema: emplaceReference({
+              document: props.document,
+              name:
+                StringUtil.pascal(`I/Api/${props.path}`) +
+                "." +
+                StringUtil.pascal(`${props.method}/${type}`),
+              schema: {
+                type: "object",
+                properties: Object.fromEntries([
+                  ...new Map<string, OpenApi.IJsonSchema>(
+                    entire
+                      .map((o) =>
+                        Object.entries(o.properties ?? {}).map(
+                          ([name, schema]) =>
+                            [
+                              name,
+                              {
+                                ...schema,
+                                description:
+                                  schema.description ?? schema.description,
+                              } as OpenApi.IJsonSchema,
+                            ] as const,
+                        ),
+                      )
+                      .flat(),
+                  ),
+                ]),
+                required: [
+                  ...new Set(entire.map((o) => o.required ?? []).flat()),
+                ],
+              },
+            }),
           });
     });
 
@@ -200,18 +216,29 @@ export namespace MigrateRouteConverter {
         );
     if (failures.length) return failures;
 
+    const parameters: IMigrateRoute.IParameter[] = (
+      props.operation.parameters ?? []
+    )
+      .filter((p) => p.in === "path")
+      .map((p, i) => ({
+        // FILL KEY NAME IF NOT EXISTsS
+        name: parameterNames[i],
+        key: (() => {
+          let key: string = StringUtil.normalize(parameterNames[i]);
+          if (Escaper.variable(key)) return key;
+          while (true) {
+            key = "_" + key;
+            if (!parameterNames.some((s) => s === key)) return key;
+          }
+        })(),
+        schema: p.schema,
+        parameter: () => p,
+      }));
     return {
       method: props.method,
       path: props.path,
       emendedPath: props.emendedPath,
       accessor: ["@lazy"],
-      headers: headers
-        ? {
-            name: "headers",
-            key: "headers",
-            schema: headers,
-          }
-        : null,
       parameters: (props.operation.parameters ?? [])
         .filter((p) => p.in === "path")
         .map((p, i) => ({
@@ -225,18 +252,11 @@ export namespace MigrateRouteConverter {
               if (!parameterNames.some((s) => s === key)) return key;
             }
           })(),
-          schema: {
-            ...p!.schema,
-            description: p!.schema.description ?? p!.description,
-          },
+          schema: p.schema,
+          parameter: () => p,
         })),
-      query: query
-        ? {
-            name: "query",
-            key: "query",
-            schema: query,
-          }
-        : null,
+      headers: headers || null,
+      query: query || null,
       body: body as IMigrateRoute.IBody | null,
       success: success as IMigrateRoute.IBody | null,
       exceptions: Object.fromEntries(
@@ -244,48 +264,80 @@ export namespace MigrateRouteConverter {
           .filter(
             ([key]) => key !== "200" && key !== "201" && key !== "default",
           )
-          .map(([key, value]) => [
-            key,
+          .map(([status, response]) => [
+            status,
             {
-              description: value.description,
-              schema: value.content?.["application/json"]?.schema ?? {},
+              schema: response.content?.["application/json"]?.schema ?? {},
+              response: () => response,
             },
           ]),
       ),
-      comment: () => writeDescription(props.operation),
+      comment: () =>
+        writeRouteComment({
+          operation: props.operation,
+          parameters,
+          query: query || null,
+          body: body || null,
+        }),
       operation: () => props.operation,
     };
   };
 
-  const writeDescription = (original: OpenApi.IOperation): string => {
+  const writeRouteComment = (props: {
+    operation: OpenApi.IOperation;
+    parameters: IMigrateRoute.IParameter[];
+    query: IMigrateRoute.IQuery | null;
+    body: IMigrateRoute.IBody | null;
+  }): string => {
     const commentTags: string[] = [];
     const add = (text: string) => {
       if (commentTags.every((line) => line !== text)) commentTags.push(text);
     };
 
-    let description: string = original.description ?? "";
-    if (original.summary) {
-      const emended: string = original.summary.endsWith(".")
-        ? original.summary
-        : original.summary + ".";
-      if (!!description.length && !description.startsWith(original.summary))
+    let description: string = props.operation.description ?? "";
+    if (props.operation.summary) {
+      const emended: string = props.operation.summary.endsWith(".")
+        ? props.operation.summary
+        : props.operation.summary + ".";
+      if (
+        !!description.length &&
+        !description.startsWith(props.operation.summary)
+      )
         description = `${emended}\n${description}`;
     }
-    for (const p of original.parameters ?? [])
-      if (p.description) add(`@param ${p.name} ${p.description}`);
-    if (original.requestBody?.description)
-      add(`@param body ${original.requestBody.description}`);
-    for (const security of original.security ?? [])
+    description = description
+      .split("\n")
+      .map((s) => s.trim())
+      .join("\n");
+
+    for (const p of props.parameters ?? []) {
+      const param = p.parameter();
+      if (param.description || param.title) {
+        const text: string = (param.description ?? param.title)!;
+        add(`@param ${p.name} ${writeIndented(text, p.name.length + 8)}`);
+      }
+    }
+    if (props.body?.description()?.length)
+      add(`@param body ${writeIndented(props.body.description()!, 12)}`);
+    for (const security of props.operation.security ?? [])
       for (const [name, scopes] of Object.entries(security))
         add(`@security ${[name, ...scopes].join("")}`);
-    if (original.tags) original.tags.forEach((name) => add(`@tag ${name}`));
-    if (original.deprecated) add("@deprecated");
+    if (props.operation.tags)
+      props.operation.tags.forEach((name) => add(`@tag ${name}`));
+    if (props.operation.deprecated) add("@deprecated");
     return description.length
       ? commentTags.length
         ? `${description}\n\n${commentTags.join("\n")}`
         : description
       : commentTags.join("\n");
   };
+
+  const writeIndented = (text: string, spaces: number): string =>
+    text
+      .split("\n")
+      .map((s) => s.trim())
+      .map((s, i) => (i === 0 ? s : `${" ".repeat(spaces)}${s}`))
+      .join("\n");
 
   const emplaceBodySchema =
     (from: "request" | "response") =>
@@ -322,6 +374,7 @@ export namespace MigrateRouteConverter {
               : emplacer(schema)
             : {},
           "x-nestia-encrypted": meta["x-nestia-encrypted"],
+          description: () => meta.description,
         };
       }
 
@@ -339,6 +392,7 @@ export namespace MigrateRouteConverter {
               ? schema
               : emplacer(schema)
             : {},
+          description: () => meta.description,
         };
       }
 
@@ -349,6 +403,7 @@ export namespace MigrateRouteConverter {
           name: "body",
           key: "body",
           schema: { type: "string" },
+          description: () => meta.description,
         };
 
       if (from === "request") {
@@ -366,6 +421,7 @@ export namespace MigrateRouteConverter {
                 ? schema
                 : emplacer(schema)
               : {},
+            description: () => meta.description,
           };
         }
       }

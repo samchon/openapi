@@ -194,9 +194,12 @@ export namespace IMigrateRoute {
     schema: Schema;
 
     /**
-     * Description comment for the path parameter.
+     * Original parameter info from the OpenAPI document.
+     *
+     * The `parameter` is a function returning the original
+     * {@link OpenApi.IOperation.IParameter} from the {@link OpenAPI} document.
      */
-    description?: string;
+    parameter: () => OpenApi.IOperation.IParameter<Schema>;
   }
 
   /**
@@ -219,6 +222,8 @@ export namespace IMigrateRoute {
      * Metadata of headers data type.
      */
     schema: Schema;
+    title: () => string | undefined;
+    description: () => string | undefined;
   }
 
   /**
@@ -230,6 +235,8 @@ export namespace IMigrateRoute {
     name: string;
     key: string;
     schema: Schema;
+    title: () => string | undefined;
+    description: () => string | undefined;
   }
 
   /**
@@ -263,6 +270,11 @@ export namespace IMigrateRoute {
     schema: Schema;
 
     /**
+     * Description comment for the request/response body.
+     */
+    description: () => string | undefined;
+
+    /**
      * Whether the body is encrypted or not.
      */
     "x-nestia-encrypted"?: boolean;
@@ -275,13 +287,13 @@ export namespace IMigrateRoute {
     Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   > {
     /**
-     * Description comment for the exception.
-     */
-    description?: string;
-
-    /**
      * Metadata of response body data type.
      */
     schema: Schema;
+
+    /**
+     * Description comment for the exception.
+     */
+    response: () => OpenApi.IOperation.IResponse<Schema>;
   }
 }
