@@ -75,6 +75,8 @@ export interface IMigrateRoute<
 
   /**
    * List of path parameters.
+   *
+   * Note that, not a list of every parameters, but only path parameters.
    */
   parameters: IMigrateRoute.IParameter<Schema>[];
 
@@ -224,6 +226,8 @@ export namespace IMigrateRoute {
     schema: Schema;
     title: () => string | undefined;
     description: () => string | undefined;
+    example: () => any | undefined;
+    examples: () => Record<string, any> | undefined;
   }
 
   /**
@@ -237,6 +241,8 @@ export namespace IMigrateRoute {
     schema: Schema;
     title: () => string | undefined;
     description: () => string | undefined;
+    example: () => any | undefined;
+    examples: () => Record<string, any> | undefined;
   }
 
   /**
@@ -275,6 +281,11 @@ export namespace IMigrateRoute {
     description: () => string | undefined;
 
     /**
+     * Media type of the request/response body.
+     */
+    media: () => OpenApi.IOperation.IMediaType<Schema>;
+
+    /**
      * Whether the body is encrypted or not.
      */
     "x-nestia-encrypted"?: boolean;
@@ -295,5 +306,10 @@ export namespace IMigrateRoute {
      * Description comment for the exception.
      */
     response: () => OpenApi.IOperation.IResponse<Schema>;
+
+    /**
+     * Media type of the response body.
+     */
+    media: () => OpenApi.IOperation.IMediaType<Schema>;
   }
 }

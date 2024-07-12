@@ -506,9 +506,9 @@ export namespace OpenApi {
      * Request body of the operation.
      */
     export interface IRequestBody<Schema extends IJsonSchema = IJsonSchema> {
+      content?: IContent<Schema>;
       description?: string;
       required?: boolean;
-      content?: IContent<Schema>;
       "x-nestia-encrypted"?: boolean;
     }
 
@@ -516,8 +516,8 @@ export namespace OpenApi {
      * Response of the operation.
      */
     export interface IResponse<Schema extends IJsonSchema = IJsonSchema> {
-      content?: IContent<Schema>;
       headers?: Record<string, IOperation.IParameter<Schema>>;
+      content?: IContent<Schema>;
       description?: string;
       "x-nestia-encrypted"?: boolean;
     }
