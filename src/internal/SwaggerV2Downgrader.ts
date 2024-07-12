@@ -118,6 +118,10 @@ export namespace SwaggerV2Downgrader {
         required: (input.schema as any)?.required,
         schema: undefined,
         name: input.name ?? `p${i}`,
+        ...{
+          example: undefined,
+          examples: undefined,
+        },
       }) as any;
 
   const downgradeRequestBody =
@@ -150,6 +154,10 @@ export namespace SwaggerV2Downgrader {
                 {
                   ...value,
                   schema: downgradeSchema(collection)(value.schema),
+                  ...{
+                    example: undefined,
+                    examples: undefined,
+                  },
                 },
               ]),
           )

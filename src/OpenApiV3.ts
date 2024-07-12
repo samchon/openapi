@@ -115,6 +115,11 @@ export namespace OpenApiV3 {
       schema: IJsonSchema;
       required?: boolean;
       description?: string;
+      example?: any;
+      examples?: Record<
+        string,
+        IExample | IJsonSchema.IReference<`#/components/examples/${string}`>
+      >;
     }
     export interface IRequestBody {
       description?: string;
@@ -132,7 +137,19 @@ export namespace OpenApiV3 {
     }
     export interface IMediaType {
       schema?: IJsonSchema;
+      example?: any;
+      examples?: Record<
+        string,
+        IExample | IJsonSchema.IReference<`#/components/examples/${string}`>
+      >;
     }
+  }
+
+  export interface IExample {
+    summary?: string;
+    description?: string;
+    value?: any;
+    externalValue?: string;
   }
 
   /* -----------------------------------------------------------
@@ -145,6 +162,7 @@ export namespace OpenApiV3 {
     requestBodies?: Record<string, IOperation.IRequestBody>;
     securitySchemes?: Record<string, ISecurityScheme>;
     headers?: Record<string, Omit<IOperation.IParameter, "in">>;
+    examples?: Record<string, IExample>;
   }
 
   export type IJsonSchema =

@@ -28,6 +28,7 @@ Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
 - Operation
   - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
   - Resolve references of `OpenApiV3_1.IOperation` members
+  - Escape references of `OpenApiV3_1.IComponents.examples`
 - JSON Schema
   - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
   - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
