@@ -86,6 +86,8 @@ export namespace MigrateRouteConverter {
         schema: OpenApi.IJsonSchema;
         title?: string;
         description?: string;
+        example?: any;
+        examples?: Record<string, any>;
       }) =>
         ({
           ...elem,
@@ -93,6 +95,8 @@ export namespace MigrateRouteConverter {
           key: type,
           title: () => elem.title,
           description: () => elem.description,
+          example: () => elem.example,
+          examples: () => elem.examples,
         }) satisfies IMigrateRoute.IHeaders;
 
       if (objects.length === 1 && primitives.length === 0)
@@ -269,6 +273,7 @@ export namespace MigrateRouteConverter {
             {
               schema: response.content?.["application/json"]?.schema ?? {},
               response: () => response,
+              media: () => response.content?.["application/json"] ?? {},
             },
           ]),
       ),
@@ -373,8 +378,9 @@ export namespace MigrateRouteConverter {
               ? schema
               : emplacer(schema)
             : {},
-          "x-nestia-encrypted": meta["x-nestia-encrypted"],
           description: () => meta.description,
+          media: () => json[1],
+          "x-nestia-encrypted": meta["x-nestia-encrypted"],
         };
       }
 
@@ -393,6 +399,7 @@ export namespace MigrateRouteConverter {
               : emplacer(schema)
             : {},
           description: () => meta.description,
+          media: () => query[1],
         };
       }
 
@@ -404,6 +411,7 @@ export namespace MigrateRouteConverter {
           key: "body",
           schema: { type: "string" },
           description: () => meta.description,
+          media: () => text[1],
         };
 
       if (from === "request") {
@@ -422,6 +430,7 @@ export namespace MigrateRouteConverter {
                 : emplacer(schema)
               : {},
             description: () => meta.description,
+            media: () => multipart[1],
           };
         }
       }
