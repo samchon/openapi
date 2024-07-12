@@ -29,8 +29,9 @@ import { SwaggerV2Downgrader } from "./internal/SwaggerV2Downgrader";
  * Here is the entire list of differences between OpenAPI v3.1 and emended `OpenApi`.
  *
  * - Operation
- *   - Merged {@link OpenApiV3_1.IPath.parameters} to {@link OpenApi.IOperation.parameters}
- *   - Resolved {@link OpenApi.IJsonSchema.IReference references} of {@link OpenApiV3_1.IOperation} members
+ *   - Merge {@link OpenApiV3_1.IPath.parameters} to {@link OpenApi.IOperation.parameters}
+ *   - Resolve {@link OpenApi.IJsonSchema.IReference references} of {@link OpenApiV3_1.IOperation} members
+ *   - Escape references of {@link OpenApiV3_1.IComponent.examples}
  * - JSON Schema
  *   - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  *   - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
@@ -497,6 +498,8 @@ export namespace OpenApi {
       required?: boolean;
       title?: string;
       description?: string;
+      example?: any;
+      examples?: Record<string, IExample>;
     }
 
     /**
@@ -531,6 +534,8 @@ export namespace OpenApi {
      */
     export interface IMediaType<Schema extends IJsonSchema = IJsonSchema> {
       schema?: Schema;
+      example?: any;
+      examples?: Record<string, IExample>;
     }
 
     /**
@@ -543,6 +548,16 @@ export namespace OpenApi {
       | "multipart/form-data"
       | "*/*"
       | (string & {});
+  }
+
+  /**
+   * Example of the operation parameter or response.
+   */
+  export interface IExample {
+    summary?: string;
+    description?: string;
+    value?: any;
+    externalValue?: string;
   }
 
   /* -----------------------------------------------------------

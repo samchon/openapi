@@ -98,7 +98,20 @@ export namespace OpenApiV3Converter {
     ): OpenApi.IOperation.IParameter => ({
       ...input,
       schema: convertSchema(components)(input.schema),
+      examples: input.examples
+        ? Object.fromEntries(
+            Object.entries(input.examples)
+              .map(([key, value]) => [
+                key,
+                TypeChecker.isReference(value)
+                  ? components.examples?.[value.$ref.split("/").pop() ?? ""]
+                  : value,
+              ])
+              .filter(([_, v]) => v !== undefined),
+          )
+        : undefined,
     });
+
   const convertRequestBody =
     (doc: OpenApiV3.IDocument) =>
     (
@@ -192,6 +205,20 @@ export namespace OpenApiV3Converter {
                   ...value,
                   schema: value.schema
                     ? convertSchema(components)(value.schema)
+                    : undefined,
+                  examples: value.examples
+                    ? Object.fromEntries(
+                        Object.entries(value.examples)
+                          .map(([key, value]) => [
+                            key,
+                            TypeChecker.isReference(value)
+                              ? components.examples?.[
+                                  value.$ref.split("/").pop() ?? ""
+                                ]
+                              : value,
+                          ])
+                          .filter(([_, v]) => v !== undefined),
+                      )
                     : undefined,
                 },
               ] as const,

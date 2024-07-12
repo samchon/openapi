@@ -145,6 +145,7 @@ export namespace SwaggerV2Converter {
           ? {
               "application/json": {
                 schema: convertSchema(input.schema),
+                example: input.example,
               },
             }
           : undefined,

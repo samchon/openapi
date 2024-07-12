@@ -109,6 +109,7 @@ export namespace SwaggerV2 {
       description?: string;
       headers?: Record<string, IJsonSchema>;
       schema?: IJsonSchema;
+      example?: any;
     }
   }
 
