@@ -219,7 +219,7 @@ export namespace OpenApiV3Downgrader {
               ];
               if (elements.length === 0) return {};
               return {
-                oneOf: elements.map(downgradeSchema(collection)),
+                oneOf: elements.map(downgradeSchema(collection) as any),
               };
             })(),
             minItems: schema.prefixItems.length,
@@ -276,8 +276,8 @@ export namespace OpenApiV3Downgrader {
       visitConstant(input);
       if (nullable === true)
         for (const u of union)
-          if (OpenApiTypeChecker.isReference(u))
-            downgradeNullableReference(collection)(u);
+          if (OpenApiTypeChecker.isReference(u as any))
+            downgradeNullableReference(collection)(u as any);
           else (u as OpenApiV3.IJsonSchema.IArray).nullable = true;
       if (nullable === true && union.length === 0)
         return { type: "null", ...attribute };

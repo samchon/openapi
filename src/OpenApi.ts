@@ -1032,7 +1032,12 @@ export namespace OpenApi {
     /**
      * Null type.
      */
-    export interface INull extends __ISignificant<"null"> {}
+    export interface INull extends __ISignificant<"null"> {
+      /**
+       * Default value.
+       */
+      default?: null;
+    }
 
     /**
      * Unknown, `any` type.
