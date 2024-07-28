@@ -201,7 +201,7 @@ export namespace OpenApiV3_1 {
       type: Array<
         "boolean" | "integer" | "number" | "string" | "array" | "object"
       >;
-      default?: any[];
+      default?: any[] | null;
       enum?: any[];
     }
 
@@ -209,11 +209,11 @@ export namespace OpenApiV3_1 {
       const: boolean | number | string;
     }
     export interface IBoolean extends __ISignificant<"boolean"> {
-      default?: boolean;
+      default?: boolean | null;
       enum?: boolean[];
     }
     export interface IInteger extends __ISignificant<"integer"> {
-      /** @type int64 */ default?: number;
+      /** @type int64 */ default?: number | null;
       /** @type int64 */ enum?: number[];
       /** @type int64 */ minimum?: number;
       /** @type int64 */ maximum?: number;
@@ -226,7 +226,7 @@ export namespace OpenApiV3_1 {
       multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {
-      default?: number;
+      default?: number | null;
       enum?: number[];
       minimum?: number;
       maximum?: number;
@@ -236,7 +236,7 @@ export namespace OpenApiV3_1 {
     }
     export interface IString extends __ISignificant<"string"> {
       contentMediaType?: string;
-      default?: string;
+      default?: string | null;
       enum?: string[];
       format?:
         | "binary"
@@ -271,7 +271,9 @@ export namespace OpenApiV3_1 {
     export interface IUnknown extends __IAttribute {
       type?: undefined;
     }
-    export interface INull extends __ISignificant<"null"> {}
+    export interface INull extends __ISignificant<"null"> {
+      default?: null;
+    }
     export interface IAllOf extends __IAttribute {
       allOf: IJsonSchema[];
     }

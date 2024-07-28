@@ -244,7 +244,10 @@ export namespace OpenApiV3Converter {
   export const convertSchema =
     (components: OpenApiV3.IComponents) =>
     (input: OpenApiV3.IJsonSchema): OpenApi.IJsonSchema => {
-      const nullable: { value: boolean } = { value: false };
+      const nullable: { value: boolean; default?: null } = {
+        value: false,
+        default: undefined,
+      };
       const union: OpenApi.IJsonSchema[] = [];
       const attribute: OpenApi.IJsonSchema.__IAttribute = {
         title: input.title,
@@ -260,8 +263,11 @@ export namespace OpenApiV3Converter {
         if (
           (schema as OpenApiV3.IJsonSchema.__ISignificant<any>).nullable ===
           true
-        )
+        ) {
           nullable.value ||= true;
+          if ((schema as OpenApiV3.IJsonSchema.INumber).default === null)
+            nullable.default = null;
+        }
         // UNION TYPE CASE
         if (TypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
         else if (TypeChecker.isOneOf(schema)) schema.oneOf.forEach(visit);
@@ -279,6 +285,11 @@ export namespace OpenApiV3Converter {
           else
             union.push({
               ...schema,
+              default: (schema.default ?? undefined) satisfies
+                | boolean
+                | number
+                | string
+                | undefined as any,
               ...{ enum: undefined },
             });
         // INSTANCE TYPE CASE
@@ -318,7 +329,10 @@ export namespace OpenApiV3Converter {
         nullable.value === true &&
         !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
       )
-        union.push({ type: "null" });
+        union.push({
+          type: "null",
+          default: nullable.default,
+        });
       return {
         ...(union.length === 0
           ? { type: undefined }

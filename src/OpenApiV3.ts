@@ -180,11 +180,11 @@ export namespace OpenApiV3 {
     | IJsonSchema.IOneOf;
   export namespace IJsonSchema {
     export interface IBoolean extends __ISignificant<"boolean"> {
-      default?: boolean;
+      default?: boolean | null;
       enum?: boolean[];
     }
     export interface IInteger extends __ISignificant<"integer"> {
-      /** @type int64 */ default?: number;
+      /** @type int64 */ default?: number | null;
       /** @type int64 */ enum?: number[];
       /** @type int64 */ minimum?: number;
       /** @type int64 */ maximum?: number;
@@ -197,7 +197,7 @@ export namespace OpenApiV3 {
       multipleOf?: number;
     }
     export interface INumber extends __ISignificant<"number"> {
-      default?: number;
+      default?: number | null;
       enum?: number[];
       minimum?: number;
       maximum?: number;
@@ -206,7 +206,7 @@ export namespace OpenApiV3 {
       /** @exclusiveMinimum 0 */ multipleOf?: number;
     }
     export interface IString extends __ISignificant<"string"> {
-      default?: string;
+      default?: string | null;
       enum?: string[];
       format?:
         | "binary"
@@ -260,6 +260,7 @@ export namespace OpenApiV3 {
     }
     export interface INullOnly extends __IAttribute {
       type: "null";
+      default?: null;
     }
     export interface IAllOf extends __IAttribute {
       allOf: IJsonSchema[];

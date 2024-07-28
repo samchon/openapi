@@ -231,7 +231,7 @@ export namespace SwaggerV2Downgrader {
               ];
               if (elements.length === 0) return {};
               return {
-                "x-oneOf": elements.map(downgradeSchema(collection)),
+                "x-oneOf": elements.map(downgradeSchema(collection) as any),
               };
             })(),
             minItems: schema.prefixItems.length,
@@ -286,8 +286,8 @@ export namespace SwaggerV2Downgrader {
       visitConstant(input);
       if (nullable)
         for (const u of union)
-          if (OpenApiTypeChecker.isReference(u))
-            downgradeNullableReference(collection)(u);
+          if (OpenApiTypeChecker.isReference(u as any))
+            downgradeNullableReference(collection)(u as any);
           else (u as SwaggerV2.IJsonSchema.IArray)["x-nullable"] = true;
 
       if (nullable === true && union.length === 0)

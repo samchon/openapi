@@ -252,7 +252,10 @@ export namespace SwaggerV2Converter {
   };
 
   const convertSchema = (input: SwaggerV2.IJsonSchema): OpenApi.IJsonSchema => {
-    const nullable: { value: boolean } = { value: false };
+    const nullable: { value: boolean; default?: null } = {
+      value: false,
+      default: undefined,
+    };
     const union: OpenApi.IJsonSchema[] = [];
     const attribute: OpenApi.IJsonSchema.__IAttribute = {
       title: input.title,
@@ -268,8 +271,11 @@ export namespace SwaggerV2Converter {
       if (
         (schema as SwaggerV2.IJsonSchema.__ISignificant<any>)["x-nullable"] ===
         true
-      )
+      ) {
         nullable.value ||= true;
+        if ((schema as SwaggerV2.IJsonSchema.INumber).default === null)
+          nullable.default = null;
+      }
       // UNION TYPE CASE
       if (TypeChecker.isAnyOf(schema)) schema["x-anyOf"].forEach(visit);
       else if (TypeChecker.isOneOf(schema)) schema["x-oneOf"].forEach(visit);
@@ -285,6 +291,11 @@ export namespace SwaggerV2Converter {
         else
           union.push({
             ...schema,
+            default: (schema.default ?? undefined) satisfies
+              | boolean
+              | number
+              | string
+              | undefined as any,
             ...{ enum: undefined },
           });
       // INSTANCE TYPE CASE
@@ -325,7 +336,10 @@ export namespace SwaggerV2Converter {
       nullable.value === true &&
       !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
     )
-      union.push({ type: "null" });
+      union.push({
+        type: "null",
+        default: nullable.default,
+      });
     return {
       ...(union.length === 0
         ? { type: undefined }

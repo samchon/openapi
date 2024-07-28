@@ -282,15 +282,21 @@ export namespace OpenApiV3_1Converter {
           ),
         ),
       };
-      const nullable: { value: boolean } = { value: false };
+      const nullable: { value: boolean; default?: null } = {
+        value: false,
+        default: undefined,
+      };
 
       const visit = (schema: OpenApiV3_1.IJsonSchema): void => {
         // NULLABLE PROPERTY
         if (
           (schema as OpenApiV3_1.IJsonSchema.__ISignificant<any>).nullable ===
           true
-        )
+        ) {
           nullable.value ||= true;
+          if ((schema as OpenApiV3_1.IJsonSchema.INumber).default === null)
+            nullable.default = null;
+        }
         // MIXED TYPE CASE
         if (TypeChecker.isMixed(schema)) {
           if (schema.const !== undefined)
@@ -364,6 +370,7 @@ export namespace OpenApiV3_1Converter {
           else
             union.push({
               ...schema,
+              default: schema.default ?? undefined,
               ...{
                 enum: undefined,
               },
@@ -388,6 +395,7 @@ export namespace OpenApiV3_1Converter {
           else
             union.push({
               ...schema,
+              default: schema.default ?? undefined,
               ...{
                 enum: undefined,
               },
@@ -423,6 +431,7 @@ export namespace OpenApiV3_1Converter {
           else
             union.push({
               ...schema,
+              default: schema.default ?? undefined,
               ...{
                 enum: undefined,
               },
@@ -513,7 +522,10 @@ export namespace OpenApiV3_1Converter {
         nullable.value === true &&
         !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
       )
-        union.push({ type: "null" });
+        union.push({
+          type: "null",
+          default: nullable.default,
+        });
       return {
         ...(union.length === 0
           ? { type: undefined }
