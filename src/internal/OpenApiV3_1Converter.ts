@@ -305,7 +305,9 @@ export namespace OpenApiV3_1Converter {
               ...{
                 type: undefined,
                 oneOf: undefined,
+                anyOf: undefined,
                 allOf: undefined,
+                $ref: undefined,
               },
             });
           if (schema.oneOf !== undefined)
@@ -313,8 +315,9 @@ export namespace OpenApiV3_1Converter {
               ...schema,
               ...{
                 type: undefined,
-                const: undefined,
+                anyOf: undefined,
                 allOf: undefined,
+                $ref: undefined,
               },
             });
           if (schema.anyOf !== undefined)
@@ -322,8 +325,19 @@ export namespace OpenApiV3_1Converter {
               ...schema,
               ...{
                 type: undefined,
-                const: undefined,
                 oneOf: undefined,
+                allOf: undefined,
+                $ref: undefined,
+              },
+            });
+          if (schema.allOf !== undefined)
+            visit({
+              ...schema,
+              ...{
+                type: undefined,
+                oneOf: undefined,
+                anyOf: undefined,
+                $ref: undefined,
               },
             });
           for (const type of schema.type)

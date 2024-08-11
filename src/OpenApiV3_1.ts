@@ -81,7 +81,7 @@ export namespace OpenApiV3_1 {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export type IPath = {
+  export interface IPath extends Partial<Record<Method, IOperation>> {
     parameters?: Array<
       | IOperation.IParameter
       | IJsonSchema.IReference<`#/components/headers/${string}`>
@@ -90,7 +90,7 @@ export namespace OpenApiV3_1 {
     servers?: IServer[];
     summary?: string;
     description?: string;
-  } & Partial<Record<Method, IOperation>>;
+  }
 
   export interface IOperation {
     operationId?: string;
@@ -197,9 +197,16 @@ export namespace OpenApiV3_1 {
         Omit<IObject, "type">,
         IOneOf,
         IAnyOf,
-        IAllOf {
+        IAllOf,
+        IReference {
       type: Array<
-        "boolean" | "integer" | "number" | "string" | "array" | "object"
+        | "boolean"
+        | "integer"
+        | "number"
+        | "string"
+        | "array"
+        | "object"
+        | "null"
       >;
       default?: any[] | null;
       enum?: any[];

@@ -75,7 +75,8 @@ export namespace OpenApiV3 {
   /* -----------------------------------------------------------
     PATH ITEMS
   ----------------------------------------------------------- */
-  export type IPath = {
+  export interface IPath
+    extends Partial<Record<Method, IOperation | undefined>> {
     parameters?: Array<
       | IOperation.IParameter
       | IJsonSchema.IReference<`#/components/headers/${string}`>
@@ -84,7 +85,7 @@ export namespace OpenApiV3 {
     servers?: IServer[];
     summary?: string;
     description?: string;
-  } & Partial<Record<Method, IOperation | undefined>>;
+  }
 
   export interface IOperation {
     operationId?: string;
