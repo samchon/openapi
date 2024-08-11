@@ -68,11 +68,12 @@ export namespace SwaggerV2 {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export type IPath = {
+  export interface IPath
+    extends Partial<Record<Method, IOperation | undefined>> {
     parameters?: Array<
       IOperation.IParameter | IJsonSchema.IReference<`#/parameters/${string}`>
     >;
-  } & Partial<Record<Method, IOperation | undefined>>;
+  }
 
   export interface IOperation {
     operationId?: string;

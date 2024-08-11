@@ -492,13 +492,66 @@ export namespace OpenApi {
      * Parameter of the operation.
      */
     export interface IParameter<Schema extends IJsonSchema = IJsonSchema> {
+      /**
+       * Representative name of the parameter.
+       *
+       * In the most case, the `name` is equivalent to parameter variable name.
+       * Therefore, the `name` must be filled with the significant variable name
+       * of the parameter.
+       *
+       * By the way, only when the {@link in} property is `path`, the `name`
+       * can be omitted. In that case, the `name` is automatically deduced from
+       * the URL path's positional template argument analyzing.
+       */
       name?: string;
+
+      /**
+       * Location of the parameter.
+       *
+       * The `in` property is a string that determines the location of the parameter.
+       *
+       * - `path`: parameter is part of the path of the URL.
+       * - `query`: parameter is part of the query string.
+       * - `header`: parameter is part of the header.
+       * - `cookie`: parameter is part of the cookie.
+       */
       in: "path" | "query" | "header" | "cookie";
+
+      /**
+       * Type info of the parameter.
+       */
       schema: Schema;
+
+      /**
+       * Whether the parameter is required for execution or not.
+       *
+       * If the parameter is required, the value must be filled. Otherwise,
+       * it is possible to skip the parameter when executing the APi operation.
+       *
+       * For reference, the `required` property must be always `true` when the
+       * {@link in} property is `path`. Otherwise, the `required` property can
+       * be anything of them; `true`, `false` and `undefined`.
+       */
       required?: boolean;
+
+      /**
+       * Short title of the parameter.
+       */
       title?: string;
+
+      /**
+       * Verbose explanation of the parameter.
+       */
       description?: string;
+
+      /**
+       * Example value of the parameter.
+       */
       example?: any;
+
+      /**
+       * Collection of example values of the parameter with keys.
+       */
       examples?: Record<string, IExample>;
     }
 
@@ -525,9 +578,8 @@ export namespace OpenApi {
     /**
      * List of content types supported in request/response body.
      */
-    export type IContent<Schema extends IJsonSchema = IJsonSchema> = Partial<
-      Record<ContentType, IMediaType<Schema>>
-    >;
+    export interface IContent<Schema extends IJsonSchema = IJsonSchema>
+      extends Partial<Record<ContentType, IMediaType<Schema>>> {}
 
     /**
      * Media type of a request/response body.
