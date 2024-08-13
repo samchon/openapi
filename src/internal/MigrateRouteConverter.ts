@@ -358,10 +358,7 @@ export namespace MigrateRouteConverter {
 
       const entries: [string, OpenApi.IOperation.IMediaType][] = Object.entries(
         meta.content,
-      ).filter(([_, v]) => !!v?.schema) as [
-        string,
-        OpenApi.IOperation.IMediaType,
-      ][];
+      ).filter(([_, v]) => !!v) as [string, OpenApi.IOperation.IMediaType][];
       const json = entries.find((e) =>
         meta["x-nestia-encrypted"] === true
           ? e[0].includes("text/plain") || e[0].includes("application/json")
@@ -369,19 +366,21 @@ export namespace MigrateRouteConverter {
       );
       if (json) {
         const { schema } = json[1];
-        return {
-          type: "application/json",
-          name: "body",
-          key: "body",
-          schema: schema
-            ? isNotObjectLiteral(schema)
-              ? schema
-              : emplacer(schema)
-            : {},
-          description: () => meta.description,
-          media: () => json[1],
-          "x-nestia-encrypted": meta["x-nestia-encrypted"],
-        };
+        return schema || from === "request"
+          ? {
+              type: "application/json",
+              name: "body",
+              key: "body",
+              schema: schema
+                ? isNotObjectLiteral(schema)
+                  ? schema
+                  : emplacer(schema)
+                : {},
+              description: () => meta.description,
+              media: () => json[1],
+              "x-nestia-encrypted": meta["x-nestia-encrypted"],
+            }
+          : null;
       }
 
       const query = entries.find((e) =>
@@ -389,18 +388,20 @@ export namespace MigrateRouteConverter {
       );
       if (query) {
         const { schema } = query[1];
-        return {
-          type: "application/x-www-form-urlencoded",
-          name: "body",
-          key: "body",
-          schema: schema
-            ? isNotObjectLiteral(schema)
-              ? schema
-              : emplacer(schema)
-            : {},
-          description: () => meta.description,
-          media: () => query[1],
-        };
+        return schema || from === "request"
+          ? {
+              type: "application/x-www-form-urlencoded",
+              name: "body",
+              key: "body",
+              schema: schema
+                ? isNotObjectLiteral(schema)
+                  ? schema
+                  : emplacer(schema)
+                : {},
+              description: () => meta.description,
+              media: () => query[1],
+            }
+          : null;
       }
 
       const text = entries.find((e) => e[0].includes("text/plain"));
