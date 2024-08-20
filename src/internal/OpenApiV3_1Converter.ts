@@ -297,6 +297,15 @@ export namespace OpenApiV3_1Converter {
           if ((schema as OpenApiV3_1.IJsonSchema.INumber).default === null)
             nullable.default = null;
         }
+        if (
+          Array.isArray((schema as OpenApiV3_1.IJsonSchema.INumber).enum) &&
+          (schema as OpenApiV3_1.IJsonSchema.INumber).enum?.length &&
+          (schema as OpenApiV3_1.IJsonSchema.INumber).enum?.some(
+            (e) => e === null,
+          )
+        )
+          nullable.value ||= true;
+
         // MIXED TYPE CASE
         if (TypeChecker.isMixed(schema)) {
           if (schema.const !== undefined)
@@ -345,9 +354,10 @@ export namespace OpenApiV3_1Converter {
               visit({
                 ...schema,
                 ...{
-                  enum: schema.enum?.length
-                    ? schema.enum.filter((x) => typeof x === type)
-                    : undefined,
+                  enum:
+                    schema.enum?.length && schema.enum.filter((e) => e !== null)
+                      ? schema.enum.filter((x) => typeof x === type)
+                      : undefined,
                 },
                 type: type as any,
               });
@@ -355,9 +365,15 @@ export namespace OpenApiV3_1Converter {
               visit({
                 ...schema,
                 ...{
-                  enum: schema.enum?.length
-                    ? schema.enum.filter((x) => Number.isInteger(x))
-                    : undefined,
+                  enum:
+                    schema.enum?.length && schema.enum.filter((e) => e !== null)
+                      ? schema.enum.filter(
+                          (x) =>
+                            x !== null &&
+                            typeof x === "number" &&
+                            Number.isInteger(x),
+                        )
+                      : undefined,
                 },
                 type: type as any,
               });
@@ -370,8 +386,11 @@ export namespace OpenApiV3_1Converter {
           union.push(convertAllOfSchema(components)(schema));
         // ATOMIC TYPE CASE (CONSIDER ENUM VALUES)
         else if (TypeChecker.isBoolean(schema))
-          if (schema.enum?.length)
-            for (const value of schema.enum)
+          if (
+            schema.enum?.length &&
+            schema.enum.filter((e) => e !== null).length
+          )
+            for (const value of schema.enum.filter((e) => e !== null))
               union.push({
                 const: value,
                 ...({
@@ -390,8 +409,8 @@ export namespace OpenApiV3_1Converter {
               },
             });
         else if (TypeChecker.isInteger(schema) || TypeChecker.isNumber(schema))
-          if (schema.enum?.length)
-            for (const value of schema.enum)
+          if (schema.enum?.length && schema.enum.filter((e) => e !== null))
+            for (const value of schema.enum.filter((e) => e !== null))
               union.push({
                 const: value,
                 ...({
@@ -431,8 +450,11 @@ export namespace OpenApiV3_1Converter {
                   }),
             });
         else if (TypeChecker.isString(schema))
-          if (schema.enum?.length)
-            for (const value of schema.enum)
+          if (
+            schema.enum?.length &&
+            schema.enum.filter((e) => e !== null).length
+          )
+            for (const value of schema.enum.filter((e) => e !== null))
               union.push({
                 const: value,
                 ...({

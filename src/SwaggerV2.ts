@@ -132,11 +132,11 @@ export namespace SwaggerV2 {
   export namespace IJsonSchema {
     export interface IBoolean extends __ISignificant<"boolean"> {
       default?: boolean | null;
-      enum?: boolean[];
+      enum?: Array<boolean | null>;
     }
     export interface IInteger extends __ISignificant<"integer"> {
       /** @type int64 */ default?: number | null;
-      /** @type int64 */ enum?: number[];
+      /** @type int64 */ enum?: Array<number | null>;
       /** @type int64 */ minimum?: number;
       /** @type int64 */ maximum?: number;
       exclusiveMinimum?: boolean;
@@ -149,7 +149,7 @@ export namespace SwaggerV2 {
     }
     export interface INumber extends __ISignificant<"number"> {
       default?: number | null;
-      enum?: number[];
+      enum?: Array<number | null>;
       minimum?: number;
       maximum?: number;
       exclusiveMinimum?: boolean;
@@ -158,7 +158,7 @@ export namespace SwaggerV2 {
     }
     export interface IString extends __ISignificant<"string"> {
       default?: string | null;
-      enum?: string[];
+      enum?: Array<string | null>;
       format?:
         | "binary"
         | "byte"
