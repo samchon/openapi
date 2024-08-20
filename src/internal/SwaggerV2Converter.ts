@@ -276,6 +276,12 @@ export namespace SwaggerV2Converter {
         if ((schema as SwaggerV2.IJsonSchema.INumber).default === null)
           nullable.default = null;
       }
+      if (
+        Array.isArray((schema as SwaggerV2.IJsonSchema.INumber).enum) &&
+        (schema as SwaggerV2.IJsonSchema.INumber).enum?.length &&
+        (schema as SwaggerV2.IJsonSchema.INumber).enum?.some((e) => e === null)
+      )
+        nullable.value ||= true;
       // UNION TYPE CASE
       if (TypeChecker.isAnyOf(schema)) schema["x-anyOf"].forEach(visit);
       else if (TypeChecker.isOneOf(schema)) schema["x-oneOf"].forEach(visit);
@@ -286,8 +292,12 @@ export namespace SwaggerV2Converter {
         TypeChecker.isNumber(schema) ||
         TypeChecker.isString(schema)
       )
-        if (schema.enum?.length)
-          union.push(...schema.enum.map((value) => ({ const: value })));
+        if (schema.enum?.length && schema.enum.filter((e) => e !== null).length)
+          union.push(
+            ...schema.enum
+              .filter((v) => v !== null)
+              .map((value) => ({ const: value })),
+          );
         else
           union.push({
             ...schema,

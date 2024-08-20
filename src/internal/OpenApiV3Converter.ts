@@ -268,6 +268,14 @@ export namespace OpenApiV3Converter {
           if ((schema as OpenApiV3.IJsonSchema.INumber).default === null)
             nullable.default = null;
         }
+        if (
+          Array.isArray((schema as OpenApiV3.IJsonSchema.INumber).enum) &&
+          (schema as OpenApiV3.IJsonSchema.INumber).enum?.length &&
+          (schema as OpenApiV3.IJsonSchema.INumber).enum?.some(
+            (e) => e === null,
+          )
+        )
+          nullable.value ||= true;
         // UNION TYPE CASE
         if (TypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
         else if (TypeChecker.isOneOf(schema)) schema.oneOf.forEach(visit);
@@ -280,8 +288,15 @@ export namespace OpenApiV3Converter {
           TypeChecker.isNumber(schema) ||
           TypeChecker.isString(schema)
         )
-          if (schema.enum?.length)
-            union.push(...schema.enum.map((value) => ({ const: value })));
+          if (
+            schema.enum?.length &&
+            schema.enum.filter((e) => e !== null).length
+          )
+            union.push(
+              ...schema.enum
+                .filter((v) => v !== null)
+                .map((value) => ({ const: value })),
+            );
           else
             union.push({
               ...schema,
