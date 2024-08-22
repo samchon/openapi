@@ -1,16 +1,16 @@
-import { NamingConvention } from "typia/lib/utils/NamingConvention";
+import { NamingConvention } from "./NamingConvention";
 
 export namespace StringUtil {
-  export const capitalize = (str: string) =>
-    str[0].toUpperCase() + str.slice(1).toLowerCase();
+  export const capitalize = (str: string): string =>
+    str.length !== 0 ? str[0].toUpperCase() + str.slice(1).toLowerCase() : str;
 
-  export const pascal = (path: string) =>
+  export const pascal = (path: string): string =>
     splitWithNormalization(path)
       .filter((str) => str[0] !== "{")
       .map(NamingConvention.pascal)
       .join("");
 
-  export const splitWithNormalization = (path: string) =>
+  export const splitWithNormalization = (path: string): string[] =>
     path
       .split("/")
       .map((str) => normalize(str.trim()))
@@ -27,11 +27,56 @@ export namespace StringUtil {
       )
       .join("/");
 
-  export const normalize = (str: string) =>
-    str.split(".").join("_").split("-").join("_");
+  export const normalize = (str: string): string => {
+    str = str.split(".").join("_").split("-").join("_").trim();
+    if (RESERVED.has(str)) return `_${str}`;
+    else if (str.length !== 0 && "0" <= str[0] && str[0] <= "9")
+      str = `_${str}`;
+    return str;
+  };
 
   export const escapeDuplicate =
     (keep: string[]) =>
     (change: string): string =>
       keep.includes(change) ? escapeDuplicate(keep)(`_${change}`) : change;
 }
+
+const RESERVED: Set<string> = new Set([
+  "break",
+  "case",
+  "catch",
+  "class",
+  "const",
+  "continue",
+  "debugger",
+  "default",
+  "delete",
+  "do",
+  "else",
+  "enum",
+  "export",
+  "extends",
+  "false",
+  "finally",
+  "for",
+  "function",
+  "if",
+  "import",
+  "in",
+  "instanceof",
+  "new",
+  "null",
+  "package",
+  "return",
+  "super",
+  "switch",
+  "this",
+  "throw",
+  "true",
+  "try",
+  "typeof",
+  "var",
+  "void",
+  "while",
+  "with",
+]);
