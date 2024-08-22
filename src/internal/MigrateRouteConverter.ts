@@ -330,11 +330,13 @@ export namespace MigrateRouteConverter {
     if (props.operation.tags)
       props.operation.tags.forEach((name) => add(`@tag ${name}`));
     if (props.operation.deprecated) add("@deprecated");
-    return description.length
+    description = description.length
       ? commentTags.length
         ? `${description}\n\n${commentTags.join("\n")}`
         : description
       : commentTags.join("\n");
+    description = description.split("*/").join("*\\/");
+    return description;
   };
 
   const writeIndented = (text: string, spaces: number): string =>
