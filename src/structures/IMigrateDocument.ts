@@ -1,5 +1,5 @@
+import { OpenApi } from "../OpenApi";
 import { IMigrateRoute } from "./IMigrateRoute";
-import { OpenApi } from "./OpenApi";
 
 /**
  * Document of migration.
@@ -27,6 +27,11 @@ export interface IMigrateDocument<
    * List of errors occurred during the migration.
    */
   errors: IMigrateDocument.IError<Operation>[];
+
+  /**
+   * Source OpenAPI document.
+   */
+  document: () => OpenApi.IDocument<Schema, Operation>;
 }
 export namespace IMigrateDocument {
   /**

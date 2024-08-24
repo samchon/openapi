@@ -1,4 +1,4 @@
-import { OpenApi } from "./OpenApi";
+import { OpenApi } from "../OpenApi";
 
 /**
  * Route information for migration.

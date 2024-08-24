@@ -1,5 +1,5 @@
-export * from "./IMigrateRoute";
-export * from "./IMigrateDocument";
+export * from "./structures/IMigrateRoute";
+export * from "./structures/IMigrateDocument";
 export * from "./OpenApi";
 export * from "./OpenApiTypeChecker";
 

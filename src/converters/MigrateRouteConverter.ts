@@ -1,6 +1,6 @@
-import { IMigrateRoute } from "../IMigrateRoute";
 import { OpenApi } from "../OpenApi";
 import { OpenApiTypeChecker } from "../OpenApiTypeChecker";
+import { IMigrateRoute } from "../structures/IMigrateRoute";
 import { Escaper } from "../utils/Escaper";
 import { StringUtil } from "../utils/StringUtil";
 

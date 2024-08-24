@@ -1,13 +1,15 @@
-import { IMigrateDocument } from "./IMigrateDocument";
 import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
-import { MigrateConverter } from "./internal/MigrateConverter";
-import { OpenApiV3Converter } from "./internal/OpenApiV3Converter";
-import { OpenApiV3Downgrader } from "./internal/OpenApiV3Downgrader";
-import { OpenApiV3_1Converter } from "./internal/OpenApiV3_1Converter";
-import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
-import { SwaggerV2Downgrader } from "./internal/SwaggerV2Downgrader";
+import { LlmComposer } from "./converters/LlmComposer";
+import { MigrateConverter } from "./converters/MigrateConverter";
+import { OpenApiV3Converter } from "./converters/OpenApiV3Converter";
+import { OpenApiV3Downgrader } from "./converters/OpenApiV3Downgrader";
+import { OpenApiV3_1Converter } from "./converters/OpenApiV3_1Converter";
+import { SwaggerV2Converter } from "./converters/SwaggerV2Converter";
+import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
+import { ILlmDocument } from "./structures/ILlmDocument";
+import { IMigrateDocument } from "./structures/IMigrateDocument";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -151,6 +153,31 @@ export namespace OpenApi {
     document: IDocument<Schema, Operation>,
   ): IMigrateDocument<Schema, Operation> {
     return MigrateConverter.convert(document);
+  }
+
+  export function llm(
+    document: OpenApi.IDocument,
+    options?: ILlmDocument.IOptions,
+  ): ILlmDocument;
+
+  export function llm(
+    mirate: IMigrateDocument,
+    options?: ILlmDocument.IOptions,
+  ): ILlmDocument;
+
+  /**
+   * @internal
+   */
+  export function llm(
+    document: OpenApi.IDocument | IMigrateDocument,
+    options?: ILlmDocument.IOptions,
+  ): ILlmDocument {
+    if ((document as OpenApi.IDocument)["x-samchon-emended"] !== true)
+      document = migrate(document as OpenApi.IDocument);
+    return LlmComposer.compose(document as IMigrateDocument, {
+      keyword: options?.keyword ?? false,
+      separate: options?.separate ?? null,
+    });
   }
 
   /* -----------------------------------------------------------

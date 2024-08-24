@@ -1,9 +1,9 @@
-import { IMigrateRoute } from "../IMigrateRoute";
-import { IMigrateDocument } from "../IMigrateDocument";
 import { OpenApi } from "../OpenApi";
+import { IMigrateDocument } from "../structures/IMigrateDocument";
+import { IMigrateRoute } from "../structures/IMigrateRoute";
 import { StringUtil } from "../utils/StringUtil";
-import { MigrateRouteConverter } from "./MigrateRouteConverter";
 import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
+import { MigrateRouteConverter } from "./MigrateRouteConverter";
 
 export namespace MigrateConverter {
   export const convert = <
@@ -49,6 +49,7 @@ export namespace MigrateConverter {
     );
     MigrateRouteAccessor.overwrite(operations);
     return {
+      document: () => document,
       routes: operations,
       errors,
     };
