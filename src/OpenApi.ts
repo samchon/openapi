@@ -8,7 +8,7 @@ import { OpenApiV3Downgrader } from "./converters/OpenApiV3Downgrader";
 import { OpenApiV3_1Converter } from "./converters/OpenApiV3_1Converter";
 import { SwaggerV2Converter } from "./converters/SwaggerV2Converter";
 import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
-import { ILlmDocument } from "./structures/ILlmDocument";
+import { ILlmHttpApplication } from "./structures/ILlmHttpApplication";
 import { IMigrateDocument } from "./structures/IMigrateDocument";
 
 /**
@@ -156,22 +156,9 @@ export namespace OpenApi {
   }
 
   export function llm(
-    document: OpenApi.IDocument,
-    options?: ILlmDocument.IOptions,
-  ): ILlmDocument;
-
-  export function llm(
-    mirate: IMigrateDocument,
-    options?: ILlmDocument.IOptions,
-  ): ILlmDocument;
-
-  /**
-   * @internal
-   */
-  export function llm(
     document: OpenApi.IDocument | IMigrateDocument,
-    options?: ILlmDocument.IOptions,
-  ): ILlmDocument {
+    options?: ILlmHttpApplication.IOptions,
+  ): ILlmHttpApplication {
     if ((document as OpenApi.IDocument)["x-samchon-emended"] !== true)
       document = migrate(document as OpenApi.IDocument);
     return LlmComposer.compose(document as IMigrateDocument, {

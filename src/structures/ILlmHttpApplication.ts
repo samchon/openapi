@@ -1,9 +1,9 @@
 import { OpenApi } from "../OpenApi";
-import { ILlmProcedure } from "./ILlmProcedure";
+import { ILlmHttpFunction } from "./ILlmHttpFunction";
 import { ILlmSchema } from "./ILlmSchema";
 import { IMigrateRoute } from "./IMigrateRoute";
 
-export interface ILlmDocument<
+export interface ILlmHttpApplication<
   Schema extends ILlmSchema = ILlmSchema,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IMigrateRoute = IMigrateRoute,
@@ -23,12 +23,12 @@ export interface ILlmDocument<
    * When you want to execute the function with LLM constructed arguments,
    * you can do it through {@link LlmFetcher.execute} function.
    */
-  functions: ILlmProcedure[];
+  functions: ILlmHttpFunction[];
 
   /**
    * List of errors occurred during the composition.
    */
-  errors: ILlmDocument.IError<Operation, Route>[];
+  errors: ILlmHttpApplication.IError<Operation, Route>[];
 
   /**
    * Options for the document.
@@ -36,9 +36,9 @@ export interface ILlmDocument<
    * Adjusted options when composing the document through
    * {@link OpenApi.llm} function.
    */
-  options: ILlmDocument.IOptions<Schema>;
+  options: ILlmHttpApplication.IOptions<Schema>;
 }
-export namespace ILlmDocument {
+export namespace ILlmHttpApplication {
   /**
    * Error occurred in the composition.
    */
@@ -89,7 +89,7 @@ export namespace ILlmDocument {
      * Whether the parameters are keyworded or not.
      *
      * If this property value is `true`, length of the
-     * {@link ILlmDocument.IFunction.parameters} is always 1, and type of
+     * {@link ILlmHttpApplication.IFunction.parameters} is always 1, and type of
      * the pararameter is always {@link ILlmSchema.IObject} type.
      * Also, its properties are following below rules:
      *
@@ -106,7 +106,7 @@ export namespace ILlmDocument {
      * ```
      *
      * Otherwise (this property value is `false`), length of the
-     * {@link ILlmProcedure.parameters} is variable, and sequence of the
+     * {@link ILlmHttpFunction.parameters} is variable, and sequence of the
      * parameters are following below rules.
      *
      * ```typescript
@@ -136,8 +136,8 @@ export namespace ILlmDocument {
      * predicating whether the schema value must be composed by human or
      * not, the parameters would be separated into two parts.
      *
-     * - {@link ILlmProcedure.separated.llm}
-     * - {@link ILlmProcedure.separated.human}
+     * - {@link ILlmHttpFunction.separated.llm}
+     * - {@link ILlmHttpFunction.separated.human}
      *
      * When writing the function, note that returning value `true` means
      * to be a human composing the value, and `false` means to LLM

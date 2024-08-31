@@ -7,7 +7,9 @@ export namespace MigrateRouteFetcher {
   export interface IProps {
     connection: IHttpConnection;
     route: IMigrateRoute;
-    parameters: Array<string | number | boolean | bigint | null>;
+    parameters:
+      | Array<string | number | boolean | bigint | null>
+      | Record<string, string | number | boolean | bigint | null>;
     query?: object | undefined;
     body?: object | undefined;
   }
@@ -30,15 +32,24 @@ export namespace MigrateRouteFetcher {
 }
 
 const _Propagate = async (
-  funcName: string,
+  from: string,
   props: MigrateRouteFetcher.IProps,
 ): Promise<IHttpResponse> => {
-  // VALIDATION
+  // VALIDATE PARAMETERS
   const error = (message: string) =>
-    new Error(`Error on MigrateRouteFetcher.${funcName}(): ${message}`);
-  if (props.route.parameters.length !== props.parameters.length)
+    new Error(`Error on MigrateRouteFetcher.${from}(): ${message}`);
+  if (Array.isArray(props.parameters)) {
+    if (props.route.parameters.length !== props.parameters.length)
+      throw error(`number of parameters is not matched.`);
+  } else if (
+    props.route.parameters.every(
+      (p) => (props.parameters as Record<string, any>)[p.key] !== undefined,
+    ) === false
+  )
     throw error(`number of parameters is not matched.`);
-  else if (!!props.route.query !== !!props.query)
+
+  // VALIDATE QUERY
+  if (!!props.route.query !== !!props.query)
     throw error(`query is not matched.`);
   else if (!!props.route.body !== (props.body !== undefined))
     throw error(`body is not matched.`);
@@ -128,7 +139,14 @@ const getPath = (
 ): string => {
   let path: string = props.route.emendedPath;
   props.route.parameters.forEach((p, i) => {
-    path = path.replace(`:${p.key}`, String(props.parameters[i] ?? "null"));
+    path = path.replace(
+      `:${p.key}`,
+      String(
+        (Array.isArray(props.parameters)
+          ? props.parameters[i]
+          : props.parameters[p.key]) ?? "null",
+      ),
+    );
   });
   if (props.route.query) path += getQueryPath(props.query ?? {});
   return path;

@@ -2,6 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../bin",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "paths": {
       "@samchon/openapi": ["../src/index.ts"],
       "@samchon/openapi/lib/*": ["../src/*"],

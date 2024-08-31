@@ -1,9 +1,9 @@
 import { ILlmSchema } from "../structures/ILlmSchema";
 
 /**
- * Type checker for LLM function calling schema.
+ * Type checker for LLM type schema.
  *
- * `LlmTypeChecker` is a type checker of {@link ILlmSchema}.
+ * `LlmSchemaTypeChecker` is a type checker of {@link ILlmSchema}.
  *
  * @author Samchon
  */

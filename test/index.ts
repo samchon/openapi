@@ -1,12 +1,23 @@
 import { DynamicExecutor } from "@nestia/e2e";
+import { NestFactory } from "@nestjs/core";
 import chalk from "chalk";
 
+import { AppModule } from "./controllers/AppModule";
+
 const main = async (): Promise<void> => {
+  // PREPARE SERVER
+  const app = await NestFactory.create(AppModule, { logger: false });
+  await app.listen(3_000);
+
   // DO TEST
   const report: DynamicExecutor.IReport = await DynamicExecutor.validate({
     prefix: "test_",
     location: __dirname + "/features",
-    parameters: () => [],
+    parameters: () => [
+      {
+        connection: { host: `http://localhost:3000` },
+      },
+    ],
     onComplete: (exec) => {
       const trace = (str: string) =>
         console.log(`  - ${chalk.green(exec.name)}: ${str}`);
@@ -31,9 +42,7 @@ const main = async (): Promise<void> => {
     console.log("Failed");
     console.log("Elapsed time", report.time.toLocaleString(), `ms`);
   }
+  await app.close();
   if (exceptions.length) process.exit(-1);
 };
-main().catch((exp) => {
-  console.error(exp);
-  process.exit(-1);
-});
+main().catch(console.error);

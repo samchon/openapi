@@ -3,31 +3,31 @@ import { ILlmSchema } from "./ILlmSchema";
 import { IMigrateRoute } from "./IMigrateRoute";
 
 /**
- * LLM procedure metadata from OpenAPI operation.
+ * LLM function metadata from HTTP (OpenAPI) operation.
  *
- * `ILlmProcedure` is a data structure representing a procedure converted
+ * `ILlmHttpFunction` is a data structure representing a procedure converted
  * from the OpenAPI operation, used for the LLM (Large Language Model)
  * function calling. It's a typical RPC (Remote Procedure Call) structure
  * containing the procedure {@link name}, {@link parameters}, and
  * {@link output return type}.
  *
- * If you provide this `ILlmProcedure` data to the LLM like "OpenAI",
+ * If you provide this `ILlmHttpFunction` data to the LLM like "OpenAI",
  * the "OpenAI" will compose a function arguments by analyzing
  * conversations with the user. With the LLM composed arguments, you can
  * execute the procedure through {@link LlmFetcher.execute} and get the
  * result.
  *
- * For reference, different between `ILlmProcedure` and its origin source
- * {@link OpenApi.IOperation} is, `ILlmProcedure` has converted every type
+ * For reference, different between `ILlmHttpFunction` and its origin source
+ * {@link OpenApi.IOperation} is, `ILlmHttpFunction` has converted every type
  * schema informations from {@link OpenApi.IJsonSchema} to {@link ILlmSchema}
  * to escape {@link OpenApi.IJsonSchema.IReference reference types}, and
  * downgrade the version of the JSON schema to OpenAPI 3.0. It's because
  * LLM function call feature cannot understand both reference types and
  * OpenAPI 3.1 specification.
  *
- * Additionally, if you've composed `ILlmProcedure` with
- * {@link ILlmDocument.IOptions.keyword} configuration as `true`, number of
- * {@link ILlmProcedure.parameters} are always 1 and the first parameter's
+ * Additionally, if you've composed `ILlmHttpFunction` with
+ * {@link ILlmHttpApplication.IOptions.keyword} configuration as `true`, number of
+ * {@link ILlmHttpFunction.parameters} are always 1 and the first parameter's
  * type is always {@link ILlmSchema.IObject}. The properties' rule is:
  *
  * - `pathParameters`: Path parameters of {@link OpenApi.IOperation.parameters}
@@ -56,7 +56,7 @@ import { IMigrateRoute } from "./IMigrateRoute";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface ILlmProcedure<
+export interface ILlmHttpFunction<
   Schema extends ILlmSchema = ILlmSchema,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IMigrateRoute = IMigrateRoute,
@@ -75,7 +75,7 @@ export interface ILlmProcedure<
    * Representative name of the function.
    *
    * The `name` is a repsentative name identifying the function in the
-   * {@link ILlmDocument}. The `name` value is just composed by joining the
+   * {@link ILlmHttpApplication}. The `name` value is just composed by joining the
    * {@link IMigrateRoute.accessor} by underscore `_` character.
    *
    * Here is the composition rule of the  {@link IMigrateRoute.accessor}:
@@ -117,8 +117,8 @@ export interface ILlmProcedure<
   /**
    * List of parameter types.
    *
-   * If you've configured {@link ILlmDocument.IOptions.keyword} as `true`,
-   * number of {@link ILlmProcedure.parameters} are always 1 and the first
+   * If you've configured {@link ILlmHttpApplication.IOptions.keyword} as `true`,
+   * number of {@link ILlmHttpFunction.parameters} are always 1 and the first
    * parameter's type is always {@link ILlmSchema.IObject}. The
    * properties' rule is:
    *
@@ -150,9 +150,9 @@ export interface ILlmProcedure<
   /**
    * Collection of separated parameters.
    *
-   * Filled only when {@link ILlmDocument.IOptions.separate} is configured.
+   * Filled only when {@link ILlmHttpApplication.IOptions.separate} is configured.
    */
-  separated?: ILlmProcedure.ISeparated<Schema>;
+  separated?: ILlmHttpFunction.ISeparated<Schema>;
 
   /**
    * Expected return type.
@@ -165,7 +165,7 @@ export interface ILlmProcedure<
   /**
    * Description of the procedure.
    *
-   * `ILlmProcedure.description` is composed by below rule:
+   * `ILlmHttpFunction.description` is composed by below rule:
    *
    * 1. Starts from the {@link OpenApi.IOperation.summary} paragraph.
    * 2. The next paragraphs are filled with the
@@ -206,7 +206,7 @@ export interface ILlmProcedure<
    */
   route: () => Route;
 }
-export namespace ILlmProcedure {
+export namespace ILlmHttpFunction {
   /**
    * Collection of separated parameters.
    */

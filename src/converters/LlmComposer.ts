@@ -1,7 +1,7 @@
 import { OpenApi } from "../OpenApi";
 import { OpenApiTypeChecker } from "../OpenApiTypeChecker";
-import { ILlmDocument } from "../structures/ILlmDocument";
-import { ILlmProcedure } from "../structures/ILlmProcedure";
+import { ILlmHttpApplication } from "../structures/ILlmHttpApplication";
+import { ILlmHttpFunction } from "../structures/ILlmHttpFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
 import { IMigrateDocument } from "../structures/IMigrateDocument";
 import { IMigrateRoute } from "../structures/IMigrateRoute";
@@ -12,20 +12,20 @@ import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 export namespace LlmComposer {
   export const compose = (
     migrate: IMigrateDocument,
-    options: ILlmDocument.IOptions,
-  ): ILlmDocument => {
+    options: ILlmHttpApplication.IOptions,
+  ): ILlmHttpApplication => {
     // COMPOSE FUNCTIONS
-    const errors: ILlmDocument.IError[] = migrate.errors.map((e) => ({
+    const errors: ILlmHttpApplication.IError[] = migrate.errors.map((e) => ({
       method: e.method,
       path: e.path,
       messages: e.messages,
       operation: () => e.operation(),
       route: () => undefined,
     }));
-    const functions: ILlmProcedure[] = migrate.routes
+    const functions: ILlmHttpFunction[] = migrate.routes
       .map((route) => {
         if (route.method === "head") return null;
-        const func: ILlmProcedure | null = composeFunction(options)(
+        const func: ILlmHttpFunction | null = composeFunction(options)(
           migrate.document().components,
         )(route);
         if (func === null)
@@ -38,7 +38,7 @@ export namespace LlmComposer {
           });
         return func;
       })
-      .filter((v): v is ILlmProcedure => v !== null);
+      .filter((v): v is ILlmHttpFunction => v !== null);
     return {
       openapi: "3.0.3",
       functions,
@@ -70,9 +70,9 @@ export namespace LlmComposer {
   };
 
   const composeFunction =
-    (options: ILlmDocument.IOptions) =>
+    (options: ILlmHttpApplication.IOptions) =>
     (components: OpenApi.IComponents) =>
-    (route: IMigrateRoute): ILlmProcedure | null => {
+    (route: IMigrateRoute): ILlmHttpFunction | null => {
       // CAST SCHEMA TYPES
       const cast = (s: OpenApi.IJsonSchema) => schema(components, s);
       const output: ILlmSchema | null | undefined =
