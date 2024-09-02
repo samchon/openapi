@@ -3,7 +3,7 @@ import fs from "fs";
 import typia from "typia";
 
 export const test_document_convert_v31 = async (): Promise<void> => {
-  const path: string = `${__dirname}/../../../examples/v3.1`;
+  const path: string = `${__dirname}/../../../../examples/v3.1`;
   for (const file of await fs.promises.readdir(path)) {
     if (file.endsWith(".json") === false) continue;
     const swagger: OpenApiV3_1.IDocument = typia.assert<OpenApiV3_1.IDocument>(

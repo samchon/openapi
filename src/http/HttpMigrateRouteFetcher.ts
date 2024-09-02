@@ -1,12 +1,12 @@
 import { IHttpConnection } from "../structures/IHttpConnection";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { IHttpResponse } from "../structures/IHttpResponse";
-import { IMigrateRoute } from "../structures/IMigrateRoute";
 import { HttpError } from "./HttpError";
 
-export namespace MigrateRouteFetcher {
+export namespace HttpMigrateRouteFetcher {
   export interface IProps {
     connection: IHttpConnection;
-    route: IMigrateRoute;
+    route: IHttpMigrateRoute;
     parameters:
       | Array<string | number | boolean | bigint | null>
       | Record<string, string | number | boolean | bigint | null>;
@@ -16,7 +16,8 @@ export namespace MigrateRouteFetcher {
 
   export const request = async (props: IProps): Promise<unknown> => {
     const result: IHttpResponse = await _Propagate("request", props);
-    if (result.status === 200 || result.status === 201)
+    props.route.success?.media;
+    if (result.status !== 200 && result.status !== 201)
       throw new HttpError(
         props.route.method.toUpperCase() as "GET",
         props.route.path,
@@ -33,7 +34,7 @@ export namespace MigrateRouteFetcher {
 
 const _Propagate = async (
   from: string,
-  props: MigrateRouteFetcher.IProps,
+  props: HttpMigrateRouteFetcher.IProps,
 ): Promise<IHttpResponse> => {
   // VALIDATE PARAMETERS
   const error = (message: string) =>
@@ -57,6 +58,10 @@ const _Propagate = async (
   // INIT REQUEST DATA
   const headers: Record<string, IHttpConnection.HeaderValue | undefined> = {
     ...(props.connection.headers ?? {}),
+    ...(props.route.body?.type &&
+    props.route.body.type !== "multipart/form-data"
+      ? { "Content-Type": props.route.body.type }
+      : {}),
   };
   const init: RequestInit = {
     ...(props.connection.options ?? {}),
@@ -72,13 +77,15 @@ const _Propagate = async (
     })(),
   };
   if (props.body !== undefined)
-    props.route.body?.type === "application/x-www-form-urlencoded"
-      ? requestQueryBody(props.body)
-      : props.route.body?.type === "multipart/form-data"
-        ? requestFormDataBody(props.body)
-        : props.route.body?.type !== "text/plain"
-          ? JSON.stringify(props.body)
-          : props.body;
+    init.body = (
+      props.route.body?.type === "application/x-www-form-urlencoded"
+        ? requestQueryBody(props.body)
+        : props.route.body?.type === "multipart/form-data"
+          ? requestFormDataBody(props.body)
+          : props.route.body?.type === "application/json"
+            ? JSON.stringify(props.body)
+            : props.body
+    ) as any;
 
   // DO REQUEST
   const path: string =
@@ -86,7 +93,7 @@ const _Propagate = async (
     props.route.path[0] !== "/"
       ? `/${getPath(props)}`
       : getPath(props);
-  const url: URL = new URL(`${props.connection.host}${path}`);
+  const url: URL = new URL(`${props.connection.host}/${path}`);
 
   const response: Response = await (props.connection.fetch ?? fetch)(url, init);
   const status: number = response.status;
@@ -135,7 +142,7 @@ const _Propagate = async (
 };
 
 const getPath = (
-  props: Pick<MigrateRouteFetcher.IProps, "route" | "parameters" | "query">,
+  props: Pick<HttpMigrateRouteFetcher.IProps, "route" | "parameters" | "query">,
 ): string => {
   let path: string = props.route.emendedPath;
   props.route.parameters.forEach((p, i) => {

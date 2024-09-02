@@ -1,0 +1,428 @@
+{
+  "openapi": "3.1.0",
+  "servers": [
+    {
+      "url": "https://github.com/samchon/nestia",
+      "description": "insert your server url"
+    }
+  ],
+  "info": {
+    "version": "0.5.0-dev.20240824",
+    "title": "@samchon/openapi",
+    "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "paths": {
+    "/{a}/{b}/{c}/parameters": {
+      "get": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "a",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "b",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "c",
+            "in": "path",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{a}/{b}/{c}/query": {
+      "get": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "a",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "b",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "c",
+            "in": "path",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          },
+          {
+            "name": "flag",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{a}/{b}/{c}/body": {
+      "post": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "a",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "b",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "c",
+            "in": "path",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flag": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "flag",
+                  "value",
+                  "text"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{a}/{b}/{c}/query/body": {
+      "post": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "a",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "b",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "c",
+            "in": "path",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "reference",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "memo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flag": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "flag",
+                  "value",
+                  "text"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "object",
+                      "properties": {
+                        "memo": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "memo"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "query"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{a}/{b}/{c}/multipart": {
+      "post": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "a",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "b",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "c",
+            "in": "path",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          },
+          {
+            "name": "flag",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": true
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "reference": {
+                    "type": "string"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "name",
+                  "reference",
+                  "file"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "reference": {
+                          "type": "string"
+                        },
+                        "file": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "reference",
+                        "file"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "body"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  },
+  "tags": [],
+  "x-samchon-emended": true
+}

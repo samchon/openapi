@@ -2,11 +2,16 @@ import { DynamicExecutor } from "@nestia/e2e";
 import { NestFactory } from "@nestjs/core";
 import chalk from "chalk";
 
+import { AppFilter } from "./controllers/AppFilter";
 import { AppModule } from "./controllers/AppModule";
+
+const EXTENSION = __filename.substr(-2);
+if (EXTENSION === "js") require("source-map-support").install();
 
 const main = async (): Promise<void> => {
   // PREPARE SERVER
   const app = await NestFactory.create(AppModule, { logger: false });
+  app.useGlobalFilters(new AppFilter(app.getHttpAdapter()));
   await app.listen(3_000);
 
   // DO TEST
@@ -15,7 +20,7 @@ const main = async (): Promise<void> => {
     location: __dirname + "/features",
     parameters: () => [
       {
-        connection: { host: `http://localhost:3000` },
+        host: `http://localhost:3000`,
       },
     ],
     onComplete: (exec) => {

@@ -6,6 +6,7 @@ import {
   TypedRoute,
 } from "@nestia/core";
 import { Controller, Query } from "@nestjs/common";
+import { tags } from "typia";
 
 @Controller()
 export class AppController {
@@ -24,11 +25,7 @@ export class AppController {
     @TypedParam("b") b: number,
     @TypedParam("c") c: boolean,
     @TypedQuery()
-    query: {
-      flag: boolean;
-      value: number;
-      text: string;
-    },
+    query: IQuery,
   ) {
     return { a, b, c, query };
   }
@@ -39,11 +36,7 @@ export class AppController {
     @TypedParam("b") b: number,
     @TypedParam("c") c: boolean,
     @TypedBody()
-    body: {
-      flag: boolean;
-      value: number;
-      text: string;
-    },
+    body: IBody,
   ) {
     return { a, b, c, body };
   }
@@ -53,18 +46,14 @@ export class AppController {
     @TypedParam("a") a: string,
     @TypedParam("b") b: number,
     @TypedParam("c") c: boolean,
-    @Query("name") name: string,
-    @Query("reference") reference: string,
+    @Query("thumbnail")
+    thumbnail: string & tags.Format<"uri"> & tags.ContentMediaType<"image/*">,
     @TypedQuery()
     query: {
-      memo: string;
+      summary: string;
     },
     @TypedBody()
-    body: {
-      flag: boolean;
-      value: number;
-      text: string;
-    },
+    body: IBody,
   ) {
     return {
       a,
@@ -72,8 +61,7 @@ export class AppController {
       c,
       query: {
         ...query,
-        name,
-        reference,
+        thumbnail,
       },
       body,
     };
@@ -84,13 +72,9 @@ export class AppController {
     @TypedParam("a") a: string,
     @TypedParam("b") b: number,
     @TypedParam("c") c: boolean,
-    @TypedQuery() query: { flag: boolean; value: number; text: string },
+    @TypedQuery() query: IQuery,
     @TypedFormData.Body()
-    body: {
-      name: string;
-      reference: string;
-      file: File;
-    },
+    body: IMultipart,
   ) {
     return {
       a,
@@ -98,10 +82,22 @@ export class AppController {
       c,
       query,
       body: {
-        name: body.name,
-        reference: body.reference,
-        file: `http://localhost:3000/files/${body.file.name}`,
+        ...body,
+        file: `http://localhost:3000/files/${Date.now()}.raw`,
       },
     };
   }
+}
+
+interface IQuery {
+  summary: string;
+  thumbnail: string & tags.Format<"uri"> & tags.ContentMediaType<"image/*">;
+}
+interface IBody {
+  title: string;
+  body: string;
+  draft: boolean;
+}
+interface IMultipart extends IBody {
+  file: File;
 }

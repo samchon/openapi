@@ -1,14 +1,20 @@
-export * from "./structures/ILlmHttpApplication";
-export * from "./structures/ILlmHttpFunction";
+//  STRUCTURES
+export * from "./structures/IHttpLlmApplication";
+export * from "./structures/IHttpLlmFunction";
+export * from "./structures/IHttpMigrateRoute";
+export * from "./structures/IHttpMigrateApplication";
 export * from "./structures/ILlmSchema";
-export * from "./structures/IMigrateRoute";
-export * from "./structures/IMigrateDocument";
 
+// HTTP INTERACTION
 export * from "./http/HttpError";
-export * from "./http/LlmFunctionFetcher";
-export * from "./http/MigrateRouteFetcher";
-export * from "./OpenApiTypeChecker";
+export * from "./http/HttpLlmFunctionFetcher";
+export * from "./http/HttpMigrateRouteFetcher";
 
+// UTILS
+export * from "./utils/OpenApiTypeChecker";
+export * from "./utils/LlmTypeChecker";
+
+// OPENAPI MODULES
 export * from "./OpenApi";
 export * from "./SwaggerV2";
 export * from "./OpenApiV3";

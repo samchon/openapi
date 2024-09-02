@@ -1,12 +1,12 @@
 import { OpenApi } from "../OpenApi";
-import { ILlmHttpFunction } from "./ILlmHttpFunction";
+import { IHttpLlmFunction } from "./IHttpLlmFunction";
+import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmSchema } from "./ILlmSchema";
-import { IMigrateRoute } from "./IMigrateRoute";
 
-export interface ILlmHttpApplication<
+export interface IHttpLlmApplication<
   Schema extends ILlmSchema = ILlmSchema,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  Route extends IMigrateRoute = IMigrateRoute,
+  Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
   /**
    * Version of OpenAPI.
@@ -23,12 +23,12 @@ export interface ILlmHttpApplication<
    * When you want to execute the function with LLM constructed arguments,
    * you can do it through {@link LlmFetcher.execute} function.
    */
-  functions: ILlmHttpFunction[];
+  functions: IHttpLlmFunction[];
 
   /**
    * List of errors occurred during the composition.
    */
-  errors: ILlmHttpApplication.IError<Operation, Route>[];
+  errors: IHttpLlmApplication.IError<Operation, Route>[];
 
   /**
    * Options for the document.
@@ -36,15 +36,15 @@ export interface ILlmHttpApplication<
    * Adjusted options when composing the document through
    * {@link OpenApi.llm} function.
    */
-  options: ILlmHttpApplication.IOptions<Schema>;
+  options: IHttpLlmApplication.IOptions<Schema>;
 }
-export namespace ILlmHttpApplication {
+export namespace IHttpLlmApplication {
   /**
    * Error occurred in the composition.
    */
   export interface IError<
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IMigrateRoute = IMigrateRoute,
+    Route extends IHttpMigrateRoute = IHttpMigrateRoute,
   > {
     /**
      * HTTP method of the endpoint.
@@ -89,13 +89,13 @@ export namespace ILlmHttpApplication {
      * Whether the parameters are keyworded or not.
      *
      * If this property value is `true`, length of the
-     * {@link ILlmHttpApplication.IFunction.parameters} is always 1, and type of
+     * {@link IHttpLlmApplication.IFunction.parameters} is always 1, and type of
      * the pararameter is always {@link ILlmSchema.IObject} type.
      * Also, its properties are following below rules:
      *
-     * - `pathParameters`: Path parameters of {@link IMigrateRoute.parameters}
-     * - `query`: Query parameter of {@link IMigrateRoute.query}
-     * - `body`: Body parameter of {@link IMigrateRoute.body}
+     * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}
+     * - `query`: Query parameter of {@link IHttpMigrateRoute.query}
+     * - `body`: Body parameter of {@link IHttpMigrateRoute.body}
      *
      * ```typescript
      * {
@@ -106,7 +106,7 @@ export namespace ILlmHttpApplication {
      * ```
      *
      * Otherwise (this property value is `false`), length of the
-     * {@link ILlmHttpFunction.parameters} is variable, and sequence of the
+     * {@link IHttpLlmFunction.parameters} is variable, and sequence of the
      * parameters are following below rules.
      *
      * ```typescript
@@ -136,8 +136,8 @@ export namespace ILlmHttpApplication {
      * predicating whether the schema value must be composed by human or
      * not, the parameters would be separated into two parts.
      *
-     * - {@link ILlmHttpFunction.separated.llm}
-     * - {@link ILlmHttpFunction.separated.human}
+     * - {@link IHttpLlmFunction.separated.llm}
+     * - {@link IHttpLlmFunction.separated.human}
      *
      * When writing the function, note that returning value `true` means
      * to be a human composing the value, and `false` means to LLM

@@ -1,21 +1,21 @@
 import { IHttpConnection } from "../structures/IHttpConnection";
+import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
+import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { IHttpResponse } from "../structures/IHttpResponse";
-import { ILlmHttpApplication } from "../structures/ILlmHttpApplication";
-import { ILlmHttpFunction } from "../structures/ILlmHttpFunction";
-import { IMigrateRoute } from "../structures/IMigrateRoute";
-import { MigrateRouteFetcher } from "./MigrateRouteFetcher";
+import { HttpMigrateRouteFetcher } from "./HttpMigrateRouteFetcher";
 
-export namespace LlmFunctionFetcher {
+export namespace HttpLlmFunctionFetcher {
   export interface IProps {
     /**
      * Document of the OpenAI function call schemas.
      */
-    document: ILlmHttpApplication;
+    document: IHttpLlmApplication;
 
     /**
      * Procedure schema to call.
      */
-    procedure: ILlmHttpFunction;
+    procedure: IHttpLlmFunction;
 
     /**
      * Connection info to the server.
@@ -29,16 +29,16 @@ export namespace LlmFunctionFetcher {
   }
 
   export const execute = async (props: IProps): Promise<unknown> =>
-    MigrateRouteFetcher.request(getFetchArguments(props));
+    HttpMigrateRouteFetcher.request(getFetchArguments(props));
 
   export const propagate = async (props: IProps): Promise<IHttpResponse> =>
-    MigrateRouteFetcher.propagate(getFetchArguments(props));
+    HttpMigrateRouteFetcher.propagate(getFetchArguments(props));
 
-  const getFetchArguments = (props: IProps): MigrateRouteFetcher.IProps => {
-    const route: IMigrateRoute = props.procedure.route();
+  const getFetchArguments = (props: IProps): HttpMigrateRouteFetcher.IProps => {
+    const route: IHttpMigrateRoute = props.procedure.route();
     if (props.document.options.keyword === true) {
       const input: Pick<
-        MigrateRouteFetcher.IProps,
+        HttpMigrateRouteFetcher.IProps,
         "parameters" | "query" | "body"
       > = props.arguments[0];
       return {

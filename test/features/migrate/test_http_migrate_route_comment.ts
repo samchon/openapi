@@ -1,18 +1,22 @@
 import { TestValidator } from "@nestia/e2e";
-import { IMigrateDocument, IMigrateRoute, OpenApi } from "@samchon/openapi";
+import {
+  IHttpMigrateApplication,
+  IHttpMigrateRoute,
+  OpenApi,
+} from "@samchon/openapi";
 import fs from "fs";
 
-export const test_document_migrate_route_comment = async (): Promise<void> => {
+export const test_http_migrate_route_comment = async (): Promise<void> => {
   const swagger: OpenApi.IDocument = OpenApi.convert(
     JSON.parse(
       await fs.promises.readFile(
-        `${__dirname}/../../../examples/v3.1/shopping.json`,
+        `${__dirname}/../../../../examples/v3.1/shopping.json`,
         "utf8",
       ),
     ),
   );
-  const migrate: IMigrateDocument = OpenApi.migrate(swagger);
-  const route: IMigrateRoute | undefined = migrate.routes.find(
+  const migrate: IHttpMigrateApplication = OpenApi.migrate(swagger);
+  const route: IHttpMigrateRoute | undefined = migrate.routes.find(
     (r) => r.path === "/shoppings/sellers/sales/{id}" && r.method === "put",
   );
   TestValidator.equals("comment")(route?.comment())(EXPECTED);

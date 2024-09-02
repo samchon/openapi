@@ -8,8 +8,8 @@ import { OpenApiV3Downgrader } from "./converters/OpenApiV3Downgrader";
 import { OpenApiV3_1Converter } from "./converters/OpenApiV3_1Converter";
 import { SwaggerV2Converter } from "./converters/SwaggerV2Converter";
 import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
-import { ILlmHttpApplication } from "./structures/ILlmHttpApplication";
-import { IMigrateDocument } from "./structures/IMigrateDocument";
+import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
+import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -139,7 +139,7 @@ export namespace OpenApi {
   /**
    * Convert to migrate document.
    *
-   * Convert the given OpenAPI document to {@link IMigrateDocument}, that is
+   * Convert the given OpenAPI document to {@link IHttpMigrateApplication}, that is
    * useful for OpenAPI generator library which makes RPC (Remote Procedure Call)
    * functions for the Restful API operation.
    *
@@ -151,17 +151,17 @@ export namespace OpenApi {
     Operation extends IOperation<Schema> = IOperation<Schema>,
   >(
     document: IDocument<Schema, Operation>,
-  ): IMigrateDocument<Schema, Operation> {
+  ): IHttpMigrateApplication<Schema, Operation> {
     return MigrateConverter.convert(document);
   }
 
   export function llm(
-    document: OpenApi.IDocument | IMigrateDocument,
-    options?: ILlmHttpApplication.IOptions,
-  ): ILlmHttpApplication {
+    document: OpenApi.IDocument | IHttpMigrateApplication,
+    options?: IHttpLlmApplication.IOptions,
+  ): IHttpLlmApplication {
     if ((document as OpenApi.IDocument)["x-samchon-emended"] !== true)
       document = migrate(document as OpenApi.IDocument);
-    return LlmComposer.compose(document as IMigrateDocument, {
+    return LlmComposer.compose(document as IHttpMigrateApplication, {
       keyword: options?.keyword ?? false,
       separate: options?.separate ?? null,
     });

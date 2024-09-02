@@ -46,9 +46,9 @@ Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
   - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
   - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
 
-Additionally, `@samchon/openapi` provides [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for OpenAPI generators. 
+Additionally, `@samchon/openapi` provides [`IHttpMigrateApplication`](https://github.com/samchon/openapi/blob/master/src/IHttpMigrateApplication.ts) for OpenAPI generators. 
 
-If you're developing TypeScript, [`@nestia/editor`](https://nestia.io/docs/editor) would be the best project utilizing the [`IMigrateDocument`](https://github.com/samchon/openapi/blob/master/src/IMigrateDocument.ts) for the OpenAPI SDK generation. Otherwise, you wanna utilize OpenAPI document for OpenAI function calling, [`@wrtnio/openai-function-schema`](https://github.com/wrtnio/openai-function-schema/) has been prepared for you.
+If you're developing TypeScript, [`@nestia/editor`](https://nestia.io/docs/editor) would be the best project utilizing the [`IHttpMigrateApplication`](https://github.com/samchon/openapi/blob/master/src/IHttpMigrateApplication.ts) for the OpenAPI SDK generation. Otherwise, you wanna utilize OpenAPI document for OpenAI function calling, [`@wrtnio/openai-function-schema`](https://github.com/wrtnio/openai-function-schema/) has been prepared for you.
 
 ```mermaid
 flowchart
@@ -78,7 +78,7 @@ import {
   SwaggerV2,
   OpenApiV3,
   OpenApiV3_1,
-  IMigrateDocument,
+  IHttpMigrateApplication,
 } from "@samchon/openapi";
 
 // original Swagger/OpenAPI document
@@ -100,7 +100,7 @@ OpenApi.downgrade(OpenApi.convert(v2), "3.0");
 OpenApi.downgrade(OpenApi.convert(v3), "2.0");
 
 // also helps openapi generator libraries
-const migrate: IMigrateDocument = OpenApi.migrate(output);
+const migrate: IHttpMigrateApplication = OpenApi.migrate(output);
 ```
 
 Just install `@samchon/openapi` library and import `OpenApi` module from there.

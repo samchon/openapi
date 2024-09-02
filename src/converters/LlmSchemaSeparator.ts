@@ -1,4 +1,4 @@
-import { ILlmHttpFunction } from "../structures/ILlmHttpFunction";
+import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
 import { LlmTypeChecker } from "../utils/LlmTypeChecker";
 
@@ -7,7 +7,7 @@ export namespace LlmSchemaSeparator {
     parameters: ILlmSchema[];
     predicator: (schema: ILlmSchema) => boolean;
   }
-  export const parameters = (props: IProps): ILlmHttpFunction.ISeparated => {
+  export const parameters = (props: IProps): IHttpLlmFunction.ISeparated => {
     const indexes: Array<[ILlmSchema | null, ILlmSchema | null]> =
       props.parameters.map(schema(props.predicator));
     return {

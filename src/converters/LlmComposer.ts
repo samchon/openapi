@@ -1,31 +1,31 @@
 import { OpenApi } from "../OpenApi";
-import { OpenApiTypeChecker } from "../OpenApiTypeChecker";
-import { ILlmHttpApplication } from "../structures/ILlmHttpApplication";
-import { ILlmHttpFunction } from "../structures/ILlmHttpFunction";
+import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
+import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
+import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { ILlmSchema } from "../structures/ILlmSchema";
-import { IMigrateDocument } from "../structures/IMigrateDocument";
-import { IMigrateRoute } from "../structures/IMigrateRoute";
 import { LlmTypeChecker } from "../utils/LlmTypeChecker";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { LlmSchemaSeparator } from "./LlmSchemaSeparator";
 import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
 export namespace LlmComposer {
   export const compose = (
-    migrate: IMigrateDocument,
-    options: ILlmHttpApplication.IOptions,
-  ): ILlmHttpApplication => {
+    migrate: IHttpMigrateApplication,
+    options: IHttpLlmApplication.IOptions,
+  ): IHttpLlmApplication => {
     // COMPOSE FUNCTIONS
-    const errors: ILlmHttpApplication.IError[] = migrate.errors.map((e) => ({
+    const errors: IHttpLlmApplication.IError[] = migrate.errors.map((e) => ({
       method: e.method,
       path: e.path,
       messages: e.messages,
       operation: () => e.operation(),
       route: () => undefined,
     }));
-    const functions: ILlmHttpFunction[] = migrate.routes
+    const functions: IHttpLlmFunction[] = migrate.routes
       .map((route) => {
         if (route.method === "head") return null;
-        const func: ILlmHttpFunction | null = composeFunction(options)(
+        const func: IHttpLlmFunction | null = composeFunction(options)(
           migrate.document().components,
         )(route);
         if (func === null)
@@ -38,7 +38,7 @@ export namespace LlmComposer {
           });
         return func;
       })
-      .filter((v): v is ILlmHttpFunction => v !== null);
+      .filter((v): v is IHttpLlmFunction => v !== null);
     return {
       openapi: "3.0.3",
       functions,
@@ -70,9 +70,9 @@ export namespace LlmComposer {
   };
 
   const composeFunction =
-    (options: ILlmHttpApplication.IOptions) =>
+    (options: IHttpLlmApplication.IOptions) =>
     (components: OpenApi.IComponents) =>
-    (route: IMigrateRoute): ILlmHttpFunction | null => {
+    (route: IHttpMigrateRoute): IHttpLlmFunction | null => {
       // CAST SCHEMA TYPES
       const cast = (s: OpenApi.IJsonSchema) => schema(components, s);
       const output: ILlmSchema | null | undefined =

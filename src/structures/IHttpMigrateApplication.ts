@@ -1,39 +1,39 @@
 import { OpenApi } from "../OpenApi";
-import { IMigrateRoute } from "./IMigrateRoute";
+import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 
 /**
  * Document of migration.
  *
- * The `IMigrateDocument` interface is a document of migration from
+ * The `IHttpMigrateApplication` interface is an application migrated from
  * {@link OpenAPI.IDocument OpenAPI document} to RPC (Remote Procedure Call)
- * functions; {@link IMigrateRoute}.
+ * functions; {@link IHttpMigrateRoute}.
  *
- * As the `IMigrateDocument` and {@link IMigrateRoute} have a lot of special
+ * As the `IHttpMigrateApplication` and {@link IHttpMigrateRoute} have a lot of special
  * stories, when you're developing OpenAPI generator library, please read
  * their descriptions carefully including the description of properties.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IMigrateDocument<
+export interface IHttpMigrateApplication<
   Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
 > {
   /**
    * List of routes for migration.
    */
-  routes: IMigrateRoute<Schema, Operation>[];
+  routes: IHttpMigrateRoute<Schema, Operation>[];
 
   /**
    * List of errors occurred during the migration.
    */
-  errors: IMigrateDocument.IError<Operation>[];
+  errors: IHttpMigrateApplication.IError<Operation>[];
 
   /**
    * Source OpenAPI document.
    */
   document: () => OpenApi.IDocument<Schema, Operation>;
 }
-export namespace IMigrateDocument {
+export namespace IHttpMigrateApplication {
   /**
    * Error of migration in the operation level.
    */

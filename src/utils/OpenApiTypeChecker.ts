@@ -1,5 +1,5 @@
-import { OpenApi } from "./OpenApi";
-import { MapUtil } from "./utils/MapUtil";
+import { OpenApi } from "../OpenApi";
+import { MapUtil } from "./MapUtil";
 
 export namespace OpenApiTypeChecker {
   export const visit =

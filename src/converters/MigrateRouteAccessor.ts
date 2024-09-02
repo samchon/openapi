@@ -1,5 +1,5 @@
 import { OpenApi } from "../OpenApi";
-import { IMigrateRoute } from "../structures/IMigrateRoute";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { Escaper } from "../utils/Escaper";
 import { MapUtil } from "../utils/MapUtil";
 import { StringUtil } from "../utils/StringUtil";
@@ -9,7 +9,7 @@ export namespace MigrateRouteAccessor {
     Schema extends OpenApi.IJsonSchema,
     Operation extends OpenApi.IOperation<Schema>,
   >(
-    routes: IMigrateRoute<Schema, Operation>[],
+    routes: IHttpMigrateRoute<Schema, Operation>[],
   ): void => {
     const dict: Map<string, IElement<Schema, Operation>> = collect((op) =>
       op.emendedPath
@@ -50,10 +50,10 @@ export namespace MigrateRouteAccessor {
       Schema extends OpenApi.IJsonSchema,
       Operation extends OpenApi.IOperation<Schema>,
     >(
-      getter: (r: IMigrateRoute<Schema, Operation>) => string[],
+      getter: (r: IHttpMigrateRoute<Schema, Operation>) => string[],
     ) =>
     (
-      routes: IMigrateRoute<Schema, Operation>[],
+      routes: IHttpMigrateRoute<Schema, Operation>[],
     ): Map<string, IElement<Schema, Operation>> => {
       const dict: Map<string, IElement<Schema, Operation>> = new Map();
       for (const r of routes) {
@@ -94,7 +94,7 @@ export namespace MigrateRouteAccessor {
     Schema extends OpenApi.IJsonSchema,
     Operation extends OpenApi.IOperation<Schema>,
   >(
-    op: IMigrateRoute<Schema, Operation>,
+    op: IHttpMigrateRoute<Schema, Operation>,
   ): string => {
     const method = op.method === "delete" ? "erase" : op.method;
     if (op.parameters.length === 0) return method;
@@ -117,7 +117,7 @@ export namespace MigrateRouteAccessor {
     Schema extends OpenApi.IJsonSchema,
     Operation extends OpenApi.IOperation<Schema>,
   > {
-    route: IMigrateRoute<Schema, Operation>;
+    route: IHttpMigrateRoute<Schema, Operation>;
     alias: string;
   }
 }

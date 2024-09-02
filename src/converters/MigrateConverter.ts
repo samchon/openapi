@@ -1,6 +1,6 @@
 import { OpenApi } from "../OpenApi";
-import { IMigrateDocument } from "../structures/IMigrateDocument";
-import { IMigrateRoute } from "../structures/IMigrateRoute";
+import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { StringUtil } from "../utils/StringUtil";
 import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
 import { MigrateRouteConverter } from "./MigrateRouteConverter";
@@ -11,9 +11,9 @@ export namespace MigrateConverter {
     Operation extends OpenApi.IOperation<Schema>,
   >(
     document: OpenApi.IDocument<Schema, Operation>,
-  ): IMigrateDocument<Schema, Operation> => {
-    const errors: IMigrateDocument.IError<Operation>[] = [];
-    const entire: Array<IMigrateRoute<Schema, Operation> | null> =
+  ): IHttpMigrateApplication<Schema, Operation> => {
+    const errors: IHttpMigrateApplication.IError<Operation>[] = [];
+    const entire: Array<IHttpMigrateRoute<Schema, Operation> | null> =
       Object.entries({
         ...(document.paths ?? {}),
         ...(document.webhooks ?? {}),
@@ -23,14 +23,14 @@ export namespace MigrateConverter {
             .filter((method) => collection[method] !== undefined)
             .map((method) => {
               const operation: Operation = collection[method]!;
-              const migrated: IMigrateRoute<Schema, Operation> | string[] =
+              const migrated: IHttpMigrateRoute<Schema, Operation> | string[] =
                 MigrateRouteConverter.convert({
                   document,
                   method,
                   path,
                   emendedPath: StringUtil.reJoinWithDecimalParameters(path),
                   operation,
-                }) as IMigrateRoute<Schema, Operation> | string[];
+                }) as IHttpMigrateRoute<Schema, Operation> | string[];
               if (Array.isArray(migrated)) {
                 errors.push({
                   method,
@@ -44,8 +44,8 @@ export namespace MigrateConverter {
             }),
         )
         .flat();
-    const operations: IMigrateRoute<Schema, Operation>[] = entire.filter(
-      (o): o is IMigrateRoute<Schema, Operation> => !!o,
+    const operations: IHttpMigrateRoute<Schema, Operation>[] = entire.filter(
+      (o): o is IHttpMigrateRoute<Schema, Operation> => !!o,
     );
     MigrateRouteAccessor.overwrite(operations);
     return {

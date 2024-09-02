@@ -1,7 +1,7 @@
 import { OpenApi } from "../OpenApi";
-import { OpenApiTypeChecker } from "../OpenApiTypeChecker";
-import { IMigrateRoute } from "../structures/IMigrateRoute";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { Escaper } from "../utils/Escaper";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { StringUtil } from "../utils/StringUtil";
 
 export namespace MigrateRouteConverter {
@@ -12,11 +12,11 @@ export namespace MigrateRouteConverter {
     emendedPath: string;
     operation: OpenApi.IOperation;
   }
-  export const convert = (props: IProps): IMigrateRoute | string[] => {
+  export const convert = (props: IProps): IHttpMigrateRoute | string[] => {
     //----
     // REQUEST AND RESPONSE BODY
     //----
-    const body: false | null | IMigrateRoute.IBody = emplaceBodySchema(
+    const body: false | null | IHttpMigrateRoute.IBody = emplaceBodySchema(
       "request",
     )((schema) =>
       emplaceReference({
@@ -25,7 +25,7 @@ export namespace MigrateRouteConverter {
         schema,
       }),
     )(props.operation.requestBody);
-    const success: false | null | IMigrateRoute.IBody = emplaceBodySchema(
+    const success: false | null | IHttpMigrateRoute.IBody = emplaceBodySchema(
       "response",
     )((schema) =>
       emplaceReference({
@@ -97,7 +97,7 @@ export namespace MigrateRouteConverter {
           description: () => elem.description,
           example: () => elem.example,
           examples: () => elem.examples,
-        }) satisfies IMigrateRoute.IHeaders;
+        }) satisfies IHttpMigrateRoute.IHeaders;
 
       if (objects.length === 1 && primitives.length === 0)
         return out(parameters[0]);
@@ -220,7 +220,7 @@ export namespace MigrateRouteConverter {
         );
     if (failures.length) return failures;
 
-    const parameters: IMigrateRoute.IParameter[] = (
+    const parameters: IHttpMigrateRoute.IParameter[] = (
       props.operation.parameters ?? []
     )
       .filter((p) => p.in === "path")
@@ -261,8 +261,8 @@ export namespace MigrateRouteConverter {
         })),
       headers: headers || null,
       query: query || null,
-      body: body as IMigrateRoute.IBody | null,
-      success: success as IMigrateRoute.IBody | null,
+      body: body as IHttpMigrateRoute.IBody | null,
+      success: success as IHttpMigrateRoute.IBody | null,
       exceptions: Object.fromEntries(
         Object.entries(props.operation.responses ?? {})
           .filter(
@@ -290,9 +290,9 @@ export namespace MigrateRouteConverter {
 
   const writeRouteComment = (props: {
     operation: OpenApi.IOperation;
-    parameters: IMigrateRoute.IParameter[];
-    query: IMigrateRoute.IQuery | null;
-    body: IMigrateRoute.IBody | null;
+    parameters: IHttpMigrateRoute.IParameter[];
+    query: IHttpMigrateRoute.IQuery | null;
+    body: IHttpMigrateRoute.IBody | null;
   }): string => {
     const commentTags: string[] = [];
     const add = (text: string) => {
@@ -355,7 +355,7 @@ export namespace MigrateRouteConverter {
       description?: string;
       content?: Partial<Record<string, OpenApi.IOperation.IMediaType>>; // ISwaggerRouteBodyContent;
       "x-nestia-encrypted"?: boolean;
-    }): false | null | IMigrateRoute.IBody => {
+    }): false | null | IHttpMigrateRoute.IBody => {
       if (!meta?.content) return null;
 
       const entries: [string, OpenApi.IOperation.IMediaType][] = Object.entries(

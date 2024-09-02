@@ -3,17 +3,17 @@ import { OpenApi } from "../OpenApi";
 /**
  * Route information for migration.
  *
- * The `IMigrateRoute` is a structure representing a route information for
+ * The `IHttpMigrateRoute` is a structure representing a route information for
  * OpenAPI generated RPC (Remote Procedure Call) function composed from the
  * {@link OpenApi.IOperation OpenAPI operation}.
  *
- * As the `IMigrateRoute` has a lot of speical stories, when you're developing
+ * As the `IHttpMigrateRoute` has a lot of speical stories, when you're developing
  * OpenAPI generator library, please read its description carefully including
  * the description of its properties.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IMigrateRoute<
+export interface IHttpMigrateRoute<
   Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
   Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
 > {
@@ -78,7 +78,7 @@ export interface IMigrateRoute<
    *
    * Note that, not a list of every parameters, but only path parameters.
    */
-  parameters: IMigrateRoute.IParameter<Schema>[];
+  parameters: IHttpMigrateRoute.IParameter<Schema>[];
 
   /**
    * Metadata of headers.
@@ -86,16 +86,16 @@ export interface IMigrateRoute<
    * The `headers` property is a metadata of HTTP request headers for RPC function,
    * including the parameter variable name and schema.
    *
-   * Also, its {@link IMigrateRoute.IHeaders.schema} is always object or reference
+   * Also, its {@link IHttpMigrateRoute.IHeaders.schema} is always object or reference
    * to object. Even though the original {@link OpenApi.IOperation OpenAPI operation}'s
    * headers are separated to atomic typed properties, the `headers` property forcibly
    * combines them into a single object type.
    *
    * For reference, if the `headers` property has been converted to an object type
-   * forcibly, its property {@link IMigrateRoute.IHeaders.name name} and
-   * {@link IMigrateRoute.IHeaders.key key} are always "headers".
+   * forcibly, its property {@link IHttpMigrateRoute.IHeaders.name name} and
+   * {@link IHttpMigrateRoute.IHeaders.key key} are always "headers".
    */
-  headers: IMigrateRoute.IHeaders<Schema> | null;
+  headers: IHttpMigrateRoute.IHeaders<Schema> | null;
 
   /**
    * Metadata of query values.
@@ -103,16 +103,16 @@ export interface IMigrateRoute<
    * The `query` property is a metadata of HTTP request query values for RPC function,
    * including the parameter variable name and schema.
    *
-   * Also, its {@link IMigrateRoute.IQuery.schema} is always object or reference
+   * Also, its {@link IHttpMigrateRoute.IQuery.schema} is always object or reference
    * to object. Even though the original {@link OpenApi.IOperation OpenAPI operation}'s
    * query parameters are separated to atomic typed properties, the `query` property
    * forcibly combines them into a single object type.
    *
    * For reference, if the `query` property has been converted to an object type
-   * forcibly, its property {@link IMigrateRoute.IQuery.name name} and
-   * {@link IMigrateRoute.IQuery.key key} are always "headers".
+   * forcibly, its property {@link IHttpMigrateRoute.IQuery.name name} and
+   * {@link IHttpMigrateRoute.IQuery.key key} are always "headers".
    */
-  query: IMigrateRoute.IQuery<Schema> | null;
+  query: IHttpMigrateRoute.IQuery<Schema> | null;
 
   /**
    * Metadata of request body.
@@ -123,7 +123,7 @@ export interface IMigrateRoute<
    * If the `body` property is `null`, it means the operation does not require
    * the request body data.
    */
-  body: IMigrateRoute.IBody<Schema> | null;
+  body: IHttpMigrateRoute.IBody<Schema> | null;
 
   /**
    * Metadata of response body for success case.
@@ -134,7 +134,7 @@ export interface IMigrateRoute<
    * If the `success` property is `null`, it means the operation does not have
    * the response body data. In other words, the RPC function would return `void`.
    */
-  success: IMigrateRoute.IBody<Schema> | null;
+  success: IHttpMigrateRoute.IBody<Schema> | null;
 
   /**
    * Metadata of response body for exceptional status cases.
@@ -147,7 +147,7 @@ export interface IMigrateRoute<
    * stringified number, but sometimes it could be a string like "default",
    * because the OpenAPI document allows the status code to be a string.
    */
-  exceptions: Record<string, IMigrateRoute.IException<Schema>>;
+  exceptions: Record<string, IHttpMigrateRoute.IException<Schema>>;
 
   /**
    * Description comment for the route function.
@@ -173,7 +173,7 @@ export interface IMigrateRoute<
    */
   operation: () => Operation;
 }
-export namespace IMigrateRoute {
+export namespace IHttpMigrateRoute {
   /**
    * Metadata of path parameter.
    */
