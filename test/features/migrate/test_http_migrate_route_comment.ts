@@ -1,5 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
 import {
+  HttpMigration,
   IHttpMigrateApplication,
   IHttpMigrateRoute,
   OpenApi,
@@ -15,7 +16,7 @@ export const test_http_migrate_route_comment = async (): Promise<void> => {
       ),
     ),
   );
-  const migrate: IHttpMigrateApplication = OpenApi.migrate(swagger);
+  const migrate: IHttpMigrateApplication = HttpMigration.application(swagger);
   const route: IHttpMigrateRoute | undefined = migrate.routes.find(
     (r) => r.path === "/shoppings/sellers/sales/{id}" && r.method === "put",
   );

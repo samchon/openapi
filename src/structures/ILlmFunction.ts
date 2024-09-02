@@ -34,6 +34,11 @@ export interface ILlmFunction<Schema extends ILlmSchema = ILlmSchema> {
   parameters: Schema[];
 
   /**
+   * Collection of separated parameters.
+   */
+  separated?: ILlmFunction.ISeparated<Schema>;
+
+  /**
    * Expected return type.
    *
    * If the function returns nothing (`void`), the `output` value would
@@ -53,4 +58,35 @@ export interface ILlmFunction<Schema extends ILlmSchema = ILlmSchema> {
    * property has the highest priroity, and you have to consider it.
    */
   description?: string | undefined;
+}
+export namespace ILlmFunction {
+  /**
+   * Collection of separated parameters.
+   */
+  export interface ISeparated<Schema extends ILlmSchema = ILlmSchema> {
+    /**
+     * Parameters that would be composed by the LLM.
+     */
+    llm: ISeparatedParameter<Schema>[];
+
+    /**
+     * Parameters that would be composed by the human.
+     */
+    human: ISeparatedParameter<Schema>[];
+  }
+
+  /**
+   * Separated parameter.
+   */
+  export interface ISeparatedParameter<Schema extends ILlmSchema = ILlmSchema> {
+    /**
+     * Index of the parameter.
+     */
+    index: number;
+
+    /**
+     * Type schema info of the parameter.
+     */
+    schema: Schema;
+  }
 }

@@ -1,10 +1,10 @@
 import {
-  HttpMigrateRouteFetcher,
+  HttpMigration,
+  IHttpConnection,
   IHttpMigrateApplication,
   IHttpMigrateRoute,
+  OpenApi,
 } from "@samchon/openapi";
-import { OpenApi } from "@samchon/openapi/lib/OpenApi";
-import { IHttpConnection } from "@samchon/openapi/lib/structures/IHttpConnection";
 
 import swagger from "../../swagger.json";
 
@@ -12,19 +12,20 @@ export const test_http_migrate_fetch_query_and_body = async (
   connection: IHttpConnection,
 ): Promise<void> => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
-  const app: IHttpMigrateApplication = OpenApi.migrate(document);
+  const app: IHttpMigrateApplication = HttpMigration.application(document);
   const route: IHttpMigrateRoute | undefined = app.routes.find(
-    (r) => r.path === "/{a}/{b}/{c}/query/body" && r.method === "post",
+    (r) =>
+      r.path === "/{index}/{level}/{optimal}/query/body" && r.method === "post",
   );
   if (route === undefined) throw new Error("Route not found");
 
-  await HttpMigrateRouteFetcher.request({
+  await HttpMigration.request({
     connection,
     route,
     parameters: {
-      a: "string",
-      b: 123,
-      c: true,
+      index: "string",
+      level: 123,
+      optimal: true,
     },
     query: {
       summary: "some summary",

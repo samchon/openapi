@@ -222,37 +222,20 @@ export namespace ILlmSchema {
      * Content media type restriction.
      */
     contentMediaType?: string;
-
-    /**
-     * Secret key for the schema.
-     *
-     * `x-wrtn-secret-key` is a property means a secret key that is required
-     * for the target API endpoint calling. If the secret key is not filled,
-     * the API call would be failed.
-     */
-    "x-wrtn-secret-key"?: string;
-
-    /**
-     * Secret scopes for the schema.
-     *
-     * `x-wrtn-secret-scopes` is a property means a list of secret scopes that
-     * are required for the target API endpoint calling. If the secret scopes
-     * are not satisfied, the API call would be failed.
-     */
-    "x-wrtn-secret-scopes"?: string[];
   }
 
   /**
    * Array type schema info.
    */
-  export interface IArray extends __ISignificant<"array"> {
+  export interface IArray<Schema extends ILlmSchema = ILlmSchema>
+    extends __ISignificant<"array"> {
     /**
      * Items type schema info.
      *
      * The `items` means the type of the array elements. In other words, it is
      * the type schema info of the `T` in the TypeScript array type `Array<T>`.
      */
-    items: ILlmSchema;
+    items: Schema;
 
     /**
      * Unique items restriction.
@@ -283,7 +266,8 @@ export namespace ILlmSchema {
   /**
    * Object type schema info.
    */
-  export interface IObject extends __ISignificant<"object"> {
+  export interface IObject<Schema extends ILlmSchema = ILlmSchema>
+    extends __ISignificant<"object"> {
     /**
      * Properties of the object.
      *
@@ -294,7 +278,7 @@ export namespace ILlmSchema {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, ILlmSchema>;
+    properties?: Record<string, Schema>;
 
     /**
      * List of key values of the required properties.
@@ -345,7 +329,7 @@ export namespace ILlmSchema {
      * - `true`: `Record<string, any>`
      * - `ILlmSchema`: `Record<string, T>`
      */
-    additionalProperties?: boolean | ILlmSchema;
+    additionalProperties?: boolean | Schema;
   }
 
   /**
@@ -379,11 +363,12 @@ export namespace ILlmSchema {
    * defined `anyOf` instead of the `oneOf`, it has been forcibly converted
    * to `oneOf` type by {@link OpenApi.convert OpenAPI conversion}.
    */
-  export interface IOneOf extends __IAttribute {
+  export interface IOneOf<Schema extends ILlmSchema = ILlmSchema>
+    extends __IAttribute {
     /**
      * List of the union types.
      */
-    oneOf: ILlmSchema[];
+    oneOf: Exclude<Schema, ILlmSchema.IOneOf<Schema>>[];
   }
 
   /**
@@ -419,112 +404,5 @@ export namespace ILlmSchema {
      * Whether the type is deprecated or not.
      */
     deprecated?: boolean;
-
-    /**
-     * Placeholder value for frontend application.
-     *
-     * Placeholder means the value to be shown in the input field as a hint.
-     * For example, when an email input field exists, the placeholder value
-     * would be "Insert your email address here".
-     */
-    "x-wrtn-placeholder"?: string;
-
-    /**
-     * Prerequisite API endpoint for the schema.
-     *
-     * `x-wrtn-prerequisite` is a property representing the prerequisite API
-     * interaction. It means that, the endpoint API should be called before
-     * calling the target API, for composing some argument value.
-     *
-     * @reference https://github.com/wrtnio/decorators/blob/main/src/Prerequisite.ts
-     */
-    "x-wrtn-prerequisite"?: {
-      /**
-       * HTTP method to call the endpoint.
-       */
-      method: "get" | "post" | "patch" | "put" | "delete";
-
-      /**
-       * Path of the endpoint.
-       */
-      path: string;
-    } & (
-      | {
-          /**
-           * Function returning transformed values using JMESPath expression.
-           *
-           * `Prerequisite.Props.jmesPath` is a string typed property that extracts desired values
-           * from the prerequisite API response using a JMESPath expression. This property simplifies
-           * and replaces the `label`, `value`, and `array` properties.
-           *
-           * JMESPath expressions are used to extract the desired data based on the API response.
-           * The expression must always be a valid JMESPath syntax.
-           *
-           * - Type: `jmesPath: string`
-           * - Example: `"members[*].data.title"`
-           * - Usage: `jmespath.search(response, jmesPath)`
-           *
-           * Note: The `label`, `value`, and `array` properties are no longer in use.
-           */
-          jmesPath: string;
-        }
-      | {
-          /**
-           * Transform function returning label.
-           *
-           * `Prerequisite.Props.label` is a string typed property representing
-           * a function returning the label from the element instance of the
-           * prerequisite API respond array.
-           *
-           * The function script must be a string value that can be parsed by
-           * `new Function(string)` statement. Also, its parameter names are
-           * always `elem`, `index` and `array`. Of course, the function's
-           * return type must be always `string`.
-           *
-           * - type: `label: (elem: Element, index: number, array: Element[]) => string`
-           * - example: `return elem.title`
-           * - how to use: `new Function("elem", "index", "array", labelScript)(...)`
-           */
-          label: string;
-
-          /**
-           * Transform function returning target value.
-           *
-           * `Prerequisite.Props.value` is a string typed property representing
-           * a function returning the target value from the element instance of
-           * the prerequisite API respond array. If you've defined this `Prerequisite`
-           * type to a `number` type, the returned value must be actual number type.
-           *
-           * The function script must be a string value that can be parsed by
-           * `new Function(string)` statement. Also, its parameter names are always
-           * `elem`, `index` and `array`.
-           *
-           * - type: `value: (elem: Element, index: number, array: Element[]) => Value`
-           * - example: `return elem.no`
-           * - how to use: `new Function("elem", "index", "array", valueScript)(...)`
-           */
-          value: string;
-
-          /**
-           * Transform function returning array instance.
-           *
-           * `Prerequisite.Props.array` is a string typed property representing
-           * a function returning an array instance from the response of the
-           * prerequisite API.
-           *
-           * The function script must be a string value that can be parsed by
-           * `new Function(string)` statement. Also, its parameter name is
-           * always `response`.
-           *
-           * If the prerequisite API responses an array and it is the desired one,
-           * you don't need to specify this property.
-           *
-           * - type: `array: (response: Response) => Elemenet[]`
-           * - example: `return response.members.map(m => m.data)`
-           * - how to use: `new Function("response", arrayScript)(response)`
-           */
-          array?: string;
-        }
-    );
   }
 }

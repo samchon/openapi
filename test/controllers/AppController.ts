@@ -10,42 +10,42 @@ import { tags } from "typia";
 
 @Controller()
 export class AppController {
-  @TypedRoute.Get(":a/:b/:c/parameters")
+  @TypedRoute.Get(":index/:level/:optimal/parameters")
   public parameters(
-    @TypedParam("a") a: string,
-    @TypedParam("b") b: number,
-    @TypedParam("c") c: boolean,
+    @TypedParam("index") index: string,
+    @TypedParam("level") level: number,
+    @TypedParam("optimal") optimal: boolean,
   ) {
-    return { a, b, c };
+    return { index, level, optimal };
   }
 
-  @TypedRoute.Get(":a/:b/:c/query")
+  @TypedRoute.Get(":index/:level/:optimal/query")
   public query(
-    @TypedParam("a") a: string,
-    @TypedParam("b") b: number,
-    @TypedParam("c") c: boolean,
+    @TypedParam("index") index: string,
+    @TypedParam("level") level: number,
+    @TypedParam("optimal") optimal: boolean,
     @TypedQuery()
     query: IQuery,
   ) {
-    return { a, b, c, query };
+    return { index, level, optimal, query };
   }
 
-  @TypedRoute.Post(":a/:b/:c/body")
+  @TypedRoute.Post(":index/:level/:optimal/body")
   public body(
-    @TypedParam("a") a: string,
-    @TypedParam("b") b: number,
-    @TypedParam("c") c: boolean,
+    @TypedParam("index") index: string,
+    @TypedParam("level") level: number,
+    @TypedParam("optimal") optimal: boolean,
     @TypedBody()
     body: IBody,
   ) {
-    return { a, b, c, body };
+    return { index, level, optimal, body };
   }
 
-  @TypedRoute.Post(":a/:b/:c/query/body")
+  @TypedRoute.Post(":index/:level/:optimal/query/body")
   public query_body(
-    @TypedParam("a") a: string,
-    @TypedParam("b") b: number,
-    @TypedParam("c") c: boolean,
+    @TypedParam("index") index: string,
+    @TypedParam("level") level: number,
+    @TypedParam("optimal") optimal: boolean,
     @Query("thumbnail")
     thumbnail: string & tags.Format<"uri"> & tags.ContentMediaType<"image/*">,
     @TypedQuery()
@@ -56,9 +56,9 @@ export class AppController {
     body: IBody,
   ) {
     return {
-      a,
-      b,
-      c,
+      index,
+      level,
+      optimal,
       query: {
         ...query,
         thumbnail,
@@ -67,19 +67,19 @@ export class AppController {
     };
   }
 
-  @TypedRoute.Post(":a/:b/:c/multipart")
+  @TypedRoute.Post(":index/:level/:optimal/multipart")
   public query_multipart(
-    @TypedParam("a") a: string,
-    @TypedParam("b") b: number,
-    @TypedParam("c") c: boolean,
+    @TypedParam("index") index: string,
+    @TypedParam("level") level: number,
+    @TypedParam("optimal") optimal: boolean,
     @TypedQuery() query: IQuery,
     @TypedFormData.Body()
     body: IMultipart,
   ) {
     return {
-      a,
-      b,
-      c,
+      index,
+      level,
+      optimal,
       query,
       body: {
         ...body,

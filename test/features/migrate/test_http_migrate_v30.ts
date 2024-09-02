@@ -1,4 +1,9 @@
-import { IHttpMigrateApplication, OpenApi, OpenApiV3 } from "@samchon/openapi";
+import {
+  HttpMigration,
+  IHttpMigrateApplication,
+  OpenApi,
+  OpenApiV3,
+} from "@samchon/openapi";
 import fs from "fs";
 import typia from "typia";
 
@@ -10,7 +15,7 @@ export const test_http_migrate_v30 = async (): Promise<void> => {
       JSON.parse(await fs.promises.readFile(`${path}/${file}`, "utf8")),
     );
     const openapi: OpenApi.IDocument = OpenApi.convert(swagger);
-    const migrate: IHttpMigrateApplication = OpenApi.migrate(openapi);
+    const migrate: IHttpMigrateApplication = HttpMigration.application(openapi);
     typia.assert(migrate);
   }
 };

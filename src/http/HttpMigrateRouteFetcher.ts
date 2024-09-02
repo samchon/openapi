@@ -148,10 +148,12 @@ const getPath = (
   props.route.parameters.forEach((p, i) => {
     path = path.replace(
       `:${p.key}`,
-      String(
-        (Array.isArray(props.parameters)
-          ? props.parameters[i]
-          : props.parameters[p.key]) ?? "null",
+      encodeURIComponent(
+        String(
+          (Array.isArray(props.parameters)
+            ? props.parameters[i]
+            : props.parameters[p.key]) ?? "null",
+        ),
       ),
     );
   });

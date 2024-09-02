@@ -1,15 +1,11 @@
 import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
-import { LlmComposer } from "./converters/LlmComposer";
-import { MigrateConverter } from "./converters/MigrateConverter";
 import { OpenApiV3Converter } from "./converters/OpenApiV3Converter";
 import { OpenApiV3Downgrader } from "./converters/OpenApiV3Downgrader";
 import { OpenApiV3_1Converter } from "./converters/OpenApiV3_1Converter";
 import { SwaggerV2Converter } from "./converters/SwaggerV2Converter";
 import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
-import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
-import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -134,37 +130,6 @@ export namespace OpenApi {
     if (version === "2.0") return SwaggerV2Downgrader.downgrade(document);
     else if (version === "3.0") return OpenApiV3Downgrader.downgrade(document);
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
-  }
-
-  /**
-   * Convert to migrate document.
-   *
-   * Convert the given OpenAPI document to {@link IHttpMigrateApplication}, that is
-   * useful for OpenAPI generator library which makes RPC (Remote Procedure Call)
-   * functions for the Restful API operation.
-   *
-   * @param document OpenAPI document to migrate
-   * @returns Migrated document
-   */
-  export function migrate<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  >(
-    document: IDocument<Schema, Operation>,
-  ): IHttpMigrateApplication<Schema, Operation> {
-    return MigrateConverter.convert(document);
-  }
-
-  export function llm(
-    document: OpenApi.IDocument | IHttpMigrateApplication,
-    options?: IHttpLlmApplication.IOptions,
-  ): IHttpLlmApplication {
-    if ((document as OpenApi.IDocument)["x-samchon-emended"] !== true)
-      document = migrate(document as OpenApi.IDocument);
-    return LlmComposer.compose(document as IHttpMigrateApplication, {
-      keyword: options?.keyword ?? false,
-      separate: options?.separate ?? null,
-    });
   }
 
   /* -----------------------------------------------------------
@@ -1066,7 +1031,7 @@ export namespace OpenApi {
       /**
        * List of the union types.
        */
-      oneOf: Exclude<Schema, IJsonSchema.IOneOf>[];
+      oneOf: Exclude<Schema, IJsonSchema.IOneOf<Schema>>[];
 
       /**
        * Discriminator info of the union type.

@@ -15,12 +15,12 @@
     }
   },
   "paths": {
-    "/{a}/{b}/{c}/parameters": {
+    "/{index}/{level}/{optimal}/parameters": {
       "get": {
         "tags": [],
         "parameters": [
           {
-            "name": "a",
+            "name": "index",
             "in": "path",
             "schema": {
               "type": "string"
@@ -28,7 +28,7 @@
             "required": true
           },
           {
-            "name": "b",
+            "name": "level",
             "in": "path",
             "schema": {
               "type": "number"
@@ -36,7 +36,7 @@
             "required": true
           },
           {
-            "name": "c",
+            "name": "optimal",
             "in": "path",
             "schema": {
               "type": "boolean"
@@ -58,12 +58,12 @@
         }
       }
     },
-    "/{a}/{b}/{c}/query": {
+    "/{index}/{level}/{optimal}/query": {
       "get": {
         "tags": [],
         "parameters": [
           {
-            "name": "a",
+            "name": "index",
             "in": "path",
             "schema": {
               "type": "string"
@@ -71,7 +71,7 @@
             "required": true
           },
           {
-            "name": "b",
+            "name": "level",
             "in": "path",
             "schema": {
               "type": "number"
@@ -79,7 +79,7 @@
             "required": true
           },
           {
-            "name": "c",
+            "name": "optimal",
             "in": "path",
             "schema": {
               "type": "boolean"
@@ -87,26 +87,20 @@
             "required": true
           },
           {
-            "name": "flag",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            },
-            "required": true
-          },
-          {
-            "name": "value",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            },
-            "required": true
-          },
-          {
-            "name": "text",
+            "name": "summary",
             "in": "query",
             "schema": {
               "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "thumbnail",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "contentMediaType": "image/*"
             },
             "required": true
           }
@@ -125,12 +119,12 @@
         }
       }
     },
-    "/{a}/{b}/{c}/body": {
+    "/{index}/{level}/{optimal}/body": {
       "post": {
         "tags": [],
         "parameters": [
           {
-            "name": "a",
+            "name": "index",
             "in": "path",
             "schema": {
               "type": "string"
@@ -138,7 +132,7 @@
             "required": true
           },
           {
-            "name": "b",
+            "name": "level",
             "in": "path",
             "schema": {
               "type": "number"
@@ -146,7 +140,7 @@
             "required": true
           },
           {
-            "name": "c",
+            "name": "optimal",
             "in": "path",
             "schema": {
               "type": "boolean"
@@ -158,23 +152,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "flag": {
-                    "type": "boolean"
-                  },
-                  "value": {
-                    "type": "number"
-                  },
-                  "text": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "flag",
-                  "value",
-                  "text"
-                ]
+                "$ref": "#/components/schemas/IBody"
               }
             }
           },
@@ -194,12 +172,12 @@
         }
       }
     },
-    "/{a}/{b}/{c}/query/body": {
+    "/{index}/{level}/{optimal}/query/body": {
       "post": {
         "tags": [],
         "parameters": [
           {
-            "name": "a",
+            "name": "index",
             "in": "path",
             "schema": {
               "type": "string"
@@ -207,7 +185,7 @@
             "required": true
           },
           {
-            "name": "b",
+            "name": "level",
             "in": "path",
             "schema": {
               "type": "number"
@@ -215,7 +193,7 @@
             "required": true
           },
           {
-            "name": "c",
+            "name": "optimal",
             "in": "path",
             "schema": {
               "type": "boolean"
@@ -223,23 +201,17 @@
             "required": true
           },
           {
-            "name": "name",
+            "name": "thumbnail",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uri",
+              "contentMediaType": "image/*"
             },
             "required": true
           },
           {
-            "name": "reference",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          },
-          {
-            "name": "memo",
+            "name": "summary",
             "in": "query",
             "schema": {
               "type": "string"
@@ -251,23 +223,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "flag": {
-                    "type": "boolean"
-                  },
-                  "value": {
-                    "type": "number"
-                  },
-                  "text": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "flag",
-                  "value",
-                  "text"
-                ]
+                "$ref": "#/components/schemas/IBody"
               }
             }
           },
@@ -283,12 +239,12 @@
                     "query": {
                       "type": "object",
                       "properties": {
-                        "memo": {
+                        "summary": {
                           "type": "string"
                         }
                       },
                       "required": [
-                        "memo"
+                        "summary"
                       ]
                     }
                   },
@@ -302,12 +258,12 @@
         }
       }
     },
-    "/{a}/{b}/{c}/multipart": {
+    "/{index}/{level}/{optimal}/multipart": {
       "post": {
         "tags": [],
         "parameters": [
           {
-            "name": "a",
+            "name": "index",
             "in": "path",
             "schema": {
               "type": "string"
@@ -315,7 +271,7 @@
             "required": true
           },
           {
-            "name": "b",
+            "name": "level",
             "in": "path",
             "schema": {
               "type": "number"
@@ -323,7 +279,7 @@
             "required": true
           },
           {
-            "name": "c",
+            "name": "optimal",
             "in": "path",
             "schema": {
               "type": "boolean"
@@ -331,26 +287,20 @@
             "required": true
           },
           {
-            "name": "flag",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            },
-            "required": true
-          },
-          {
-            "name": "value",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            },
-            "required": true
-          },
-          {
-            "name": "text",
+            "name": "summary",
             "in": "query",
             "schema": {
               "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "thumbnail",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "contentMediaType": "image/*"
             },
             "required": true
           }
@@ -359,24 +309,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "reference": {
-                    "type": "string"
-                  },
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                },
-                "required": [
-                  "name",
-                  "reference",
-                  "file"
-                ]
+                "$ref": "#/components/schemas/IMultipart"
               }
             }
           },
@@ -392,20 +325,24 @@
                     "body": {
                       "type": "object",
                       "properties": {
-                        "name": {
-                          "type": "string"
-                        },
-                        "reference": {
-                          "type": "string"
-                        },
                         "file": {
                           "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "body": {
+                          "type": "string"
+                        },
+                        "draft": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
-                        "name",
-                        "reference",
-                        "file"
+                        "file",
+                        "title",
+                        "body",
+                        "draft"
                       ]
                     }
                   },
@@ -421,7 +358,68 @@
     }
   },
   "components": {
-    "schemas": {}
+    "schemas": {
+      "IQuery": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri",
+            "contentMediaType": "image/*"
+          }
+        },
+        "required": [
+          "summary",
+          "thumbnail"
+        ]
+      },
+      "IBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "draft": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "body",
+          "draft"
+        ]
+      },
+      "IMultipart": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "draft": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "file",
+          "title",
+          "body",
+          "draft"
+        ]
+      }
+    }
   },
   "tags": [],
   "x-samchon-emended": true

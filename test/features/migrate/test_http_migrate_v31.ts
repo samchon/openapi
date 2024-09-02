@@ -1,4 +1,5 @@
 import {
+  HttpMigration,
   IHttpMigrateApplication,
   OpenApi,
   OpenApiV3_1,
@@ -14,7 +15,7 @@ export const test_http_migrate_v31 = async (): Promise<void> => {
       JSON.parse(await fs.promises.readFile(`${path}/${file}`, "utf8")),
     );
     const openapi: OpenApi.IDocument = OpenApi.convert(swagger);
-    const migrate: IHttpMigrateApplication = OpenApi.migrate(openapi);
+    const migrate: IHttpMigrateApplication = HttpMigration.application(openapi);
     typia.assert(migrate);
   }
 };

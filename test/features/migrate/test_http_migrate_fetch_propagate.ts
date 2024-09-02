@@ -1,12 +1,12 @@
 import { TestValidator } from "@nestia/e2e";
 import {
-  HttpMigrateRouteFetcher,
+  HttpMigration,
+  IHttpConnection,
   IHttpMigrateApplication,
   IHttpMigrateRoute,
+  IHttpResponse,
   OpenApi,
 } from "@samchon/openapi";
-import { IHttpConnection } from "@samchon/openapi/lib/structures/IHttpConnection";
-import { IHttpResponse } from "@samchon/openapi/lib/structures/IHttpResponse";
 
 import swagger from "../../swagger.json";
 
@@ -14,13 +14,14 @@ export const test_http_migrate_fetch_propagate = async (
   connection: IHttpConnection,
 ): Promise<void> => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
-  const app: IHttpMigrateApplication = OpenApi.migrate(document);
+  const app: IHttpMigrateApplication = HttpMigration.application(document);
   const route: IHttpMigrateRoute | undefined = app.routes.find(
-    (r) => r.path === "/{a}/{b}/{c}/parameters" && r.method === "get",
+    (r) =>
+      r.path === "/{index}/{level}/{optimal}/parameters" && r.method === "get",
   );
   if (route === undefined) throw new Error("Route not found");
 
-  const response: IHttpResponse = await HttpMigrateRouteFetcher.propagate({
+  const response: IHttpResponse = await HttpMigration.propagate({
     connection,
     route,
     parameters: ["three", "two", "one"],
