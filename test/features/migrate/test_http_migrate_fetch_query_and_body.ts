@@ -23,7 +23,7 @@ export const test_http_migrate_fetch_query_and_body = async (
     connection,
     route,
     parameters: {
-      index: "string",
+      index: "https://some.url/index.html",
       level: 123,
       optimal: true,
     },

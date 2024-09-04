@@ -1,11 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
-import {
-  HttpLanguageModel,
-  ILlmSchema,
-  LlmTypeChecker,
-  OpenApi,
-} from "@samchon/openapi";
-import { LlmSchemaSeparator } from "@samchon/openapi/lib/converters/LlmSchemaSeparator";
+import { HttpLlm, ILlmSchema, LlmTypeChecker, OpenApi } from "@samchon/openapi";
+import { LlmSchemaSeparator } from "@samchon/openapi/lib/utils/LlmSchemaSeparator";
 import typia, { tags } from "typia";
 
 export const test_llm_schema_separate_nested = (): void => {
@@ -50,7 +45,7 @@ const schema = (props: {
   components: OpenApi.IComponents;
   schemas: OpenApi.IJsonSchema[];
 }): ILlmSchema => {
-  const schema: ILlmSchema | null = HttpLanguageModel.schema({
+  const schema: ILlmSchema | null = HttpLlm.schema({
     components: props.components,
     schema: props.schemas[0],
   });

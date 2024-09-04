@@ -1,9 +1,9 @@
 import { TestValidator } from "@nestia/e2e";
-import { LlmMerger } from "@samchon/openapi/lib/converters/LlmMerger";
+import { HttpLlm } from "@samchon/openapi";
 
 export const test_llm_merge_parameters = (): void => {
   TestValidator.equals("atomics")(
-    LlmMerger.parameters({
+    HttpLlm.mergeParameters({
       function: {
         name: "test",
         parameters: [

@@ -8,14 +8,14 @@ import { HttpMigrateRouteFetcher } from "./HttpMigrateRouteFetcher";
 export namespace HttpLlmFunctionFetcher {
   export interface IProps {
     /**
-     * Document of the OpenAI function call schemas.
+     * Application of the OpenAI function call schemas.
      */
-    document: IHttpLlmApplication;
+    application: IHttpLlmApplication;
 
     /**
-     * Procedure schema to call.
+     * Function schema to call.
      */
-    procedure: IHttpLlmFunction;
+    function: IHttpLlmFunction;
 
     /**
      * Connection info to the server.
@@ -29,22 +29,32 @@ export namespace HttpLlmFunctionFetcher {
   }
 
   export const execute = async (props: IProps): Promise<unknown> =>
-    HttpMigrateRouteFetcher.request(getFetchArguments(props));
+    HttpMigrateRouteFetcher.request(getFetchArguments("execute", props));
 
   export const propagate = async (props: IProps): Promise<IHttpResponse> =>
-    HttpMigrateRouteFetcher.propagate(getFetchArguments(props));
+    HttpMigrateRouteFetcher.propagate(getFetchArguments("propagate", props));
 
-  const getFetchArguments = (props: IProps): HttpMigrateRouteFetcher.IProps => {
-    const route: IHttpMigrateRoute = props.procedure.route();
-    if (props.document.options.keyword === true) {
-      const input: Pick<
-        HttpMigrateRouteFetcher.IProps,
-        "parameters" | "query" | "body"
-      > = props.arguments[0];
+  const getFetchArguments = (
+    from: string,
+    props: IProps,
+  ): HttpMigrateRouteFetcher.IProps => {
+    const route: IHttpMigrateRoute = props.function.route();
+    if (props.application.options.keyword === true) {
+      const input: Record<string, any> = props.arguments[0];
+      const valid: boolean =
+        props.arguments.length === 1 &&
+        typeof input === "object" &&
+        input !== null;
+      if (valid === false)
+        throw new Error(
+          `Error on HttpLlmFunctionFetcher.${from}(): keyworded arguments must be an object`,
+        );
       return {
         connection: props.connection,
         route,
-        parameters: input.parameters,
+        parameters: Object.fromEntries(
+          route.parameters.map((p) => [p.key, input[p.key]] as const),
+        ),
         query: input.query,
         body: input.body,
       };

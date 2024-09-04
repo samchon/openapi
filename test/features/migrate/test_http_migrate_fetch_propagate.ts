@@ -24,7 +24,7 @@ export const test_http_migrate_fetch_propagate = async (
   const response: IHttpResponse = await HttpMigration.propagate({
     connection,
     route,
-    parameters: ["three", "two", "one"],
+    parameters: ["https://some.url/index.html", "two", "one"],
   });
   TestValidator.equals("status")(response.status)(400);
 };

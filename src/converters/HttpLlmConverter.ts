@@ -4,12 +4,12 @@ import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { ILlmSchema } from "../structures/ILlmSchema";
+import { LlmSchemaSeparator } from "../utils/LlmSchemaSeparator";
 import { LlmTypeChecker } from "../utils/LlmTypeChecker";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
-import { LlmSchemaSeparator } from "./LlmSchemaSeparator";
 import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
-export namespace LlmComposer {
+export namespace HttpLlmConverter {
   export const compose = (
     migrate: IHttpMigrateApplication,
     options: IHttpLlmApplication.IOptions,
@@ -78,7 +78,7 @@ const composeFunction =
   (route: IHttpMigrateRoute): IHttpLlmFunction | null => {
     // CAST SCHEMA TYPES
     const cast = (s: OpenApi.IJsonSchema) =>
-      LlmComposer.schema({
+      HttpLlmConverter.schema({
         components,
         schema: s,
       });

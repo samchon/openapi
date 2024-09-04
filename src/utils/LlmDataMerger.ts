@@ -6,7 +6,7 @@ import { ILlmFunction } from "../structures/ILlmFunction";
  *
  * @author Samchon
  */
-export namespace LlmMerger {
+export namespace LlmDataMerger {
   /**
    * Properties of {@link parameters} function.
    */
@@ -36,7 +36,7 @@ export namespace LlmMerger {
    * and human.
    *
    * In that case, you can combine both LLM and human composed arguments into one
-   * by utilizing this {@link LlmMerger.parameters} function, referencing
+   * by utilizing this {@link LlmDataMerger.parameters} function, referencing
    * the target function metadata {@link IOpenAiFunction.separated}.
    *
    * @param props Properties to combine LLM and human arguments with metadata.

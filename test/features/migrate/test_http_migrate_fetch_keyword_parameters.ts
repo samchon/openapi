@@ -23,7 +23,7 @@ export const test_http_migrate_fetch_keyword_parameters = async (
     connection,
     route,
     parameters: {
-      index: "three",
+      index: "https://some.url/index.html",
       level: 2,
       optimal: true,
     },

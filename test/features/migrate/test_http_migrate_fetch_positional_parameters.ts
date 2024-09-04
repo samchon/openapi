@@ -22,6 +22,6 @@ export const test_http_migrate_fetch_positional_parameters = async (
   await HttpMigration.request({
     connection,
     route,
-    parameters: ["three", 2, true],
+    parameters: ["https://some.url/index.html", 2, true],
   });
 };

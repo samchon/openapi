@@ -1,16 +1,17 @@
 import { HttpMigration } from "./HttpMigration";
 import { OpenApi } from "./OpenApi";
-import { LlmComposer } from "./converters/LlmComposer";
-import { LlmMerger } from "./converters/LlmMerger";
+import { HttpLlmConverter } from "./converters/HttpLlmConverter";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "./structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
 import { IHttpResponse } from "./structures/IHttpResponse";
+import { ILlmFunction } from "./structures/ILlmFunction";
 import { ILlmSchema } from "./structures/ILlmSchema";
+import { LlmDataMerger } from "./utils/LlmDataMerger";
 
-export namespace HttpLanguageModel {
+export namespace HttpLlm {
   export const application = <
     Schema extends ILlmSchema,
     Operation extends OpenApi.IOperation,
@@ -25,7 +26,7 @@ export namespace HttpLanguageModel {
       document = HttpMigration.application(
         document as OpenApi.IDocument<any, Operation>,
       );
-    return LlmComposer.compose(
+    return HttpLlmConverter.compose(
       document as IHttpMigrateApplication<any, Operation>,
       {
         keyword: options?.keyword ?? false,
@@ -37,18 +38,18 @@ export namespace HttpLanguageModel {
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-  }): ILlmSchema | null => LlmComposer.schema(props);
+  }): ILlmSchema | null => HttpLlmConverter.schema(props);
 
-  export interface IExecutionProps {
+  export interface IFetchProps {
     /**
      * Document of the OpenAI function call schemas.
      */
-    document: IHttpLlmApplication;
+    application: IHttpLlmApplication;
 
     /**
-     * Procedure schema to call.
+     * Function schema to call.
      */
-    procedure: IHttpLlmFunction;
+    function: IHttpLlmFunction;
 
     /**
      * Connection info to the server.
@@ -60,17 +61,18 @@ export namespace HttpLanguageModel {
      */
     arguments: any[];
   }
-  export const execute = (props: IExecutionProps): Promise<unknown> =>
+  export const execute = (props: IFetchProps): Promise<unknown> =>
     HttpLlmFunctionFetcher.execute(props);
-
-  export const propagate = (props: IExecutionProps): Promise<IHttpResponse> =>
+  export const propagate = (props: IFetchProps): Promise<IHttpResponse> =>
     HttpLlmFunctionFetcher.propagate(props);
 
   export interface IMergeProps {
-    function: IHttpLlmFunction;
+    function: ILlmFunction;
     llm: unknown[];
     human: unknown[];
   }
-  export const merge = (props: IMergeProps): unknown[] =>
-    LlmMerger.parameters(props);
+  export const mergeParameters = (props: IMergeProps): unknown[] =>
+    LlmDataMerger.parameters(props);
+  export const mergeValue = (x: unknown, y: unknown): unknown =>
+    LlmDataMerger.value(x, y);
 }

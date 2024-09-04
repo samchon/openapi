@@ -1,12 +1,12 @@
 import { TestValidator } from "@nestia/e2e";
-import { LlmMerger } from "@samchon/openapi/lib/converters/LlmMerger";
+import { HttpLlm } from "@samchon/openapi";
 
 export const test_llm_merge_parameters = (): void => {
-  TestValidator.equals("number")(LlmMerger.value(1, 2))(2);
-  TestValidator.equals("nullable")(LlmMerger.value(0, null))(0);
-  TestValidator.equals("optional")(LlmMerger.value(0, undefined))(0);
+  TestValidator.equals("number")(HttpLlm.mergeValue(1, 2))(2);
+  TestValidator.equals("nullable")(HttpLlm.mergeValue(0, null))(0);
+  TestValidator.equals("optional")(HttpLlm.mergeValue(0, undefined))(0);
   TestValidator.equals("object")(
-    LlmMerger.value(
+    HttpLlm.mergeValue(
       {
         a: "A",
         array: [1, 2, 3],
@@ -37,7 +37,7 @@ export const test_llm_merge_parameters = (): void => {
     object: { x: "X", y: "Y" },
   });
   TestValidator.equals("membership")(
-    LlmMerger.value(
+    HttpLlm.mergeValue(
       {
         name: "Samchon",
         email: "samchon.github@gmail.com",

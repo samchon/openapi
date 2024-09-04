@@ -1,6 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
 import {
-  HttpLanguageModel,
+  HttpLlm,
   IHttpLlmApplication,
   IHttpMigrateRoute,
   ILlmSchema,
@@ -12,12 +12,9 @@ import swagger from "../../swagger.json";
 
 export const test_http_llm_application_keyword = (): void => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
-  const application: IHttpLlmApplication = HttpLanguageModel.application(
-    document,
-    {
-      keyword: true,
-    },
-  );
+  const application: IHttpLlmApplication = HttpLlm.application(document, {
+    keyword: true,
+  });
   for (const func of application.functions) {
     const route: IHttpMigrateRoute = func.route();
     TestValidator.equals("length")(1)(func.parameters.length);

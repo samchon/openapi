@@ -1,6 +1,6 @@
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
-import { LlmTypeChecker } from "../utils/LlmTypeChecker";
+import { LlmTypeChecker } from "./LlmTypeChecker";
 
 export namespace LlmSchemaSeparator {
   export interface IProps {

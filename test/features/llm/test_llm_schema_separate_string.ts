@@ -1,6 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
 import { ILlmSchema, LlmTypeChecker } from "@samchon/openapi";
-import { LlmSchemaSeparator } from "@samchon/openapi/lib/converters/LlmSchemaSeparator";
+import { LlmSchemaSeparator } from "@samchon/openapi/lib/utils/LlmSchemaSeparator";
 
 export const test_schema_separate_string = (): void => {
   const separator = LlmSchemaSeparator.schema(

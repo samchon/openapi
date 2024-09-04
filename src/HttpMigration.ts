@@ -15,7 +15,7 @@ export namespace HttpMigration {
   ): IHttpMigrateApplication<Schema, Operation> =>
     MigrateConverter.convert(document);
 
-  export interface IProps {
+  export interface IFetchProps {
     connection: IHttpConnection;
     route: IHttpMigrateRoute;
     parameters:
@@ -24,8 +24,8 @@ export namespace HttpMigration {
     query?: object | undefined;
     body?: object | undefined;
   }
-  export const request = (props: IProps): Promise<unknown> =>
+  export const request = (props: IFetchProps): Promise<unknown> =>
     HttpMigrateRouteFetcher.request(props);
-  export const propagate = (props: IProps): Promise<IHttpResponse> =>
+  export const propagate = (props: IFetchProps): Promise<IHttpResponse> =>
     HttpMigrateRouteFetcher.propagate(props);
 }
