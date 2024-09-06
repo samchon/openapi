@@ -34,7 +34,7 @@ export interface IHttpLlmApplication<
    * Options for the document.
    *
    * Adjusted options when composing the document through
-   * {@link OpenApi.llm} function.
+   * {@link HttpLlm.application} function.
    */
   options: IHttpLlmApplication.IOptions<Schema>;
 }

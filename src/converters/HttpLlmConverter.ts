@@ -152,7 +152,7 @@ const composeFunction =
         ? (OpenApiV3Downgrader.downgradeSchema({
             original: {},
             downgraded: {},
-          })(output) as ILlmSchema)
+          })(output as any) as ILlmSchema)
         : undefined,
       description: (() => {
         if (operation.summary && operation.description) {

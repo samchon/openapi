@@ -35,12 +35,12 @@ export namespace ILlmSchema {
     /**
      * Default value.
      */
-    default?: boolean;
+    default?: boolean | null;
 
     /**
      * Enumeration values.
      */
-    enum?: boolean[];
+    enum?: Array<boolean | null>;
   }
 
   /**
@@ -52,14 +52,14 @@ export namespace ILlmSchema {
      *
      * @type int64
      */
-    default?: number;
+    default?: number | null;
 
     /**
      * Enumeration values.
      *
      * @type int64
      */
-    enum?: number[];
+    enum?: Array<number | null>;
 
     /**
      * Minimum value restriction.
@@ -111,12 +111,12 @@ export namespace ILlmSchema {
     /**
      * Default value.
      */
-    default?: number;
+    default?: number | null;
 
     /**
      * Enumeration values.
      */
-    enum?: number[];
+    enum?: Array<number | null>;
 
     /**
      * Minimum value restriction.
@@ -163,12 +163,12 @@ export namespace ILlmSchema {
     /**
      * Default value.
      */
-    default?: string;
+    default?: string | null;
 
     /**
      * Enumeration values.
      */
-    enum?: string[];
+    enum?: Array<string | null>;
 
     /**
      * Format restriction.
@@ -352,6 +352,11 @@ export namespace ILlmSchema {
      * Type is always `null`.
      */
     type: "null";
+
+    /**
+     * Default value.
+     */
+    default?: null;
   }
 
   /**

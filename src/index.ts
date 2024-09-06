@@ -5,6 +5,7 @@ export * from "./structures/IHttpLlmFunction";
 export * from "./structures/IHttpMigrateRoute";
 export * from "./structures/IHttpMigrateApplication";
 export * from "./structures/IHttpResponse";
+export * from "./structures/ILlmApplication";
 export * from "./structures/ILlmSchema";
 
 // UTILS
