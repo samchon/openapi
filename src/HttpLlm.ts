@@ -134,8 +134,27 @@ export namespace HttpLlm {
   /**
    * Execute the LLM function call.
    *
-   * @param props
-   * @returns
+   * `HttmLlm.execute()` is a function executing the target
+   * {@link OpenApi.IOperation API endpoint} with with the connection information
+   * and arguments composed by Large Language Model like OpenAI (+human sometimes).
+   *
+   * By the way, if you've configured the {@link IHttpLlmApplication.IOptions.separate},
+   * so that the parameters are separated to human and LLM sides, you have to merge
+   * these humand and LLM sides' parameters into one through
+   * {@link HttpLlm.mergeParameters} function.
+   *
+   * About the {@link IHttpLlmApplication.IOptions.keyword} option, don't worry anything.
+   * This `HttmLlm.execute()` function will automatically recognize the keyword arguments
+   * and convert them to the proper sequence.
+   *
+   * For reference, if the target API endpoinnt responds none 200/201 status, this
+   * would be considered as an error and the {@link HttpError} would be thrown.
+   * Otherwise you don't want such rule, you can use the {@link HttpLlm.propagate}
+   * function instead.
+   *
+   * @param props Properties for the LLM function call
+   * @returns Return value from the API endpoint
+   * @throws HttpError when the API endpoint responds none 200/201 status
    */
   export const execute = (props: IFetchProps): Promise<unknown> =>
     HttpLlmFunctionFetcher.execute(props);
@@ -143,8 +162,26 @@ export namespace HttpLlm {
   /**
    * Propagate the LLM function call.
    *
-   * @param props
-   * @returns
+   * `HttmLlm.propagate()` is a function propagating the target
+   * {@link OpenApi.IOperation API endpoint} with with the connection information
+   * and arguments composed by Large Language Model like OpenAI (+human sometimes).
+   *
+   * By the way, if you've configured the {@link IHttpLlmApplication.IOptions.separate},
+   * so that the parameters are separated to human and LLM sides, you have to merge
+   * these humand and LLM sides' parameters into one through
+   * {@link HttpLlm.mergeParameters} function.
+   *
+   * About the {@link IHttpLlmApplication.IOptions.keyword} option, don't worry anything.
+   * This `HttmLlm.propagate()` function will automatically recognize the keyword arguments
+   * and convert them to the proper sequence.
+   *
+   * For reference, the propagation means always returning the response from the API
+   * endpoint, even if the status is not 200/201. This is useful when you want to
+   * handle the response by yourself.
+   *
+   * @param props Properties for the LLM function call
+   * @returns Response from the API endpoint
+   * @throws Error only when the connection is failed
    */
   export const propagate = (props: IFetchProps): Promise<IHttpResponse> =>
     HttpLlmFunctionFetcher.propagate(props);
@@ -175,14 +212,29 @@ export namespace HttpLlm {
   /**
    * Merge the parameters.
    *
-   * @param props
-   * @returns
+   * If you've configured the {@link IHttpLlmApplication.IOptions.separate} option,
+   * so that the parameters are separated to human and LLM sides, you can merge these
+   * humand and LLM sides' parameters into one through this `HttpLlm.mergeParameters()`
+   * function before the actual LLM function call execution.
+   *
+   * On contrary, if you've not configured the
+   * {@link IHttpLlmApplication.IOptions.separate} option, this function would throw
+   * an error.
+   *
+   * @param props Properties for the parameters' merging
+   * @returns Merged parameter values
    */
   export const mergeParameters = (props: IMergeProps): unknown[] =>
     LlmDataMerger.parameters(props);
 
   /**
    * Merge two values.
+   *
+   * If both values are objects, then combines them in the properties level.
+   *
+   * Otherwise, returns the latter value if it's not null, otherwise the former value.
+   *
+   * - `return (y ?? x)`
    *
    * @param x Value X to merge
    * @param y Value Y to merge
