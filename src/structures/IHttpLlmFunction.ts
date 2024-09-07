@@ -3,27 +3,25 @@ import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmSchema } from "./ILlmSchema";
 
 /**
- * LLM function metadata from HTTP (OpenAPI) operation.
+ * LLM function calling schema from HTTP (OpenAPI) operation.
  *
- * `IHttpLlmFunction` is a data structure representing a procedure converted
- * from the OpenAPI operation, used for the LLM (Large Language Model)
- * function calling. It's a typical RPC (Remote Procedure Call) structure
- * containing the procedure {@link name}, {@link parameters}, and
+ * `IHttpLlmFunction` is a data structure representing a function converted
+ * from the {@link OpenApi.IOperation OpenAPI operation}, used for the LLM
+ * (Large Language Model) function calling. It's a typical RPC (Remote Procedure Call)
+ * structure containing the function {@link name}, {@link parameters}, and
  * {@link output return type}.
  *
- * If you provide this `IHttpLlmFunction` data to the LLM like "OpenAI",
- * the "OpenAI" will compose a function arguments by analyzing
- * conversations with the user. With the LLM composed arguments, you can
- * execute the procedure through {@link LlmFetcher.execute} and get the
- * result.
+ * If you provide this `IHttpLlmFunction` data to the LLM provider like "OpenAI",
+ * the "OpenAI" will compose a function arguments by analyzing conversations with
+ * the user. With the LLM composed arguments, you can execute the function through
+ * {@link LlmFetcher.execute} and get the result.
  *
  * For reference, different between `IHttpLlmFunction` and its origin source
- * {@link OpenApi.IOperation} is, `IHttpLlmFunction` has converted every type
- * schema informations from {@link OpenApi.IJsonSchema} to {@link ILlmSchema}
- * to escape {@link OpenApi.IJsonSchema.IReference reference types}, and
- * downgrade the version of the JSON schema to OpenAPI 3.0. It's because
- * LLM function call feature cannot understand both reference types and
- * OpenAPI 3.1 specification.
+ * {@link OpenApi.IOperation} is, `IHttpLlmFunction` has converted every type schema
+ * informations from {@link OpenApi.IJsonSchema} to {@link ILlmSchema} to escape
+ * {@link OpenApi.IJsonSchema.IReference reference types}, and downgrade the version
+ * of the JSON schema to OpenAPI 3.0. It's because LLM function call feature cannot
+ * understand both reference types and OpenAPI 3.1 specification.
  *
  * Additionally, if you've composed `IHttpLlmFunction` with
  * {@link IHttpLlmApplication.IOptions.keyword} configuration as `true`, number of
@@ -163,7 +161,7 @@ export interface IHttpLlmFunction<
   output?: Schema | undefined;
 
   /**
-   * Description of the procedure.
+   * Description of the function.
    *
    * `IHttpLlmFunction.description` is composed by below rule:
    *
@@ -228,6 +226,8 @@ export namespace IHttpLlmFunction {
   export interface ISeparatedParameter<Schema extends ILlmSchema = ILlmSchema> {
     /**
      * Index of the parameter.
+     *
+     * @type uint
      */
     index: number;
 
