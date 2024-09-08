@@ -1,27 +1,118 @@
 # `@samchon/openapi`
-![Nestia Editor](https://github.com/samchon/openapi/assets/13158709/350128f7-c159-4ba4-8f8c-743908ada8eb)
+```mermaid
+flowchart
+  subgraph "OpenAPI Specification"
+    v20("Swagger v2.0") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
+    v30("OpenAPI v3.0") --upgrades--> emended
+    v31("OpenAPI v3.1") --emends--> emended
+  end
+  subgraph "Ecosystem"
+    emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
+  end
+```
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/samchon/openapi/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Downloads](https://img.shields.io/npm/dm/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Build Status](https://github.com/samchon/openapi/workflows/build/badge.svg)](https://github.com/samchon/openapi/actions?query=workflow%3Abuild)
 
-OpenAPI definitions and converters.
+OpenAPI definitions, converters and utillity functions.
 
-`@samchon/openapi` is a collection of OpenAPI definitions of below versions. Those type definitions do not contain every properties of OpenAPI specification, but just have only significant features essentially required for `typia`, `nestia` (especially for [`@nestia/editor`](https://nestia.io/docs/editor/)).
+`@samchon/openapi` is a collection of OpenAPI types for every versions, and converters for them. In the OpenAPI types, there is an "emended" OpenAPI v3.1 specification, which has removed ambiguous and duplicated expressions for the clarity. Every conversions are based on the emended OpenAPI v3.1 specification.
 
   1. [Swagger v2.0](https://github.com/samchon/openapi/blob/master/src/SwaggerV2.ts)
   2. [OpenAPI v3.0](https://github.com/samchon/openapi/blob/master/src/OpenApiV3.ts)
   3. [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
+  4. [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
 
-Also, `@samchon/openapi` provides emended OpenAPI v3.1 definition and its converter/inverter from above versions for convenient development. The keyword "emended" means that [`OpenApi`](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts) is not a direct OpenAPI v3.1 specification ([`OpenApiV3_1`](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)), but a little bit shrinked to remove ambiguous and duplicated expressions of OpenAPI v3.1 for the convenience of `typia` and `nestia`.
+`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts) module, you can perform the LLM funtion calling extremely easily just by delivering the OpenAPI (Swagger) document.
 
-For example, when representing nullable type, OpenAPI v3.1 supports three ways. In that case, OpenApi remains only the third way, so that makes `typia` and `nestia` (especially for [`@nestia/editor`](https://nestia.io/docs/editor/)) to be simple and easy to implement.
+  - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
+  - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
+  - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
+  - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
 
-- `{ type: ["string", "null"] }`
-- `{ type: "string", nullable: true }`
-- `{ oneOf: [{ type: "string" }, { type: "null" }] }`
+> [!TIP]
+>
+> LLM selects proper function and fill arguments.
+> 
+> In nowadays, most LLM (Large Language Model) like OpenAI are supporting "function calling" feature. The "LLM function calling" means that LLM automatically selects a proper function and fills parameter values from conversation with the user (may by chatting text).
+> 
+> https://platform.openai.com/docs/guides/function-calling
 
+
+
+
+## Setup
+```bash
+npm install @samchon/openapi
+```
+
+Just install by `npm i @samchon/openapi` command.
+
+Here is an example code utilizing the `@samchon/openapi` for LLM function calling purpose. 
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document);
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles" && f.method === "post",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: [
+      {
+        title: "Hello, world!",
+        body: "Let's imagine that this argument is composed by LLM.",
+        thumbnail: null,
+      },
+    ],
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
+
+
+
+
+## OpenAPI Definitions
 ```mermaid
 flowchart
   v20(Swagger v2.0) --upgrades--> emended[["<b><u>OpenAPI v3.1 (emended)</u></b>"]]
@@ -31,86 +122,35 @@ flowchart
   emended --downgrades--> v30d(Swagger v3.0)
 ```
 
-Here is the entire list of differences between OpenAPI v3.1 and emended OpenApi.
+`@samchon/openapi` support every versions of OpenAPI specifications with detailed TypeScript types.
 
-- Operation
-  - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
-  - Resolve references of `OpenApiV3_1.IOperation` members
-  - Escape references of `OpenApiV3_1.IComponents.examples`
-- JSON Schema
-  - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
-  - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
-  - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
-  - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
-  - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
-  - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
-  - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
+  - [Swagger v2.0](https://github.com/samchon/openapi/blob/master/src/SwaggerV2.ts)
+  - [OpenAPI v3.0](https://github.com/samchon/openapi/blob/master/src/OpenApiV3.ts)
+  - [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
+  - [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
 
-Additionally, `@samchon/openapi` provides [`IHttpMigrateApplication`](https://github.com/samchon/openapi/blob/master/src/IHttpMigrateApplication.ts) for OpenAPI generators. 
+Also, `@samchon/openapi` provides "emended OpenAPI v3.1 definition" which has removed ambiguous and duplicated expressions for clarity. It has emended original OpenAPI v3.1 specification like above. You can compose the "emended OpenAPI v3.1 document" by calling the `OpenApi.convert()` function. 
 
-If you're developing TypeScript, [`@nestia/editor`](https://nestia.io/docs/editor) would be the best project utilizing the [`IHttpMigrateApplication`](https://github.com/samchon/openapi/blob/master/src/IHttpMigrateApplication.ts) for the OpenAPI SDK generation. Otherwise, you wanna utilize OpenAPI document for OpenAI function calling, [`@wrtnio/openai-function-schema`](https://github.com/wrtnio/openai-function-schema/) has been prepared for you.
+  - Operation
+    - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
+    - Resolve references of `OpenApiV3_1.IOperation` members
+    - Escape references of `OpenApiV3_1.IComponents.examples`
+  - JSON Schema
+    - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
+    - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
+    - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
+    - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
+    - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
+    - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
+    - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
 
-```mermaid
-flowchart
-  subgraph "OpenAPI Specification"
-    v20(Swagger v2.0) --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
-    v30(OpenAPI v3.0) --upgrades--> emended
-    v31(OpenAPI v3.1) --emends--> emended
-  end
-  subgraph "OpenAPI Generators"
-    emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
-    migration --A.I.--> lfc{{"LLM Function Call"}}
-    migration --Uiltiy--> editor{{"@nestia/editor"}}
-  end
-```
+Conversions to another version's OpenAPI document is also based on the "emended OpenAPI v3.1 specification" like above diagram. You can do it through `OpenApi.downgrade()` function. Therefore, if you want to convert Swagger v2.0 document to OpenAPI v3.0 document, you have to call two functions; `OpenApi.convert()` and then `OpenApi.downgrade()`.
 
+At last, if you utilize `typia` library with `@samchon/openapi` types, you can validate whether your OpenAPI document is following the standard specification or not. Just visit one of below playground links, and paste your OpenAPI document URL address. This validation strategy would be superior than any other OpenAPI validator libraries.
 
-
-
-## How to use
-```bash
-npm install @samchon/openapi
-```
-
-```typescript
-import {
-  OpenApi,
-  SwaggerV2,
-  OpenApiV3,
-  OpenApiV3_1,
-  IHttpMigrateApplication,
-} from "@samchon/openapi";
-
-// original Swagger/OpenAPI document
-const input: 
-  | SwaggerV2.IDocument
-  | OpenApiV3.IDocument
-  | OpenApiV3_1.IDocument
-  | OpenApi.IDocument = { ... };
-
-// you can convert it to emended OpenAPI v3.1
-const output: OpenApi.IDocument = OpenApi.convert(input);
-
-// it is possible to downgrade to Swagger v2 or OpenAPI v3
-const v2: SwaggerV2 = OpenApi.downgrade(output, "2.0");
-const v3: OpenApiV3 = OpenApi.downgrade(output, "3.0");
-
-// you can utilize it like below
-OpenApi.downgrade(OpenApi.convert(v2), "3.0");
-OpenApi.downgrade(OpenApi.convert(v3), "2.0");
-
-// also helps openapi generator libraries
-const migrate: IHttpMigrateApplication = OpenApi.migrate(output);
-```
-
-Just install `@samchon/openapi` library and import `OpenApi` module from there.
-
-Every features you need from `@samchon/openapi` are in the `OpenApi` module. If you want to connvert emended OpenAPI v3.1 type, just call `OpenApi.convert()` function with your document. Otherwise you want to downgrade from the OpenAPI v3.1 emended specification, call `OpenApi.migrate()` instead. Of course, if you combine both `OpenApi.convert()` and `OpenApi.migrate()` functions, you can transform every OpenAPI versions.
-
-By the way, if you want to validate whether your OpenAPI document is following the standard specification or not, you can do it on the playground website. Click one of below links, and paste your OpenAPI URL address. Of course, if you wanna validate in your local machine, just install [`typia`](https://github.com/samchon/typia) and write same code of playground.
-
-  - [💻 Type assertion](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgWGYzCqLRqvWQnWmTmA7CewV+MAq73YUGyqTOcAAPoRqKQyIwnr0BkyWYCzZaqMRaHiHU7WRgYK64GwuDw+Px7Y7mb7-SVchFGZHATTXCVJcM1SQlXUasg4FUJp0BlUBtN6fA0L7smhsnF3TRwz7ATta7hgRp0rwYHGG36k3SPBAsU9fKIIBFy5hK9kk0JjN5fNFgexjqoIvSB0LeBIoDSgA)
-  - [💻 Detailed validation](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgJCwABlegMsDVeshOtN6Xylu8MfBAk5gOwnul2BicuwAakznAAD6EaikMiMJ7KpkswG2h1UYi0PHu5msjAwb1wNhcHh8fhugYe4Ohkq5CKMoOAmnTYCiSL8vVA+TvZTKJbyAL+QKic0pKKIW30iBYp6+UQQCK5-VPXgSKDyDMlEqLGDvKAYWnCVwlSXDDUkKotOo1ZBwKoTToDKoDLUeeBoYPZNDZOK+mix+OAnbH3DAjTpXgwFNnkN9mYeBtC5ut3eYffZDNCYzeL40TAlaJz1o2XbQDSQA)
+  - Playground Links
+    - [💻 Type assertion](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgWGYzCqLRqvWQnWmTmA7CewV+MAq73YUGyqTOcAAPoRqKQyIwnr0BkyWYCzZaqMRaHiHU7WRgYK64GwuDw+Px7Y7mb7-SVchFGZHATTXCVJcM1SQlXUasg4FUJp0BlUBtN6fA0L7smhsnF3TRwz7ATta7hgRp0rwYHGG36k3SPBAsU9fKIIBFy5hK9kk0JjN5fNFgexjqoIvSB0LeBIoDSgA)
+    - [💻 Detailed validation](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgJCwABlegMsDVeshOtN6Xylu8MfBAk5gOwnul2BicuwAakznAAD6EaikMiMJ7KpkswG2h1UYi0PHu5msjAwb1wNhcHh8fhugYe4Ohkq5CKMoOAmnTYCiSL8vVA+TvZTKJbyAL+QKic0pKKIW30iBYp6+UQQCK5-VPXgSKDyDMlEqLGDvKAYWnCVwlSXDDUkKotOo1ZBwKoTToDKoDLUeeBoYPZNDZOK+mix+OAnbH3DAjTpXgwFNnkN9mYeBtC5ut3eYffZDNCYzeL40TAlaJz1o2XbQDSQA)
 
 ```typescript
 import { OpenApi, OpenApiV3, OpenApiV3_1, SwaggerV2 } from "@samchon/openapi";
@@ -144,7 +184,267 @@ main().catch(console.error);
 
 
 
-## Related Projects
-- `typia`: https://github.com/samchon/typia
-- `nestia`: https://github.com/samchon/nestia
-- `@wrtnio/openai-function-schema`: https://github.com/wrtnio/openai-function-schema
+## LLM Function Calling
+### Preface
+```mermaid
+flowchart
+  subgraph "OpenAPI Specification"
+    v20("Swagger v2.0") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
+    v30("OpenAPI v3.0") --upgrades--> emended
+    v31("OpenAPI v3.1") --emends--> emended
+  end
+  subgraph "Ecosystem"
+    emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
+  end
+```
+
+LLM function calling application from OpenAPI document.
+
+`@samchon/openapi` provides LLM (Large Language Model) funtion calling application from the "emended OpenAPI v3.1 document". Therefore, if you have any HTTP backend server and succeeded to build an OpenAPI document, you can easily make the A.I. chatbot application.
+
+In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the `HttpLlm.execute()` funtion, it is the "LLM function call."
+
+Let's enjoy the fantastic LLM function calling feature very easily with `@samchon/openapi`.
+
+  - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
+  - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
+  - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
+  - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
+
+> [!NOTE]
+>
+> Preparing playground website utilizing [`web-llm`](https://github.com/mlc-ai/web-llm).
+
+> [!TIP]
+>
+> LLM selects proper function and fill arguments.
+> 
+> In nowadays, most LLM (Large Language Model) like OpenAI are supporting "function calling" feature. The "LLM function calling" means that LLM automatically selects a proper function and fills parameter values from conversation with the user (may by chatting text).
+> 
+> https://platform.openai.com/docs/guides/function-calling
+
+### Execution
+Actual function call execution is by yourself.
+
+LLM (Large Language Model) providers like OpenAI selects a proper function to call from the conversations with users, and fill arguments of it. However, function calling feature supported by LLM providers do not perform the function call execution. The actual execution responsibility is on you.
+
+In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.execute()` (or `HttpLlm.propagate()`) function. Here is an example code executing the LLM function calling through the `HttpLlm.execute()` function. As you can see, to execute the LLM function call, you have to deliver these informations:
+
+  - Connection info to the HTTP server
+  - Application of the LLM fuction calling
+  - LLM function schema to call
+  - Arguments for the function call (maybe composed by LLM)
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document);
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles" && f.method === "post",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: [
+      "general",
+      {
+        title: "Hello, world!",
+        body: "Let's imagine that this argument is composed by LLM.",
+        thumbnail: null,
+      },
+    ],
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
+
+### Keyword Parameter
+Combine parameters into single object.
+
+If you configure `keyword` option when composing the LLM (Large Language Model) function calling appliation, every parameters of OpenAPI operations would be combined to a single object type in the LLM funtion calling schema. This strategy is loved in many A.I. Chatbot developers, because LLM tends to a little professional in the single parameter function case.
+
+Also, do not worry about the function call execution case. You don't need to resolve the keyworded parameter manually. The `HttpLlm.execute()` and `HttpLlm.propagate()` functions will resolve the keyworded parameter automatically by analyzing the `IHttpLlmApplication.options` property.
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+import { v4 } from "uuid";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document, {
+    keyword: true,
+  });
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: [
+      {
+        section: "general",
+        id: v4(),
+        query: {
+          language: "en-US",
+          format: "markdown",
+        },
+        body: {
+          title: "Hello, world!",
+          body: "Let's imagine that this argument is composed by LLM.",
+          thumbnail: null,
+        },
+      },
+    ],
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
+
+### Separation
+Arguments from both Human and LLM sides.
+
+When composing parameter arguments through the LLM (Large Language Model) function calling, there can be a case that some parameters (or nested properties) must be composed not by LLM, but by Human. File uploading feature, or sensitive information like secret key (password) cases are the representative examples.
+
+In that case, you can configure the LLM function calling schemas to exclude such Human side parameters (or nested properties) by `IHttpLlmApplication.options.separate` property. Instead, you have to merge both Human and LLM composed parameters into one by calling the `HttpLlm.mergeParameters()` before the LLM function call execution of `HttpLlm.execute()` function.
+
+Here is the example code separating the file uploading feature from the LLM function calling schema, and combining both Human and LLM composed parameters into one before the LLM function call execution.
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  LlmTypeChecker,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+import { v4 } from "uuid";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document, {
+    keyword: false,
+    separate: (schema) =>
+      LlmTypeChecker.isString(schema) && schema.contentMediaType !== undefined,
+  });
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: HttpLlm.mergeParameters({
+      function: func,
+      llm: [
+        // LLM composed parameter values
+        "general",
+        v4(),
+        {
+          language: "en-US",
+          format: "markdown",
+        },
+        {
+          title: "Hello, world!",
+          content: "Let's imagine that this argument is composed by LLM.",
+        },
+      ],
+      human: [
+        // Human composed parameter values
+        { thumbnail: "https://example.com/thumbnail.jpg" },
+      ],
+    }),
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
