@@ -249,6 +249,7 @@ import {
 } from "@samchon/openapi";
 import fs from "fs";
 import typia from "typia";
+import { v4 } from "uuid";
 
 const main = async (): Promise<void> => {
   // read swagger document and validate it
@@ -268,7 +269,7 @@ const main = async (): Promise<void> => {
   // Let's imagine that LLM has selected a function to call
   const func: IHttpLlmFunction | undefined = application.functions.find(
     // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/articles" && f.method === "post",
+    (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
   );
   if (func === undefined) throw new Error("No matched function exists.");
 
@@ -281,6 +282,7 @@ const main = async (): Promise<void> => {
     function: func,
     arguments: [
       "general",
+      v4(),
       {
         title: "Hello, world!",
         body: "Let's imagine that this argument is composed by LLM.",
@@ -334,7 +336,7 @@ const main = async (): Promise<void> => {
   // Let's imagine that LLM has selected a function to call
   const func: IHttpLlmFunction | undefined = application.functions.find(
     // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+    (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
   );
   if (func === undefined) throw new Error("No matched function exists.");
 
@@ -346,6 +348,7 @@ const main = async (): Promise<void> => {
     application,
     function: func,
     arguments: [
+      // one single object with key-value paired
       {
         section: "general",
         id: v4(),
