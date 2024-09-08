@@ -1,13 +1,11 @@
-import { IMigrateDocument } from "./IMigrateDocument";
 import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
-import { MigrateConverter } from "./internal/MigrateConverter";
-import { OpenApiV3Converter } from "./internal/OpenApiV3Converter";
-import { OpenApiV3Downgrader } from "./internal/OpenApiV3Downgrader";
-import { OpenApiV3_1Converter } from "./internal/OpenApiV3_1Converter";
-import { SwaggerV2Converter } from "./internal/SwaggerV2Converter";
-import { SwaggerV2Downgrader } from "./internal/SwaggerV2Downgrader";
+import { OpenApiV3Converter } from "./converters/OpenApiV3Converter";
+import { OpenApiV3Downgrader } from "./converters/OpenApiV3Downgrader";
+import { OpenApiV3_1Converter } from "./converters/OpenApiV3_1Converter";
+import { SwaggerV2Converter } from "./converters/SwaggerV2Converter";
+import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -132,25 +130,6 @@ export namespace OpenApi {
     if (version === "2.0") return SwaggerV2Downgrader.downgrade(document);
     else if (version === "3.0") return OpenApiV3Downgrader.downgrade(document);
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
-  }
-
-  /**
-   * Convert to migrate document.
-   *
-   * Convert the given OpenAPI document to {@link IMigrateDocument}, that is
-   * useful for OpenAPI generator library which makes RPC (Remote Procedure Call)
-   * functions for the Restful API operation.
-   *
-   * @param document OpenAPI document to migrate
-   * @returns Migrated document
-   */
-  export function migrate<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  >(
-    document: IDocument<Schema, Operation>,
-  ): IMigrateDocument<Schema, Operation> {
-    return MigrateConverter.convert(document);
   }
 
   /* -----------------------------------------------------------
@@ -1052,7 +1031,7 @@ export namespace OpenApi {
       /**
        * List of the union types.
        */
-      oneOf: Exclude<Schema, IJsonSchema.IOneOf>[];
+      oneOf: Exclude<Schema, IJsonSchema.IOneOf<Schema>>[];
 
       /**
        * Discriminator info of the union type.

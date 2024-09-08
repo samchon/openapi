@@ -1,14 +1,19 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "target": "ESNext",
     "outDir": "../bin",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "paths": {
       "@samchon/openapi": ["../src/index.ts"],
       "@samchon/openapi/lib/*": ["../src/*"],
     },
     "plugins": [
-      { "transform": "typia/lib/transform" },
       { "transform": "typescript-transform-paths" },
+      { "transform": "typia/lib/transform" },
+      { "transform": "@nestia/core/lib/transform" },
     ]
   },
   "include": ["../src", "../test"]
