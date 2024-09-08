@@ -5,8 +5,9 @@ import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
  * Document of migration.
  *
  * The `IHttpMigrateApplication` interface is an application migrated from
- * {@link OpenAPI.IDocument OpenAPI document} to RPC (Remote Procedure Call)
- * functions; {@link IHttpMigrateRoute}.
+ * {@link OpenAPI.IDocument OpenAPI document} for supporting the OpenAPI generator
+ * libraries which compose RPC (Remote Procedure Call) functions from the
+ * {@link OpenAPI.IOperation OpenAPI operations}.
  *
  * As the `IHttpMigrateApplication` and {@link IHttpMigrateRoute} have a lot of special
  * stories, when you're developing OpenAPI generator library, please read

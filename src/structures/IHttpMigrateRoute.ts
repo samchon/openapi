@@ -4,8 +4,8 @@ import { OpenApi } from "../OpenApi";
  * Route information for migration.
  *
  * The `IHttpMigrateRoute` is a structure representing a route information for
- * OpenAPI generated RPC (Remote Procedure Call) function composed from the
- * {@link OpenApi.IOperation OpenAPI operation}.
+ * OpenAPI generator libraries, which composes an RPC (Remote Procedure Call) function
+ * from the {@link OpenApi.IOperation OpenAPI operation}.
  *
  * As the `IHttpMigrateRoute` has a lot of speical stories, when you're developing
  * OpenAPI generator library, please read its description carefully including

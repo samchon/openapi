@@ -1,20 +1,12 @@
+import type { HttpMigration } from "../HttpMigration";
 import { IHttpConnection } from "../structures/IHttpConnection";
-import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { IHttpResponse } from "../structures/IHttpResponse";
 import { HttpError } from "./HttpError";
 
 export namespace HttpMigrateRouteFetcher {
-  export interface IProps {
-    connection: IHttpConnection;
-    route: IHttpMigrateRoute;
-    parameters:
-      | Array<string | number | boolean | bigint | null>
-      | Record<string, string | number | boolean | bigint | null>;
-    query?: object | undefined;
-    body?: object | undefined;
-  }
-
-  export const request = async (props: IProps): Promise<unknown> => {
+  export const execute = async (
+    props: HttpMigration.IFetchProps,
+  ): Promise<unknown> => {
     const result: IHttpResponse = await _Propagate("request", props);
     props.route.success?.media;
     if (result.status !== 200 && result.status !== 201)
@@ -28,13 +20,14 @@ export namespace HttpMigrateRouteFetcher {
     return result.body;
   };
 
-  export const propagate = (props: IProps): Promise<IHttpResponse> =>
-    _Propagate("propagate", props);
+  export const propagate = (
+    props: HttpMigration.IFetchProps,
+  ): Promise<IHttpResponse> => _Propagate("propagate", props);
 }
 
 const _Propagate = async (
   from: string,
-  props: HttpMigrateRouteFetcher.IProps,
+  props: HttpMigration.IFetchProps,
 ): Promise<IHttpResponse> => {
   // VALIDATE PARAMETERS
   const error = (message: string) =>
@@ -142,7 +135,7 @@ const _Propagate = async (
 };
 
 const getPath = (
-  props: Pick<HttpMigrateRouteFetcher.IProps, "route" | "parameters" | "query">,
+  props: Pick<HttpMigration.IFetchProps, "route" | "parameters" | "query">,
 ): string => {
   let path: string = props.route.emendedPath;
   props.route.parameters.forEach((p, i) => {

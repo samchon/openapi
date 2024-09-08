@@ -8,12 +8,12 @@ import { ILlmSchema } from "./ILlmSchema";
  * calling. Also, it's a function structure containing the function
  * {@link name}, {@link parameters} and {@link output return type}.
  *
- * If you provide this `ILlmFunction` data to the LLM like "OpenAI",
- * the "OpenAI" will compose a function arguments by analyzing
- * conversations with the user. With the LLM composed arguments, you can
- * execute the function and get the result.
+ * If you provide this `ILlmFunction` data to the LLM provider like "OpenAI",
+ * the "OpenAI" will compose a function arguments by analyzing conversations
+ * with the user. With the LLM composed arguments, you can execute the function
+ * and get the result.
  *
- * By the way, do not sure that LLM will always provide the correct
+ * By the way, do not ensure that LLM will always provide the correct
  * arguments. The LLM of present age is not perfect, so that you would
  * better to validate the arguments before executing the function.
  * I recommend you to validate the arguments before execution by using
@@ -81,6 +81,8 @@ export namespace ILlmFunction {
   export interface ISeparatedParameter<Schema extends ILlmSchema = ILlmSchema> {
     /**
      * Index of the parameter.
+     *
+     * @type uint
      */
     index: number;
 

@@ -3,6 +3,69 @@ import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmSchema } from "./ILlmSchema";
 
+/**
+ * Application of LLM function call from OpenAPI document.
+ *
+ * `IHttpLlmApplication` is a data structure representing collection of
+ * {@link IHttpLlmFunction LLM function calling schemas} composed from the
+ * {@link OpenApi.IDocument OpenAPI document} and its {@link OpenApi.IOperation operation}
+ * metadata. It also contains {@link IHttpLlmApplication.errors failed operations}, and
+ * adjusted {@link IHttpLlmApplication.options options} during the `IHttpLlmApplication`
+ * construction.
+ *
+ * About the {@link OpenApi.IOperation API operations}, they are converted to
+ * {@link IHttpLlmFunction} type which represents LLM function calling schema.
+ * By the way, if tehre're some recursive types which can't escape the
+ * {@link OpenApi.IJsonSchema.IReference} type, the operation would be failed and
+ * pushed into the {@link IHttpLlmApplication.errors}. Otherwise not, the operation
+ * would be successfully converted to {@link IHttpLlmFunction} and its type schemas
+ * are downgraded to {@link OpenApiV3.IJsonSchema} and converted to {@link ILlmSchema}.
+ *
+ * About the options, if you've configured {@link IHttpLlmApplication.options.keyword}
+ * (as `true`), number of {@link IHttpLlmFunction.parameters} are always 1 and the first
+ * parameter type is always {@link ILlmSchema.IObject}. Otherwise, the parameters would
+ * be multiple, and the sequence of the parameters are following below rules.
+ *
+ * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}
+ * - `query`: Query parameter of {@link IHttpMigrateRoute.query}
+ * - `body`: Body parameter of {@link IHttpMigrateRoute.body}
+ *
+ * ```typescript
+ * // KEYWORD TRUE
+ * {
+ *   ...pathParameters,
+ *   query,
+ *   body,
+ * }
+ *
+ * // KEYWORD FALSE
+ * [
+ *   ...pathParameters,
+ *   ...(query ? [query] : []),
+ *   ...(body ? [body] : []),
+ * ]
+ * ```
+ *
+ * By the way, there can be some parameters (or their nested properties) which must be
+ * composed by human, not by LLM. File uploading feature or some sensitive information
+ * like secrety key (password) are the examples. In that case, you can separate the
+ * function parameters to both LLM and human sides by configuring the
+ * {@link IHttpLlmApplication.IOptions.separate} property. The separated parameters are
+ * assigned to the {@link IHttpLlmFunction.separated} property.
+ *
+ * For reference, the actual function call execution is not by LLM, but by you.
+ * When the LLM selects the proper function and fills the arguments, you just call
+ * the function by {@link HttpLlm.execute} with the LLM prepared arguments. And then
+ * informs the return value to the LLM by system prompt. The LLM will continue the next
+ * conversation based on the return value.
+ *
+ * Additionally, if you've configured {@link IHttpLlmApplication.IOptions.separate},
+ * so that the parameters are separated to human and LLM sides, you can merge these
+ * humand and LLM sides' parameters into one through {@link HttpLlm.mergeParameters}
+ * before the actual LLM function call execution.
+ *
+ * @author Jeongho Nam - https://github.com/samchon
+ */
 export interface IHttpLlmApplication<
   Schema extends ILlmSchema = ILlmSchema,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
@@ -91,25 +154,19 @@ export namespace IHttpLlmApplication {
      * If this property value is `true`, length of the
      * {@link IHttpLlmApplication.IFunction.parameters} is always 1, and type of
      * the pararameter is always {@link ILlmSchema.IObject} type.
-     * Also, its properties are following below rules:
      *
-     * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}
-     * - `query`: Query parameter of {@link IHttpMigrateRoute.query}
-     * - `body`: Body parameter of {@link IHttpMigrateRoute.body}
+     * Otherwise, the parameters would be multiple, and the sequence of the parameters
+     * are following below rules.
      *
      * ```typescript
+     * // KEYWORD TRUE
      * {
      *   ...pathParameters,
      *   query,
      *   body,
      * }
-     * ```
      *
-     * Otherwise (this property value is `false`), length of the
-     * {@link IHttpLlmFunction.parameters} is variable, and sequence of the
-     * parameters are following below rules.
-     *
-     * ```typescript
+     * // KEYWORD FALSE
      * [
      *   ...pathParameters,
      *   ...(query ? [query] : []),
