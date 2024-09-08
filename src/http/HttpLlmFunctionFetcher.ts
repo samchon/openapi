@@ -1,43 +1,22 @@
-import { IHttpConnection } from "../structures/IHttpConnection";
-import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
-import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
+import type { HttpLlm } from "../HttpLlm";
+import type { HttpMigration } from "../HttpMigration";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { IHttpResponse } from "../structures/IHttpResponse";
 import { HttpMigrateRouteFetcher } from "./HttpMigrateRouteFetcher";
 
 export namespace HttpLlmFunctionFetcher {
-  export interface IProps {
-    /**
-     * Application of the OpenAI function call schemas.
-     */
-    application: IHttpLlmApplication;
+  export const execute = async (props: HttpLlm.IFetchProps): Promise<unknown> =>
+    HttpMigrateRouteFetcher.execute(getFetchArguments("execute", props));
 
-    /**
-     * Function schema to call.
-     */
-    function: IHttpLlmFunction;
-
-    /**
-     * Connection info to the server.
-     */
-    connection: IHttpConnection;
-
-    /**
-     * Arguments for the function call.
-     */
-    arguments: any[];
-  }
-
-  export const execute = async (props: IProps): Promise<unknown> =>
-    HttpMigrateRouteFetcher.request(getFetchArguments("execute", props));
-
-  export const propagate = async (props: IProps): Promise<IHttpResponse> =>
+  export const propagate = async (
+    props: HttpLlm.IFetchProps,
+  ): Promise<IHttpResponse> =>
     HttpMigrateRouteFetcher.propagate(getFetchArguments("propagate", props));
 
   const getFetchArguments = (
     from: string,
-    props: IProps,
-  ): HttpMigrateRouteFetcher.IProps => {
+    props: HttpLlm.IFetchProps,
+  ): HttpMigration.IFetchProps => {
     const route: IHttpMigrateRoute = props.function.route();
     if (props.application.options.keyword === true) {
       const input: Record<string, any> = props.arguments[0];

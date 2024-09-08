@@ -19,7 +19,7 @@ export const test_http_migrate_fetch_query_and_body = async (
   );
   if (route === undefined) throw new Error("Route not found");
 
-  await HttpMigration.request({
+  await HttpMigration.execute({
     connection,
     route,
     parameters: {

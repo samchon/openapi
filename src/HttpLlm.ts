@@ -15,7 +15,7 @@ import { LlmDataMerger } from "./utils/LlmDataMerger";
  * LLM function calling application composer from OpenAPI document.
  *
  * `HttpLlm` is a module for composing LLM (Large Language Model) function calling
- * application by the {@link OpenApi.IDocument OpenAPI document}, and also for
+ * application from the {@link OpenApi.IDocument OpenAPI document}, and also for
  * LLM function call execution and parameter merging.
  *
  * At first, you can construct the LLM function calling application by the
@@ -121,7 +121,7 @@ export namespace HttpLlm {
     function: IHttpLlmFunction;
 
     /**
-     * Connection info to the server.
+     * Connection info to the HTTP server.
      */
     connection: IHttpConnection;
 
@@ -153,7 +153,7 @@ export namespace HttpLlm {
    * function instead.
    *
    * @param props Properties for the LLM function call
-   * @returns Return value from the API endpoint
+   * @returns Return value (response body) from the API endpoint
    * @throws HttpError when the API endpoint responds none 200/201 status
    */
   export const execute = (props: IFetchProps): Promise<unknown> =>
