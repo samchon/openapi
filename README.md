@@ -7,7 +7,7 @@ flowchart
     v31("OpenAPI v3.1") --emends--> emended
   end
   subgraph "Ecosystem"
-    emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
+    emended --normalizes--> migration[["Migration Schema"]]
     migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
   end
 ```
@@ -194,8 +194,8 @@ flowchart
     v31("OpenAPI v3.1") --emends--> emended
   end
   subgraph "Ecosystem"
-    emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
-    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
+    emended --normalizes--> migration[["Migration Schema"]]
+    migration --"Artificial Intelligence"--> lfc{{"<b><u>LLM Function Calling Application</b></u>"}}
   end
 ```
 
