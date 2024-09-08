@@ -6,7 +6,7 @@ flowchart
     v30("OpenAPI v3.0") --upgrades--> emended
     v31("OpenAPI v3.1") --emends--> emended
   end
-  subgraph "Ecosystem"
+  subgraph "OpenAPI Generator"
     emended --normalizes--> migration[["Migration Schema"]]
     migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
   end
@@ -193,7 +193,7 @@ flowchart
     v30("OpenAPI v3.0") --upgrades--> emended
     v31("OpenAPI v3.1") --emends--> emended
   end
-  subgraph "Ecosystem"
+  subgraph "OpenAPI Generator"
     emended --normalizes--> migration[["Migration Schema"]]
     migration --"Artificial Intelligence"--> lfc{{"<b><u>LLM Function Calling Application</b></u>"}}
   end
