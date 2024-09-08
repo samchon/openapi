@@ -111,12 +111,12 @@ export namespace HttpLlm {
    */
   export interface IFetchProps {
     /**
-     * Document of the OpenAI function call schemas.
+     * Application of the LLM function calling.
      */
     application: IHttpLlmApplication;
 
     /**
-     * Function schema to call.
+     * LLM function schema to call.
      */
     function: IHttpLlmFunction;
 

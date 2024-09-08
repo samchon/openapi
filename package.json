@@ -44,6 +44,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.12.7",
+    "@types/uuid": "^10.0.0",
     "chalk": "^4.1.2",
     "js-yaml": "^4.1.0",
     "nestia": "^6.0.1",
@@ -54,7 +55,8 @@
     "ts-patch": "^3.2.1",
     "typescript": "^5.5.3",
     "typescript-transform-paths": "^3.4.7",
-    "typia": "^6.9.0"
+    "typia": "^6.9.0",
+    "uuid": "^10.0.0"
   },
   "files": [
     "lib",

@@ -39,6 +39,7 @@ const main = async (): Promise<void> => {
     application,
     function: func,
     arguments: [
+      "general",
       {
         title: "Hello, world!",
         body: "Let's imagine that this argument is composed by LLM.",

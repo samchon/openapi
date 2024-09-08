@@ -8,7 +8,7 @@ flowchart
   end
   subgraph "Ecosystem"
     emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
-    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Schema"}}
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
   end
 ```
 
@@ -34,7 +34,7 @@ OpenAPI definitions, converters and utillity functions.
   - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
   - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
 
-> [!NOTE]
+> [!TIP]
 >
 > LLM selects proper function and fill arguments.
 > 
@@ -100,6 +100,7 @@ const main = async (): Promise<void> => {
       {
         title: "Hello, world!",
         body: "Let's imagine that this argument is composed by LLM.",
+        thumbnail: null,
       },
     ],
   });
@@ -185,6 +186,265 @@ main().catch(console.error);
 
 ## LLM Function Calling
 ### Preface
+```mermaid
+flowchart
+  subgraph "OpenAPI Specification"
+    v20("Swagger v2.0") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
+    v30("OpenAPI v3.0") --upgrades--> emended
+    v31("OpenAPI v3.1") --emends--> emended
+  end
+  subgraph "Ecosystem"
+    emended --normalizes--> migration[["<b><u>Migration Schema</u></b>"]]
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling Application"}}
+  end
+```
+
+LLM function calling application from OpenAPI document.
+
+`@samchon/openapi` provides LLM (Large Language Model) funtion calling application from the "emended OpenAPI v3.1 document". Therefore, if you have any HTTP backend server and succeeded to build an OpenAPI document, you can easily make the A.I. chatbot application.
+
+In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the `HttpLlm.execute()` funtion, it is the "LLM function call."
+
+Let's enjoy the fantastic LLM function calling feature very easily with `@samchon/openapi`.
+
+  - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
+  - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
+  - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
+  - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
+
+> [!NOTE]
+>
+> Preparing playground website utilizing [`web-llm`](https://github.com/mlc-ai/web-llm).
+
+> [!TIP]
+>
+> LLM selects proper function and fill arguments.
+> 
+> In nowadays, most LLM (Large Language Model) like OpenAI are supporting "function calling" feature. The "LLM function calling" means that LLM automatically selects a proper function and fills parameter values from conversation with the user (may by chatting text).
+> 
+> https://platform.openai.com/docs/guides/function-calling
+
 ### Execution
+Actual function call execution is by yourself.
+
+LLM (Large Language Model) providers like OpenAI selects a proper function to call from the conversations with users, and fill arguments of it. However, function calling feature supported by LLM providers do not perform the function call execution. The actual execution responsibility is on you.
+
+In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.execute()` (or `HttpLlm.propagate()`) function. Here is an example code executing the LLM function calling through the `HttpLlm.execute()` function. As you can see, to execute the LLM function call, you have to deliver these informations:
+
+  - Connection info to the HTTP server
+  - Application of the LLM fuction calling
+  - LLM function schema to call
+  - Arguments for the function call (maybe composed by LLM)
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document);
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles" && f.method === "post",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: [
+      "general",
+      {
+        title: "Hello, world!",
+        body: "Let's imagine that this argument is composed by LLM.",
+        thumbnail: null,
+      },
+    ],
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
+
 ### Keyword Parameter
+Combine parameters into single object.
+
+If you configure `keyword` option when composing the LLM (Large Language Model) function calling appliation, every parameters of OpenAPI operations would be combined to a single object type in the LLM funtion calling schema. This strategy is loved in many A.I. Chatbot developers, because LLM tends to a little professional in the single parameter function case.
+
+Also, do not worry about the function call execution case. You don't need to resolve the keyworded parameter manually. The `HttpLlm.execute()` and `HttpLlm.propagate()` functions will resolve the keyworded parameter automatically by analyzing the `IHttpLlmApplication.options` property.
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+import { v4 } from "uuid";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document, {
+    keyword: true,
+  });
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: [
+      {
+        section: "general",
+        id: v4(),
+        query: {
+          language: "en-US",
+          format: "markdown",
+        },
+        body: {
+          title: "Hello, world!",
+          body: "Let's imagine that this argument is composed by LLM.",
+          thumbnail: null,
+        },
+      },
+    ],
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
+
 ### Separation
+Arguments from both Human and LLM sides.
+
+When composing parameter arguments through the LLM (Large Language Model) function calling, there can be a case that some parameters (or nested properties) must be composed not by LLM, but by Human. File uploading feature, or sensitive information like secret key (password) cases are the representative examples.
+
+In that case, you can configure the LLM function calling schemas to exclude such Human side parameters (or nested properties) by `IHttpLlmApplication.options.separate` property. Instead, you have to merge both Human and LLM composed parameters into one by calling the `HttpLlm.mergeParameters()` before the LLM function call execution of `HttpLlm.execute()` function.
+
+Here is the example code separating the file uploading feature from the LLM function calling schema, and combining both Human and LLM composed parameters into one before the LLM function call execution.
+
+```typescript
+import {
+  HttpLlm,
+  IHttpLlmApplication,
+  IHttpLlmFunction,
+  LlmTypeChecker,
+  OpenApi,
+  OpenApiV3,
+  OpenApiV3_1,
+  SwaggerV2,
+} from "@samchon/openapi";
+import fs from "fs";
+import typia from "typia";
+import { v4 } from "uuid";
+
+const main = async (): Promise<void> => {
+  // read swagger document and validate it
+  const swagger:
+    | SwaggerV2.IDocument
+    | OpenApiV3.IDocument
+    | OpenApiV3_1.IDocument = JSON.parse(
+    await fs.promises.readFile("swagger.json", "utf8"),
+  );
+  typia.assert(swagger); // recommended
+
+  // convert to emended OpenAPI document,
+  // and compose LLM function calling application
+  const document: OpenApi.IDocument = OpenApi.convert(swagger);
+  const application: IHttpLlmApplication = HttpLlm.application(document, {
+    keyword: false,
+    separate: (schema) =>
+      LlmTypeChecker.isString(schema) && schema.contentMediaType !== undefined,
+  });
+
+  // Let's imagine that LLM has selected a function to call
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_fuction_name"
+    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+  );
+  if (func === undefined) throw new Error("No matched function exists.");
+
+  // actual execution is by yourself
+  const article = await HttpLlm.execute({
+    connection: {
+      host: "http://localhost:3000",
+    },
+    application,
+    function: func,
+    arguments: HttpLlm.mergeParameters({
+      function: func,
+      llm: [
+        // LLM composed parameter values
+        "general",
+        v4(),
+        {
+          language: "en-US",
+          format: "markdown",
+        },
+        {
+          title: "Hello, world!",
+          content: "Let's imagine that this argument is composed by LLM.",
+        },
+      ],
+      human: [
+        // Human composed parameter values
+        { thumbnail: "https://example.com/thumbnail.jpg" },
+      ],
+    }),
+  });
+  console.log("article", article);
+};
+main().catch(console.error);
+```
