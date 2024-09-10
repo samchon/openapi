@@ -58,6 +58,7 @@
     "typia": "^6.9.0",
     "uuid": "^10.0.0"
   },
+  "sideEffects": false,
   "files": [
     "lib",
     "src",

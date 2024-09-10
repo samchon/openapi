@@ -8,6 +8,8 @@ module.exports = {
     format: "esm",
     entryFileNames: "[name].mjs",
     sourcemap: true,
+    preserveModules: true,
+    preserveModulesRoot: "src",
   },
   plugins: [
     typescript({
