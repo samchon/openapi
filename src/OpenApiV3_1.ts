@@ -299,7 +299,7 @@ export namespace OpenApiV3_1 {
     }
 
     export interface IArray extends __ISignificant<"array"> {
-      items: IJsonSchema | IJsonSchema[];
+      items?: IJsonSchema | IJsonSchema[];
       prefixItems?: IJsonSchema[];
       uniqueItems?: boolean;
       additionalItems?: boolean | IJsonSchema;

@@ -6,7 +6,7 @@ import { ILlmSchema } from "./ILlmSchema";
 /**
  * Application of LLM function call from OpenAPI document.
  *
- * `IHttpLlmApplication` is a data structure representing collection of
+ * `IHttpLlmApplication` is a data structure representing a collection of
  * {@link IHttpLlmFunction LLM function calling schemas} composed from the
  * {@link OpenApi.IDocument OpenAPI document} and its {@link OpenApi.IOperation operation}
  * metadata. It also contains {@link IHttpLlmApplication.errors failed operations}, and
@@ -47,9 +47,9 @@ import { ILlmSchema } from "./ILlmSchema";
  * ```
  *
  * By the way, there can be some parameters (or their nested properties) which must be
- * composed by human, not by LLM. File uploading feature or some sensitive information
+ * composed by Human, not by LLM. File uploading feature or some sensitive information
  * like secrety key (password) are the examples. In that case, you can separate the
- * function parameters to both LLM and human sides by configuring the
+ * function parameters to both LLM and Human sides by configuring the
  * {@link IHttpLlmApplication.IOptions.separate} property. The separated parameters are
  * assigned to the {@link IHttpLlmFunction.separated} property.
  *
@@ -60,7 +60,7 @@ import { ILlmSchema } from "./ILlmSchema";
  * conversation based on the return value.
  *
  * Additionally, if you've configured {@link IHttpLlmApplication.IOptions.separate},
- * so that the parameters are separated to human and LLM sides, you can merge these
+ * so that the parameters are separated to Human and LLM sides, you can merge these
  * humand and LLM sides' parameters into one through {@link HttpLlm.mergeParameters}
  * before the actual LLM function call execution.
  *
@@ -182,27 +182,27 @@ export namespace IHttpLlmApplication {
      * Separator function for the parameters.
      *
      * When composing parameter arguments through LLM function call,
-     * there can be a case that some parameters must be composed by human,
+     * there can be a case that some parameters must be composed by Human,
      * or LLM cannot understand the parameter. For example, if the
      * parameter type has configured
      * {@link ILlmSchema.IString.contentMediaType} which indicates file
-     * uploading, it must be composed by human, not by LLM
+     * uploading, it must be composed by Human, not by LLM
      * (Large Language Model).
      *
      * In that case, if you configure this property with a function that
-     * predicating whether the schema value must be composed by human or
+     * predicating whether the schema value must be composed by Human or
      * not, the parameters would be separated into two parts.
      *
      * - {@link IHttpLlmFunction.separated.llm}
-     * - {@link IHttpLlmFunction.separated.human}
+     * - {@link IHttpLlmFunction.separated.Human}
      *
      * When writing the function, note that returning value `true` means
-     * to be a human composing the value, and `false` means to LLM
+     * to be a Human composing the value, and `false` means to LLM
      * composing the value. Also, when predicating the schema, it would
      * better to utilize the {@link LlmTypeChecker} features.
      *
      * @param schema Schema to be separated.
-     * @returns Whether the schema value must be composed by human or not.
+     * @returns Whether the schema value must be composed by Human or not.
      * @default null
      */
     separate: null | ((schema: Schema) => boolean);
