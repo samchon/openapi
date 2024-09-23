@@ -40,11 +40,14 @@ export interface ILlmApplication<Schema extends ILlmSchema = ILlmSchema> {
   functions: ILlmFunction<Schema>[];
 
   /**
-   * Options for the document.
+   * Options for the application.
    */
   options: ILlmApplication.IOptions<Schema>;
 }
 export namespace ILlmApplication {
+  /**
+   * Options for composing the LLM application.
+   */
   export interface IOptions<Schema extends ILlmSchema = ILlmSchema> {
     /**
      * Separator function for the parameters.
