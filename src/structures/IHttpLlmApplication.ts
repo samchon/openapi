@@ -94,9 +94,9 @@ export interface IHttpLlmApplication<
   errors: IHttpLlmApplication.IError<Operation, Route>[];
 
   /**
-   * Options for the document.
+   * Options for the application.
    *
-   * Adjusted options when composing the document through
+   * Adjusted options when composing the application through
    * {@link HttpLlm.application} function.
    */
   options: IHttpLlmApplication.IOptions<Schema>;
@@ -137,7 +137,7 @@ export namespace IHttpLlmApplication {
      * Get the migration route metadata, of the source.
      *
      * If the property returns `undefined`, it means that the error has
-     * been occured in the migration level, not of LLM document composition.
+     * been occured in the migration level, not of LLM application composition.
      *
      * @returns Migration route metadata.
      */
@@ -145,7 +145,7 @@ export namespace IHttpLlmApplication {
   }
 
   /**
-   * Options for composing the LLM document.
+   * Options for composing the LLM application.
    */
   export interface IOptions<Schema extends ILlmSchema = ILlmSchema> {
     /**

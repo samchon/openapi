@@ -78,6 +78,17 @@ export namespace LlmTypeChecker {
     (schema as ILlmSchema.IBoolean).type === "boolean";
 
   /**
+   * Test whether the schema is an integer type.
+   *
+   * @param schema Target schema
+   * @returns Whether integer type or not
+   */
+  export const isInteger = (
+    schema: ILlmSchema,
+  ): schema is ILlmSchema.IInteger =>
+    (schema as ILlmSchema.IInteger).type === "integer";
+
+  /**
    * Test whether the schema is a number type.
    *
    * @param schema Target schema
