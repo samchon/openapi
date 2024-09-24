@@ -1,14 +1,14 @@
 import { TestValidator } from "@nestia/e2e";
-import { OpenApi, OpenApiV3 } from "@samchon/openapi";
-import { OpenApiV3Downgrader } from "@samchon/openapi/lib/converters/OpenApiV3Downgrader";
+import { OpenApi, SwaggerV2 } from "@samchon/openapi";
+import { SwaggerV2Downgrader } from "@samchon/openapi/lib/converters/SwaggerV2Downgrader";
 
-export const test_json_schema_downgrade_v30 = () => {
+export const test_json_schema_downgrade_v20_enum = () => {
   const schema: OpenApi.IJsonSchema = {
     oneOf: [{ const: "a" }, { const: "b" }, { const: "c" }],
     title: "something",
     description: "nothing",
   };
-  const downgraded: OpenApiV3.IJsonSchema = OpenApiV3Downgrader.downgradeSchema(
+  const downgraded: SwaggerV2.IJsonSchema = SwaggerV2Downgrader.downgradeSchema(
     {
       original: {},
       downgraded: {},
