@@ -187,10 +187,9 @@ export namespace SwaggerV2Downgrader {
   export const downgradeSchema =
     (collection: IComponentsCollection) =>
     (input: OpenApi.IJsonSchema): SwaggerV2.IJsonSchema => {
-      const nullable: boolean =
-        OpenApiTypeChecker.isNull(input) ||
-        (OpenApiTypeChecker.isOneOf(input) &&
-          input.oneOf.some(OpenApiTypeChecker.isNull));
+      const nullable: boolean = isNullable(new Set())(collection.original)(
+        input,
+      );
       const union: SwaggerV2.IJsonSchema[] = [];
       const attribute: SwaggerV2.IJsonSchema.__IAttribute = {
         title: input.title,
@@ -297,7 +296,7 @@ export namespace SwaggerV2Downgrader {
           ? { type: undefined }
           : union.length === 1
             ? { ...union[0] }
-            : { "x-oneOf": union.map((u) => ({ ...u, nullable: undefined })) }),
+            : { "x-oneOf": union }),
         ...attribute,
         ...(union.length > 1 ? { discriminator: undefined } : {}),
       };
@@ -363,4 +362,22 @@ export namespace SwaggerV2Downgrader {
     }
     return [];
   };
+
+  const isNullable =
+    (visited: Set<string>) =>
+    (components: OpenApi.IComponents) =>
+    (schema: OpenApi.IJsonSchema): boolean => {
+      if (OpenApiTypeChecker.isNull(schema)) return true;
+      else if (OpenApiTypeChecker.isReference(schema)) {
+        if (visited.has(schema.$ref)) return false;
+        visited.add(schema.$ref);
+        const key: string = schema.$ref.split("/").pop()!;
+        const next: OpenApi.IJsonSchema | undefined = components.schemas?.[key];
+        return next ? isNullable(visited)(components)(next) : false;
+      }
+      return (
+        OpenApiTypeChecker.isOneOf(schema) &&
+        schema.oneOf.some(isNullable(visited)(components))
+      );
+    };
 }

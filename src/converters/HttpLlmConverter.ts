@@ -201,7 +201,7 @@ const escape = (props: {
     if (oneOf.some((v) => v === null)) return null;
     return {
       ...props.input,
-      oneOf: oneOf as OpenApi.IJsonSchema[],
+      oneOf: flat(oneOf as OpenApi.IJsonSchema[]),
     };
   } else if (OpenApiTypeChecker.isObject(props.input)) {
     // OBJECT
@@ -282,3 +282,8 @@ const escape = (props: {
   }
   return props.input;
 };
+
+const flat = (elements: OpenApi.IJsonSchema[]): OpenApi.IJsonSchema[] =>
+  elements
+    .map((elem) => (OpenApiTypeChecker.isOneOf(elem) ? flat(elem.oneOf) : elem))
+    .flat();
