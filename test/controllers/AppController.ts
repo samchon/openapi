@@ -65,6 +65,9 @@ export class AppController {
     };
   }
 
+  /**
+   * @deprecated
+   */
   @TypedRoute.Post(":index/:level/:optimal/multipart")
   public query_multipart(
     @TypedParam("index")

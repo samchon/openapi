@@ -1108,6 +1108,16 @@ export namespace OpenApi {
        * Whether the type is deprecated or not.
        */
       deprecated?: boolean;
+
+      /**
+       * Example value.
+       */
+      example?: any;
+
+      /**
+       * List of example values as key-value pairs.
+       */
+      examples?: Record<string, any[]>;
     }
   }
 

@@ -1,5 +1,6 @@
 import { OpenApi } from "../OpenApi";
 import { SwaggerV2 } from "../SwaggerV2";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace SwaggerV2Converter {
   export const convert = (input: SwaggerV2.IDocument): OpenApi.IDocument => ({
@@ -251,7 +252,9 @@ export namespace SwaggerV2Converter {
     return undefined!;
   };
 
-  const convertSchema = (input: SwaggerV2.IJsonSchema): OpenApi.IJsonSchema => {
+  export const convertSchema = (
+    input: SwaggerV2.IJsonSchema,
+  ): OpenApi.IJsonSchema => {
     const nullable: { value: boolean; default?: null } = {
       value: false,
       default: undefined,
@@ -265,6 +268,10 @@ export namespace SwaggerV2Converter {
           ([key, value]) => key.startsWith("x-") && value !== undefined,
         ),
       ),
+      example: input.example,
+      examples: input.examples
+        ? Object.fromEntries(input.examples.map((v, i) => [i.toString(), v]))
+        : undefined,
     };
     const visit = (schema: SwaggerV2.IJsonSchema): void => {
       // NULLABLE PROPERTY
@@ -306,6 +313,11 @@ export namespace SwaggerV2Converter {
               | number
               | string
               | undefined as any,
+            examples: schema.examples
+              ? Object.fromEntries(
+                  schema.examples.map((v, i) => [i.toString(), v]),
+                )
+              : undefined,
             ...{ enum: undefined },
           });
       // INSTANCE TYPE CASE
@@ -313,6 +325,11 @@ export namespace SwaggerV2Converter {
         union.push({
           ...schema,
           items: convertSchema(schema.items),
+          examples: schema.examples
+            ? Object.fromEntries(
+                schema.examples.map((v, i) => [i.toString(), v]),
+              )
+            : undefined,
         });
       else if (TypeChecker.isObject(schema))
         union.push({
@@ -332,13 +349,31 @@ export namespace SwaggerV2Converter {
                 : schema.additionalProperties
               : undefined,
           },
+          examples: schema.examples
+            ? Object.fromEntries(
+                schema.examples.map((v, i) => [i.toString(), v]),
+              )
+            : undefined,
         });
       else if (TypeChecker.isReference(schema))
         union.push({
           ...schema,
           $ref: schema.$ref.replace("#/definitions/", "#/components/schemas/"),
+          examples: schema.examples
+            ? Object.fromEntries(
+                schema.examples.map((v, i) => [i.toString(), v]),
+              )
+            : undefined,
         });
-      else union.push(schema);
+      else
+        union.push({
+          ...schema,
+          examples: schema.examples
+            ? Object.fromEntries(
+                schema.examples.map((v, i) => [i.toString(), v]),
+              )
+            : undefined,
+        });
     };
 
     visit(input);
@@ -350,6 +385,22 @@ export namespace SwaggerV2Converter {
         type: "null",
         default: nullable.default,
       });
+    if (
+      union.length === 2 &&
+      union.filter((x) => OpenApiTypeChecker.isNull(x)).length === 1
+    ) {
+      const type: OpenApi.IJsonSchema = union.filter(
+        (x) => OpenApiTypeChecker.isNull(x) === false,
+      )[0];
+      for (const key of [
+        "title",
+        "description",
+        "deprecated",
+        "example",
+        "examples",
+      ] as const)
+        if (type[key] !== undefined) delete type[key];
+    }
     return {
       ...(union.length === 0
         ? { type: undefined }

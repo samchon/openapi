@@ -167,6 +167,7 @@ const composeFunction =
         }
         return operation.description ?? operation.summary;
       })(),
+      deprecated: operation.deprecated,
       route: () => route,
       operation: () => operation,
     };

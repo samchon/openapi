@@ -187,6 +187,15 @@ export interface IHttpLlmFunction<
   description?: string;
 
   /**
+   * Whether the function is deprecated or not.
+   *
+   * If the `deprecated` is `true`, the function is not recommended to use.
+   *
+   * LLM (Large Language Model) may not use the deprecated function.
+   */
+  deprecated?: boolean | undefined;
+
+  /**
    * Get the Swagger operation metadata.
    *
    * Get the Swagger operation metadata, of the source.

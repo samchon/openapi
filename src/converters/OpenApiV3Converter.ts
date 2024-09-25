@@ -1,5 +1,6 @@
 import { OpenApi } from "../OpenApi";
 import { OpenApiV3 } from "../OpenApiV3";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace OpenApiV3Converter {
   export const convert = (input: OpenApiV3.IDocument): OpenApi.IDocument => ({
@@ -257,6 +258,8 @@ export namespace OpenApiV3Converter {
             ([key, value]) => key.startsWith("x-") && value !== undefined,
           ),
         ),
+        example: input.example,
+        examples: input.examples,
       };
       const visit = (schema: OpenApiV3.IJsonSchema): void => {
         // NULLABLE PROPERTY
@@ -348,6 +351,22 @@ export namespace OpenApiV3Converter {
           type: "null",
           default: nullable.default,
         });
+      if (
+        union.length === 2 &&
+        union.filter((x) => OpenApiTypeChecker.isNull(x)).length === 1
+      ) {
+        const type: OpenApi.IJsonSchema = union.filter(
+          (x) => OpenApiTypeChecker.isNull(x) === false,
+        )[0];
+        for (const key of [
+          "title",
+          "description",
+          "deprecated",
+          "example",
+          "examples",
+        ] as const)
+          if (type[key] !== undefined) delete type[key];
+      }
       return {
         ...(union.length === 0
           ? { type: undefined }

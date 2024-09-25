@@ -328,6 +328,8 @@ export namespace OpenApiV3_1 {
       title?: string;
       description?: string;
       deprecated?: boolean;
+      example?: any;
+      examples?: Record<string, any>;
     }
   }
 
