@@ -67,6 +67,13 @@ export interface ILlmFunction<Schema extends ILlmSchema = ILlmSchema> {
    * LLM (Large Language Model) may not use the deprecated function.
    */
   deprecated?: boolean | undefined;
+
+  /**
+   * Category tags for the function.
+   *
+   * You can fill this property by the `@tag ${name}` comment tag.
+   */
+  tags?: string[];
 }
 export namespace ILlmFunction {
   /**

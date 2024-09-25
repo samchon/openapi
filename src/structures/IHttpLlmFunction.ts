@@ -196,6 +196,13 @@ export interface IHttpLlmFunction<
   deprecated?: boolean | undefined;
 
   /**
+   * Category tags for the function.
+   *
+   * Same with {@link OpenApi.IOperation.tags} indicating the category of the function.
+   */
+  tags?: string[];
+
+  /**
    * Get the Swagger operation metadata.
    *
    * Get the Swagger operation metadata, of the source.
