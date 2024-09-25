@@ -1117,7 +1117,7 @@ export namespace OpenApi {
       /**
        * List of example values as key-value pairs.
        */
-      examples?: Record<string, any[]>;
+      examples?: Record<string, any>;
     }
   }
 
