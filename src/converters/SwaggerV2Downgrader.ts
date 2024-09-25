@@ -209,13 +209,21 @@ export namespace SwaggerV2Downgrader {
           OpenApiTypeChecker.isNumber(schema) ||
           OpenApiTypeChecker.isString(schema)
         )
-          union.push({ ...schema });
+          union.push({
+            ...schema,
+            examples: schema.examples
+              ? Object.values(schema.examples)
+              : undefined,
+          });
         else if (OpenApiTypeChecker.isReference(schema))
           union.push({ $ref: `#/definitions/${schema.$ref.split("/").pop()}` });
         else if (OpenApiTypeChecker.isArray(schema))
           union.push({
             ...schema,
             items: downgradeSchema(collection)(schema.items),
+            examples: schema.examples
+              ? Object.values(schema.examples)
+              : undefined,
           });
         else if (OpenApiTypeChecker.isTuple(schema))
           union.push({
@@ -242,6 +250,9 @@ export namespace SwaggerV2Downgrader {
               prefixItems: undefined,
               additionalItems: undefined,
             },
+            examples: schema.examples
+              ? Object.values(schema.examples)
+              : undefined,
           });
         else if (OpenApiTypeChecker.isObject(schema))
           union.push({
@@ -261,6 +272,9 @@ export namespace SwaggerV2Downgrader {
                 ? downgradeSchema(collection)(schema.additionalProperties)
                 : schema.additionalProperties,
             required: schema.required,
+            examples: schema.examples
+              ? Object.values(schema.examples)
+              : undefined,
           });
         else if (OpenApiTypeChecker.isOneOf(schema))
           schema.oneOf.forEach(visit);

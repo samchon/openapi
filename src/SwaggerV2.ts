@@ -231,6 +231,8 @@ export namespace SwaggerV2 {
       title?: string;
       description?: string;
       deprecated?: boolean;
+      example?: any;
+      examples?: any[];
     }
   }
 

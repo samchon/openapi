@@ -58,6 +58,15 @@ export interface ILlmFunction<Schema extends ILlmSchema = ILlmSchema> {
    * property has the highest priroity, and you have to consider it.
    */
   description?: string | undefined;
+
+  /**
+   * Whether the function is deprecated or not.
+   *
+   * If the `deprecated` is `true`, the function is not recommended to use.
+   *
+   * LLM (Large Language Model) may not use the deprecated function.
+   */
+  deprecated?: boolean | undefined;
 }
 export namespace ILlmFunction {
   /**

@@ -188,6 +188,8 @@ export namespace OpenApiV3Downgrader {
             ([key, value]) => key.startsWith("x-") && value !== undefined,
           ),
         ),
+        example: input.example,
+        examples: input.examples,
       };
       const visit = (schema: OpenApi.IJsonSchema): void => {
         if (OpenApiTypeChecker.isBoolean(schema))
