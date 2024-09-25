@@ -31,6 +31,10 @@ export class AppController {
     return { index, level, optimal, query };
   }
 
+  /**
+   * @tag body
+   * @tag post
+   */
   @TypedRoute.Post(":index/:level/:optimal/body")
   public body(
     @TypedParam("index")
