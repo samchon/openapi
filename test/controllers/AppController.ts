@@ -93,6 +93,9 @@ export class AppController {
       },
     };
   }
+
+  @TypedRoute.Get("nothing")
+  public nothing(): void {}
 }
 
 interface IQuery {
