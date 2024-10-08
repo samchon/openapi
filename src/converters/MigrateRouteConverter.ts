@@ -139,7 +139,7 @@ export namespace MigrateRouteConverter {
           ]),
           required: [
             ...primitives.filter((p) => p.required).map((p) => p.name!),
-            ...(dto ? dto.required ?? [] : []),
+            ...(dto ? (dto.required ?? []) : []),
           ],
         },
       ];
@@ -368,7 +368,7 @@ export namespace MigrateRouteConverter {
       );
       if (json) {
         const { schema } = json[1];
-        return schema || from === "request"
+        return schema || from === "response"
           ? {
               type: "application/json",
               name: "body",
@@ -390,7 +390,7 @@ export namespace MigrateRouteConverter {
       );
       if (query) {
         const { schema } = query[1];
-        return schema || from === "request"
+        return schema || from === "response"
           ? {
               type: "application/x-www-form-urlencoded",
               name: "body",
