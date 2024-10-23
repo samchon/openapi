@@ -194,6 +194,8 @@ export namespace SwaggerV2Downgrader {
       const attribute: SwaggerV2.IJsonSchema.__IAttribute = {
         title: input.title,
         description: input.description,
+        example: input.example,
+        examples: input.examples ? Object.values(input.examples) : undefined,
         ...Object.fromEntries(
           Object.entries(input).filter(
             ([key, value]) => key.startsWith("x-") && value !== undefined,
@@ -297,11 +299,12 @@ export namespace SwaggerV2Downgrader {
 
       visit(input);
       visitConstant(input);
-      if (nullable)
+      if (nullable) {
         for (const u of union)
           if (OpenApiTypeChecker.isReference(u as any))
-            downgradeNullableReference(collection)(u as any);
+            downgradeNullableReference(new Set())(collection)(u as any);
           else (u as SwaggerV2.IJsonSchema.IArray)["x-nullable"] = true;
+      }
 
       if (nullable === true && union.length === 0)
         return { type: "null", ...attribute };
@@ -317,6 +320,7 @@ export namespace SwaggerV2Downgrader {
     };
 
   const downgradeNullableReference =
+    (visited: Set<string>) =>
     (collection: IComponentsCollection) =>
     (schema: SwaggerV2.IJsonSchema.IReference): void => {
       const key: string = schema.$ref.split("/").pop()!;
@@ -325,10 +329,31 @@ export namespace SwaggerV2Downgrader {
       const found: OpenApi.IJsonSchema | undefined =
         collection.original.schemas?.[key];
       if (found === undefined) return;
+      else if (isNullable(visited)(collection.original)(found) === true) return;
       else if (collection.downgraded[`${key}.Nullable`] === undefined) {
         collection.downgraded[`${key}.Nullable`] = {};
-        collection.downgraded[`${key}.Nullable`] =
-          downgradeSchema(collection)(found);
+        collection.downgraded[`${key}.Nullable`] = downgradeSchema(collection)(
+          OpenApiTypeChecker.isOneOf(found)
+            ? {
+                ...found,
+                oneOf: [...found.oneOf, { type: "null" }],
+              }
+            : {
+                title: found.title,
+                description: found.description,
+                example: found.example,
+                examples: found.examples
+                  ? Object.values(found.examples)
+                  : undefined,
+                ...Object.fromEntries(
+                  Object.entries(found).filter(
+                    ([key, value]) =>
+                      key.startsWith("x-") && value !== undefined,
+                  ),
+                ),
+                oneOf: [found, { type: "null" }],
+              },
+        );
       }
       schema.$ref += ".Nullable";
     };

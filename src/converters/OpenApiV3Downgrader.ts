@@ -183,13 +183,13 @@ export namespace OpenApiV3Downgrader {
       const attribute: OpenApiV3.IJsonSchema.__IAttribute = {
         title: input.title,
         description: input.description,
+        example: input.example,
+        examples: input.examples,
         ...Object.fromEntries(
           Object.entries(input).filter(
             ([key, value]) => key.startsWith("x-") && value !== undefined,
           ),
         ),
-        example: input.example,
-        examples: input.examples,
       };
       const visit = (schema: OpenApi.IJsonSchema): void => {
         if (OpenApiTypeChecker.isBoolean(schema))
@@ -278,7 +278,7 @@ export namespace OpenApiV3Downgrader {
       if (nullable === true)
         for (const u of union)
           if (OpenApiTypeChecker.isReference(u as any))
-            downgradeNullableReference(collection)(u as any);
+            downgradeNullableReference(new Set())(collection)(u as any);
           else (u as OpenApiV3.IJsonSchema.IArray).nullable = true;
       if (nullable === true && union.length === 0)
         return { type: "null", ...attribute };
@@ -293,6 +293,7 @@ export namespace OpenApiV3Downgrader {
     };
 
   const downgradeNullableReference =
+    (visited: Set<string>) =>
     (collection: IComponentsCollection) =>
     (schema: OpenApiV3.IJsonSchema.IReference): void => {
       const key: string = schema.$ref.split("/").pop()!;
@@ -301,12 +302,34 @@ export namespace OpenApiV3Downgrader {
       const found: OpenApi.IJsonSchema | undefined =
         collection.original.schemas?.[key];
       if (found === undefined) return;
+      else if (isNullable(visited)(collection.original)(found) === true) return;
       else if (
-        collection.downgraded.schemas![`${key}.Nullable`] === undefined
+        collection.downgraded.schemas?.[`${key}.Nullable`] === undefined
       ) {
-        collection.downgraded.schemas![`${key}.Nullable`] = {};
-        collection.downgraded.schemas![`${key}.Nullable`] =
-          downgradeSchema(collection)(found);
+        collection.downgraded.schemas ??= {};
+        collection.downgraded.schemas[`${key}.Nullable`] = {};
+        collection.downgraded.schemas[`${key}.Nullable`] = downgradeSchema(
+          collection,
+        )(
+          OpenApiTypeChecker.isOneOf(found)
+            ? {
+                ...found,
+                oneOf: [...found.oneOf, { type: "null" }],
+              }
+            : {
+                oneOf: [found, { type: "null" }],
+                title: found.title,
+                description: found.description,
+                example: found.example,
+                examples: found.examples,
+                ...Object.fromEntries(
+                  Object.entries(found).filter(
+                    ([key, value]) =>
+                      key.startsWith("x-") && value !== undefined,
+                  ),
+                ),
+              },
+        );
       }
       schema.$ref += ".Nullable";
     };
