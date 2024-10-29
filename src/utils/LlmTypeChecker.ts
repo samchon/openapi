@@ -8,6 +8,9 @@ import { ILlmSchema } from "../structures/ILlmSchema";
  * @author Samchon
  */
 export namespace LlmTypeChecker {
+  /* -----------------------------------------------------------
+    OPERATORS
+  ----------------------------------------------------------- */
   /**
    * Visit every nested schemas.
    *
@@ -39,6 +42,9 @@ export namespace LlmTypeChecker {
     } else if (isArray(schema)) visit(schema.items, callback);
   };
 
+  /* -----------------------------------------------------------
+    TYPE CHECKERS
+  ----------------------------------------------------------- */
   /**
    * Test whether the schema is an union type.
    *
