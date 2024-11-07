@@ -7,11 +7,13 @@ export * from "./structures/IHttpMigrateApplication";
 export * from "./structures/IHttpResponse";
 export * from "./structures/ILlmApplication";
 export * from "./structures/ILlmSchema";
+export * from "./structures/IChatGptSchema";
 
 // UTILS
 export * from "./http/HttpError";
 export * from "./utils/OpenApiTypeChecker";
 export * from "./utils/LlmTypeChecker";
+export * from "./utils/ChatGptTypeChecker";
 
 // OPENAPI MODULES
 export * from "./OpenApi";

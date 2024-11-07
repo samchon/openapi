@@ -3,11 +3,12 @@ import { OpenApiTypeChecker } from "@samchon/openapi";
 
 export const test_json_schema_type_checker_cover_any = (): void => {
   TestValidator.equals("any covers (string | null)")(true)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         type: undefined,
       },
-      {
+      y: {
         oneOf: [
           {
             type: "string",
@@ -17,14 +18,15 @@ export const test_json_schema_type_checker_cover_any = (): void => {
           },
         ],
       },
-    ),
+    }),
   );
   TestValidator.equals("any covers union type")(true)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         type: undefined,
       },
-      {
+      y: {
         oneOf: [
           {
             type: "string",
@@ -34,12 +36,13 @@ export const test_json_schema_type_checker_cover_any = (): void => {
           },
         ],
       },
-    ),
+    }),
   );
 
   TestValidator.equals("(string | null) can't cover any")(false)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         oneOf: [
           {
             type: "string",
@@ -49,14 +52,15 @@ export const test_json_schema_type_checker_cover_any = (): void => {
           },
         ],
       },
-      {
+      y: {
         type: undefined,
       },
-    ),
+    }),
   );
   TestValidator.equals("union can't cover any")(false)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         oneOf: [
           {
             type: "string",
@@ -66,9 +70,9 @@ export const test_json_schema_type_checker_cover_any = (): void => {
           },
         ],
       },
-      {
+      y: {
         type: undefined,
       },
-    ),
+    }),
   );
 };

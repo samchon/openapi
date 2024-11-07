@@ -3,8 +3,9 @@ import { OpenApiTypeChecker } from "@samchon/openapi";
 
 export const test_json_schema_type_checker_cover_nullable = (): void => {
   TestValidator.equals("(string | null) covers string")(true)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         oneOf: [
           {
             type: "string",
@@ -14,17 +15,18 @@ export const test_json_schema_type_checker_cover_nullable = (): void => {
           },
         ],
       },
-      {
+      y: {
         type: "string",
       },
-    ),
+    }),
   );
   TestValidator.equals("string can't cover (string | null)")(false)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         type: "string",
       },
-      {
+      y: {
         oneOf: [
           {
             type: "string",
@@ -34,6 +36,6 @@ export const test_json_schema_type_checker_cover_nullable = (): void => {
           },
         ],
       },
-    ),
+    }),
   );
 };
