@@ -29,10 +29,12 @@ OpenAPI definitions, converters and LLM function calling application composer.
 `@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts) module, you can perform the LLM funtion calling extremely easily just by delivering the OpenAPI (Swagger) document.
 
   - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
-  - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
-  - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
-  - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
-  - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
+  - [`IHttpLlmApplication<Model, Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
+  - [`IHttpLlmFunction<Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - Supported schemes
+    - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
+    - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts)
+    - [`IOpenAiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IOpenAiSchema.ts)
 
 > [!TIP]
 >
