@@ -5,8 +5,9 @@ import typia, { tags } from "typia";
 export const test_json_schema_type_checker_cover_string = (): void => {
   // SUCCESS SCENARIOS
   TestValidator.equals("enum cover relationship")(true)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         oneOf: [
           {
             const: "a",
@@ -19,7 +20,7 @@ export const test_json_schema_type_checker_cover_string = (): void => {
           },
         ],
       },
-      {
+      y: {
         oneOf: [
           {
             const: "a",
@@ -29,43 +30,49 @@ export const test_json_schema_type_checker_cover_string = (): void => {
           },
         ],
       },
-    ),
+    }),
   );
   TestValidator.equals("minLength covers when equal")(true)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", minLength: 1 },
-      { type: "string", minLength: 1 },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", minLength: 1 },
+      y: { type: "string", minLength: 1 },
+    }),
   );
   TestValidator.equals("minLength covers when less")(true)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", minLength: 1 },
-      { type: "string", minLength: 2 },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", minLength: 1 },
+      y: { type: "string", minLength: 2 },
+    }),
   );
   TestValidator.equals("maxLength covers when equal")(true)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", maxLength: 2 },
-      { type: "string", maxLength: 2 },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", maxLength: 2 },
+      y: { type: "string", maxLength: 2 },
+    }),
   );
   TestValidator.equals("maxLength covers when greater")(true)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", maxLength: 2 },
-      { type: "string", maxLength: 1 },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", maxLength: 2 },
+      y: { type: "string", maxLength: 1 },
+    }),
   );
   TestValidator.equals("pattern covers when equal")(true)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", pattern: "^a.*" },
-      { type: "string", pattern: "^a.*" },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", pattern: "^a.*" },
+      y: { type: "string", pattern: "^a.*" },
+    }),
   );
 
   // FAILURE SCENARIOS
   TestValidator.equals("enum non cover (but covered) relationship")(false)(
-    OpenApiTypeChecker.covers({})(
-      {
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: {
         oneOf: [
           {
             const: "a",
@@ -75,7 +82,7 @@ export const test_json_schema_type_checker_cover_string = (): void => {
           },
         ],
       },
-      {
+      y: {
         oneOf: [
           {
             const: "a",
@@ -88,25 +95,28 @@ export const test_json_schema_type_checker_cover_string = (): void => {
           },
         ],
       },
-    ),
+    }),
   );
   TestValidator.equals("minLength can't cover when greater")(false)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", minLength: 2 },
-      { type: "string", minLength: 1 },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", minLength: 2 },
+      y: { type: "string", minLength: 1 },
+    }),
   );
   TestValidator.equals("maxLength can't cover when less")(false)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", maxLength: 1 },
-      { type: "string", maxLength: 2 },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", maxLength: 1 },
+      y: { type: "string", maxLength: 2 },
+    }),
   );
   TestValidator.equals("pattern can't cover when different")(false)(
-    OpenApiTypeChecker.covers({})(
-      { type: "string", pattern: "^a.*" },
-      { type: "string", pattern: "^b.*" },
-    ),
+    OpenApiTypeChecker.covers({
+      components: {},
+      x: { type: "string", pattern: "^a.*" },
+      y: { type: "string", pattern: "^b.*" },
+    }),
   );
 
   // CHECK FORMAT CASE
@@ -120,9 +130,10 @@ export const test_json_schema_type_checker_cover_string = (): void => {
           (x === "iri" && y === "uri") ||
           (x === "iri-reference" && y === "uri-reference"),
       )(
-        OpenApiTypeChecker.covers({})(
-          { type: "string", format: x },
-          { type: "string", format: y },
-        ),
+        OpenApiTypeChecker.covers({
+          components: {},
+          x: { type: "string", format: x },
+          y: { type: "string", format: y },
+        }),
       );
 };

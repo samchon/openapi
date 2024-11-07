@@ -28,8 +28,10 @@ export * from "./structures/IHttpLlmFunction";
 export * from "./structures/ILlmApplication";
 
 export * from "./structures/ILlmSchema";
+export * from "./structures/IChatGptSchema";
 export * from "./structures/IGeminiSchema";
 
 export * from "./HttpLlm";
 export * from "./utils/LlmTypeChecker";
+export * from "./utils/ChatGptTypeChecker";
 export * from "./utils/GeminiTypeChecker";

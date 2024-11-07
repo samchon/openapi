@@ -17,75 +17,96 @@ export const test_json_schema_type_checker_cover_object = (): void => {
   //----
   // SINGLE OBJECT TYPE
   TestValidator.equals("Plan3D covers Plan2D")(true)(
-    OpenApiTypeChecker.covers(components)(plan3D, plan2D),
+    OpenApiTypeChecker.covers({
+      components,
+      x: plan3D,
+      y: plan2D,
+    }),
   );
   TestValidator.equals("Box3D covers Box2D")(true)(
-    OpenApiTypeChecker.covers(components)(box3D, box2D),
+    OpenApiTypeChecker.covers({
+      components,
+      x: box3D,
+      y: box2D,
+    }),
   );
 
   // UNION TYPE
   TestValidator.equals("(Plan3D|Box3D) covers Plan2D")(true)(
-    OpenApiTypeChecker.covers(components)({ oneOf: [plan3D, box3D] }, plan2D),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { oneOf: [plan3D, box3D] },
+      y: plan2D,
+    }),
   );
   TestValidator.equals("(Plan3D|Box3D) covers Box2D")(true)(
-    OpenApiTypeChecker.covers(components)({ oneOf: [plan3D, box3D] }, box2D),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { oneOf: [plan3D, box3D] },
+      y: box2D,
+    }),
   );
   TestValidator.equals("(Plan3D|Box3D) covers (Plan2D|Box2D)")(true)(
-    OpenApiTypeChecker.covers(components)(
-      { oneOf: [plan3D, box3D] },
-      { oneOf: [box2D, box2D] },
-    ),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { oneOf: [plan3D, box3D] },
+      y: { oneOf: [box2D, box2D] },
+    }),
   );
 
   // DYNAMIC FEATURES
   TestValidator.equals("optional covers required")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         properties: {
           id: { type: "string" },
         },
       },
-      {
+      y: {
         type: "object",
         properties: {
           id: { type: "string" },
         },
         required: ["id"],
       },
-    ),
+    }),
   );
   TestValidator.equals("(additionalProperties := true) cover static")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         additionalProperties: true,
       },
-      {
+      y: {
         type: "object",
       },
-    ),
+    }),
   );
   TestValidator.equals("(addtionalProperties := object) covers static")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         additionalProperties: {
           type: "object",
         },
       },
-      {
+      y: {
         type: "object",
       },
-    ),
+    }),
   );
   TestValidator.equals("(addtionalProperties := true) covers everything")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         additionalProperties: true,
       },
-      {
+      y: {
         type: "object",
         additionalProperties: {
           type: "object",
@@ -94,19 +115,20 @@ export const test_json_schema_type_checker_cover_object = (): void => {
           },
         },
       },
-    ),
+    }),
   );
   TestValidator.equals("addtionalProperties covers relationship")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         additionalProperties: box3D,
       },
-      {
+      y: {
         type: "object",
         additionalProperties: box2D,
       },
-    ),
+    }),
   );
 
   //----
@@ -114,71 +136,83 @@ export const test_json_schema_type_checker_cover_object = (): void => {
   //----
   // SINGLE OBJECT TYPE
   TestValidator.equals("Plan2D can't cover Plan3D")(false)(
-    OpenApiTypeChecker.covers(components)(plan2D, plan3D),
+    OpenApiTypeChecker.covers({ components, x: plan2D, y: plan3D }),
   );
   TestValidator.equals("Box2D can't cover Box3D")(false)(
-    OpenApiTypeChecker.covers(components)(box2D, box3D),
+    OpenApiTypeChecker.covers({ components, x: box2D, y: box3D }),
   );
 
   // UNION TYPE
   TestValidator.equals("Plan3D can't cover (Plan2D|Box2D)")(false)(
-    OpenApiTypeChecker.covers(components)(plan3D, { oneOf: [plan2D, box2D] }),
+    OpenApiTypeChecker.covers({
+      components,
+      x: plan3D,
+      y: { oneOf: [plan2D, box2D] },
+    }),
   );
   TestValidator.equals("Box3D can't cover (Plan2D|Box2D)")(false)(
-    OpenApiTypeChecker.covers(components)(box3D, { oneOf: [plan2D, box2D] }),
+    OpenApiTypeChecker.covers({
+      components,
+      x: box3D,
+      y: { oneOf: [plan2D, box2D] },
+    }),
   );
 
   // DYNAMIC FEATURES
   TestValidator.equals("required can't cover optional")(false)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         properties: {
           id: { type: "string" },
         },
         required: ["id"],
       },
-      {
+      y: {
         type: "object",
         properties: {
           id: { type: "string" },
         },
       },
-    ),
+    }),
   );
   TestValidator.equals("static can't cover (additionalProperties := true)")(
     false,
   )(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
       },
-      {
+      y: {
         type: "object",
         additionalProperties: true,
       },
-    ),
+    }),
   );
   TestValidator.equals("static can't cover (additionalProperties := object)")(
     false,
   )(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
       },
-      {
+      y: {
         type: "object",
         additionalProperties: {
           type: "object",
         },
       },
-    ),
+    }),
   );
   TestValidator.equals("nothing can cover (addtionalProperties := true)")(
     false,
   )(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         additionalProperties: {
           type: "object",
@@ -187,23 +221,24 @@ export const test_json_schema_type_checker_cover_object = (): void => {
           },
         },
       },
-      {
+      y: {
         type: "object",
         additionalProperties: true,
       },
-    ),
+    }),
   );
   TestValidator.equals("relationship can't cover addtionalProperties")(false)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "object",
         additionalProperties: box2D,
       },
-      {
+      y: {
         type: "object",
         additionalProperties: box3D,
       },
-    ),
+    }),
   );
 };
 

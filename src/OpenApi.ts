@@ -1071,7 +1071,7 @@ export namespace OpenApi {
     }
 
     /**
-     * Unknown, `any` type.
+     * Unknown, the `any` type.
      */
     export interface IUnknown extends __IAttribute {
       /**

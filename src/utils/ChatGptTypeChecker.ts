@@ -1,94 +1,92 @@
-import { OpenApi } from "../OpenApi";
+import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { MapUtil } from "./MapUtil";
 
-export namespace OpenApiTypeChecker {
+export namespace ChatGptTypeChecker {
   /* -----------------------------------------------------------
     TYPE CHECKERS
   ----------------------------------------------------------- */
   export const isNull = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.INull =>
-    (schema as OpenApi.IJsonSchema.INull).type === "null";
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.INull =>
+    (schema as IChatGptSchema.INull).type === "null";
   export const isUnknown = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IUnknown =>
-    (schema as OpenApi.IJsonSchema.IUnknown).type === undefined &&
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IUnknown =>
+    (schema as IChatGptSchema.IUnknown).type === undefined &&
     !isConstant(schema) &&
     !isOneOf(schema) &&
     !isReference(schema);
 
   export const isConstant = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IConstant =>
-    (schema as OpenApi.IJsonSchema.IConstant).const !== undefined;
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IConstant =>
+    (schema as IChatGptSchema.IConstant).const !== undefined;
   export const isBoolean = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IBoolean =>
-    (schema as OpenApi.IJsonSchema.IBoolean).type === "boolean";
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IBoolean =>
+    (schema as IChatGptSchema.IBoolean).type === "boolean";
   export const isInteger = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IInteger =>
-    (schema as OpenApi.IJsonSchema.IInteger).type === "integer";
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IInteger =>
+    (schema as IChatGptSchema.IInteger).type === "integer";
   export const isNumber = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.INumber =>
-    (schema as OpenApi.IJsonSchema.INumber).type === "number";
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.INumber =>
+    (schema as IChatGptSchema.INumber).type === "number";
   export const isString = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IString =>
-    (schema as OpenApi.IJsonSchema.IString).type === "string";
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IString =>
+    (schema as IChatGptSchema.IString).type === "string";
 
   export const isArray = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IArray =>
-    (schema as OpenApi.IJsonSchema.IArray).type === "array" &&
-    (schema as OpenApi.IJsonSchema.IArray).items !== undefined;
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IArray =>
+    (schema as IChatGptSchema.IArray).type === "array" &&
+    (schema as IChatGptSchema.IArray).items !== undefined;
   export const isTuple = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.ITuple =>
-    (schema as OpenApi.IJsonSchema.ITuple).type === "array" &&
-    (schema as OpenApi.IJsonSchema.ITuple).prefixItems !== undefined;
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.ITuple =>
+    (schema as IChatGptSchema.ITuple).type === "array" &&
+    (schema as IChatGptSchema.ITuple).prefixItems !== undefined;
   export const isObject = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IObject =>
-    (schema as OpenApi.IJsonSchema.IObject).type === "object";
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IObject =>
+    (schema as IChatGptSchema.IObject).type === "object";
   export const isReference = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IReference =>
-    (schema as any).$ref !== undefined;
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IReference => (schema as any).$ref !== undefined;
   export const isOneOf = (
-    schema: OpenApi.IJsonSchema,
-  ): schema is OpenApi.IJsonSchema.IOneOf =>
-    (schema as OpenApi.IJsonSchema.IOneOf).oneOf !== undefined;
+    schema: IChatGptSchema,
+  ): schema is IChatGptSchema.IOneOf =>
+    (schema as IChatGptSchema.IOneOf).oneOf !== undefined;
 
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
   export const visit = (props: {
-    closure: (schema: OpenApi.IJsonSchema) => void;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
+    closure: (schema: IChatGptSchema) => void;
+    top: IChatGptSchema.ITop;
+    schema: IChatGptSchema;
   }): void => {
     const already: Set<string> = new Set();
-    const next = (schema: OpenApi.IJsonSchema): void => {
+    const next = (schema: IChatGptSchema): void => {
       props.closure(schema);
-      if (OpenApiTypeChecker.isReference(schema)) {
-        const key: string = schema.$ref.split("#/components/schemas/").pop()!;
+      if (ChatGptTypeChecker.isReference(schema)) {
+        const key: string = schema.$ref.split("#/$defs/").pop()!;
         if (already.has(key) === true) return;
         already.add(key);
-        const found: OpenApi.IJsonSchema | undefined =
-          props.components.schemas?.[key];
+        const found: IChatGptSchema | undefined = props.top.$defs?.[key];
         if (found !== undefined) next(found);
-      } else if (OpenApiTypeChecker.isOneOf(schema)) schema.oneOf.forEach(next);
-      else if (OpenApiTypeChecker.isObject(schema)) {
+      } else if (ChatGptTypeChecker.isOneOf(schema)) schema.oneOf.forEach(next);
+      else if (ChatGptTypeChecker.isObject(schema)) {
         for (const value of Object.values(schema.properties ?? {})) next(value);
         if (
           typeof schema.additionalProperties === "object" &&
           schema.additionalProperties !== null
         )
           next(schema.additionalProperties);
-      } else if (OpenApiTypeChecker.isArray(schema)) next(schema.items);
-      else if (OpenApiTypeChecker.isTuple(schema)) {
+      } else if (ChatGptTypeChecker.isArray(schema)) next(schema.items);
+      else if (ChatGptTypeChecker.isTuple(schema)) {
         (schema.prefixItems ?? []).forEach(next);
         if (
           typeof schema.additionalItems === "object" &&
@@ -101,30 +99,30 @@ export namespace OpenApiTypeChecker {
   };
 
   export const covers = (props: {
-    components: OpenApi.IComponents;
-    x: OpenApi.IJsonSchema;
-    y: OpenApi.IJsonSchema;
+    top: IChatGptSchema.ITop;
+    x: IChatGptSchema;
+    y: IChatGptSchema;
   }): boolean =>
     coverStation({
-      components: props.components,
+      top: props.top,
       x: props.x,
       y: props.y,
       visited: new Map(),
     });
 
   const coverStation = (p: {
-    components: OpenApi.IComponents;
-    visited: Map<OpenApi.IJsonSchema, Map<OpenApi.IJsonSchema, boolean>>;
-    x: OpenApi.IJsonSchema;
-    y: OpenApi.IJsonSchema;
+    top: IChatGptSchema.ITop;
+    visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
+    x: IChatGptSchema;
+    y: IChatGptSchema;
   }): boolean => {
     const cache: boolean | undefined = p.visited.get(p.x)?.get(p.y);
     if (cache !== undefined) return cache;
 
     // FOR RECURSIVE CASE
-    const nested: Map<OpenApi.IJsonSchema, boolean> = MapUtil.take(p.visited)(
-      p.x,
-    )(() => new Map());
+    const nested: Map<IChatGptSchema, boolean> = MapUtil.take(p.visited)(p.x)(
+      () => new Map(),
+    );
     nested.set(p.y, true);
 
     // COMPUTE IT
@@ -134,10 +132,10 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverSchema = (p: {
-    components: OpenApi.IComponents;
-    visited: Map<OpenApi.IJsonSchema, Map<OpenApi.IJsonSchema, boolean>>;
-    x: OpenApi.IJsonSchema;
-    y: OpenApi.IJsonSchema;
+    top: IChatGptSchema.ITop;
+    visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
+    x: IChatGptSchema;
+    y: IChatGptSchema;
   }): boolean => {
     // CHECK EQUALITY
     if (p.x === p.y) return true;
@@ -145,14 +143,14 @@ export namespace OpenApiTypeChecker {
       return true;
 
     // COMPARE WITH FLATTENING
-    const alpha: OpenApi.IJsonSchema[] = flatSchema(p.components, p.x);
-    const beta: OpenApi.IJsonSchema[] = flatSchema(p.components, p.y);
+    const alpha: IChatGptSchema[] = flatSchema(p.top, p.x);
+    const beta: IChatGptSchema[] = flatSchema(p.top, p.y);
     if (alpha.some((x) => isUnknown(x))) return true;
     else if (beta.some((x) => isUnknown(x))) return false;
     return beta.every((b) =>
       alpha.some((a) =>
         coverEscapedSchema({
-          components: p.components,
+          top: p.top,
           visited: p.visited,
           x: a,
           y: b,
@@ -162,10 +160,10 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverEscapedSchema = (p: {
-    components: OpenApi.IComponents;
-    visited: Map<OpenApi.IJsonSchema, Map<OpenApi.IJsonSchema, boolean>>;
-    x: OpenApi.IJsonSchema;
-    y: OpenApi.IJsonSchema;
+    top: IChatGptSchema.ITop;
+    visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
+    x: IChatGptSchema;
+    y: IChatGptSchema;
   }): boolean => {
     // CHECK EQUALITY
     if (p.x === p.y) return true;
@@ -192,7 +190,7 @@ export namespace OpenApiTypeChecker {
       return (
         (isArray(p.y) || isTuple(p.y)) &&
         coverArray({
-          components: p.components,
+          top: p.top,
           visited: p.visited,
           x: p.x,
           y: p.y,
@@ -202,7 +200,7 @@ export namespace OpenApiTypeChecker {
       return (
         isObject(p.y) &&
         coverObject({
-          components: p.components,
+          top: p.top,
           visited: p.visited,
           x: p.x,
           y: p.y,
@@ -213,16 +211,16 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverArray = (p: {
-    components: OpenApi.IComponents;
-    visited: Map<OpenApi.IJsonSchema, Map<OpenApi.IJsonSchema, boolean>>;
-    x: OpenApi.IJsonSchema.IArray;
-    y: OpenApi.IJsonSchema.IArray | OpenApi.IJsonSchema.ITuple;
+    top: IChatGptSchema.ITop;
+    visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
+    x: IChatGptSchema.IArray;
+    y: IChatGptSchema.IArray | IChatGptSchema.ITuple;
   }): boolean => {
     if (isTuple(p.y))
       return (
         p.y.prefixItems.every((v) =>
           coverStation({
-            components: p.components,
+            top: p.top,
             visited: p.visited,
             x: p.x.items,
             y: v,
@@ -231,7 +229,7 @@ export namespace OpenApiTypeChecker {
         (p.y.additionalItems === undefined ||
           (typeof p.y.additionalItems === "object" &&
             coverStation({
-              components: p.components,
+              top: p.top,
               visited: p.visited,
               x: p.x.items,
               y: p.y.additionalItems,
@@ -252,7 +250,7 @@ export namespace OpenApiTypeChecker {
     )
       return false;
     return coverStation({
-      components: p.components,
+      top: p.top,
       visited: p.visited,
       x: p.x.items,
       y: p.y.items,
@@ -260,10 +258,10 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverObject = (p: {
-    components: OpenApi.IComponents;
-    visited: Map<OpenApi.IJsonSchema, Map<OpenApi.IJsonSchema, boolean>>;
-    x: OpenApi.IJsonSchema.IObject;
-    y: OpenApi.IJsonSchema.IObject;
+    top: IChatGptSchema.ITop;
+    visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
+    x: IChatGptSchema.IObject;
+    y: IChatGptSchema.IObject;
   }): boolean => {
     if (!p.x.additionalProperties && !!p.y.additionalProperties) return false;
     else if (
@@ -274,7 +272,7 @@ export namespace OpenApiTypeChecker {
         (typeof p.x.additionalProperties === "object" &&
           typeof p.y.additionalProperties === "object" &&
           !coverStation({
-            components: p.components,
+            top: p.top,
             visited: p.visited,
             x: p.x.additionalProperties,
             y: p.y.additionalProperties,
@@ -282,7 +280,7 @@ export namespace OpenApiTypeChecker {
     )
       return false;
     return Object.entries(p.y.properties ?? {}).every(([key, b]) => {
-      const a: OpenApi.IJsonSchema | undefined = p.x.properties?.[key];
+      const a: IChatGptSchema | undefined = p.x.properties?.[key];
       if (a === undefined) return false;
       else if (
         (p.x.required?.includes(key) ?? false) === true &&
@@ -290,7 +288,7 @@ export namespace OpenApiTypeChecker {
       )
         return false;
       return coverStation({
-        components: p.components,
+        top: p.top,
         visited: p.visited,
         x: a,
         y: b,
@@ -299,8 +297,8 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverInteger = (
-    x: OpenApi.IJsonSchema.IInteger,
-    y: OpenApi.IJsonSchema.IConstant | OpenApi.IJsonSchema.IInteger,
+    x: IChatGptSchema.IInteger,
+    y: IChatGptSchema.IConstant | IChatGptSchema.IInteger,
   ): boolean => {
     if (isConstant(y))
       return typeof y.const === "number" && Number.isInteger(y.const);
@@ -326,11 +324,11 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverNumber = (
-    x: OpenApi.IJsonSchema.INumber,
+    x: IChatGptSchema.INumber,
     y:
-      | OpenApi.IJsonSchema.IConstant
-      | OpenApi.IJsonSchema.IInteger
-      | OpenApi.IJsonSchema.INumber,
+      | IChatGptSchema.IConstant
+      | IChatGptSchema.IInteger
+      | IChatGptSchema.INumber,
   ): boolean => {
     if (isConstant(y)) return typeof y.const === "number";
     return [
@@ -355,8 +353,8 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverString = (
-    x: OpenApi.IJsonSchema.IString,
-    y: OpenApi.IJsonSchema.IConstant | OpenApi.IJsonSchema.IString,
+    x: IChatGptSchema.IString,
+    y: IChatGptSchema.IConstant | IChatGptSchema.IString,
   ): boolean => {
     if (isConstant(y)) return typeof y.const === "string";
     return [
@@ -371,8 +369,8 @@ export namespace OpenApiTypeChecker {
   };
 
   const coverFormat = (
-    x: Required<OpenApi.IJsonSchema.IString>["format"],
-    y: Required<OpenApi.IJsonSchema.IString>["format"],
+    x: Required<IChatGptSchema.IString>["format"],
+    y: Required<IChatGptSchema.IString>["format"],
   ): boolean =>
     x === y ||
     (x === "idn-email" && y === "email") ||
@@ -382,23 +380,20 @@ export namespace OpenApiTypeChecker {
     (x === "iri-reference" && y === "uri-reference");
 
   const flatSchema = (
-    components: OpenApi.IComponents,
-    schema: OpenApi.IJsonSchema,
-  ): OpenApi.IJsonSchema[] => {
-    schema = escapeReference(components, schema);
+    top: IChatGptSchema.ITop,
+    schema: IChatGptSchema,
+  ): IChatGptSchema[] => {
+    schema = escapeReference(top, schema);
     if (isOneOf(schema))
-      return schema.oneOf.map((v) => flatSchema(components, v)).flat();
+      return schema.oneOf.map((v) => flatSchema(top, v)).flat();
     return [schema];
   };
 
   const escapeReference = (
-    components: OpenApi.IComponents,
-    schema: OpenApi.IJsonSchema,
-  ): Exclude<OpenApi.IJsonSchema, OpenApi.IJsonSchema.IReference> =>
+    top: IChatGptSchema.ITop,
+    schema: IChatGptSchema,
+  ): Exclude<IChatGptSchema, IChatGptSchema.IReference> =>
     isReference(schema)
-      ? escapeReference(
-          components,
-          components.schemas![schema.$ref.replace("#/components/schemas/", "")],
-        )
+      ? escapeReference(top, top.$defs![schema.$ref.replace("#/$defs/", "")]!)
       : schema;
 }

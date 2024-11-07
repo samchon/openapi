@@ -14,119 +14,129 @@ export const test_json_schema_type_checker_cover_array = (): void => {
   const box3D: OpenApi.IJsonSchema = components.schemas!.Box3D;
 
   TestValidator.equals("Plan3D[] covers Plan2D[]")(true)(
-    OpenApiTypeChecker.covers(components)(
-      { type: "array", items: plan3D },
-      { type: "array", items: plan2D },
-    ),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { type: "array", items: plan3D },
+      y: { type: "array", items: plan2D },
+    }),
   );
   TestValidator.equals("Box3D[] covers Box2D[]")(true)(
-    OpenApiTypeChecker.covers(components)(
-      { type: "array", items: box3D },
-      { type: "array", items: box2D },
-    ),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { type: "array", items: box3D },
+      y: { type: "array", items: box2D },
+    }),
   );
   TestValidator.equals("Array<Plan3D|Box3D> covers Array<Plan2D|Box2D>")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "array",
         items: {
           oneOf: [plan3D, box3D],
         },
       },
-      {
+      y: {
         type: "array",
         items: {
           oneOf: [plan2D, box2D],
         },
       },
-    ),
+    }),
   );
   TestValidator.equals("(Plan3D|Box3D)[] covers (Plan2D|Box2D)[]")(true)(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         oneOf: [
           { type: "array", items: plan3D },
           { type: "array", items: box3D },
         ],
       },
-      {
+      y: {
         oneOf: [
           { type: "array", items: plan2D },
           { type: "array", items: box2D },
         ],
       },
-    ),
+    }),
   );
 
   TestValidator.equals("Plan2D[] can't cover Plan3D[]")(false)(
-    OpenApiTypeChecker.covers(components)(
-      { type: "array", items: plan2D },
-      { type: "array", items: plan3D },
-    ),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { type: "array", items: plan2D },
+      y: { type: "array", items: plan3D },
+    }),
   );
   TestValidator.equals("Box2D[] can't cover Box3D[]")(false)(
-    OpenApiTypeChecker.covers(components)(
-      { type: "array", items: box2D },
-      { type: "array", items: box3D },
-    ),
+    OpenApiTypeChecker.covers({
+      components,
+      x: { type: "array", items: box2D },
+      y: { type: "array", items: box3D },
+    }),
   );
   TestValidator.equals("Array<Plan2D|Box2D> can't cover Array<Plan3D|Box3D>")(
     false,
   )(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         type: "array",
         items: {
           oneOf: [plan2D, box2D],
         },
       },
-      {
+      y: {
         type: "array",
         items: {
           oneOf: [plan3D, box3D],
         },
       },
-    ),
+    }),
   );
   TestValidator.equals("(Plan2D[]|Box2D[]) can't cover (Plan3D[]|Box3D[])")(
     false,
   )(
-    OpenApiTypeChecker.covers(components)(
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: {
         oneOf: [
           { type: "array", items: plan2D },
           { type: "array", items: box2D },
         ],
       },
-      {
+      y: {
         oneOf: [
           { type: "array", items: plan3D },
           { type: "array", items: box3D },
         ],
       },
-    ),
+    }),
   );
   TestValidator.equals("Plan3D[] can't cover (Plan2D|Box2D)[]")(false)(
-    OpenApiTypeChecker.covers(components)(
-      { type: "array", items: plan3D },
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: { type: "array", items: plan3D },
+      y: {
         oneOf: [
           { type: "array", items: plan2D },
           { type: "array", items: box2D },
         ],
       },
-    ),
+    }),
   );
   TestValidator.equals("Box3D[] can't cover Array<Plan2D|Box2D>")(false)(
-    OpenApiTypeChecker.covers(components)(
-      { type: "array", items: box3D },
-      {
+    OpenApiTypeChecker.covers({
+      components,
+      x: { type: "array", items: box3D },
+      y: {
         type: "array",
         items: {
           oneOf: [plan2D, box2D],
         },
       },
-    ),
+    }),
   );
 };
 
