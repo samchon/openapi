@@ -81,6 +81,7 @@ export namespace HttpLlm {
       {
         keyword: options?.keyword ?? false,
         separate: options?.separate ?? null,
+        recursive: options?.recursive ?? 3,
       },
     );
   };
@@ -101,6 +102,7 @@ export namespace HttpLlm {
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
+    recursive: false | number;
   }): ILlmSchema | null => HttpLlmConverter.schema(props);
 
   /* -----------------------------------------------------------

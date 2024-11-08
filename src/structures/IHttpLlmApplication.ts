@@ -179,6 +179,15 @@ export namespace IHttpLlmApplication {
     keyword: boolean;
 
     /**
+     * Whether to allow recursive types or not.
+     *
+     * If allow, then how many times to repeat the recursive types.
+     *
+     * @default 3
+     */
+    recursive: false | number;
+
+    /**
      * Separator function for the parameters.
      *
      * When composing parameter arguments through LLM function call,

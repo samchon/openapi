@@ -7,6 +7,7 @@ export const test_llm_schema_object = (): void => {
   const schema: ILlmSchema | null = HttpLlm.schema({
     components: app.components,
     schema: app.schemas[0],
+    recursive: false,
   });
   TestValidator.equals("schema")(schema)({
     type: "object",
@@ -28,10 +29,13 @@ export const test_llm_schema_object = (): void => {
                 description: "Hello word",
               },
             },
+            additionalProperties: false,
           },
         },
+        additionalProperties: false,
       },
     },
+    additionalProperties: false,
   });
 };
 

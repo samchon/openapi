@@ -12,6 +12,12 @@ export const test_schema_separate_string = (): void => {
     format: "uri",
     contentMediaType: "image/png",
   };
-  TestValidator.equals("plain")(separator(plain))([plain, null]);
-  TestValidator.equals("upload")(separator(upload))([null, upload]);
+  TestValidator.equals(
+    "plain",
+    (key) => key === "additionalProperties",
+  )(separator(plain))([plain, null]);
+  TestValidator.equals(
+    "upload",
+    (key) => key === "additionalProperties",
+  )(separator(upload))([null, upload]);
 };

@@ -50,11 +50,12 @@ export namespace HttpLlmConverter {
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
+    recursive: false | number;
   }): ILlmSchema | null => {
-    const resolved: OpenApi.IJsonSchema | null = escape({
+    const resolved: OpenApi.IJsonSchema | null = OpenApiTypeChecker.escape({
       components: props.components,
-      visited: new Set(),
-      input: props.schema,
+      schema: props.schema,
+      recursive: props.recursive,
     });
     if (resolved === null) return null;
     const downgraded: ILlmSchema = OpenApiV3Downgrader.downgradeSchema({
@@ -81,6 +82,7 @@ const composeFunction =
       HttpLlmConverter.schema({
         components,
         schema: s,
+        recursive: options.recursive,
       });
     const output: ILlmSchema | null | undefined =
       route.success && route.success ? cast(route.success.schema) : undefined;
@@ -173,119 +175,3 @@ const composeFunction =
       operation: () => operation,
     };
   };
-
-const escape = (props: {
-  components: OpenApi.IComponents;
-  visited: Set<string>;
-  input: OpenApi.IJsonSchema;
-}): OpenApi.IJsonSchema | null => {
-  if (OpenApiTypeChecker.isReference(props.input)) {
-    // REFERENCE
-    const name: string = props.input.$ref.split("#/components/schemas/")[1];
-    const target: OpenApi.IJsonSchema | undefined =
-      props.components.schemas?.[name];
-    if (!target) return null;
-    else if (props.visited.has(name)) return null;
-    return escape({
-      components: props.components,
-      visited: new Set([...props.visited, name]),
-      input: target,
-    });
-  } else if (OpenApiTypeChecker.isOneOf(props.input)) {
-    // ONE-OF
-    const oneOf: Array<OpenApi.IJsonSchema | null> = props.input.oneOf.map(
-      (schema) =>
-        escape({
-          ...props,
-          input: schema,
-        })!,
-    );
-    if (oneOf.some((v) => v === null)) return null;
-    return {
-      ...props.input,
-      oneOf: flat(oneOf as OpenApi.IJsonSchema[]),
-    };
-  } else if (OpenApiTypeChecker.isObject(props.input)) {
-    // OBJECT
-    const properties: Array<[string, OpenApi.IJsonSchema | null]> | undefined =
-      props.input.properties
-        ? Object.entries(props.input.properties).map(
-            ([key, value]) =>
-              [
-                key,
-                escape({
-                  ...props,
-                  input: value,
-                }),
-              ] as const,
-          )
-        : undefined;
-    const additionalProperties:
-      | OpenApi.IJsonSchema
-      | null
-      | boolean
-      | undefined = props.input.additionalProperties
-      ? typeof props.input.additionalProperties === "object" &&
-        props.input.additionalProperties !== null
-        ? escape({
-            ...props,
-            input: props.input.additionalProperties,
-          })
-        : props.input.additionalProperties
-      : undefined;
-    if (properties && properties.some(([_k, v]) => v === null)) return null;
-    else if (additionalProperties === null) return null;
-    return {
-      ...props.input,
-      properties: properties
-        ? Object.fromEntries(
-            properties.filter(([_k, v]) => !!v) as Array<
-              [string, OpenApi.IJsonSchema]
-            >,
-          )
-        : undefined,
-      additionalProperties,
-    };
-  } else if (OpenApiTypeChecker.isTuple(props.input)) {
-    // TUPLE
-    const prefixItems: Array<OpenApi.IJsonSchema | null> =
-      props.input.prefixItems.map((schema) =>
-        escape({
-          ...props,
-          input: schema,
-        }),
-      );
-    const additionalItems: OpenApi.IJsonSchema | null | boolean | undefined =
-      typeof props.input.additionalItems === "object" &&
-      props.input.additionalItems !== null
-        ? escape({
-            ...props,
-            input: props.input.additionalItems,
-          })
-        : props.input.additionalItems;
-    if (prefixItems.some((v) => v === null)) return null;
-    else if (additionalItems === null) return null;
-    return {
-      ...props.input,
-      prefixItems: prefixItems as OpenApi.IJsonSchema[],
-      additionalItems,
-    };
-  } else if (OpenApiTypeChecker.isArray(props.input)) {
-    // ARRAY
-    const items: OpenApi.IJsonSchema | null = escape({
-      ...props,
-      input: props.input.items,
-    });
-    if (items === null) return null;
-    return {
-      ...props.input,
-      items,
-    };
-  }
-  return props.input;
-};
-
-const flat = (elements: OpenApi.IJsonSchema[]): OpenApi.IJsonSchema[] =>
-  elements
-    .map((elem) => (OpenApiTypeChecker.isOneOf(elem) ? flat(elem.oneOf) : elem))
-    .flat();

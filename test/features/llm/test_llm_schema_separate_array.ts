@@ -32,6 +32,7 @@ const schema = (props: {
   const schema: ILlmSchema | null = HttpLlm.schema({
     components: props.components,
     schema: props.schemas[0],
+    recursive: false,
   });
   if (schema === null) throw new Error("Invalid schema");
   return schema;
