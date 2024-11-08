@@ -42,6 +42,7 @@ export const test_llm_schema_union = (): void => {
   const llm: ILlmSchema | null = HttpLlm.schema({
     components,
     schema,
+    recursive: false,
   });
   TestValidator.equals("nullable")(llm)({
     oneOf: [

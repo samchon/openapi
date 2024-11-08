@@ -8,6 +8,7 @@ export const test_llm_schema_oneof = (): void => {
   const casted: ILlmSchema | null = HttpLlm.schema({
     components: app.components,
     schema: app.schemas[0],
+    recursive: false,
   });
   TestValidator.equals("oneOf")(casted)({
     oneOf: [
@@ -22,6 +23,7 @@ export const test_llm_schema_oneof = (): void => {
             type: "number",
           },
         },
+        additionalProperties: false,
         required: ["type", "radius"],
       },
       {
@@ -38,6 +40,7 @@ export const test_llm_schema_oneof = (): void => {
             type: "number",
           },
         },
+        additionalProperties: false,
         required: ["type", "base", "height"],
       },
       {
@@ -54,6 +57,7 @@ export const test_llm_schema_oneof = (): void => {
             type: "number",
           },
         },
+        additionalProperties: false,
         required: ["type", "width", "height"],
       },
     ],

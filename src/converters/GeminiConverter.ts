@@ -8,6 +8,7 @@ export namespace GeminiConverter {
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
+    recursive: false | number;
   }): IGeminiSchema | null => {
     const schema: ILlmSchema | null = HttpLlmConverter.schema(props);
     if (schema === null) return null;

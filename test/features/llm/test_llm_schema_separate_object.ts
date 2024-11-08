@@ -11,9 +11,18 @@ export const test_llm_schema_separate_object = (): void => {
   const upload: ILlmSchema = schema(typia.json.application<[IFileUpload]>());
   const combined: ILlmSchema = schema(typia.json.application<[ICombined]>());
 
-  TestValidator.equals("member")(separator(member))([member, null]);
-  TestValidator.equals("upload")(separator(upload))([null, upload]);
-  TestValidator.equals("combined")(separator(combined))([member, upload]);
+  TestValidator.equals(
+    "member",
+    (key) => key === "additionalProperties",
+  )(separator(member))([member, null]);
+  TestValidator.equals(
+    "upload",
+    (key) => key === "additionalProperties",
+  )(separator(upload))([null, upload]);
+  TestValidator.equals(
+    "combined",
+    (key) => key === "additionalProperties",
+  )(separator(combined))([member, upload]);
 };
 
 interface IMember {
@@ -32,6 +41,7 @@ const schema = (props: {
   const schema: ILlmSchema | null = HttpLlm.schema({
     components: props.components,
     schema: props.schemas[0],
+    recursive: false,
   });
   if (schema === null) throw new Error("Invalid schema");
   return schema;
