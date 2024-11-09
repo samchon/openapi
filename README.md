@@ -210,11 +210,20 @@ In the A.I. chatbot, LLM will select proper function to remotely call from the c
 
 Let's enjoy the fantastic LLM function calling feature very easily with `@samchon/openapi`.
 
-  - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
-  - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
-  - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
-  - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts)
-  - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
+  - Application
+    - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
+    - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
+    - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - Schemas
+    - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts)
+    - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts)
+    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts)
+    - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts)
+  - Type Checkers
+    - [`ChatGptTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ChatGptTypeChecker.ts)
+    - [`GeminiTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/GeminiTypeChecker.ts)
+    - [`LlmTypeCheckerV3`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeCheckerV3.ts)
+    - [`LlmTypeCheckerV3_1`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeCheckerV3_1.ts)
 
 > [!NOTE]
 >
@@ -245,6 +254,7 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
+  ILlmSchemaV3_1,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -267,10 +277,13 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication = HttpLlm.application(document);
+  const application: IHttpLlmApplication<"3.1"> = HttpLlm.application({
+    model: "3.1",
+    document,
+  });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction | undefined = application.functions.find(
+  const func: IHttpLlmFunction<ILlmSchemaV3_1> | undefined = application.functions.find(
     // (f) => f.name === "llm_selected_fuction_name"
     (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
   );
@@ -310,6 +323,7 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
+  ILlmSchemaV3_1,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -332,12 +346,16 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication = HttpLlm.application(document, {
-    keyword: true,
+  const application: IHttpLlmApplication<"3.1"> = HttpLlm.application({
+    model: "3.1",
+    document, 
+    options: {
+      keyword: true,
+    },
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction | undefined = application.functions.find(
+  const func: IHttpLlmFunction<ILlmSchemaV3_1> | undefined = application.functions.find(
     // (f) => f.name === "llm_selected_fuction_name"
     (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
   );
@@ -386,7 +404,8 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  LlmTypeChecker,
+  ILlmSchemaV3_1,
+  LlmTypeCheckerV3_1,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -409,14 +428,18 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication = HttpLlm.application(document, {
-    keyword: false,
-    separate: (schema) =>
-      LlmTypeChecker.isString(schema) && schema.contentMediaType !== undefined,
+  const application: IHttpLlmApplication<"3.1"> = HttpLlm.application({
+    model: "3.1",
+    document, 
+    options: {
+      keyword: false,
+      separate: (schema) =>
+        LlmTypeCheckerV3_1.isString(schema) && schema.contentMediaType !== undefined,
+    },
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction | undefined = application.functions.find(
+  const func: IHttpLlmFunction<ILlmSchemaV3_1> | undefined = application.functions.find(
     // (f) => f.name === "llm_selected_fuction_name"
     (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
   );
