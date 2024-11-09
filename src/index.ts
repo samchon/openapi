@@ -34,5 +34,6 @@ export * from "./structures/ILlmSchemaV3_1";
 
 export * from "./HttpLlm";
 export * from "./utils/LlmTypeCheckerV3";
+export * from "./utils/LlmTypeCheckerV3_1";
 export * from "./utils/ChatGptTypeChecker";
 export * from "./utils/GeminiTypeChecker";
