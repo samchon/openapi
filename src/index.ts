@@ -27,9 +27,10 @@ export * from "./structures/IHttpLlmApplication";
 export * from "./structures/IHttpLlmFunction";
 export * from "./structures/ILlmApplication";
 
-export * from "./structures/ILlmSchemaV3";
 export * from "./structures/IChatGptSchema";
 export * from "./structures/IGeminiSchema";
+export * from "./structures/ILlmSchemaV3";
+export * from "./structures/ILlmSchemaV3_1";
 
 export * from "./HttpLlm";
 export * from "./utils/LlmTypeCheckerV3";

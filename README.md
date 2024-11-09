@@ -32,9 +32,10 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - [`IHttpLlmApplication<Model, Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
   - [`IHttpLlmFunction<Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
   - Supported schemes
-    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts)
+    - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts)
     - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts)
-    - [`IOpenAiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IOpenAiSchema.ts)
+    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts)
+    - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts)
 
 > [!TIP]
 >
