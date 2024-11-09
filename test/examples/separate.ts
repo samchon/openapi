@@ -2,7 +2,8 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  LlmTypeChecker,
+  ILlmSchemaV3,
+  LlmTypeCheckerV3,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -25,17 +26,23 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication = HttpLlm.application(document, {
-    keyword: false,
-    separate: (schema) =>
-      LlmTypeChecker.isString(schema) && schema.contentMediaType !== undefined,
+  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
+    model: "3.0",
+    document,
+    options: {
+      keyword: false,
+      separate: (schema) =>
+        LlmTypeCheckerV3.isString(schema) &&
+        schema.contentMediaType !== undefined,
+    },
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction | undefined = application.functions.find(
-    // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
-  );
+  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+    application.functions.find(
+      // (f) => f.name === "llm_selected_fuction_name"
+      (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+    );
   if (func === undefined) throw new Error("No matched function exists.");
 
   // actual execution is by yourself

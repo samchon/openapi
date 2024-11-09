@@ -17,6 +17,7 @@ export namespace IChatGptSchema {
   export type ITop<Schema extends IChatGptSchema = IChatGptSchema> = Schema & {
     $defs?: Record<string, IChatGptSchema | undefined>;
   };
+
   /**
    * Constant value type.
    */

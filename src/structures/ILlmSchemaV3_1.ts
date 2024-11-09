@@ -1,50 +1,37 @@
-/**
- * Type schema info of LLM function call.
- *
- * `ILlmSchema` is a type metadata of LLM (Large Language Model)
- * function calling.
- *
- * `ILlmSchema` basically follows the JSON schema definition of OpenAPI
- * v3.0 specification; {@link OpenApiV3.IJsonSchema}. However, `ILlmSchema`
- * does not have the reference type; {@link OpenApiV3.IJsonSchema.IReference}.
- * It's because the LLM cannot compose the reference typed arguments.
- *
- * For reference, the OpenAPI v3.0 based JSON schema definition can't
- * express the tuple array type. It has been supported since OpenAPI v3.1;
- * {@link OpenApi.IJsonSchema.ITuple}. Therefore, it would better to avoid
- * using the tuple array type in the LLM function calling.
- *
- * @reference https://platform.openai.com/docs/guides/function-calling
- * @author Jeongho Nam - https://github.com/samchon
- */
-export type ILlmSchema =
-  | ILlmSchema.IBoolean
-  | ILlmSchema.IInteger
-  | ILlmSchema.INumber
-  | ILlmSchema.IString
-  | ILlmSchema.IArray
-  | ILlmSchema.IObject
-  | ILlmSchema.IUnknown
-  | ILlmSchema.INullOnly
-  | ILlmSchema.IOneOf;
-export namespace ILlmSchema {
+export type ILlmSchemaV3_1 =
+  | ILlmSchemaV3_1.IBoolean
+  | ILlmSchemaV3_1.IInteger
+  | ILlmSchemaV3_1.INumber
+  | ILlmSchemaV3_1.IString
+  | ILlmSchemaV3_1.IArray
+  | ILlmSchemaV3_1.ITuple
+  | ILlmSchemaV3_1.IObject
+  | ILlmSchemaV3_1.IOneOf
+  | ILlmSchemaV3_1.INull
+  | ILlmSchemaV3_1.IUnknown;
+export namespace ILlmSchemaV3_1 {
   /**
-   * Boolean type schema info.
+   * Constant value type.
    */
-  export interface IBoolean extends __ISignificant<"boolean"> {
+  export interface IConstant extends __IAttribute {
     /**
-     * Default value.
+     * The constant value.
      */
-    default?: boolean | null;
-
-    /**
-     * Enumeration values.
-     */
-    enum?: Array<boolean | null>;
+    const: boolean | number | string;
   }
 
   /**
-   * Integer type schema info.
+   * Boolean type info.
+   */
+  export interface IBoolean extends __ISignificant<"boolean"> {
+    /**
+     * The default value.
+     */
+    default?: boolean;
+  }
+
+  /**
+   * Integer type info.
    */
   export interface IInteger extends __ISignificant<"integer"> {
     /**
@@ -52,14 +39,7 @@ export namespace ILlmSchema {
      *
      * @type int64
      */
-    default?: number | null;
-
-    /**
-     * Enumeration values.
-     *
-     * @type int64
-     */
-    enum?: Array<number | null>;
+    default?: number;
 
     /**
      * Minimum value restriction.
@@ -78,20 +58,20 @@ export namespace ILlmSchema {
     /**
      * Exclusive minimum value restriction.
      *
-     * For reference, even though your Swagger document has defined the
-     * `exclusiveMinimum` value as `number`, it has been forcibly converted
-     * to `boolean` type, and assigns the numeric value to the
-     * {@link minimum} property in the {@link OpenApi} conversion.
+     * For reference, even though your Swagger (or OpenAPI) document has
+     * defined the `exclusiveMinimum` value as `number`, {@link OpenApi}
+     * forcibly converts it to `boolean` type, and assign the numeric value to
+     * the {@link minimum} property.
      */
     exclusiveMinimum?: boolean;
 
     /**
      * Exclusive maximum value restriction.
      *
-     * For reference, even though your Swagger document has defined the
-     * `exclusiveMaximum` value as `number`, it has been forcibly converted
-     * to `boolean` type, and assigns the numeric value to the
-     * {@link maximum} property in the {@link OpenApi} conversion.
+     * For reference, even though your Swagger (or OpenAPI) document has
+     * defined the `exclusiveMaximum` value as `number`, {@link OpenApi}
+     * forcibly converts it to `boolean` type, and assign the numeric value to
+     * the {@link maximum} property.
      */
     exclusiveMaximum?: boolean;
 
@@ -105,18 +85,13 @@ export namespace ILlmSchema {
   }
 
   /**
-   * Number type schema info.
+   * Number (double) type info.
    */
   export interface INumber extends __ISignificant<"number"> {
     /**
      * Default value.
      */
-    default?: number | null;
-
-    /**
-     * Enumeration values.
-     */
-    enum?: Array<number | null>;
+    default?: number;
 
     /**
      * Minimum value restriction.
@@ -157,18 +132,13 @@ export namespace ILlmSchema {
   }
 
   /**
-   * String type schema info.
+   * String type info.
    */
   export interface IString extends __ISignificant<"string"> {
     /**
      * Default value.
      */
-    default?: string | null;
-
-    /**
-     * Enumeration values.
-     */
-    enum?: Array<string | null>;
+    default?: string;
 
     /**
      * Format restriction.
@@ -205,6 +175,11 @@ export namespace ILlmSchema {
     pattern?: string;
 
     /**
+     * Content media type restriction.
+     */
+    contentMediaType?: string;
+
+    /**
      * Minimum length restriction.
      *
      * @type uint64
@@ -217,25 +192,19 @@ export namespace ILlmSchema {
      * @type uint64
      */
     maxLength?: number;
-
-    /**
-     * Content media type restriction.
-     */
-    contentMediaType?: string;
   }
 
   /**
-   * Array type schema info.
+   * Array type info.
    */
-  export interface IArray<Schema extends ILlmSchema = ILlmSchema>
-    extends __ISignificant<"array"> {
+  export interface IArray extends __ISignificant<"array"> {
     /**
-     * Items type schema info.
+     * Items type info.
      *
      * The `items` means the type of the array elements. In other words, it is
      * the type schema info of the `T` in the TypeScript array type `Array<T>`.
      */
-    items: Schema;
+    items: ILlmSchemaV3_1;
 
     /**
      * Unique items restriction.
@@ -264,10 +233,67 @@ export namespace ILlmSchema {
   }
 
   /**
-   * Object type schema info.
+   * Tuple type info.
    */
-  export interface IObject<Schema extends ILlmSchema = ILlmSchema>
-    extends __ISignificant<"object"> {
+  export interface ITuple extends __ISignificant<"array"> {
+    /**
+     * Prefix items.
+     *
+     * The `prefixItems` means the type schema info of the prefix items in the
+     * tuple type. In the TypeScript, it is expressed as `[T1, T2]`.
+     *
+     * If you want to express `[T1, T2, ...TO[]]` type, you can configure the
+     * `...TO[]` through the {@link additionalItems} property.
+     */
+    prefixItems: ILlmSchemaV3_1[];
+
+    /**
+     * Additional items.
+     *
+     * The `additionalItems` means the type schema info of the additional items
+     * after the {@link prefixItems}. In the TypeScript, if there's a type
+     * `[T1, T2, ...TO[]]`, the `...TO[]` is represented by the `additionalItems`.
+     *
+     * By the way, if you configure the `additionalItems` as `true`, it means
+     * the additional items are not restricted. They can be any type, so that
+     * it is equivalent to the TypeScript type `[T1, T2, ...any[]]`.
+     *
+     * Otherwise configure the `additionalItems` as the {@link IJsonSchema},
+     * it means the additional items must follow the type schema info.
+     * Therefore, it is equivalent to the TypeScript type `[T1, T2, ...TO[]]`.
+     */
+    additionalItems?: boolean | ILlmSchemaV3_1;
+
+    /**
+     * Unique items restriction.
+     *
+     * If this property value is `true`, target tuple must have unique items.
+     */
+    uniqueItems?: boolean;
+
+    /**
+     * Minimum items restriction.
+     *
+     * Restriction of minumum number of items in the tuple.
+     *
+     * @type uint64
+     */
+    minItems?: number;
+
+    /**
+     * Maximum items restriction.
+     *
+     * Restriction of maximum number of items in the tuple.
+     *
+     * @type uint64
+     */
+    maxItems?: number;
+  }
+
+  /**
+   * Object type info.
+   */
+  export interface IObject extends __ISignificant<"object"> {
     /**
      * Properties of the object.
      *
@@ -278,7 +304,23 @@ export namespace ILlmSchema {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, Schema>;
+    properties?: Record<string, ILlmSchemaV3_1>;
+
+    /**
+     * Additional properties' info.
+     *
+     * The `additionalProperties` means the type schema info of the additional
+     * properties that are not listed in the {@link properties}.
+     *
+     * If the value is `true`, it means that the additional properties are not
+     * restricted. They can be any type. Otherwise, if the value is
+     * {@link IOpenAiSchema} type, it means that the additional properties must
+     * follow the type schema info.
+     *
+     * - `true`: `Record<string, any>`
+     * - `IOpenAiSchema`: `Record<string, T>`
+     */
+    additionalProperties?: boolean | ILlmSchemaV3_1;
 
     /**
      * List of key values of the required properties.
@@ -314,45 +356,54 @@ export namespace ILlmSchema {
      * ```
      */
     required?: string[];
-
-    /**
-     * Additional properties' info.
-     *
-     * The `additionalProperties` means the type schema info of the additional
-     * properties that are not listed in the {@link properties}.
-     *
-     * If the value is `true`, it means that the additional properties are not
-     * restricted. They can be any type. Otherwise, if the value is
-     * {@link ILlmSchema} type, it means that the additional properties must
-     * follow the type schema info.
-     *
-     * - `true`: `Record<string, any>`
-     * - `ILlmSchema`: `Record<string, T>`
-     */
-    additionalProperties?: boolean | Schema;
   }
 
   /**
-   * Unknown type schema info.
+   * Union type.
    *
-   * It means the type of the value is `any`.
+   * IOneOf` represents an union type of the TypeScript (`A | B | C`).
+   *
+   * For reference, even though your Swagger (or OpenAPI) document has
+   * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
+   * converts it to `oneOf` type.
    */
-  export interface IUnknown extends __IAttribute {
+  export interface IOneOf extends __IAttribute {
     /**
-     * Type is never be defined.
+     * List of the union types.
      */
-    type?: undefined;
+    oneOf: Exclude<ILlmSchemaV3_1, ILlmSchemaV3_1.IOneOf>[];
+
+    /**
+     * Discriminator info of the union type.
+     */
+    discriminator?: IOneOf.IDiscriminator;
+  }
+  export namespace IOneOf {
+    /**
+     * Discriminator info of the union type.
+     */
+    export interface IDiscriminator {
+      /**
+       * Property name for the discriminator.
+       */
+      propertyName: string;
+
+      /**
+       * Mapping of the discriminator value to the schema name.
+       *
+       * This property is valid only for {@link IReference} typed
+       * {@link IOneOf.oneof} elements. Therefore, `key` of `mapping` is
+       * the discriminator value, and `value` of `mapping` is the
+       * schema name like `#/components/schemas/SomeObject`.
+       */
+      mapping?: Record<string, string>;
+    }
   }
 
   /**
-   * Null only type schema info.
+   * Null type.
    */
-  export interface INullOnly extends __IAttribute {
-    /**
-     * Type is always `null`.
-     */
-    type: "null";
-
+  export interface INull extends __ISignificant<"null"> {
     /**
      * Default value.
      */
@@ -360,20 +411,13 @@ export namespace ILlmSchema {
   }
 
   /**
-   * One of type schema info.
-   *
-   * `IOneOf` represents an union type of the TypeScript (`A | B | C`).
-   *
-   * For reference, even though your Swagger (or OpenAPI) document has
-   * defined `anyOf` instead of the `oneOf`, it has been forcibly converted
-   * to `oneOf` type by {@link OpenApi.convert OpenAPI conversion}.
+   * Unknown, the `any` type.
    */
-  export interface IOneOf<Schema extends ILlmSchema = ILlmSchema>
-    extends __IAttribute {
+  export interface IUnknown extends __IAttribute {
     /**
-     * List of the union types.
+     * Type is never be defined.
      */
-    oneOf: Exclude<Schema, ILlmSchema.IOneOf<Schema>>[];
+    type?: undefined;
   }
 
   /**
@@ -384,11 +428,6 @@ export namespace ILlmSchema {
      * Discriminator value of the type.
      */
     type: Type;
-
-    /**
-     * Whether to allow `null` value or not.
-     */
-    nullable?: boolean;
   }
 
   /**

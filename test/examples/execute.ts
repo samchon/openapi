@@ -2,6 +2,7 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
+  ILlmSchemaV3,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -23,13 +24,17 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication = HttpLlm.application(document);
+  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
+    model: "3.0",
+    document,
+  });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction | undefined = application.functions.find(
-    (f) => f.path === "/bbs/articles" && f.method === "post",
-  );
-  typia.assertGuard<IHttpLlmFunction>(func);
+  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+    application.functions.find(
+      (f) => f.path === "/bbs/articles" && f.method === "post",
+    );
+  typia.assertGuard<IHttpLlmFunction<ILlmSchemaV3>>(func);
 
   // actual execution is by yourself
   const article = await HttpLlm.execute({

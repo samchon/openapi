@@ -1,8 +1,8 @@
 import { OpenApi } from "../OpenApi";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
-import { ILlmSchema } from "../structures/ILlmSchema";
-import { LlmTypeChecker } from "../utils/LlmTypeChecker";
-import { HttpLlmConverter } from "./HttpLlmConverter";
+import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
+import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
+import { LlmConverterV3 } from "./LlmConverterV3";
 
 export namespace GeminiConverter {
   export const schema = (props: {
@@ -10,13 +10,19 @@ export namespace GeminiConverter {
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
   }): IGeminiSchema | null => {
-    const schema: ILlmSchema | null = HttpLlmConverter.schema(props);
+    const schema: ILlmSchemaV3 | null = LlmConverterV3.schema(props);
     if (schema === null) return null;
 
     let union: boolean = false;
-    LlmTypeChecker.visit(schema, (v) => {
-      if (LlmTypeChecker.isOneOf(v)) union = true;
+    LlmTypeCheckerV3.visit(schema, (v) => {
+      if (LlmTypeCheckerV3.isOneOf(v)) union = true;
     });
     return union ? null : schema;
   };
+
+  export const separate = (props: {
+    predicate: (schema: IGeminiSchema) => boolean;
+    schema: IGeminiSchema;
+  }): [IGeminiSchema | null, IGeminiSchema | null] =>
+    LlmConverterV3.separate(props);
 }

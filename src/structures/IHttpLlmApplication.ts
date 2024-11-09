@@ -1,7 +1,10 @@
 import { OpenApi } from "../OpenApi";
+import { IChatGptSchema } from "./IChatGptSchema";
+import { IGeminiSchema } from "./IGeminiSchema";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
-import { ILlmSchema } from "./ILlmSchema";
+import { ILlmSchemaV3 } from "./ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * Application of LLM function call from OpenAPI document.
@@ -19,11 +22,11 @@ import { ILlmSchema } from "./ILlmSchema";
  * {@link OpenApi.IJsonSchema.IReference} type, the operation would be failed and
  * pushed into the {@link IHttpLlmApplication.errors}. Otherwise not, the operation
  * would be successfully converted to {@link IHttpLlmFunction} and its type schemas
- * are downgraded to {@link OpenApiV3.IJsonSchema} and converted to {@link ILlmSchema}.
+ * are downgraded to {@link OpenApiV3.IJsonSchema} and converted to {@link ILlmSchemaV3}.
  *
  * About the options, if you've configured {@link IHttpLlmApplication.options.keyword}
  * (as `true`), number of {@link IHttpLlmFunction.parameters} are always 1 and the first
- * parameter type is always {@link ILlmSchema.IObject}. Otherwise, the parameters would
+ * parameter type is always {@link ILlmSchemaV3.IObject}. Otherwise, the parameters would
  * be multiple, and the sequence of the parameters are following below rules.
  *
  * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}
@@ -67,16 +70,19 @@ import { ILlmSchema } from "./ILlmSchema";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export interface IHttpLlmApplication<
-  Schema extends ILlmSchema = ILlmSchema,
+  Model extends IHttpLlmApplication.Model,
+  Schema extends
+    | ILlmSchemaV3
+    | ILlmSchemaV3_1
+    | IChatGptSchema
+    | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
   /**
-   * Version of OpenAPI.
-   *
-   * LLM function call schema is based on OpenAPI 3.0.3 specification.
+   * Model of the target LLM.
    */
-  openapi: "3.0.3";
+  model: Model;
 
   /**
    * List of function metadata.
@@ -86,7 +92,7 @@ export interface IHttpLlmApplication<
    * When you want to execute the function with LLM constructed arguments,
    * you can do it through {@link LlmFetcher.execute} function.
    */
-  functions: IHttpLlmFunction[];
+  functions: IHttpLlmFunction<Schema, Operation, Route>[];
 
   /**
    * List of errors occurred during the composition.
@@ -99,9 +105,17 @@ export interface IHttpLlmApplication<
    * Adjusted options when composing the application through
    * {@link HttpLlm.application} function.
    */
-  options: IHttpLlmApplication.IOptions<Schema>;
+  options: IHttpLlmApplication.IOptions<Model, Schema>;
 }
 export namespace IHttpLlmApplication {
+  export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
+  export type ModelSchema = {
+    "3.0": ILlmSchemaV3;
+    "3.1": ILlmSchemaV3_1;
+    chatgpt: IChatGptSchema;
+    gemini: IGeminiSchema;
+  };
+
   /**
    * Error occurred in the composition.
    */
@@ -147,13 +161,20 @@ export namespace IHttpLlmApplication {
   /**
    * Options for composing the LLM application.
    */
-  export interface IOptions<Schema extends ILlmSchema = ILlmSchema> {
+  export interface IOptions<
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+  > {
     /**
      * Whether the parameters are keyworded or not.
      *
      * If this property value is `true`, length of the
      * {@link IHttpLlmApplication.IFunction.parameters} is always 1, and type of
-     * the pararameter is always {@link ILlmSchema.IObject} type.
+     * the pararameter is always {@link ILlmSchemaV3.IObject} type.
      *
      * Otherwise, the parameters would be multiple, and the sequence of the parameters
      * are following below rules.
@@ -183,9 +204,12 @@ export namespace IHttpLlmApplication {
      *
      * If allow, then how many times to repeat the recursive types.
      *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
      * @default 3
      */
-    recursive: false | number;
+    recursive: Model extends "chatgpt" ? never : false | number;
 
     /**
      * Separator function for the parameters.
@@ -194,7 +218,7 @@ export namespace IHttpLlmApplication {
      * there can be a case that some parameters must be composed by Human,
      * or LLM cannot understand the parameter. For example, if the
      * parameter type has configured
-     * {@link ILlmSchema.IString.contentMediaType} which indicates file
+     * {@link ILlmSchemaV3.IString.contentMediaType} which indicates file
      * uploading, it must be composed by Human, not by LLM
      * (Large Language Model).
      *

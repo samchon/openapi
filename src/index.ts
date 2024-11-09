@@ -27,11 +27,13 @@ export * from "./structures/IHttpLlmApplication";
 export * from "./structures/IHttpLlmFunction";
 export * from "./structures/ILlmApplication";
 
-export * from "./structures/ILlmSchema";
 export * from "./structures/IChatGptSchema";
 export * from "./structures/IGeminiSchema";
+export * from "./structures/ILlmSchemaV3";
+export * from "./structures/ILlmSchemaV3_1";
 
 export * from "./HttpLlm";
-export * from "./utils/LlmTypeChecker";
+export * from "./utils/LlmTypeCheckerV3";
+export * from "./utils/LlmTypeCheckerV3_1";
 export * from "./utils/ChatGptTypeChecker";
 export * from "./utils/GeminiTypeChecker";

@@ -1,5 +1,9 @@
+import { IChatGptSchema } from "../structures/IChatGptSchema";
+import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { ILlmFunction } from "../structures/ILlmFunction";
+import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 
 /**
  * Data combiner for LLM function call.
@@ -10,11 +14,17 @@ export namespace LlmDataMerger {
   /**
    * Properties of {@link parameters} function.
    */
-  export interface IProps {
+  export interface IProps<
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Target function to call.
      */
-    function: ILlmFunction;
+    function: ILlmFunction<Schema>;
 
     /**
      * Arguments composed by LLM (Large Language Model).
@@ -42,8 +52,16 @@ export namespace LlmDataMerger {
    * @param props Properties to combine LLM and human arguments with metadata.
    * @returns Combined arguments
    */
-  export const parameters = (props: IProps): unknown[] => {
-    const separated: IHttpLlmFunction.ISeparated | undefined =
+  export const parameters = <
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  >(
+    props: IProps<Schema>,
+  ): unknown[] => {
+    const separated: IHttpLlmFunction.ISeparated<Schema> | undefined =
       props.function.separated;
     if (separated === undefined)
       throw new Error(
@@ -80,7 +98,7 @@ export namespace LlmDataMerger {
         ? new Array(Math.max(x.length, y.length))
             .fill(0)
             .map((_, i) => value(x[i], y[i]))
-        : y ?? x;
+        : (y ?? x);
 
   const combineObject = (x: any, y: any): any => {
     const output: any = { ...x };

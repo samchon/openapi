@@ -1,13 +1,13 @@
-import { ILlmSchema } from "../structures/ILlmSchema";
+import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 
 /**
  * Type checker for LLM type schema.
  *
- * `LlmSchemaTypeChecker` is a type checker of {@link ILlmSchema}.
+ * `LlmSchemaTypeChecker` is a type checker of {@link ILlmSchemaV3}.
  *
  * @author Samchon
  */
-export namespace LlmTypeChecker {
+export namespace LlmTypeCheckerV3 {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
@@ -26,8 +26,8 @@ export namespace LlmTypeChecker {
    * @param callback Callback function to apply
    */
   export const visit = (
-    schema: ILlmSchema,
-    callback: (schema: ILlmSchema) => void,
+    schema: ILlmSchemaV3,
+    callback: (schema: ILlmSchemaV3) => void,
   ): void => {
     callback(schema);
     if (isOneOf(schema)) schema.oneOf.forEach((s) => visit(s, callback));
@@ -51,8 +51,10 @@ export namespace LlmTypeChecker {
    * @param schema Target schema
    * @returns Whether union type or not
    */
-  export const isOneOf = (schema: ILlmSchema): schema is ILlmSchema.IOneOf =>
-    (schema as ILlmSchema.IOneOf).oneOf !== undefined;
+  export const isOneOf = (
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IOneOf =>
+    (schema as ILlmSchemaV3.IOneOf).oneOf !== undefined;
 
   /**
    * Test whether the schema is an object type.
@@ -60,8 +62,10 @@ export namespace LlmTypeChecker {
    * @param schema Target schema
    * @returns Whether object type or not
    */
-  export const isObject = (schema: ILlmSchema): schema is ILlmSchema.IObject =>
-    (schema as ILlmSchema.IObject).type === "object";
+  export const isObject = (
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IObject =>
+    (schema as ILlmSchemaV3.IObject).type === "object";
 
   /**
    * Test whether the schema is an array type.
@@ -69,8 +73,10 @@ export namespace LlmTypeChecker {
    * @param schema Target schema
    * @returns Whether array type or not
    */
-  export const isArray = (schema: ILlmSchema): schema is ILlmSchema.IArray =>
-    (schema as ILlmSchema.IArray).type === "array";
+  export const isArray = (
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IArray =>
+    (schema as ILlmSchemaV3.IArray).type === "array";
 
   /**
    * Test whether the schema is a boolean type.
@@ -79,9 +85,9 @@ export namespace LlmTypeChecker {
    * @returns Whether boolean type or not
    */
   export const isBoolean = (
-    schema: ILlmSchema,
-  ): schema is ILlmSchema.IBoolean =>
-    (schema as ILlmSchema.IBoolean).type === "boolean";
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IBoolean =>
+    (schema as ILlmSchemaV3.IBoolean).type === "boolean";
 
   /**
    * Test whether the schema is an integer type.
@@ -90,9 +96,9 @@ export namespace LlmTypeChecker {
    * @returns Whether integer type or not
    */
   export const isInteger = (
-    schema: ILlmSchema,
-  ): schema is ILlmSchema.IInteger =>
-    (schema as ILlmSchema.IInteger).type === "integer";
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IInteger =>
+    (schema as ILlmSchemaV3.IInteger).type === "integer";
 
   /**
    * Test whether the schema is a number type.
@@ -100,8 +106,10 @@ export namespace LlmTypeChecker {
    * @param schema Target schema
    * @returns Whether number type or not
    */
-  export const isNumber = (schema: ILlmSchema): schema is ILlmSchema.INumber =>
-    (schema as ILlmSchema.INumber).type === "number";
+  export const isNumber = (
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.INumber =>
+    (schema as ILlmSchemaV3.INumber).type === "number";
 
   /**
    * Test whether the schema is a string type.
@@ -109,8 +117,10 @@ export namespace LlmTypeChecker {
    * @param schema Target schema
    * @returns Whether string type or not
    */
-  export const isString = (schema: ILlmSchema): schema is ILlmSchema.IString =>
-    (schema as ILlmSchema.IString).type === "string";
+  export const isString = (
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IString =>
+    (schema as ILlmSchemaV3.IString).type === "string";
 
   /**
    * Test whether the schema is a null type.
@@ -119,9 +129,9 @@ export namespace LlmTypeChecker {
    * @returns Whether null type or not
    */
   export const isNullOnly = (
-    schema: ILlmSchema,
-  ): schema is ILlmSchema.INullOnly =>
-    (schema as ILlmSchema.INullOnly).type === "null";
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.INullOnly =>
+    (schema as ILlmSchemaV3.INullOnly).type === "null";
 
   /**
    * Test whether the schema is a nullable type.
@@ -129,7 +139,7 @@ export namespace LlmTypeChecker {
    * @param schema Target schema
    * @returns Whether nullable type or not
    */
-  export const isNullable = (schema: ILlmSchema): boolean =>
+  export const isNullable = (schema: ILlmSchemaV3): boolean =>
     !isUnknown(schema) &&
     (isNullOnly(schema) ||
       (isOneOf(schema)
@@ -143,7 +153,7 @@ export namespace LlmTypeChecker {
    * @returns Whether unknown type or not
    */
   export const isUnknown = (
-    schema: ILlmSchema,
-  ): schema is ILlmSchema.IUnknown =>
-    !isOneOf(schema) && (schema as ILlmSchema.IUnknown).type === undefined;
+    schema: ILlmSchemaV3,
+  ): schema is ILlmSchemaV3.IUnknown =>
+    !isOneOf(schema) && (schema as ILlmSchemaV3.IUnknown).type === undefined;
 }
