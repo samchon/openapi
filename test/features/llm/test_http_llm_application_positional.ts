@@ -10,8 +10,12 @@ import swagger from "../../swagger.json";
 
 export const test_http_llm_application_positional = (): void => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
-  const application: IHttpLlmApplication = HttpLlm.application(document, {
-    keyword: false,
+  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
+    model: "3.0",
+    document,
+    options: {
+      keyword: false,
+    },
   });
   for (const func of application.functions) {
     const route: IHttpMigrateRoute = func.route();

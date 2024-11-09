@@ -1,6 +1,9 @@
 import { OpenApi } from "../OpenApi";
+import { IChatGptSchema } from "./IChatGptSchema";
+import { IGeminiSchema } from "./IGeminiSchema";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
-import { ILlmSchema } from "./ILlmSchema";
+import { ILlmSchemaV3 } from "./ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * LLM function calling schema from HTTP (OpenAPI) operation.
@@ -18,7 +21,7 @@ import { ILlmSchema } from "./ILlmSchema";
  *
  * For reference, different between `IHttpLlmFunction` and its origin source
  * {@link OpenApi.IOperation} is, `IHttpLlmFunction` has converted every type schema
- * informations from {@link OpenApi.IJsonSchema} to {@link ILlmSchema} to escape
+ * informations from {@link OpenApi.IJsonSchema} to {@link ILlmSchemaV3} to escape
  * {@link OpenApi.IJsonSchema.IReference reference types}, and downgrade the version
  * of the JSON schema to OpenAPI 3.0. It's because LLM function call feature cannot
  * understand both reference types and OpenAPI 3.1 specification.
@@ -26,7 +29,7 @@ import { ILlmSchema } from "./ILlmSchema";
  * Additionally, if you've composed `IHttpLlmFunction` with
  * {@link IHttpLlmApplication.IOptions.keyword} configuration as `true`, number of
  * {@link IHttpLlmFunction.parameters} are always 1 and the first parameter's
- * type is always {@link ILlmSchema.IObject}. The properties' rule is:
+ * type is always {@link ILlmSchemaV3.IObject}. The properties' rule is:
  *
  * - `pathParameters`: Path parameters of {@link OpenApi.IOperation.parameters}
  * - `query`: Query parameter of {@link IHttpMigrateRoute.query}
@@ -55,7 +58,7 @@ import { ILlmSchema } from "./ILlmSchema";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export interface IHttpLlmFunction<
-  Schema extends ILlmSchema = ILlmSchema,
+  Schema extends ILlmSchemaV3 | ILlmSchemaV3_1 | IChatGptSchema | IGeminiSchema,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
@@ -117,7 +120,7 @@ export interface IHttpLlmFunction<
    *
    * If you've configured {@link IHttpLlmApplication.IOptions.keyword} as `true`,
    * number of {@link IHttpLlmFunction.parameters} are always 1 and the first
-   * parameter's type is always {@link ILlmSchema.IObject}. The
+   * parameter's type is always {@link ILlmSchemaV3.IObject}. The
    * properties' rule is:
    *
    * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}
@@ -224,7 +227,13 @@ export namespace IHttpLlmFunction {
   /**
    * Collection of separated parameters.
    */
-  export interface ISeparated<Schema extends ILlmSchema = ILlmSchema> {
+  export interface ISeparated<
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Parameters that would be composed by the LLM.
      */
@@ -239,7 +248,13 @@ export namespace IHttpLlmFunction {
   /**
    * Separated parameter.
    */
-  export interface ISeparatedParameter<Schema extends ILlmSchema = ILlmSchema> {
+  export interface ISeparatedParameter<
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Index of the parameter.
      *

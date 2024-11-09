@@ -1,5 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import { HttpLlm, ILlmSchema, OpenApi } from "@samchon/openapi";
+import { HttpLlm, ILlmSchemaV3, OpenApi } from "@samchon/openapi";
 
 export const test_llm_schema_union = (): void => {
   const components: OpenApi.IComponents = {
@@ -39,7 +39,8 @@ export const test_llm_schema_union = (): void => {
       },
     ],
   };
-  const llm: ILlmSchema | null = HttpLlm.schema({
+  const llm: ILlmSchemaV3 | null = HttpLlm.schema({
+    model: "3.0",
     components,
     schema,
     recursive: false,

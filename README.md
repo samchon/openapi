@@ -32,7 +32,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - [`IHttpLlmApplication<Model, Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
   - [`IHttpLlmFunction<Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
   - Supported schemes
-    - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
+    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts)
     - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts)
     - [`IOpenAiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IOpenAiSchema.ts)
 
@@ -212,7 +212,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
   - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
   - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
   - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
-  - [`ILlmSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchema.ts)
+  - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts)
   - [`LlmTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeChecker.ts)
 
 > [!NOTE]

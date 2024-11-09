@@ -1,5 +1,8 @@
+import { IChatGptSchema } from "./IChatGptSchema";
+import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlmFunction } from "./ILlmFunction";
-import { ILlmSchema } from "./ILlmSchema";
+import { ILlmSchemaV3 } from "./ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * Application of LLM function calling.
@@ -31,7 +34,19 @@ import { ILlmSchema } from "./ILlmSchema";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface ILlmApplication<Schema extends ILlmSchema = ILlmSchema> {
+export interface ILlmApplication<
+  Model extends ILlmApplication.Model,
+  Schema extends
+    | ILlmSchemaV3
+    | ILlmSchemaV3_1
+    | IChatGptSchema
+    | IGeminiSchema = ILlmApplication.ModelSchema[Model],
+> {
+  /**
+   * Model of the LLM.
+   */
+  model: Model;
+
   /**
    * List of function metadata.
    *
@@ -42,21 +57,39 @@ export interface ILlmApplication<Schema extends ILlmSchema = ILlmSchema> {
   /**
    * Options for the application.
    */
-  options: ILlmApplication.IOptions<Schema>;
+  options: ILlmApplication.IOptions<Model, Schema>;
 }
 export namespace ILlmApplication {
+  export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
+  export type ModelSchema = {
+    "3.0": ILlmSchemaV3;
+    "3.1": ILlmSchemaV3_1;
+    chatgpt: IChatGptSchema;
+    gemini: IGeminiSchema;
+  };
+
   /**
    * Options for composing the LLM application.
    */
-  export interface IOptions<Schema extends ILlmSchema = ILlmSchema> {
+  export interface IOptions<
+    Model extends ILlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Whether to allow recursive types or not.
      *
      * If allow, then how many times to repeat the recursive types.
      *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
      * @default 3
      */
-    recursive: false | number;
+    recursive: Model extends "chatgpt" ? never : false | number;
 
     /**
      * Separator function for the parameters.
@@ -65,7 +98,7 @@ export namespace ILlmApplication {
      * there can be a case that some parameters must be composed by human,
      * or LLM cannot understand the parameter. For example, if the
      * parameter type has configured
-     * {@link ILlmSchema.IString.contentMediaType} which indicates file
+     * {@link ILlmSchemaV3.IString.contentMediaType} which indicates file
      * uploading, it must be composed by human, not by LLM
      * (Large Language Model).
      *

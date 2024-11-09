@@ -5,7 +5,8 @@ import {
   IHttpLlmApplication,
   IHttpLlmFunction,
   IHttpResponse,
-  LlmTypeChecker,
+  ILlmSchemaV3,
+  LlmTypeCheckerV3,
   OpenApi,
 } from "@samchon/openapi";
 
@@ -15,14 +16,20 @@ export const test_http_llm_fetcher_keyword_query = async (
   connection: IHttpConnection,
 ): Promise<void> => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
-  const application: IHttpLlmApplication = HttpLlm.application(document, {
-    keyword: false,
-    separate: (schema) =>
-      LlmTypeChecker.isString(schema) && !!schema.contentMediaType,
+  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
+    model: "3.0",
+    document,
+    options: {
+      keyword: false,
+      separate: (schema) =>
+        LlmTypeCheckerV3.isString(schema) && !!schema.contentMediaType,
+    },
   });
-  const func: IHttpLlmFunction | undefined = application.functions.find(
-    (f) => f.path === "/{index}/{level}/{optimal}/query" && f.method === "get",
-  );
+  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+    application.functions.find(
+      (f) =>
+        f.path === "/{index}/{level}/{optimal}/query" && f.method === "get",
+    );
   if (func === undefined) throw new Error("Function not found");
 
   const response: IHttpResponse = await HttpLlm.propagate({

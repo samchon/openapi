@@ -1,4 +1,7 @@
-import { ILlmSchema } from "./ILlmSchema";
+import { IChatGptSchema } from "./IChatGptSchema";
+import { IGeminiSchema } from "./IGeminiSchema";
+import { ILlmSchemaV3 } from "./ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * LLM function metadata.
@@ -22,7 +25,9 @@ import { ILlmSchema } from "./ILlmSchema";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface ILlmFunction<Schema extends ILlmSchema = ILlmSchema> {
+export interface ILlmFunction<
+  Schema extends ILlmSchemaV3 | ILlmSchemaV3_1 | IChatGptSchema | IGeminiSchema,
+> {
   /**
    * Representative name of the function.
    */
@@ -79,7 +84,13 @@ export namespace ILlmFunction {
   /**
    * Collection of separated parameters.
    */
-  export interface ISeparated<Schema extends ILlmSchema = ILlmSchema> {
+  export interface ISeparated<
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Parameters that would be composed by the LLM.
      */
@@ -94,7 +105,13 @@ export namespace ILlmFunction {
   /**
    * Separated parameter.
    */
-  export interface ISeparatedParameter<Schema extends ILlmSchema = ILlmSchema> {
+  export interface ISeparatedParameter<
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Index of the parameter.
      *

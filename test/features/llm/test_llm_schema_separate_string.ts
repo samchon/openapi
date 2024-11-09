@@ -1,13 +1,16 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema, LlmTypeChecker } from "@samchon/openapi";
-import { LlmSchemaSeparator } from "@samchon/openapi/lib/utils/LlmSchemaSeparator";
+import { ILlmSchemaV3, LlmTypeCheckerV3 } from "@samchon/openapi";
+import { LlmConverterV3 } from "@samchon/openapi/lib/converters/LlmConverterV3";
 
 export const test_schema_separate_string = (): void => {
-  const separator = LlmSchemaSeparator.schema(
-    (s) => LlmTypeChecker.isString(s) && s.contentMediaType !== undefined,
-  );
-  const plain: ILlmSchema = { type: "string" };
-  const upload: ILlmSchema = {
+  const separator = (schema: ILlmSchemaV3) =>
+    LlmConverterV3.separate({
+      predicate: (s) =>
+        LlmTypeCheckerV3.isString(s) && s.contentMediaType !== undefined,
+      schema,
+    });
+  const plain: ILlmSchemaV3 = { type: "string" };
+  const upload: ILlmSchemaV3 = {
     type: "string",
     format: "uri",
     contentMediaType: "image/png",

@@ -2,13 +2,17 @@ import { HttpMigration } from "./HttpMigration";
 import { OpenApi } from "./OpenApi";
 import { HttpLlmConverter } from "./converters/HttpLlmConverter";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
+import { IChatGptSchema } from "./structures/IChatGptSchema";
+import { IGeminiSchema } from "./structures/IGeminiSchema";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "./structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
+import { IHttpMigrateRoute } from "./structures/IHttpMigrateRoute";
 import { IHttpResponse } from "./structures/IHttpResponse";
 import { ILlmFunction } from "./structures/ILlmFunction";
-import { ILlmSchema } from "./structures/ILlmSchema";
+import { ILlmSchemaV3 } from "./structures/ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "./structures/ILlmSchemaV3_1";
 import { LlmDataMerger } from "./utils/LlmDataMerger";
 
 /**
@@ -55,7 +59,7 @@ export namespace HttpLlm {
    *
    * Additionally, if you have configured the {@link IHttpLlmApplication.IOptions.keyword}
    * as `true`, the number of {@link IHttpLlmFunction.parameters} are always 1 and the
-   * first parameter type is always {@link ILlmSchema.IObject}. I recommend this option
+   * first parameter type is always {@link ILlmSchemaV3.IObject}. I recommend this option
    * because LLM can understand the keyword arguments more easily.
    *
    * @param document Target OpenAPI document to convert (or migrate application)
@@ -63,47 +67,54 @@ export namespace HttpLlm {
    * @returns LLM function calling application
    */
   export const application = <
-    Schema extends ILlmSchema,
-    Operation extends OpenApi.IOperation,
-  >(
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Operation extends OpenApi.IOperation = OpenApi.IOperation,
+  >(props: {
+    model: Model;
     document:
-      | OpenApi.IDocument<any, Operation>
-      | IHttpMigrateApplication<any, Operation>,
-    options?: Partial<IHttpLlmApplication.IOptions>,
-  ): IHttpLlmApplication<Schema> => {
+      | OpenApi.IDocument<OpenApi.IJsonSchema, Operation>
+      | IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
+    options?: Partial<IHttpLlmApplication.IOptions<Model, Schema>>;
+  }): IHttpLlmApplication<Model, Schema> => {
     // MIGRATE
-    if ((document as OpenApi.IDocument)["x-samchon-emended"] === true)
-      document = HttpMigration.application(
-        document as OpenApi.IDocument<any, Operation>,
-      );
-    return HttpLlmConverter.compose(
-      document as IHttpMigrateApplication<any, Operation>,
-      {
-        keyword: options?.keyword ?? false,
-        separate: options?.separate ?? null,
-        recursive: options?.recursive ?? 3,
+    const migrate: IHttpMigrateApplication =
+      (props.document as OpenApi.IDocument)["x-samchon-emended"] === true
+        ? HttpMigration.application(props.document as OpenApi.IDocument)
+        : (props.document as IHttpMigrateApplication);
+    return HttpLlmConverter.compose<Model, Schema>({
+      migrate,
+      model: props.model,
+      options: {
+        keyword: props.options?.keyword ?? false,
+        separate: props.options?.separate ?? null,
+        recursive: (props.model === "chatgpt"
+          ? undefined
+          : (props.options?.recursive ?? 3)) as IHttpLlmApplication.IOptions<
+          Model,
+          Schema
+        >["recursive"],
       },
-    );
+    });
   };
 
-  /**
-   * Convert JSON schema to LLM schema.
-   *
-   * Converts {@link OpenApi.IJsonSchema JSON schema} to {@link ILlmSchema LLM schema}.
-   *
-   * By the way, if the target JSON schema has some recursive references, the
-   * conversion would be failed and `null` value would be returned. It's because
-   * the LLM schema does not support the reference type embodied by the
-   * {@link OpenApi.IJsonSchema.IReference} type.
-   *
-   * @param props Schema to convert and components to refer
-   * @returns LLM schema or null value
-   */
-  export const schema = (props: {
+  export const schema = <
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+  >(props: {
+    model: Model;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
-  }): ILlmSchema | null => HttpLlmConverter.schema(props);
+  }): Schema | null => HttpLlmConverter.schema(props);
 
   /* -----------------------------------------------------------
     FETCHERS
@@ -111,16 +122,28 @@ export namespace HttpLlm {
   /**
    * Properties for the LLM function call.
    */
-  export interface IFetchProps {
+  export interface IFetchProps<
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Operation extends OpenApi.IOperation = OpenApi.IOperation,
+    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
+      OpenApi.IJsonSchema,
+      Operation
+    >,
+  > {
     /**
      * Application of the LLM function calling.
      */
-    application: IHttpLlmApplication;
+    application: IHttpLlmApplication<Model, Schema, Operation>;
 
     /**
      * LLM function schema to call.
      */
-    function: IHttpLlmFunction;
+    function: IHttpLlmFunction<Schema, Operation, Route>;
 
     /**
      * Connection info to the HTTP server.
@@ -158,8 +181,17 @@ export namespace HttpLlm {
    * @returns Return value (response body) from the API endpoint
    * @throws HttpError when the API endpoint responds none 200/201 status
    */
-  export const execute = (props: IFetchProps): Promise<unknown> =>
-    HttpLlmFunctionFetcher.execute(props);
+  export const execute = <
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Operation extends OpenApi.IOperation = OpenApi.IOperation,
+  >(
+    props: IFetchProps<Model, Schema, Operation>,
+  ): Promise<unknown> => HttpLlmFunctionFetcher.execute(props);
 
   /**
    * Propagate the LLM function call.
@@ -185,8 +217,17 @@ export namespace HttpLlm {
    * @returns Response from the API endpoint
    * @throws Error only when the connection is failed
    */
-  export const propagate = (props: IFetchProps): Promise<IHttpResponse> =>
-    HttpLlmFunctionFetcher.propagate(props);
+  export const propagate = <
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Operation extends OpenApi.IOperation = OpenApi.IOperation,
+  >(
+    props: IFetchProps<Model, Schema, Operation>,
+  ): Promise<IHttpResponse> => HttpLlmFunctionFetcher.propagate(props);
 
   /* -----------------------------------------------------------
     MERGERS
@@ -194,11 +235,17 @@ export namespace HttpLlm {
   /**
    * Properties for the parameters' merging.
    */
-  export interface IMergeProps {
+  export interface IMergeProps<
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  > {
     /**
      * Metadata of the target function.
      */
-    function: ILlmFunction;
+    function: ILlmFunction<Schema>;
 
     /**
      * Arguments composed by the LLM.
@@ -226,8 +273,15 @@ export namespace HttpLlm {
    * @param props Properties for the parameters' merging
    * @returns Merged parameter values
    */
-  export const mergeParameters = (props: IMergeProps): unknown[] =>
-    LlmDataMerger.parameters(props);
+  export const mergeParameters = <
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  >(
+    props: IMergeProps<Schema>,
+  ): unknown[] => LlmDataMerger.parameters(props);
 
   /**
    * Merge two values.
