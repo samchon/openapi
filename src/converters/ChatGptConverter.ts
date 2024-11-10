@@ -30,6 +30,11 @@ export namespace ChatGptConverter {
         props.components.schemas?.[key];
       if (target === undefined) return null;
 
+      const out = () => ({
+        ...props.schema,
+        $ref: `#/$defs/${key}`,
+      });
+      if (props.$defs[key] !== undefined) return out();
       props.$defs[key] = {};
       const converted: IChatGptSchema | null = convertSchema({
         components: props.components,
@@ -39,10 +44,7 @@ export namespace ChatGptConverter {
       if (converted === null) return null;
 
       props.$defs[key] = converted;
-      return {
-        ...props.schema,
-        $ref: `#/$defs/${key}`,
-      };
+      return out();
     } else if (OpenApiTypeChecker.isArray(props.schema)) {
       const items: IChatGptSchema | null = convertSchema({
         components: props.components,
