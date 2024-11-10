@@ -77,7 +77,7 @@ export namespace ILlmApplication {
       | ILlmSchemaV3
       | ILlmSchemaV3_1
       | IChatGptSchema
-      | IGeminiSchema,
+      | IGeminiSchema = ILlmApplication.ModelSchema[Model],
   > {
     /**
      * Whether to allow recursive types or not.

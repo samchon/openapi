@@ -89,158 +89,162 @@ export namespace HttpLlmConverter {
       schema: props.schema,
     }) as Schema | null;
   };
-}
 
-const composeFunction = <
-  Model extends IHttpLlmApplication.Model,
-  Schema extends
-    | ILlmSchemaV3
-    | ILlmSchemaV3_1
-    | IChatGptSchema
-    | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
-  Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-    OpenApi.IJsonSchema,
-    Operation
-  >,
->(props: {
-  model: Model;
-  components: OpenApi.IComponents;
-  route: IHttpMigrateRoute<OpenApi.IJsonSchema, Operation>;
-  options: IHttpLlmApplication.IOptions<Model, Schema>;
-}): IHttpLlmFunction<Schema, Operation, Route> | null => {
-  const cast = (s: OpenApi.IJsonSchema): Schema | null =>
-    CASTERS[props.model]({
-      components: props.components,
-      recursive: props.options.recursive,
-      schema: s,
-    }) as Schema | null;
-  const output: Schema | null | undefined =
-    props.route.success && props.route.success
-      ? cast(props.route.success.schema)
-      : undefined;
-  if (output === null) return null;
-  const properties: [string, Schema | null][] = [
-    ...props.route.parameters.map((p) => ({
-      key: p.key,
-      schema: {
-        ...p.schema,
-        title: p.parameter().title ?? p.schema.title,
-        description: p.parameter().description ?? p.schema.description,
-      },
-    })),
-    ...(props.route.query
-      ? [
-          {
-            key: props.route.query.key,
-            schema: {
-              ...props.route.query.schema,
-              title:
-                props.route.query.title() ?? props.route.query.schema.title,
-              description:
-                props.route.query.description() ??
-                props.route.query.schema.description,
-            },
-          },
-        ]
-      : []),
-    ...(props.route.body
-      ? [
-          {
-            key: props.route.body.key,
-            schema: {
-              ...props.route.body.schema,
-              description:
-                props.route.body.description() ??
-                props.route.body.schema.description,
-            },
-          },
-        ]
-      : []),
-  ].map((o) => [o.key, cast(o.schema)]);
-  if (properties.some(([_k, v]) => v === null)) return null;
-
-  // COMPOSE PARAMETERS
-  const parameters: Schema[] = props.options.keyword
-    ? [
-        {
-          type: "object",
-          properties: Object.fromEntries(properties as [string, Schema][]),
-          additionalProperties: false,
-        } as any as Schema,
-      ]
-    : properties.map(([_k, v]) => v!);
-  const operation: OpenApi.IOperation = props.route.operation();
-
-  // FINALIZATION
-  return {
-    method: props.route.method as "get",
-    path: props.route.path,
-    name: props.route.accessor.join("_"),
-    strict: true,
-    parameters,
-    separated: props.options.separate
-      ? separateParameters({
-          model: props.model,
-          predicate: props.options.separate,
-          parameters,
-        })
-      : undefined,
-    output,
-    description: (() => {
-      if (operation.summary && operation.description) {
-        return operation.description.startsWith(operation.summary)
-          ? operation.description
-          : [
-              operation.summary,
-              operation.summary.endsWith(".") ? "" : ".",
-              "\n\n",
-              operation.description,
-            ].join("");
-      }
-      return operation.description ?? operation.summary;
-    })(),
-    deprecated: operation.deprecated,
-    tags: operation.tags,
-    route: () => props.route as any,
-    operation: () => props.route.operation(),
-  };
-};
-
-const separateParameters = <
-  Model extends IHttpLlmApplication.Model,
-  Schema extends ILlmSchemaV3 | ILlmSchemaV3_1 | IChatGptSchema | IGeminiSchema,
->(props: {
-  model: Model;
-  parameters: Schema[];
-  predicate: (schema: Schema) => boolean;
-}): IHttpLlmFunction.ISeparated<Schema> => {
-  const separator: (props: {
+  export const separateParameters = <
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema,
+  >(props: {
+    model: Model;
+    parameters: Schema[];
     predicate: (schema: Schema) => boolean;
-    schema: Schema;
-  }) => [Schema | null, Schema | null] = SEPARATORS[props.model] as any;
-  const indexes: Array<[Schema | null, Schema | null]> = props.parameters.map(
-    (schema) =>
-      separator({
-        predicate: props.predicate,
-        schema,
-      }),
-  );
-  return {
-    llm: indexes
-      .map(([llm], index) => ({
-        index,
-        schema: llm!,
-      }))
-      .filter(({ schema }) => schema !== null),
-    human: indexes
-      .map(([, human], index) => ({
-        index,
-        schema: human!,
-      }))
-      .filter(({ schema }) => schema !== null),
+  }): IHttpLlmFunction.ISeparated<Schema> => {
+    const separator: (props: {
+      predicate: (schema: Schema) => boolean;
+      schema: Schema;
+    }) => [Schema | null, Schema | null] = SEPARATORS[props.model] as any;
+    const indexes: Array<[Schema | null, Schema | null]> = props.parameters.map(
+      (schema) =>
+        separator({
+          predicate: props.predicate,
+          schema,
+        }),
+    );
+    return {
+      llm: indexes
+        .map(([llm], index) => ({
+          index,
+          schema: llm!,
+        }))
+        .filter(({ schema }) => schema !== null),
+      human: indexes
+        .map(([, human], index) => ({
+          index,
+          schema: human!,
+        }))
+        .filter(({ schema }) => schema !== null),
+    };
   };
-};
+
+  const composeFunction = <
+    Model extends IHttpLlmApplication.Model,
+    Schema extends
+      | ILlmSchemaV3
+      | ILlmSchemaV3_1
+      | IChatGptSchema
+      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Operation extends OpenApi.IOperation = OpenApi.IOperation,
+    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
+      OpenApi.IJsonSchema,
+      Operation
+    >,
+  >(props: {
+    model: Model;
+    components: OpenApi.IComponents;
+    route: IHttpMigrateRoute<OpenApi.IJsonSchema, Operation>;
+    options: IHttpLlmApplication.IOptions<Model, Schema>;
+  }): IHttpLlmFunction<Schema, Operation, Route> | null => {
+    const cast = (s: OpenApi.IJsonSchema): Schema | null =>
+      CASTERS[props.model]({
+        components: props.components,
+        recursive: props.options.recursive,
+        schema: s,
+      }) as Schema | null;
+    const output: Schema | null | undefined =
+      props.route.success && props.route.success
+        ? cast(props.route.success.schema)
+        : undefined;
+    if (output === null) return null;
+    const properties: [string, Schema | null][] = [
+      ...props.route.parameters.map((p) => ({
+        key: p.key,
+        schema: {
+          ...p.schema,
+          title: p.parameter().title ?? p.schema.title,
+          description: p.parameter().description ?? p.schema.description,
+        },
+      })),
+      ...(props.route.query
+        ? [
+            {
+              key: props.route.query.key,
+              schema: {
+                ...props.route.query.schema,
+                title:
+                  props.route.query.title() ?? props.route.query.schema.title,
+                description:
+                  props.route.query.description() ??
+                  props.route.query.schema.description,
+              },
+            },
+          ]
+        : []),
+      ...(props.route.body
+        ? [
+            {
+              key: props.route.body.key,
+              schema: {
+                ...props.route.body.schema,
+                description:
+                  props.route.body.description() ??
+                  props.route.body.schema.description,
+              },
+            },
+          ]
+        : []),
+    ].map((o) => [o.key, cast(o.schema)]);
+    if (properties.some(([_k, v]) => v === null)) return null;
+
+    // COMPOSE PARAMETERS
+    const parameters: Schema[] = props.options.keyword
+      ? [
+          {
+            type: "object",
+            properties: Object.fromEntries(properties as [string, Schema][]),
+            additionalProperties: false,
+          } as any as Schema,
+        ]
+      : properties.map(([_k, v]) => v!);
+    const operation: OpenApi.IOperation = props.route.operation();
+
+    // FINALIZATION
+    return {
+      method: props.route.method as "get",
+      path: props.route.path,
+      name: props.route.accessor.join("_"),
+      strict: true,
+      parameters,
+      separated: props.options.separate
+        ? separateParameters({
+            model: props.model,
+            predicate: props.options.separate,
+            parameters,
+          })
+        : undefined,
+      output,
+      description: (() => {
+        if (operation.summary && operation.description) {
+          return operation.description.startsWith(operation.summary)
+            ? operation.description
+            : [
+                operation.summary,
+                operation.summary.endsWith(".") ? "" : ".",
+                "\n\n",
+                operation.description,
+              ].join("");
+        }
+        return operation.description ?? operation.summary;
+      })(),
+      deprecated: operation.deprecated,
+      tags: operation.tags,
+      route: () => props.route as any,
+      operation: () => props.route.operation(),
+    };
+  };
+}
 
 const CASTERS = {
   "3.0": (props: {
