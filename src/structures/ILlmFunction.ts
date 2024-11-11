@@ -26,7 +26,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export interface ILlmFunction<
-  Schema extends ILlmSchemaV3 | ILlmSchemaV3_1 | IChatGptSchema | IGeminiSchema,
+  Schema extends
+    | ILlmSchemaV3
+    | ILlmSchemaV3_1
+    | IChatGptSchema.ITop
+    | IGeminiSchema,
 > {
   /**
    * Representative name of the function.
@@ -88,7 +92,7 @@ export namespace ILlmFunction {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema
+      | IChatGptSchema.ITop
       | IGeminiSchema,
   > {
     /**
@@ -109,7 +113,7 @@ export namespace ILlmFunction {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema
+      | IChatGptSchema.ITop
       | IGeminiSchema,
   > {
     /**

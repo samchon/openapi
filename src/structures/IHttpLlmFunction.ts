@@ -58,7 +58,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export interface IHttpLlmFunction<
-  Schema extends ILlmSchemaV3 | ILlmSchemaV3_1 | IChatGptSchema | IGeminiSchema,
+  Schema extends
+    | ILlmSchemaV3
+    | ILlmSchemaV3_1
+    | IChatGptSchema.ITop
+    | IGeminiSchema,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
@@ -231,7 +235,7 @@ export namespace IHttpLlmFunction {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema
+      | IChatGptSchema.ITop
       | IGeminiSchema,
   > {
     /**
@@ -252,7 +256,7 @@ export namespace IHttpLlmFunction {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema
+      | IChatGptSchema.ITop
       | IGeminiSchema,
   > {
     /**

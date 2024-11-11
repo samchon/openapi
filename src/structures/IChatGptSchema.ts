@@ -67,7 +67,7 @@ export namespace IChatGptSchema {
      * Exclusive minimum value restriction.
      *
      * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMinimum` value as `number`, {@link OpenApi}
+     * defined the `exclusiveMinimum` value as `number`, {@link IChatGptSchema}
      * forcibly converts it to `boolean` type, and assign the numeric value to
      * the {@link minimum} property.
      */
@@ -77,7 +77,7 @@ export namespace IChatGptSchema {
      * Exclusive maximum value restriction.
      *
      * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMaximum` value as `number`, {@link OpenApi}
+     * defined the `exclusiveMaximum` value as `number`, {@link IChatGptSchema}
      * forcibly converts it to `boolean` type, and assign the numeric value to
      * the {@link maximum} property.
      */
@@ -375,11 +375,11 @@ export namespace IChatGptSchema {
      *
      * The `ref` is a reference to the named schema. Format of the `$ref` is
      * following the JSON Pointer specification. In the OpenAPI, the `$ref`
-     * starts with `#/components/schemas/` which means the type is stored in
-     * the {@link OpenApi.IComponents.schemas} object.
+     * starts with `#/$defs/` which means the type is stored in
+     * the {@link IChatGptSchema.ITop.$defs} object.
      *
-     * - `#/components/schemas/SomeObject`
-     * - `#/components/schemas/AnotherObject`
+     * - `#/$defs/SomeObject`
+     * - `#/$defs/AnotherObject`
      */
     $ref: Key;
   }
@@ -390,7 +390,7 @@ export namespace IChatGptSchema {
    * IOneOf` represents an union type of the TypeScript (`A | B | C`).
    *
    * For reference, even though your Swagger (or OpenAPI) document has
-   * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
+   * defined `anyOf` instead of the `oneOf`, {@link IChatGptSchema} forcibly
    * converts it to `oneOf` type.
    */
   export interface IOneOf extends __IAttribute {
@@ -420,7 +420,7 @@ export namespace IChatGptSchema {
        * This property is valid only for {@link IReference} typed
        * {@link IOneOf.oneof} elements. Therefore, `key` of `mapping` is
        * the discriminator value, and `value` of `mapping` is the
-       * schema name like `#/components/schemas/SomeObject`.
+       * schema name like `#/$defs/SomeObject`.
        */
       mapping?: Record<string, string>;
     }
