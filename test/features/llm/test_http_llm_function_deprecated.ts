@@ -14,8 +14,7 @@ export const test_http_llm_function_deprecated = (): void => {
     keyword: true,
   });
   const func: IHttpLlmFunction | undefined = application.functions.find(
-    (f) =>
-      f.method === "post" && f.path === "/{index}/{level}/{optimal}/multipart",
+    (f) => f.method === "get" && f.path === "/nothing",
   );
   TestValidator.equals("deprecated")(func?.deprecated)(true);
 };
