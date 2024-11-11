@@ -130,6 +130,21 @@ export namespace ChatGptConverter {
       return {
         ...props.schema,
         oneOf: oneOf.filter((v) => v !== null),
+        discriminator: props.schema.discriminator
+          ? {
+              propertyName: props.schema.discriminator.propertyName,
+              mapping: props.schema.discriminator.mapping
+                ? Object.fromEntries(
+                    Object.entries(props.schema.discriminator.mapping).map(
+                      ([key, value]) => [
+                        key,
+                        value.replace("#/components/schemas/", "#/$defs/"),
+                      ],
+                    ),
+                  )
+                : undefined,
+            }
+          : undefined,
       };
     }
     return props.schema;

@@ -39,7 +39,7 @@ export interface ILlmApplication<
   Schema extends
     | ILlmSchemaV3
     | ILlmSchemaV3_1
-    | IChatGptSchema
+    | IChatGptSchema.ITop
     | IGeminiSchema = ILlmApplication.ModelSchema[Model],
 > {
   /**
@@ -64,7 +64,7 @@ export namespace ILlmApplication {
   export type ModelSchema = {
     "3.0": ILlmSchemaV3;
     "3.1": ILlmSchemaV3_1;
-    chatgpt: IChatGptSchema;
+    chatgpt: IChatGptSchema.ITop;
     gemini: IGeminiSchema;
   };
 
@@ -76,7 +76,7 @@ export namespace ILlmApplication {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema
+      | IChatGptSchema.ITop
       | IGeminiSchema = ILlmApplication.ModelSchema[Model],
   > {
     /**

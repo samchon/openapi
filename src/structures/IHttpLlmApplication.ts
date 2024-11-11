@@ -74,7 +74,7 @@ export interface IHttpLlmApplication<
   Schema extends
     | ILlmSchemaV3
     | ILlmSchemaV3_1
-    | IChatGptSchema
+    | IChatGptSchema.ITop
     | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
@@ -112,7 +112,7 @@ export namespace IHttpLlmApplication {
   export type ModelSchema = {
     "3.0": ILlmSchemaV3;
     "3.1": ILlmSchemaV3_1;
-    chatgpt: IChatGptSchema;
+    chatgpt: IChatGptSchema.ITop;
     gemini: IGeminiSchema;
   };
 
@@ -166,7 +166,7 @@ export namespace IHttpLlmApplication {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema
+      | IChatGptSchema.ITop
       | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
   > {
     /**
