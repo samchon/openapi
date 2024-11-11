@@ -2,42 +2,6 @@ import { OpenApi } from "../OpenApi";
 import { MapUtil } from "./MapUtil";
 
 export namespace OpenApiTypeChecker {
-  export const visit =
-    (closure: (schema: OpenApi.IJsonSchema) => void) =>
-    (components: OpenApi.IComponents) => {
-      const already: Set<string> = new Set();
-      const next = (schema: OpenApi.IJsonSchema): void => {
-        closure(schema);
-        if (OpenApiTypeChecker.isReference(schema)) {
-          const key: string = schema.$ref.split("#/components/schemas/").pop()!;
-          if (already.has(key) === true) return;
-          already.add(key);
-          const found: OpenApi.IJsonSchema | undefined =
-            components.schemas?.[key];
-          if (found !== undefined) next(found);
-        } else if (OpenApiTypeChecker.isOneOf(schema))
-          schema.oneOf.forEach(next);
-        else if (OpenApiTypeChecker.isObject(schema)) {
-          for (const value of Object.values(schema.properties ?? {}))
-            next(value);
-          if (
-            typeof schema.additionalProperties === "object" &&
-            schema.additionalProperties !== null
-          )
-            next(schema.additionalProperties);
-        } else if (OpenApiTypeChecker.isArray(schema)) next(schema.items);
-        else if (OpenApiTypeChecker.isTuple(schema)) {
-          (schema.prefixItems ?? []).forEach(next);
-          if (
-            typeof schema.additionalItems === "object" &&
-            schema.additionalItems !== null
-          )
-            next(schema.additionalItems);
-        }
-      };
-      return next;
-    };
-
   /* -----------------------------------------------------------
     TYPE CHECKERS
   ----------------------------------------------------------- */
@@ -100,10 +64,215 @@ export namespace OpenApiTypeChecker {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
+  export const visit =
+    (closure: (schema: OpenApi.IJsonSchema) => void) =>
+    (components: OpenApi.IComponents) => {
+      const already: Set<string> = new Set();
+      const next = (schema: OpenApi.IJsonSchema): void => {
+        closure(schema);
+        if (OpenApiTypeChecker.isReference(schema)) {
+          const key: string = schema.$ref.split("#/components/schemas/").pop()!;
+          if (already.has(key) === true) return;
+          already.add(key);
+          const found: OpenApi.IJsonSchema | undefined =
+            components.schemas?.[key];
+          if (found !== undefined) next(found);
+        } else if (OpenApiTypeChecker.isOneOf(schema))
+          schema.oneOf.forEach(next);
+        else if (OpenApiTypeChecker.isObject(schema)) {
+          for (const value of Object.values(schema.properties ?? {}))
+            next(value);
+          if (
+            typeof schema.additionalProperties === "object" &&
+            schema.additionalProperties !== null
+          )
+            next(schema.additionalProperties);
+        } else if (OpenApiTypeChecker.isArray(schema)) next(schema.items);
+        else if (OpenApiTypeChecker.isTuple(schema)) {
+          (schema.prefixItems ?? []).forEach(next);
+          if (
+            typeof schema.additionalItems === "object" &&
+            schema.additionalItems !== null
+          )
+            next(schema.additionalItems);
+        }
+      };
+      return next;
+    };
+
+  export const escape = (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema;
+    recursive: false | number;
+  }): OpenApi.IJsonSchema | null =>
+    escapeSchema({
+      components: props.components,
+      schema: props.schema,
+      recursive: props.recursive,
+      visited: new Map(),
+    }) || null;
+
   export const covers = (
     components: OpenApi.IComponents,
   ): ((x: OpenApi.IJsonSchema, y: OpenApi.IJsonSchema) => boolean) =>
     coverStation(components)(new Map());
+
+  const escapeSchema = (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema;
+    recursive: false | number;
+    visited: Map<string, number>;
+  }): OpenApi.IJsonSchema | null | undefined => {
+    if (isReference(props.schema)) {
+      // REFERENCE
+      const name: string = props.schema.$ref.split("#/components/schemas/")[1];
+      const target: OpenApi.IJsonSchema | undefined =
+        props.components.schemas?.[name];
+      if (target === undefined) return null;
+      else if (props.visited.has(name) === true) {
+        if (props.recursive === false) return null;
+        const depth: number = props.visited.get(name)!;
+        if (depth > props.recursive) return undefined;
+        props.visited.set(name, depth + 1);
+        return escapeSchema({
+          components: props.components,
+          schema: target,
+          recursive: props.recursive,
+          visited: props.visited,
+        });
+      }
+      return escapeSchema({
+        components: props.components,
+        schema: target,
+        recursive: props.recursive,
+        visited: new Map([...props.visited, [name, 1]]),
+      });
+    } else if (isOneOf(props.schema)) {
+      // UNION
+      const elements: Array<OpenApi.IJsonSchema | null | undefined> =
+        props.schema.oneOf.map((schema) =>
+          escapeSchema({
+            components: props.components,
+            schema: schema,
+            recursive: props.recursive,
+            visited: props.visited,
+          }),
+        );
+      if (elements.some((v) => v === null)) return null;
+      const filtered: OpenApi.IJsonSchema[] = elements.filter(
+        (v) => v !== undefined,
+      ) as OpenApi.IJsonSchema[];
+      if (filtered.length === 0) return undefined;
+      return {
+        ...props,
+        oneOf: filtered.map(flat(props.components)).flat(),
+      };
+    } else if (isObject(props.schema)) {
+      // OBJECT
+      const object: OpenApi.IJsonSchema.IObject = props.schema;
+      const properties: Array<
+        [string, OpenApi.IJsonSchema | null | undefined]
+      > = Object.entries(object.properties ?? {}).map(([key, value]) => [
+        key,
+        escapeSchema({
+          components: props.components,
+          schema: value,
+          recursive: props.recursive,
+          visited: props.visited,
+        }),
+      ]);
+      const additionalProperties:
+        | OpenApi.IJsonSchema
+        | null
+        | boolean
+        | undefined = object.additionalProperties
+        ? typeof object.additionalProperties === "object" &&
+          object.additionalProperties !== null
+          ? escapeSchema({
+              components: props.components,
+              schema: object.additionalProperties,
+              recursive: props.recursive,
+              visited: props.visited,
+            })
+          : object.additionalProperties
+        : false;
+      if (
+        properties.some(([_k, v]) => v === null) ||
+        additionalProperties === null
+      )
+        return null;
+      else if (
+        properties.some(
+          ([k, v]) => v === undefined && object.required?.includes(k) === true,
+        ) === true
+      )
+        return undefined;
+      return {
+        ...object,
+        properties: Object.fromEntries(
+          properties.filter(([_k, v]) => v !== undefined) as Array<
+            [string, OpenApi.IJsonSchema]
+          >,
+        ),
+        additionalProperties: additionalProperties ?? false,
+        required: object.required?.filter((k) =>
+          properties.some(([key, value]) => key === k && value !== undefined),
+        ),
+      };
+    } else if (isTuple(props.schema)) {
+      // TUPLE
+      const elements: Array<OpenApi.IJsonSchema | null | undefined> =
+        props.schema.prefixItems.map((schema) =>
+          escapeSchema({
+            components: props.components,
+            schema: schema,
+            recursive: props.recursive,
+            visited: props.visited,
+          }),
+        );
+      const additionalItems: OpenApi.IJsonSchema | null | boolean | undefined =
+        props.schema.additionalItems
+          ? typeof props.schema.additionalItems === "object" &&
+            props.schema.additionalItems !== null
+            ? escapeSchema({
+                components: props.components,
+                schema: props.schema.additionalItems,
+                recursive: props.recursive,
+                visited: props.visited,
+              })
+            : props.schema.additionalItems
+          : false;
+      if (elements.some((v) => v === null) || additionalItems === null)
+        return null;
+      else if (elements.some((v) => v === undefined)) return undefined;
+      return {
+        ...props.schema,
+        prefixItems: elements as OpenApi.IJsonSchema[],
+        additionalItems: additionalItems ?? false,
+      };
+    } else if (isArray(props.schema)) {
+      // ARRAY
+      const items: OpenApi.IJsonSchema | null | undefined = escapeSchema({
+        components: props.components,
+        schema: props.schema.items,
+        recursive: props.recursive,
+        visited: props.visited,
+      });
+      if (items === null) return null;
+      else if (items === undefined)
+        return {
+          ...props.schema,
+          minItems: undefined,
+          maxItems: 0,
+          items: {},
+        };
+      return {
+        ...props.schema,
+        items: items,
+      };
+    }
+    return props.schema;
+  };
 
   const coverStation =
     (components: OpenApi.IComponents) =>
@@ -134,8 +303,8 @@ export namespace OpenApiTypeChecker {
         return true;
 
       // COMPARE WITH FLATTENING
-      const alpha: OpenApi.IJsonSchema[] = flatSchema(components)(x);
-      const beta: OpenApi.IJsonSchema[] = flatSchema(components)(y);
+      const alpha: OpenApi.IJsonSchema[] = flat(components)(x);
+      const beta: OpenApi.IJsonSchema[] = flat(components)(y);
       if (alpha.some((x) => isUnknown(x))) return true;
       else if (beta.some((x) => isUnknown(x))) return false;
       return beta.every((b) =>
@@ -324,12 +493,11 @@ export namespace OpenApiTypeChecker {
     (x === "iri" && y === "uri") ||
     (x === "iri-reference" && y === "uri-reference");
 
-  const flatSchema =
+  const flat =
     (components: OpenApi.IComponents) =>
     (schema: OpenApi.IJsonSchema): OpenApi.IJsonSchema[] => {
       schema = escapeReference(components)(schema);
-      if (isOneOf(schema))
-        return schema.oneOf.map(flatSchema(components)).flat();
+      if (isOneOf(schema)) return schema.oneOf.map(flat(components)).flat();
       return [schema];
     };
 

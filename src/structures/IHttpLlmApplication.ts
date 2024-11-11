@@ -179,6 +179,18 @@ export namespace IHttpLlmApplication {
     keyword: boolean;
 
     /**
+     * Whether to allow recursive types or not.
+     *
+     * If allow, then how many times to repeat the recursive types.
+     *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
+     * @default 3
+     */
+    recursive: false | number;
+
+    /**
      * Separator function for the parameters.
      *
      * When composing parameter arguments through LLM function call,

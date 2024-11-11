@@ -28,10 +28,13 @@ export const test_llm_schema_object = (): void => {
                 description: "Hello word",
               },
             },
+            additionalProperties: false,
           },
         },
+        additionalProperties: false,
       },
     },
+    additionalProperties: false,
   });
 };
 

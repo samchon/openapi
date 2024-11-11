@@ -81,6 +81,7 @@ export namespace HttpLlm {
       {
         keyword: options?.keyword ?? false,
         separate: options?.separate ?? null,
+        recursive: options?.recursive ?? 3,
       },
     );
   };
@@ -101,7 +102,13 @@ export namespace HttpLlm {
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-  }): ILlmSchema | null => HttpLlmConverter.schema(props);
+    recursive?: false | number;
+  }): ILlmSchema | null =>
+    HttpLlmConverter.schema({
+      components: props.components,
+      schema: props.schema,
+      recursive: props.recursive ?? 3,
+    });
 
   /* -----------------------------------------------------------
     FETCHERS
