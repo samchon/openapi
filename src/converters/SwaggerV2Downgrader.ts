@@ -228,34 +228,29 @@ export namespace SwaggerV2Downgrader {
               : undefined,
           });
         else if (OpenApiTypeChecker.isTuple(schema))
-          union.push({
+          visit({
             ...schema,
-            items: ((): SwaggerV2.IJsonSchema => {
-              if (schema.additionalItems === true) return {};
-              const elements = [
+            type: "array",
+            items: {
+              oneOf: [
                 ...schema.prefixItems,
-                ...(typeof schema.additionalItems === "object"
-                  ? [downgradeSchema(collection)(schema.additionalItems)]
+                ...(typeof schema.additionalItems === "object" &&
+                schema.additionalItems !== null
+                  ? [schema.additionalItems]
                   : []),
-              ];
-              if (elements.length === 0) return {};
-              return {
-                "x-oneOf": elements.map(downgradeSchema(collection) as any),
-              };
-            })(),
-            minItems: schema.prefixItems.length,
+              ],
+            },
+            minItems: schema.minItems ?? schema.prefixItems.length,
             maxItems:
-              !!schema.additionalItems === true
+              schema.maxItems ??
+              (schema.additionalItems === true
                 ? undefined
-                : schema.prefixItems.length,
+                : schema.prefixItems.length),
             ...{
               prefixItems: undefined,
               additionalItems: undefined,
             },
-            examples: schema.examples
-              ? Object.values(schema.examples)
-              : undefined,
-          });
+          } satisfies OpenApi.IJsonSchema.IArray);
         else if (OpenApiTypeChecker.isObject(schema))
           union.push({
             ...schema,
@@ -285,16 +280,18 @@ export namespace SwaggerV2Downgrader {
         const insert = (value: any): void => {
           const matched: SwaggerV2.IJsonSchema.INumber | undefined = union.find(
             (u) =>
-              (u as SwaggerV2.IJsonSchema.__ISignificant<any>).type === value,
+              (u as SwaggerV2.IJsonSchema.__ISignificant<any>).type ===
+              typeof value,
           ) as SwaggerV2.IJsonSchema.INumber | undefined;
           if (matched !== undefined) {
             matched.enum ??= [];
             matched.enum.push(value);
           } else union.push({ type: typeof value as "number", enum: [value] });
-          if (OpenApiTypeChecker.isConstant(schema)) insert(schema.const);
-          else if (OpenApiTypeChecker.isOneOf(schema))
-            schema.oneOf.forEach(insert);
         };
+        if (OpenApiTypeChecker.isConstant(schema)) insert(schema.const);
+        else if (OpenApiTypeChecker.isOneOf(schema))
+          for (const u of schema.oneOf)
+            if (OpenApiTypeChecker.isConstant(u)) insert(u.const);
       };
 
       visit(input);

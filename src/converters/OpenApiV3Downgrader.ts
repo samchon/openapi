@@ -208,31 +208,29 @@ export namespace OpenApiV3Downgrader {
             items: downgradeSchema(collection)(schema.items),
           });
         else if (OpenApiTypeChecker.isTuple(schema))
-          union.push({
+          visit({
             ...schema,
-            items: ((): OpenApiV3.IJsonSchema => {
-              if (schema.additionalItems === true) return {};
-              const elements = [
+            type: "array",
+            items: {
+              oneOf: [
                 ...schema.prefixItems,
-                ...(typeof schema.additionalItems === "object"
-                  ? [downgradeSchema(collection)(schema.additionalItems)]
+                ...(typeof schema.additionalItems === "object" &&
+                schema.additionalItems !== null
+                  ? [schema.additionalItems]
                   : []),
-              ];
-              if (elements.length === 0) return {};
-              return {
-                oneOf: elements.map(downgradeSchema(collection) as any),
-              };
-            })(),
-            minItems: schema.prefixItems.length,
+              ],
+            },
+            minItems: schema.minItems ?? schema.prefixItems.length,
             maxItems:
-              !!schema.additionalItems === true
+              schema.maxItems ??
+              (schema.additionalItems === true
                 ? undefined
-                : schema.prefixItems.length,
+                : schema.prefixItems.length),
             ...{
               prefixItems: undefined,
               additionalItems: undefined,
             },
-          });
+          } satisfies OpenApi.IJsonSchema.IArray);
         else if (OpenApiTypeChecker.isObject(schema))
           union.push({
             ...schema,
