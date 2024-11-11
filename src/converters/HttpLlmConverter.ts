@@ -24,7 +24,30 @@ export namespace HttpLlmConverter {
     }));
     const functions: IHttpLlmFunction[] = migrate.routes
       .map((route) => {
-        if (route.method === "head") return null;
+        if (route.method === "head") {
+          errors.push({
+            method: route.method,
+            path: route.path,
+            messages: ["HEAD method is not supported in the LLM application."],
+            operation: () => route.operation(),
+            route: () => route,
+          });
+          return null;
+        } else if (
+          route.body?.type === "multipart/form-data" ||
+          route.success?.type === "multipart/form-data"
+        ) {
+          errors.push({
+            method: route.method,
+            path: route.path,
+            messages: [
+              `The "multipart/form-data" content type is not supported in the LLM application.`,
+            ],
+            operation: () => route.operation(),
+            route: () => route,
+          });
+          return null;
+        }
         const func: IHttpLlmFunction | null = composeFunction(options)(
           migrate.document().components,
         )(route);

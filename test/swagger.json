@@ -7,7 +7,7 @@
     }
   ],
   "info": {
-    "version": "1.1.1-dev.20241008-2",
+    "version": "1.2.0",
     "title": "@samchon/openapi",
     "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
     "license": {
@@ -53,7 +53,24 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "index": {
+                      "type": "string",
+                      "format": "uri",
+                      "contentMediaType": "text/html"
+                    },
+                    "level": {
+                      "type": "number"
+                    },
+                    "optimal": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "index",
+                    "level",
+                    "optimal"
+                  ]
                 }
               }
             }
@@ -117,7 +134,28 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "index": {
+                      "type": "string",
+                      "format": "uri",
+                      "contentMediaType": "text/html"
+                    },
+                    "level": {
+                      "type": "number"
+                    },
+                    "optimal": {
+                      "type": "boolean"
+                    },
+                    "query": {
+                      "$ref": "#/components/schemas/IQuery"
+                    }
+                  },
+                  "required": [
+                    "index",
+                    "level",
+                    "optimal",
+                    "query"
+                  ]
                 }
               }
             }
@@ -176,7 +214,28 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "index": {
+                      "type": "string",
+                      "format": "uri",
+                      "contentMediaType": "text/html"
+                    },
+                    "level": {
+                      "type": "number"
+                    },
+                    "optimal": {
+                      "type": "boolean"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/IBody"
+                    }
+                  },
+                  "required": [
+                    "index",
+                    "level",
+                    "optimal",
+                    "body"
+                  ]
                 }
               }
             }
@@ -251,20 +310,44 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "index": {
+                      "type": "string",
+                      "format": "uri",
+                      "contentMediaType": "text/html"
+                    },
+                    "level": {
+                      "type": "number"
+                    },
+                    "optimal": {
+                      "type": "boolean"
+                    },
                     "query": {
                       "type": "object",
                       "properties": {
+                        "thumbnail": {
+                          "type": "string",
+                          "format": "uri",
+                          "contentMediaType": "image/*"
+                        },
                         "summary": {
                           "type": "string"
                         }
                       },
                       "required": [
+                        "thumbnail",
                         "summary"
                       ]
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/IBody"
                     }
                   },
                   "required": [
-                    "query"
+                    "index",
+                    "level",
+                    "optimal",
+                    "query",
+                    "body"
                   ]
                 }
               }
@@ -275,7 +358,6 @@
     },
     "/{index}/{level}/{optimal}/multipart": {
       "post": {
-        "deprecated": true,
         "tags": [],
         "parameters": [
           {
@@ -341,6 +423,20 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "index": {
+                      "type": "string",
+                      "format": "uri",
+                      "contentMediaType": "text/html"
+                    },
+                    "level": {
+                      "type": "number"
+                    },
+                    "optimal": {
+                      "type": "boolean"
+                    },
+                    "query": {
+                      "$ref": "#/components/schemas/IQuery"
+                    },
                     "body": {
                       "type": "object",
                       "properties": {
@@ -366,6 +462,10 @@
                     }
                   },
                   "required": [
+                    "index",
+                    "level",
+                    "optimal",
+                    "query",
                     "body"
                   ]
                 }
@@ -377,6 +477,7 @@
     },
     "/nothing": {
       "get": {
+        "deprecated": true,
         "tags": [],
         "parameters": [],
         "responses": {
