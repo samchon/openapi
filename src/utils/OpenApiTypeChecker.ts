@@ -166,6 +166,7 @@ export namespace OpenApiTypeChecker {
       return {
         ...props,
         oneOf: filtered.map(flat(props.components)).flat(),
+        discriminator: undefined,
       };
     } else if (isObject(props.schema)) {
       // OBJECT

@@ -5,7 +5,6 @@ import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { ILlmSchema } from "../structures/ILlmSchema";
 import { LlmSchemaSeparator } from "../utils/LlmSchemaSeparator";
-import { LlmTypeChecker } from "../utils/LlmTypeChecker";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
@@ -81,18 +80,10 @@ export namespace HttpLlmConverter {
       recursive: props.recursive,
     });
     if (resolved === null) return null;
-    const downgraded: ILlmSchema = OpenApiV3Downgrader.downgradeSchema({
+    return OpenApiV3Downgrader.downgradeSchema({
       original: {},
       downgraded: {},
-    })(resolved) as ILlmSchema;
-    LlmTypeChecker.visit(downgraded, (schema) => {
-      if (
-        LlmTypeChecker.isOneOf(schema) &&
-        (schema as any).discriminator !== undefined
-      )
-        delete (schema as any).discriminator;
-    });
-    return downgraded;
+    })(resolved);
   };
 }
 
