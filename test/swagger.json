@@ -7,7 +7,7 @@
     }
   ],
   "info": {
-    "version": "1.1.1-dev.20241008-2",
+    "version": "2.0.0-dev.20241111-3",
     "title": "@samchon/openapi",
     "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
     "license": {
@@ -275,7 +275,6 @@
     },
     "/{index}/{level}/{optimal}/multipart": {
       "post": {
-        "deprecated": true,
         "tags": [],
         "parameters": [
           {
@@ -377,6 +376,7 @@
     },
     "/nothing": {
       "get": {
+        "deprecated": true,
         "tags": [],
         "parameters": [],
         "responses": {
