@@ -8,6 +8,10 @@ export const test_llm_schema_recursive_array = (): void => {
         Department: {
           type: "object",
           properties: {
+            id: {
+              type: "string",
+              format: "uuid",
+            },
             name: {
               type: "string",
             },
@@ -18,7 +22,7 @@ export const test_llm_schema_recursive_array = (): void => {
               },
             },
           },
-          required: ["name", "children"],
+          required: ["id", "name", "children"],
         },
       },
     },
@@ -30,6 +34,10 @@ export const test_llm_schema_recursive_array = (): void => {
   TestValidator.equals("recursive")(schema)({
     type: "object",
     properties: {
+      id: {
+        type: "string",
+        format: "uuid",
+      },
       name: {
         type: "string",
       },
@@ -38,6 +46,10 @@ export const test_llm_schema_recursive_array = (): void => {
         items: {
           type: "object",
           properties: {
+            id: {
+              type: "string",
+              format: "uuid",
+            },
             name: {
               type: "string",
             },
@@ -46,6 +58,10 @@ export const test_llm_schema_recursive_array = (): void => {
               items: {
                 type: "object",
                 properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid",
+                  },
                   name: {
                     type: "string",
                   },
@@ -54,6 +70,10 @@ export const test_llm_schema_recursive_array = (): void => {
                     items: {
                       type: "object",
                       properties: {
+                        id: {
+                          type: "string",
+                          format: "uuid",
+                        },
                         name: {
                           type: "string",
                         },
@@ -63,22 +83,22 @@ export const test_llm_schema_recursive_array = (): void => {
                           maxItems: 0,
                         },
                       },
-                      required: ["name", "children"],
+                      required: ["id", "name", "children"],
                       additionalProperties: false,
                     },
                   },
                 },
-                required: ["name", "children"],
+                required: ["id", "name", "children"],
                 additionalProperties: false,
               },
             },
           },
-          required: ["name", "children"],
+          required: ["id", "name", "children"],
           additionalProperties: false,
         },
       },
     },
-    required: ["name", "children"],
+    required: ["id", "name", "children"],
     additionalProperties: false,
   });
 };
