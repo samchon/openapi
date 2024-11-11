@@ -22,6 +22,7 @@ export const test_llm_schema_oneof = (): void => {
             type: "number",
           },
         },
+        additionalProperties: false,
         required: ["type", "radius"],
       },
       {
@@ -38,6 +39,7 @@ export const test_llm_schema_oneof = (): void => {
             type: "number",
           },
         },
+        additionalProperties: false,
         required: ["type", "base", "height"],
       },
       {
@@ -54,6 +56,7 @@ export const test_llm_schema_oneof = (): void => {
             type: "number",
           },
         },
+        additionalProperties: false,
         required: ["type", "width", "height"],
       },
     ],
