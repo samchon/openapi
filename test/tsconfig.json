@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2015",
     "outDir": "../bin",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -16,5 +16,6 @@
       { "transform": "@nestia/core/lib/transform" },
     ]
   },
-  "include": ["../src", "../test"]
+  "include": ["../src", "./"],
+  "exclude": ["../node_modules"]
 }

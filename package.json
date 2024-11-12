@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "2.0.0-dev.20241111-3",
+  "version": "2.0.0-dev.20241113",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
@@ -52,8 +52,9 @@
     "rimraf": "^5.0.5",
     "rollup": "^4.18.1",
     "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
     "ts-patch": "^3.2.1",
-    "typescript": "5.5.4",
+    "typescript": "^5.6.3",
     "typescript-transform-paths": "^3.4.7",
     "typia": "^6.9.0",
     "uuid": "^10.0.0"
@@ -63,6 +64,5 @@
     "lib",
     "src",
     "README.md"
-  ],
-  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+  ]
 }

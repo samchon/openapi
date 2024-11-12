@@ -29,6 +29,7 @@ const main = async (): Promise<void> => {
   const report: DynamicExecutor.IReport = await DynamicExecutor.validate({
     prefix: "test_",
     location: __dirname + "/features",
+    extension: __filename.substring(__filename.length - 2),
     parameters: () => [
       {
         host: `http://localhost:3000`,

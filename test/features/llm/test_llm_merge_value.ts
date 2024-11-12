@@ -1,7 +1,7 @@
 import { TestValidator } from "@nestia/e2e";
 import { HttpLlm } from "@samchon/openapi";
 
-export const test_llm_merge_parameters = (): void => {
+export const test_llm_merge_value = (): void => {
   TestValidator.equals("number")(HttpLlm.mergeValue(1, 2))(2);
   TestValidator.equals("nullable")(HttpLlm.mergeValue(0, null))(0);
   TestValidator.equals("optional")(HttpLlm.mergeValue(0, undefined))(0);
