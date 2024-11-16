@@ -1,10 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
 import { IChatGptSchema } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
-import typia, { IJsonApplication, tags } from "typia";
+import typia, { IJsonSchemaCollection, tags } from "typia";
 
 export const test_chatgpt_schema_ref = (): void => {
-  test(typia.json.application<[IShoppingCategory]>(), {
+  test(typia.json.schemas<[IShoppingCategory]>(), {
     $ref: "#/$defs/IShoppingCategory",
     $defs: {
       IShoppingCategory: {
@@ -29,7 +29,7 @@ export const test_chatgpt_schema_ref = (): void => {
       },
     },
   });
-  test(typia.json.application<[IShoppingCategory.IInvert]>(), {
+  test(typia.json.schemas<[IShoppingCategory.IInvert]>(), {
     $ref: "#/$defs/IShoppingCategory.IInvert",
     $defs: {
       "IShoppingCategory.IInvert": {
@@ -61,7 +61,7 @@ export const test_chatgpt_schema_ref = (): void => {
 };
 
 const test = (
-  collection: IJsonApplication,
+  collection: IJsonSchemaCollection,
   expected: IChatGptSchema.ITop,
 ): void => {
   const schema: IChatGptSchema.ITop | null = ChatGptConverter.schema({

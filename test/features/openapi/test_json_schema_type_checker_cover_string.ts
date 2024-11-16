@@ -120,8 +120,8 @@ export const test_json_schema_type_checker_cover_string = (): void => {
   );
 
   // CHECK FORMAT CASE
-  for (const x of typia.misc.literals<keyof tags.Format.Validator>())
-    for (const y of typia.misc.literals<keyof tags.Format.Validator>())
+  for (const x of typia.misc.literals<tags.Format.Value>())
+    for (const y of typia.misc.literals<tags.Format.Value>())
       TestValidator.equals(`format ${x} covers ${y}`)(
         x === y ||
           (x === "idn-email" && y === "email") ||

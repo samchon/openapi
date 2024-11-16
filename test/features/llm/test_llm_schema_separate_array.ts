@@ -15,13 +15,9 @@ export const test_llm_schema_separate_array = (): void => {
         LlmTypeCheckerV3.isString(s) && s.contentMediaType !== undefined,
       schema,
     });
-  const member: ILlmSchemaV3 = schema(typia.json.application<[IMember[]]>());
-  const upload: ILlmSchemaV3 = schema(
-    typia.json.application<[IFileUpload[]]>(),
-  );
-  const combined: ILlmSchemaV3 = schema(
-    typia.json.application<[ICombined[]]>(),
-  );
+  const member: ILlmSchemaV3 = schema(typia.json.schemas<[IMember[]]>());
+  const upload: ILlmSchemaV3 = schema(typia.json.schemas<[IFileUpload[]]>());
+  const combined: ILlmSchemaV3 = schema(typia.json.schemas<[ICombined[]]>());
 
   TestValidator.equals("member")(separator(member))([member, null]);
   TestValidator.equals("upload")(separator(upload))([null, upload]);

@@ -3,7 +3,7 @@ import { HttpLlmConverter } from "@samchon/openapi/lib/converters/HttpLlmConvert
 import typia from "typia";
 
 export const test_llm_schema_v31_ultimate_union = (): void => {
-  const collection = typia.json.application<[IJsonSchemaCollection[]]>();
+  const collection = typia.json.schemas<[IJsonSchemaCollection[]]>();
   HttpLlmConverter.schema({
     model: "3.1",
     components: collection.components,
