@@ -1,10 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
 import { OpenApi, OpenApiTypeChecker } from "@samchon/openapi";
-import typia, { IJsonApplication } from "typia";
+import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_json_schema_type_checker_cover_object = (): void => {
-  const app: IJsonApplication =
-    typia.json.application<[Plan2D, Plan3D, Box2D, Box3D]>();
+  const app: IJsonSchemaCollection =
+    typia.json.schemas<[Plan2D, Plan3D, Box2D, Box3D]>();
   const components: OpenApi.IComponents = app.components as any;
 
   const plan2D: OpenApi.IJsonSchema = components.schemas!.Plan2D;

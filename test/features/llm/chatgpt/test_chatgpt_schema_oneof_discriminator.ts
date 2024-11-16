@@ -1,11 +1,11 @@
 import { TestValidator } from "@nestia/e2e";
 import { IChatGptSchema } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
-import typia, { IJsonApplication } from "typia";
+import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_chatgpt_schema_oneof_discriminator = (): void => {
-  const collection: IJsonApplication =
-    typia.json.application<[IPoint | ILine | ITriangle | IRectangle]>();
+  const collection: IJsonSchemaCollection =
+    typia.json.schemas<[IPoint | ILine | ITriangle | IRectangle]>();
   const schema = ChatGptConverter.schema({
     components: collection.components,
     schema: collection.schemas[0],

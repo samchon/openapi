@@ -15,14 +15,12 @@ export const test_llm_schema_separate_nested = (): void => {
         LlmTypeCheckerV3.isString(s) && s.contentMediaType !== undefined,
       schema,
     });
-  const member: ILlmSchemaV3 = schema(
-    typia.json.application<[INested<IMember>]>(),
-  );
+  const member: ILlmSchemaV3 = schema(typia.json.schemas<[INested<IMember>]>());
   const upload: ILlmSchemaV3 = schema(
-    typia.json.application<[INested<IFileUpload>]>(),
+    typia.json.schemas<[INested<IFileUpload>]>(),
   );
   const combined: ILlmSchemaV3 = schema(
-    typia.json.application<[INested<ICombined>]>(),
+    typia.json.schemas<[INested<ICombined>]>(),
   );
 
   TestValidator.equals(
