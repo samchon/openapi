@@ -1,6 +1,5 @@
 import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
-import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { ILlmFunction } from "../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
@@ -15,26 +14,26 @@ export namespace LlmDataMerger {
    * Properties of {@link parameters} function.
    */
   export interface IProps<
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema,
+    Parameters extends
+      | ILlmSchemaV3.IObject
+      | ILlmSchemaV3_1.IObject
+      | IChatGptSchema.ITopObject
+      | IGeminiSchema.IObject,
   > {
     /**
      * Target function to call.
      */
-    function: ILlmFunction<Schema>;
+    function: ILlmFunction<Parameters>;
 
     /**
      * Arguments composed by LLM (Large Language Model).
      */
-    llm: any[];
+    llm: object | null;
 
     /**
      * Arguments composed by human.
      */
-    human: any[];
+    human: object | null;
   }
 
   /**
@@ -53,29 +52,20 @@ export namespace LlmDataMerger {
    * @returns Combined arguments
    */
   export const parameters = <
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema,
+    Parameters extends
+      | ILlmSchemaV3.IObject
+      | ILlmSchemaV3_1.IObject
+      | IChatGptSchema.ITopObject
+      | IGeminiSchema.IObject,
   >(
-    props: IProps<Schema>,
-  ): unknown[] => {
-    const separated: IHttpLlmFunction.ISeparated<Schema> | undefined =
-      props.function.separated;
+    props: IProps<Parameters>,
+  ): object => {
+    const separated = props.function.separated;
     if (separated === undefined)
       throw new Error(
         "Error on OpenAiDataComposer.parameters(): the function parameters are not separated.",
       );
-    return new Array(props.function.parameters.length).fill(0).map((_, i) => {
-      const llm: number = separated.llm.findIndex((p) => p.index === i);
-      const human: number = separated.human.findIndex((p) => p.index === i);
-      if (llm === -1 && human === -1)
-        throw new Error(
-          "Error on OpenAiDataComposer.parameters(): failed to gather separated arguments, because both LLM and human sides are all empty.",
-        );
-      return value(props.llm[llm], props.human[human]);
-    });
+    return value(props.llm, props.human) as object;
   };
 
   /**

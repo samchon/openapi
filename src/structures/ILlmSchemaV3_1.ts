@@ -304,7 +304,7 @@ export namespace ILlmSchemaV3_1 {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, ILlmSchemaV3_1>;
+    properties: Record<string, ILlmSchemaV3_1>;
 
     /**
      * Additional properties' info.

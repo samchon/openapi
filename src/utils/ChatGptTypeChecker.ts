@@ -65,7 +65,7 @@ export namespace ChatGptTypeChecker {
   ----------------------------------------------------------- */
   export const visit = (props: {
     closure: (schema: IChatGptSchema) => void;
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     schema: IChatGptSchema;
   }): void => {
     const already: Set<string> = new Set();
@@ -75,7 +75,7 @@ export namespace ChatGptTypeChecker {
         const key: string = schema.$ref.split("#/$defs/").pop()!;
         if (already.has(key) === true) return;
         already.add(key);
-        const found: IChatGptSchema | undefined = props.top.$defs?.[key];
+        const found: IChatGptSchema | undefined = props.$defs?.[key];
         if (found !== undefined) next(found);
       } else if (ChatGptTypeChecker.isOneOf(schema)) schema.oneOf.forEach(next);
       else if (ChatGptTypeChecker.isObject(schema)) {
@@ -99,19 +99,19 @@ export namespace ChatGptTypeChecker {
   };
 
   export const covers = (props: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     x: IChatGptSchema;
     y: IChatGptSchema;
   }): boolean =>
     coverStation({
-      top: props.top,
+      $defs: props.$defs,
       x: props.x,
       y: props.y,
       visited: new Map(),
     });
 
   const coverStation = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema;
     y: IChatGptSchema;
@@ -132,7 +132,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverSchema = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema;
     y: IChatGptSchema;
@@ -143,14 +143,14 @@ export namespace ChatGptTypeChecker {
       return true;
 
     // COMPARE WITH FLATTENING
-    const alpha: IChatGptSchema[] = flatSchema(p.top, p.x);
-    const beta: IChatGptSchema[] = flatSchema(p.top, p.y);
+    const alpha: IChatGptSchema[] = flatSchema(p.$defs, p.x);
+    const beta: IChatGptSchema[] = flatSchema(p.$defs, p.y);
     if (alpha.some((x) => isUnknown(x))) return true;
     else if (beta.some((x) => isUnknown(x))) return false;
     return beta.every((b) =>
       alpha.some((a) =>
         coverEscapedSchema({
-          top: p.top,
+          $defs: p.$defs,
           visited: p.visited,
           x: a,
           y: b,
@@ -160,7 +160,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverEscapedSchema = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema;
     y: IChatGptSchema;
@@ -190,7 +190,7 @@ export namespace ChatGptTypeChecker {
       return (
         (isArray(p.y) || isTuple(p.y)) &&
         coverArray({
-          top: p.top,
+          $defs: p.$defs,
           visited: p.visited,
           x: p.x,
           y: p.y,
@@ -200,7 +200,7 @@ export namespace ChatGptTypeChecker {
       return (
         isObject(p.y) &&
         coverObject({
-          top: p.top,
+          $defs: p.$defs,
           visited: p.visited,
           x: p.x,
           y: p.y,
@@ -211,7 +211,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverArray = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema.IArray;
     y: IChatGptSchema.IArray | IChatGptSchema.ITuple;
@@ -220,7 +220,7 @@ export namespace ChatGptTypeChecker {
       return (
         p.y.prefixItems.every((v) =>
           coverStation({
-            top: p.top,
+            $defs: p.$defs,
             visited: p.visited,
             x: p.x.items,
             y: v,
@@ -229,7 +229,7 @@ export namespace ChatGptTypeChecker {
         (p.y.additionalItems === undefined ||
           (typeof p.y.additionalItems === "object" &&
             coverStation({
-              top: p.top,
+              $defs: p.$defs,
               visited: p.visited,
               x: p.x.items,
               y: p.y.additionalItems,
@@ -250,7 +250,7 @@ export namespace ChatGptTypeChecker {
     )
       return false;
     return coverStation({
-      top: p.top,
+      $defs: p.$defs,
       visited: p.visited,
       x: p.x.items,
       y: p.y.items,
@@ -258,7 +258,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverObject = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema.IObject;
     y: IChatGptSchema.IObject;
@@ -272,7 +272,7 @@ export namespace ChatGptTypeChecker {
         (typeof p.x.additionalProperties === "object" &&
           typeof p.y.additionalProperties === "object" &&
           !coverStation({
-            top: p.top,
+            $defs: p.$defs,
             visited: p.visited,
             x: p.x.additionalProperties,
             y: p.y.additionalProperties,
@@ -288,7 +288,7 @@ export namespace ChatGptTypeChecker {
       )
         return false;
       return coverStation({
-        top: p.top,
+        $defs: p.$defs,
         visited: p.visited,
         x: a,
         y: b,
@@ -380,20 +380,20 @@ export namespace ChatGptTypeChecker {
     (x === "iri-reference" && y === "uri-reference");
 
   const flatSchema = (
-    top: IChatGptSchema.ITop,
+    $defs: Record<string, IChatGptSchema> | undefined,
     schema: IChatGptSchema,
   ): IChatGptSchema[] => {
-    schema = escapeReference(top, schema);
+    schema = escapeReference($defs, schema);
     if (isOneOf(schema))
-      return schema.oneOf.map((v) => flatSchema(top, v)).flat();
+      return schema.oneOf.map((v) => flatSchema($defs, v)).flat();
     return [schema];
   };
 
   const escapeReference = (
-    top: IChatGptSchema.ITop,
+    $defs: Record<string, IChatGptSchema> | undefined,
     schema: IChatGptSchema,
   ): Exclude<IChatGptSchema, IChatGptSchema.IReference> =>
     isReference(schema)
-      ? escapeReference(top, top.$defs![schema.$ref.replace("#/$defs/", "")]!)
+      ? escapeReference($defs, $defs![schema.$ref.replace("#/$defs/", "")]!)
       : schema;
 }

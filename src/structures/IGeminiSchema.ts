@@ -325,7 +325,7 @@ export namespace IGeminiSchema {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, IGeminiSchema>;
+    properties: Record<string, IGeminiSchema>;
 
     /**
      * List of key values of the required properties.

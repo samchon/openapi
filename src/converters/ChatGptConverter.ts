@@ -4,22 +4,22 @@ import { ChatGptTypeChecker } from "../utils/ChatGptTypeChecker";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace ChatGptConverter {
-  export const schema = (props: {
+  export const parameters = (props: {
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-  }): IChatGptSchema.ITop | null => {
+    schema: OpenApi.IJsonSchema.IObject;
+  }): IChatGptSchema.ITopObject | null => {
     const $defs: Record<string, IChatGptSchema> = {};
-    const schema: IChatGptSchema.ITop | null = convertSchema({
+    const res: IChatGptSchema.ITopObject | null = schema({
       components: props.components,
       schema: props.schema,
       $defs,
-    });
-    if (schema === null) return null;
-    else if (Object.keys($defs).length) schema.$defs = $defs;
-    return schema;
+    }) as IChatGptSchema.ITopObject | null;
+    if (res === null) return null;
+    else if (Object.keys($defs).length) res.$defs = $defs;
+    return res;
   };
 
-  const convertSchema = (props: {
+  export const schema = (props: {
     components: OpenApi.IComponents;
     $defs: Record<string, IChatGptSchema>;
     schema: OpenApi.IJsonSchema;
@@ -36,7 +36,7 @@ export namespace ChatGptConverter {
       });
       if (props.$defs[key] !== undefined) return out();
       props.$defs[key] = {};
-      const converted: IChatGptSchema | null = convertSchema({
+      const converted: IChatGptSchema | null = schema({
         components: props.components,
         $defs: props.$defs,
         schema: target,
@@ -46,7 +46,7 @@ export namespace ChatGptConverter {
       props.$defs[key] = converted;
       return out();
     } else if (OpenApiTypeChecker.isArray(props.schema)) {
-      const items: IChatGptSchema | null = convertSchema({
+      const items: IChatGptSchema | null = schema({
         components: props.components,
         $defs: props.$defs,
         schema: props.schema.items,
@@ -59,7 +59,7 @@ export namespace ChatGptConverter {
     } else if (OpenApiTypeChecker.isTuple(props.schema)) {
       const prefixItems: Array<IChatGptSchema | null> =
         props.schema.prefixItems.map((item) =>
-          convertSchema({
+          schema({
             components: props.components,
             $defs: props.$defs,
             schema: item,
@@ -71,7 +71,7 @@ export namespace ChatGptConverter {
           ? false
           : typeof props.schema.additionalItems === "object" &&
               props.schema.additionalItems !== null
-            ? convertSchema({
+            ? schema({
                 components: props.components,
                 $defs: props.$defs,
                 schema: props.schema.additionalItems,
@@ -88,7 +88,7 @@ export namespace ChatGptConverter {
         props.schema.properties || {},
       ).reduce(
         (acc, [key, value]) => {
-          const converted: IChatGptSchema | null = convertSchema({
+          const converted: IChatGptSchema | null = schema({
             components: props.components,
             $defs: props.$defs,
             schema: value,
@@ -105,7 +105,7 @@ export namespace ChatGptConverter {
           ? false
           : typeof props.schema.additionalProperties === "object" &&
               props.schema.additionalProperties !== null
-            ? convertSchema({
+            ? schema({
                 components: props.components,
                 $defs: props.$defs,
                 schema: props.schema.additionalProperties,
@@ -120,7 +120,7 @@ export namespace ChatGptConverter {
     } else if (OpenApiTypeChecker.isOneOf(props.schema)) {
       const oneOf: Array<IChatGptSchema | null> = props.schema.oneOf.map(
         (item) =>
-          convertSchema({
+          schema({
             components: props.components,
             $defs: props.$defs,
             schema: item,
@@ -151,7 +151,7 @@ export namespace ChatGptConverter {
   };
 
   export const separate = (props: {
-    top: IChatGptSchema.ITop;
+    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
     schema: IChatGptSchema;
   }): [IChatGptSchema | null, IChatGptSchema | null] => {
@@ -163,19 +163,19 @@ export namespace ChatGptConverter {
       return [props.schema, null];
     else if (ChatGptTypeChecker.isObject(props.schema))
       return separateObject({
-        top: props.top,
+        $defs: props.$defs,
         predicate: props.predicate,
         schema: props.schema,
       });
     else if (ChatGptTypeChecker.isArray(props.schema))
       return separateArray({
-        top: props.top,
+        $defs: props.$defs,
         predicate: props.predicate,
         schema: props.schema,
       });
     else if (ChatGptTypeChecker.isReference(props.schema))
       return separateReference({
-        top: props.top,
+        $defs: props.$defs,
         predicate: props.predicate,
         schema: props.schema,
       });
@@ -183,12 +183,12 @@ export namespace ChatGptConverter {
   };
 
   const separateArray = (props: {
-    top: IChatGptSchema.ITop;
+    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
     schema: IChatGptSchema.IArray;
   }): [IChatGptSchema.IArray | null, IChatGptSchema.IArray | null] => {
     const [x, y] = separate({
-      top: props.top,
+      $defs: props.$defs,
       predicate: props.predicate,
       schema: props.schema.items,
     });
@@ -209,7 +209,7 @@ export namespace ChatGptConverter {
   };
 
   const separateObject = (props: {
-    top: IChatGptSchema.ITop;
+    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
     schema: IChatGptSchema.IObject;
   }): [IChatGptSchema.IObject | null, IChatGptSchema.IObject | null] => {
@@ -223,7 +223,7 @@ export namespace ChatGptConverter {
     } satisfies IChatGptSchema.IObject;
     for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
       const [x, y] = separate({
-        top: props.top,
+        $defs: props.$defs,
         predicate: props.predicate,
         schema: value,
       });
@@ -235,7 +235,7 @@ export namespace ChatGptConverter {
       props.schema.additionalProperties !== null
     ) {
       const [x, y] = separate({
-        top: props.top,
+        $defs: props.$defs,
         predicate: props.predicate,
         schema: props.schema.additionalProperties,
       });
@@ -258,22 +258,22 @@ export namespace ChatGptConverter {
   };
 
   const separateReference = (props: {
-    top: IChatGptSchema.ITop;
+    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
     schema: IChatGptSchema.IReference;
   }): [IChatGptSchema.IReference | null, IChatGptSchema.IReference | null] => {
     const key: string = props.schema.$ref.split("#/$defs/")[1];
 
     // FIND EXISTING
-    if (props.top.$defs?.[`${key}.Human`] || props.top.$defs?.[`${key}.Llm`])
+    if (props.$defs?.[`${key}.Human`] || props.$defs?.[`${key}.Llm`])
       return [
-        props.top.$defs?.[`${key}.Llm`]
+        props.$defs?.[`${key}.Llm`]
           ? {
               ...props.schema,
               $ref: `#/$defs/${key}.Llm`,
             }
           : null,
-        props.top.$defs?.[`${key}.Human`]
+        props.$defs?.[`${key}.Human`]
           ? {
               ...props.schema,
               $ref: `#/$defs/${key}.Human`,
@@ -282,20 +282,20 @@ export namespace ChatGptConverter {
       ];
 
     // PRE-ASSIGNMENT
-    props.top.$defs![`${key}.Llm`] = {};
-    props.top.$defs![`${key}.Human`] = {};
+    props.$defs![`${key}.Llm`] = {};
+    props.$defs![`${key}.Human`] = {};
 
     // DO COMPOSE
-    const schema: IChatGptSchema = props.top.$defs?.[key]!;
+    const schema: IChatGptSchema = props.$defs?.[key]!;
     const [llm, human] = separate({
-      top: props.top,
+      $defs: props.$defs,
       predicate: props.predicate,
       schema,
     });
-    if (llm === null) delete props.top.$defs![`${key}.Llm`];
-    else props.top.$defs![`${key}.Llm`] = llm;
-    if (human === null) delete props.top.$defs![`${key}.Human`];
-    else props.top.$defs![`${key}.Human`] = human;
+    if (llm === null) delete props.$defs![`${key}.Llm`];
+    else props.$defs![`${key}.Llm`] = llm;
+    if (human === null) delete props.$defs![`${key}.Human`];
+    else props.$defs![`${key}.Human`] = human;
 
     // FINALIZE
     return [

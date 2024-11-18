@@ -341,7 +341,7 @@ export namespace SwaggerV2Converter {
                     .filter(([_, v]) => v !== undefined)
                     .map(([key, value]) => [key, convertSchema(value)]),
                 )
-              : undefined,
+              : {},
             additionalProperties: schema.additionalProperties
               ? typeof schema.additionalProperties === "object" &&
                 schema.additionalProperties !== null

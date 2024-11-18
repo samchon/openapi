@@ -14,9 +14,9 @@ export namespace IChatGptSchema {
   /**
    * The top level schema including `$defs`.
    */
-  export type ITop<Schema extends IChatGptSchema = IChatGptSchema> = Schema & {
+  export interface ITopObject extends IObject {
     $defs?: Record<string, IChatGptSchema | undefined>;
-  };
+  }
 
   /**
    * Constant value type.
@@ -312,7 +312,7 @@ export namespace IChatGptSchema {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, IChatGptSchema>;
+    properties: Record<string, IChatGptSchema>;
 
     /**
      * Additional properties' info.

@@ -71,11 +71,8 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  */
 export interface IHttpLlmApplication<
   Model extends IHttpLlmApplication.Model,
-  Schema extends
-    | ILlmSchemaV3
-    | ILlmSchemaV3_1
-    | IChatGptSchema.ITop
-    | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+  Parameters extends
+    IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
@@ -92,7 +89,7 @@ export interface IHttpLlmApplication<
    * When you want to execute the function with LLM constructed arguments,
    * you can do it through {@link LlmFetcher.execute} function.
    */
-  functions: IHttpLlmFunction<Schema, Operation, Route>[];
+  functions: IHttpLlmFunction<Parameters, Operation, Route>[];
 
   /**
    * List of errors occurred during the composition.
@@ -105,14 +102,23 @@ export interface IHttpLlmApplication<
    * Adjusted options when composing the application through
    * {@link HttpLlm.application} function.
    */
-  options: IHttpLlmApplication.IOptions<Model, Schema>;
+  options: IHttpLlmApplication.IOptions<
+    Model,
+    Parameters["properties"][string]
+  >;
 }
 export namespace IHttpLlmApplication {
   export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
+  export type ModelParameters = {
+    "3.0": ILlmSchemaV3.IObject;
+    "3.1": ILlmSchemaV3_1.IObject;
+    chatgpt: IChatGptSchema.ITopObject;
+    gemini: IGeminiSchema.IObject;
+  };
   export type ModelSchema = {
     "3.0": ILlmSchemaV3;
     "3.1": ILlmSchemaV3_1;
-    chatgpt: IChatGptSchema.ITop;
+    chatgpt: IChatGptSchema;
     gemini: IGeminiSchema;
   };
 
@@ -166,39 +172,9 @@ export namespace IHttpLlmApplication {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema.ITop
+      | IChatGptSchema
       | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
   > {
-    /**
-     * Whether the parameters are keyworded or not.
-     *
-     * If this property value is `true`, length of the
-     * {@link IHttpLlmApplication.IFunction.parameters} is always 1, and type of
-     * the pararameter is always {@link ILlmSchemaV3.IObject} type.
-     *
-     * Otherwise, the parameters would be multiple, and the sequence of the parameters
-     * are following below rules.
-     *
-     * ```typescript
-     * // KEYWORD TRUE
-     * {
-     *   ...pathParameters,
-     *   query,
-     *   body,
-     * }
-     *
-     * // KEYWORD FALSE
-     * [
-     *   ...pathParameters,
-     *   ...(query ? [query] : []),
-     *   ...(body ? [body] : []),
-     * ]
-     * ```
-     *
-     * @default false
-     */
-    keyword: boolean;
-
     /**
      * Whether to allow recursive types or not.
      *

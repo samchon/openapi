@@ -68,53 +68,37 @@ export namespace HttpLlm {
    */
   export const application = <
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
   >(props: {
     model: Model;
     document:
       | OpenApi.IDocument<OpenApi.IJsonSchema, Operation>
       | IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
-    options?: Partial<IHttpLlmApplication.IOptions<Model, Schema>>;
-  }): IHttpLlmApplication<Model, Schema> => {
+    options?: Partial<
+      IHttpLlmApplication.IOptions<Model, Parameters["properties"][string]>
+    >;
+  }): IHttpLlmApplication<Model, Parameters> => {
     // MIGRATE
     const migrate: IHttpMigrateApplication =
       (props.document as OpenApi.IDocument)["x-samchon-emended"] === true
         ? HttpMigration.application(props.document as OpenApi.IDocument)
         : (props.document as IHttpMigrateApplication);
-    return HttpLlmConverter.compose<Model, Schema>({
+    return HttpLlmConverter.compose<Model, Parameters>({
       migrate,
       model: props.model,
       options: {
-        keyword: props.options?.keyword ?? false,
         separate: props.options?.separate ?? null,
         recursive: (props.model === "chatgpt"
           ? undefined
           : (props.options?.recursive ?? 3)) as IHttpLlmApplication.IOptions<
           Model,
-          Schema
+          Parameters["properties"][string]
         >["recursive"],
       },
     });
   };
-
-  export const schema = <
-    Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
-  >(props: {
-    model: Model;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    recursive: false | number;
-  }): Schema | null => HttpLlmConverter.schema(props);
 
   /* -----------------------------------------------------------
     FETCHERS
@@ -124,11 +108,8 @@ export namespace HttpLlm {
    */
   export interface IFetchProps<
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
     Route extends IHttpMigrateRoute = IHttpMigrateRoute<
       OpenApi.IJsonSchema,
@@ -138,12 +119,12 @@ export namespace HttpLlm {
     /**
      * Application of the LLM function calling.
      */
-    application: IHttpLlmApplication<Model, Schema, Operation>;
+    application: IHttpLlmApplication<Model, Parameters, Operation>;
 
     /**
      * LLM function schema to call.
      */
-    function: IHttpLlmFunction<Schema, Operation, Route>;
+    function: IHttpLlmFunction<Parameters, Operation, Route>;
 
     /**
      * Connection info to the HTTP server.
@@ -183,14 +164,11 @@ export namespace HttpLlm {
    */
   export const execute = <
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
   >(
-    props: IFetchProps<Model, Schema, Operation>,
+    props: IFetchProps<Model, Parameters, Operation>,
   ): Promise<unknown> => HttpLlmFunctionFetcher.execute(props);
 
   /**
@@ -219,14 +197,11 @@ export namespace HttpLlm {
    */
   export const propagate = <
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
   >(
-    props: IFetchProps<Model, Schema, Operation>,
+    props: IFetchProps<Model, Parameters, Operation>,
   ): Promise<IHttpResponse> => HttpLlmFunctionFetcher.propagate(props);
 
   /* -----------------------------------------------------------
@@ -236,26 +211,26 @@ export namespace HttpLlm {
    * Properties for the parameters' merging.
    */
   export interface IMergeProps<
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema,
+    Parameters extends
+      | ILlmSchemaV3.IObject
+      | ILlmSchemaV3_1.IObject
+      | IChatGptSchema.ITopObject
+      | IGeminiSchema.IObject,
   > {
     /**
      * Metadata of the target function.
      */
-    function: ILlmFunction<Schema>;
+    function: ILlmFunction<Parameters>;
 
     /**
      * Arguments composed by the LLM.
      */
-    llm: unknown[];
+    llm: object | null;
 
     /**
      * Arguments composed by the human.
      */
-    human: unknown[];
+    human: object | null;
   }
 
   /**
@@ -274,14 +249,14 @@ export namespace HttpLlm {
    * @returns Merged parameter values
    */
   export const mergeParameters = <
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema,
+    Parameters extends
+      | ILlmSchemaV3.IObject
+      | ILlmSchemaV3_1.IObject
+      | IChatGptSchema.ITopObject
+      | IGeminiSchema.IObject,
   >(
-    props: IMergeProps<Schema>,
-  ): unknown[] => LlmDataMerger.parameters(props);
+    props: IMergeProps<Parameters>,
+  ): object => LlmDataMerger.parameters(props);
 
   /**
    * Merge two values.

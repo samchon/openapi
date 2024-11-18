@@ -945,7 +945,7 @@ export namespace OpenApi {
        * If you need additional properties that is represented by dynamic key,
        * you can use the {@link additionalProperties} instead.
        */
-      properties?: Record<string, Schema>;
+      properties: Record<string, Schema>;
 
       /**
        * Additional properties' info.

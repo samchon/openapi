@@ -26,11 +26,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export interface ILlmFunction<
-  Schema extends
-    | ILlmSchemaV3
-    | ILlmSchemaV3_1
-    | IChatGptSchema.ITop
-    | IGeminiSchema,
+  Parameters extends
+    | ILlmSchemaV3.IObject
+    | ILlmSchemaV3_1.IObject
+    | IChatGptSchema.ITopObject
+    | IGeminiSchema.IObject,
 > {
   /**
    * Representative name of the function.
@@ -40,12 +40,12 @@ export interface ILlmFunction<
   /**
    * List of parameter types.
    */
-  parameters: Schema[];
+  parameters: Parameters;
 
   /**
    * Collection of separated parameters.
    */
-  separated?: ILlmFunction.ISeparated<Schema>;
+  separated?: ILlmFunction.ISeparated<Parameters>;
 
   /**
    * Expected return type.
@@ -53,7 +53,16 @@ export interface ILlmFunction<
    * If the function returns nothing (`void`), the `output` value would
    * be `undefined`.
    */
-  output?: Schema | undefined;
+  output?: Parameters["properties"][string];
+
+  /**
+   * Whether the function schema types are strict or not.
+   *
+   * Newly added specification to "OpenAI" at 2024-08-07.
+   *
+   * @reference https://openai.com/index/introducing-structured-outputs-in-the-api/
+   */
+  strict: true;
 
   /**
    * Description of the function.
@@ -89,43 +98,20 @@ export namespace ILlmFunction {
    * Collection of separated parameters.
    */
   export interface ISeparated<
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema.ITop
-      | IGeminiSchema,
+    Parameters extends
+      | ILlmSchemaV3.IObject
+      | ILlmSchemaV3_1.IObject
+      | IChatGptSchema.ITopObject
+      | IGeminiSchema.IObject,
   > {
     /**
      * Parameters that would be composed by the LLM.
      */
-    llm: ISeparatedParameter<Schema>[];
+    llm: Parameters | null;
 
     /**
      * Parameters that would be composed by the human.
      */
-    human: ISeparatedParameter<Schema>[];
-  }
-
-  /**
-   * Separated parameter.
-   */
-  export interface ISeparatedParameter<
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema.ITop
-      | IGeminiSchema,
-  > {
-    /**
-     * Index of the parameter.
-     *
-     * @type uint
-     */
-    index: number;
-
-    /**
-     * Type schema info of the parameter.
-     */
-    schema: Schema;
+    human: Parameters | null;
   }
 }

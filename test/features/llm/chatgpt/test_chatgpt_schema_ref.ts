@@ -62,7 +62,7 @@ export const test_chatgpt_schema_ref = (): void => {
 
 const test = (
   collection: IJsonSchemaCollection,
-  expected: IChatGptSchema.ITop,
+  expected: IChatGptSchema.ITopObject,
 ): void => {
   const schema: IChatGptSchema.ITop | null = ChatGptConverter.schema({
     components: collection.components,

@@ -329,7 +329,7 @@ export namespace OpenApiV3Converter {
                         convertSchema(components)(value),
                       ]),
                   )
-                : undefined,
+                : {},
               additionalProperties: schema.additionalProperties
                 ? typeof schema.additionalProperties === "object" &&
                   schema.additionalProperties !== null
