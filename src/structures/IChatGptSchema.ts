@@ -33,9 +33,10 @@
  * and the others would be ecaped from the {@link IChatGptSchema.IReference} type.
  *
  * Also, if you've composed the `IChatGptSchema` type with the
- * {@link ILlmApplication.IChatGptOptions.tag} `false` option, the `IChatGptSchema`
- * would not compose these properties. Instead, these properties would be written on the
- * {@link IChatGptSchema.__IAttribute}.descripotion field like `@format uuid` case.
+ * {@link ILlmApplication.IChatGptOptions.constraint} `false` option, the
+ * `IChatGptSchema` would not compose these properties. Instead, these
+ * properties would be written on {@link IChatGptSchema.__IAttribute.descripotion}
+ * field like `@format uuid` case.
  *
  * - {@link IChatGptSchema.INumber.minimum}
  * - {@link IChatGptSchema.INumber.maximum}

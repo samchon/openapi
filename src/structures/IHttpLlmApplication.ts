@@ -3,6 +3,7 @@ import { IChatGptSchema } from "./IChatGptSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
+import { ILlmApplication } from "./ILlmApplication";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
@@ -104,7 +105,9 @@ export interface IHttpLlmApplication<
    */
   options: IHttpLlmApplication.IOptions<
     Model,
-    Parameters["properties"][string]
+    Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
+      ? Parameters["properties"][string]
+      : IHttpLlmApplication.ModelSchema[Model]
   >;
 }
 export namespace IHttpLlmApplication {
@@ -164,56 +167,7 @@ export namespace IHttpLlmApplication {
     route: () => Route | undefined;
   }
 
-  /**
-   * Options for composing the LLM application.
-   */
-  export interface IOptions<
-    Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
-  > {
-    /**
-     * Whether to allow recursive types or not.
-     *
-     * If allow, then how many times to repeat the recursive types.
-     *
-     * By the way, if the model is "chatgpt", the recursive types are always
-     * allowed without any limitation, due to it supports the reference type.
-     *
-     * @default 3
-     */
-    recursive: Model extends "chatgpt" ? never : false | number;
-
-    /**
-     * Separator function for the parameters.
-     *
-     * When composing parameter arguments through LLM function call,
-     * there can be a case that some parameters must be composed by Human,
-     * or LLM cannot understand the parameter. For example, if the
-     * parameter type has configured
-     * {@link ILlmSchemaV3.IString.contentMediaType} which indicates file
-     * uploading, it must be composed by Human, not by LLM
-     * (Large Language Model).
-     *
-     * In that case, if you configure this property with a function that
-     * predicating whether the schema value must be composed by Human or
-     * not, the parameters would be separated into two parts.
-     *
-     * - {@link IHttpLlmFunction.separated.llm}
-     * - {@link IHttpLlmFunction.separated.Human}
-     *
-     * When writing the function, note that returning value `true` means
-     * to be a Human composing the value, and `false` means to LLM
-     * composing the value. Also, when predicating the schema, it would
-     * better to utilize the {@link LlmTypeChecker} features.
-     *
-     * @param schema Schema to be separated.
-     * @returns Whether the schema value must be composed by Human or not.
-     * @default null
-     */
-    separate: null | ((schema: Schema) => boolean);
-  }
+  export import IOptions = ILlmApplication.IOptions;
+  export import ICommonOptions = ILlmApplication.ICommonOptions;
+  export import IChatGptOptions = ILlmApplication.IChatGptOptions;
 }

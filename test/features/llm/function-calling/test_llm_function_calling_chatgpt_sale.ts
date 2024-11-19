@@ -21,8 +21,10 @@ export const test_llm_function_calling_chatgpt_sale =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
-        escape: process.argv.includes("--escape"),
-        tag: process.argv.includes("--tag"),
+        options: {
+          reference: process.argv.includes("--reference"),
+          constraint: process.argv.includes("--constraint"),
+        },
       });
     if (parameters === null)
       throw new Error(

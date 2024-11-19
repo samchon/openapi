@@ -77,7 +77,12 @@ export namespace HttpLlm {
       | OpenApi.IDocument<OpenApi.IJsonSchema, Operation>
       | IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
     options?: Partial<
-      IHttpLlmApplication.IOptions<Model, Parameters["properties"][string]>
+      IHttpLlmApplication.IOptions<
+        Model,
+        Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
+          ? Parameters["properties"][string]
+          : IHttpLlmApplication.ModelSchema[Model]
+      >
     >;
   }): IHttpLlmApplication<Model, Parameters> => {
     // MIGRATE
@@ -88,15 +93,35 @@ export namespace HttpLlm {
     return HttpLlmConverter.compose<Model, Parameters>({
       migrate,
       model: props.model,
-      options: {
-        separate: props.options?.separate ?? null,
-        recursive: (props.model === "chatgpt"
-          ? undefined
-          : (props.options?.recursive ?? 3)) as IHttpLlmApplication.IOptions<
-          Model,
-          Parameters["properties"][string]
-        >["recursive"],
-      },
+      options: (props.model === "chatgpt"
+        ? ({
+            separate:
+              (props.options
+                ?.separate as IHttpLlmApplication.IChatGptOptions["separate"]) ??
+              null,
+            reference:
+              (props.options as IHttpLlmApplication.IChatGptOptions | undefined)
+                ?.reference ?? false,
+            constraint:
+              (props.options as IHttpLlmApplication.IChatGptOptions | undefined)
+                ?.constraint ?? true,
+          } satisfies IHttpLlmApplication.IChatGptOptions)
+        : ({
+            separate:
+              (props.options?.separate as IHttpLlmApplication.ICommonOptions<
+                Exclude<Model, "chatgpt">
+              >["separate"]) ?? null,
+            recursive:
+              (
+                props.options as
+                  | IHttpLlmApplication.ICommonOptions<
+                      Exclude<Model, "chatgpt">
+                    >
+                  | undefined
+              )?.recursive ?? 3,
+          } satisfies IHttpLlmApplication.ICommonOptions<
+            Exclude<Model, "chatgpt">
+          >)) as IHttpLlmApplication.IOptions<Model>,
     });
   };
 

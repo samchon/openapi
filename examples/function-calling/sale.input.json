@@ -5,7 +5,7 @@
   "closed_at": null,
   "content": {
     "title": "Surface Pro 8",
-    "format": "html",
+    "format": "md",
     "body": "The best laptop for your daily needs.",
     "files": [],
     "thumbnails": []
@@ -64,10 +64,10 @@
       ],
       "stocks": [
         {
-          "name": "i3, 8 GB, 128 GB",
+          "name": "Intel Core i3 / 8 GB RAM / 128 GB Storage",
           "price": {
-            "nominal": 99900,
-            "real": 89900
+            "nominal": 999,
+            "real": 899
           },
           "quantity": 1000,
           "choices": [
@@ -86,10 +86,10 @@
           ]
         },
         {
-          "name": "i3, 16 GB, 256 GB",
+          "name": "Intel Core i3 / 16 GB RAM / 256 GB Storage",
           "price": {
-            "nominal": 119900,
-            "real": 109900
+            "nominal": 1199,
+            "real": 1099
           },
           "quantity": 1000,
           "choices": [
@@ -108,10 +108,10 @@
           ]
         },
         {
-          "name": "i3, 16 GB, 512 GB",
+          "name": "Intel Core i3 / 16 GB RAM / 512 GB Storage",
           "price": {
-            "nominal": 139900,
-            "real": 129900
+            "nominal": 1399,
+            "real": 1299
           },
           "quantity": 1000,
           "choices": [
@@ -130,10 +130,10 @@
           ]
         },
         {
-          "name": "i5, 16 GB, 256 GB",
+          "name": "Intel Core i5 / 16 GB RAM / 256 GB Storage",
           "price": {
-            "nominal": 149900,
-            "real": 139900
+            "nominal": 1499,
+            "real": 1399
           },
           "quantity": 1000,
           "choices": [
@@ -152,10 +152,10 @@
           ]
         },
         {
-          "name": "i5, 32 GB, 512 GB",
+          "name": "Intel Core i5 / 32 GB RAM / 512 GB Storage",
           "price": {
-            "nominal": 179900,
-            "real": 169900
+            "nominal": 1799,
+            "real": 1699
           },
           "quantity": 1000,
           "choices": [
@@ -174,10 +174,10 @@
           ]
         },
         {
-          "name": "i7, 16 GB, 512 GB",
+          "name": "Intel Core i7 / 16 GB RAM / 512 GB Storage",
           "price": {
-            "nominal": 179900,
-            "real": 169900
+            "nominal": 1799,
+            "real": 1699
           },
           "quantity": 1000,
           "choices": [
@@ -196,10 +196,10 @@
           ]
         },
         {
-          "name": "i7, 32 GB, 512 GB",
+          "name": "Intel Core i7 / 32 GB RAM / 512 GB Storage",
           "price": {
-            "nominal": 199900,
-            "real": 189900
+            "nominal": 1999,
+            "real": 1899
           },
           "quantity": 1000,
           "choices": [
@@ -218,31 +218,27 @@
           ]
         }
       ],
-      "name": "Surface Pro 8 Entity",
       "required": true,
+      "name": "Surface Pro 8 Entity",
       "primary": true
     },
     {
       "options": [],
       "stocks": [
         {
-          "name": "Warranty Program",
+          "name": "Standard Warranty",
           "price": {
-            "nominal": 9900,
-            "real": 8900
+            "nominal": 99,
+            "real": 89
           },
           "quantity": 1000,
           "choices": []
         }
       ],
-      "name": "Warranty Program",
       "required": false,
+      "name": "Warranty Program",
       "primary": false
     }
   ],
-  "tags": [
-    "laptop",
-    "Surface",
-    "Pro8"
-  ]
+  "tags": []
 }

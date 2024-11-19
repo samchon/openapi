@@ -10,7 +10,10 @@ export const test_llm_schema_union_const = (): void => {
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
-    escape: true,
+    options: {
+      constraint: true,
+      reference: false,
+    },
   });
   TestValidator.equals("enum")(
     typia.assert<IChatGptSchema.IString>(

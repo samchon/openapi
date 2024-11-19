@@ -20,8 +20,10 @@ export const test_llm_function_calling_chatgpt_tags =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
-        escape: false,
-        tag: true,
+        options: {
+          reference: true,
+          constraint: true,
+        },
       });
     if (parameters === null)
       throw new Error(

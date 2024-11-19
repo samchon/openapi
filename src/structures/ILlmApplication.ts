@@ -54,7 +54,12 @@ export interface ILlmApplication<
   /**
    * Options for the application.
    */
-  options: ILlmApplication.IOptions<Model, Parameters["properties"][string]>;
+  options: ILlmApplication.IOptions<
+    Model,
+    Parameters["properties"][string] extends ILlmApplication.ModelSchema[Model]
+      ? Parameters["properties"][string]
+      : ILlmApplication.ModelSchema[Model]
+  >;
 }
 export namespace ILlmApplication {
   export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
@@ -74,13 +79,26 @@ export namespace ILlmApplication {
   /**
    * Options for composing the LLM application.
    */
-  export interface IOptions<
+  export type IOptions<
     Model extends ILlmApplication.Model,
     Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = ILlmApplication.ModelSchema[Model],
+      ILlmApplication.ModelSchema[Model] = ILlmApplication.ModelSchema[Model],
+  > = Model extends "chatgpt"
+    ? IChatGptOptions<Schema extends IChatGptSchema ? Schema : IChatGptSchema>
+    : ICommonOptions<
+        Exclude<Model, "chatgpt">,
+        Schema extends ILlmApplication.ModelSchema[Exclude<Model, "chatgpt">]
+          ? Schema
+          : ILlmApplication.ModelSchema[Exclude<Model, "chatgpt">]
+      >;
+
+  /**
+   * Options for non "chatgpt" model.
+   */
+  export interface ICommonOptions<
+    Model extends Exclude<ILlmApplication.Model, "chatgpt">,
+    Schema extends
+      ILlmApplication.ModelSchema[Model] = ILlmApplication.ModelSchema[Model],
   > {
     /**
      * Whether to allow recursive types or not.
@@ -92,7 +110,7 @@ export namespace ILlmApplication {
      *
      * @default 3
      */
-    recursive: Model extends "chatgpt" ? never : false | number;
+    recursive: false | number;
 
     /**
      * Separator function for the parameters.
@@ -122,5 +140,92 @@ export namespace ILlmApplication {
      * @default null
      */
     separate: null | ((schema: Schema) => boolean);
+  }
+
+  /**
+   * Options for "chatgpt" model.
+   */
+  export interface IChatGptOptions<
+    Schema extends IChatGptSchema = IChatGptSchema,
+  > {
+    /**
+     * Separator function for the parameters.
+     *
+     * When composing parameter arguments through LLM function call,
+     * there can be a case that some parameters must be composed by human,
+     * or LLM cannot understand the parameter. For example, if the
+     * parameter type has configured
+     * {@link IChatGptSchema.IString.contentMediaType} which indicates file
+     * uploading, it must be composed by human, not by LLM
+     * (Large Language Model).
+     *
+     * In that case, if you configure this property with a function that
+     * predicating whether the schema value must be composed by human or
+     * not, the parameters would be separated into two parts.
+     *
+     * - {@link ILlmFunction.separated.llm}
+     * - {@link ILlmFunction.separated.human}
+     *
+     * When writing the function, note that returning value `true` means
+     * to be a human composing the value, and `false` means to LLM
+     * composing the value. Also, when predicating the schema, it would
+     * better to utilize the {@link ChatGptTypeChecker} features.
+     *
+     * @param schema Schema to be separated.
+     * @returns Whether the schema value must be composed by human or not.
+     * @default null
+     */
+    separate: null | ((schema: Schema) => boolean);
+
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link IChatGptSchema.IReference} would be escaped to
+     * a plain type unless recursive type case.
+     *
+     * This is because the lower version of ChatGPT does not understand the
+     * reference type well, and even the modern version of ChatGPT sometimes occur
+     * the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that reduces
+     * the LLM token cost. Therefore, if you're using the modern version of ChatGPT,
+     * and want to reduce the LLM token cost, you can configure this property to
+     * `true`.
+     *
+     * @default false
+     */
+    reference: boolean;
+
+    /**
+     * Whether to allow contraint properties or not.
+     *
+     * If you configure this property to `false`, the schemas do not containt
+     * the constraint properties of below. Instead, below properties would be
+     * written to the {@link IChatGptSchema.__IAttribute.description} property
+     * as a comment string like `"@format uuid"`.
+     *
+     * This is because the ChatGPT function calling understands the constraint
+     * properties when the function parameter types are simple, however it occurs
+     * some errors when the parameter types are complex.
+     *
+     * Therefore, considering the complexity of your parameter types, determine
+     * which is better, to allow the constraint properties or not.
+     *
+     * - {@link IChatGptSchema.INumber.minimum}
+     * - {@link IChatGptSchema.INumber.maximum}
+     * - {@link IChatGptSchema.INumber.multipleOf}
+     * - {@link IChatGptSchema.IString.minLength}
+     * - {@link IChatGptSchema.IString.maxLength}
+     * - {@link IChatGptSchema.IString.format}
+     * - {@link IChatGptSchema.IString.pattern}
+     * - {@link IChatGptSchema.IString.contentMediaType}
+     * - {@link IChatGptSchema.IArray.minItems}
+     * - {@link IChatGptSchema.IArray.maxItems}
+     * - {@link IChatGptSchema.IArray.unique}
+     *
+     * @default false
+     */
+    constraint: boolean;
   }
 }
