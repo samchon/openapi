@@ -5,7 +5,9 @@ import typia, { IJsonSchemaCollection, tags } from "typia";
 
 export const test_chatgpt_schema_ref = (): void => {
   test(typia.json.schemas<[IShoppingCategory]>(), {
-    $ref: "#/$defs/IShoppingCategory",
+    schema: {
+      $ref: "#/$defs/IShoppingCategory",
+    },
     $defs: {
       IShoppingCategory: {
         type: "object",
@@ -30,7 +32,9 @@ export const test_chatgpt_schema_ref = (): void => {
     },
   });
   test(typia.json.schemas<[IShoppingCategory.IInvert]>(), {
-    $ref: "#/$defs/IShoppingCategory.IInvert",
+    schema: {
+      $ref: "#/$defs/IShoppingCategory.IInvert",
+    },
     $defs: {
       "IShoppingCategory.IInvert": {
         type: "object",
@@ -43,7 +47,7 @@ export const test_chatgpt_schema_ref = (): void => {
             type: "string",
           },
           parent: {
-            oneOf: [
+            anyOf: [
               {
                 type: "null",
               },
@@ -62,13 +66,21 @@ export const test_chatgpt_schema_ref = (): void => {
 
 const test = (
   collection: IJsonSchemaCollection,
-  expected: IChatGptSchema.ITopObject,
+  expected: {
+    schema: IChatGptSchema;
+    $defs: Record<string, IChatGptSchema>;
+  },
 ): void => {
-  const schema: IChatGptSchema.ITop | null = ChatGptConverter.schema({
+  const $defs: Record<string, IChatGptSchema> = {};
+  const schema: IChatGptSchema | null = ChatGptConverter.schema({
+    $defs,
     components: collection.components,
     schema: collection.schemas[0],
   });
-  TestValidator.equals("ref")(schema)(expected);
+  TestValidator.equals("ref")(expected)({
+    $defs,
+    schema: schema!,
+  });
 };
 
 interface IShoppingCategory {

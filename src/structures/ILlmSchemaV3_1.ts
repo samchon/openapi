@@ -11,6 +11,16 @@ export type ILlmSchemaV3_1 =
   | ILlmSchemaV3_1.IUnknown;
 export namespace ILlmSchemaV3_1 {
   /**
+   * Type of the function parameters.
+   */
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+    /**
+     * Do not allow additional properties in the parameters.
+     */
+    additionalProperties: false;
+  }
+
+  /**
    * Constant value type.
    */
   export interface IConstant extends __IAttribute {

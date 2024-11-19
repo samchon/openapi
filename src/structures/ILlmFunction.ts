@@ -27,10 +27,10 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  */
 export interface ILlmFunction<
   Parameters extends
-    | ILlmSchemaV3.IObject
-    | ILlmSchemaV3_1.IObject
-    | IChatGptSchema.ITopObject
-    | IGeminiSchema.IObject,
+    | ILlmSchemaV3.IParameters
+    | ILlmSchemaV3_1.IParameters
+    | IChatGptSchema.IParameters
+    | IGeminiSchema.IParameters,
 > {
   /**
    * Representative name of the function.
@@ -99,10 +99,10 @@ export namespace ILlmFunction {
    */
   export interface ISeparated<
     Parameters extends
-      | ILlmSchemaV3.IObject
-      | ILlmSchemaV3_1.IObject
-      | IChatGptSchema.ITopObject
-      | IGeminiSchema.IObject,
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   > {
     /**
      * Parameters that would be composed by the LLM.

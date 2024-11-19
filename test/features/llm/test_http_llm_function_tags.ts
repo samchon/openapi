@@ -14,11 +14,8 @@ export const test_http_llm_function_deprecated = (): void => {
   const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
     model: "3.0",
     document,
-    options: {
-      keyword: true,
-    },
   });
-  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
     application.functions.find(
       (f) =>
         f.method === "post" && f.path === "/{index}/{level}/{optimal}/body",

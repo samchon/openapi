@@ -15,10 +15,10 @@ export namespace LlmDataMerger {
    */
   export interface IProps<
     Parameters extends
-      | ILlmSchemaV3.IObject
-      | ILlmSchemaV3_1.IObject
-      | IChatGptSchema.ITopObject
-      | IGeminiSchema.IObject,
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   > {
     /**
      * Target function to call.
@@ -53,10 +53,10 @@ export namespace LlmDataMerger {
    */
   export const parameters = <
     Parameters extends
-      | ILlmSchemaV3.IObject
-      | ILlmSchemaV3_1.IObject
-      | IChatGptSchema.ITopObject
-      | IGeminiSchema.IObject,
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   >(
     props: IProps<Parameters>,
   ): object => {

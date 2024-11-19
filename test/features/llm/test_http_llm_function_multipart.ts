@@ -8,9 +8,6 @@ export const test_http_llm_function_multipart = (): void => {
   const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
     model: "3.0",
     document,
-    options: {
-      keyword: true,
-    },
   });
   TestValidator.equals("multipart not suppported")(
     !!application.errors.find(

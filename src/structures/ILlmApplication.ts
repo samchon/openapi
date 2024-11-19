@@ -59,10 +59,10 @@ export interface ILlmApplication<
 export namespace ILlmApplication {
   export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
   export type ModelParameters = {
-    "3.0": ILlmSchemaV3.IObject;
-    "3.1": ILlmSchemaV3_1.IObject;
-    chatgpt: IChatGptSchema.ITopObject;
-    gemini: IGeminiSchema.IObject;
+    "3.0": ILlmSchemaV3.IParameters;
+    "3.1": ILlmSchemaV3_1.IParameters;
+    chatgpt: IChatGptSchema.IParameters;
+    gemini: IGeminiSchema.IParameters;
   };
   export type ModelSchema = {
     "3.0": ILlmSchemaV3;

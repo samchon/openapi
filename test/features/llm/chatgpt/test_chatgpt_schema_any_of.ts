@@ -6,35 +6,31 @@ import typia, { IJsonSchemaCollection } from "typia";
 export const test_chatgpt_schema_oneof_discriminator = (): void => {
   const collection: IJsonSchemaCollection =
     typia.json.schemas<[IPoint | ILine | ITriangle | IRectangle]>();
-  const schema = ChatGptConverter.schema({
+
+  const $defs: Record<string, IChatGptSchema> = {};
+  const schema: IChatGptSchema | null = ChatGptConverter.schema({
+    $defs,
     components: collection.components,
     schema: collection.schemas[0],
   });
-  TestValidator.equals("discriminator")({
-    oneOf: [
-      {
-        $ref: "#/$defs/IPoint",
-      },
-      {
-        $ref: "#/$defs/ILine",
-      },
-      {
-        $ref: "#/$defs/ITriangle",
-      },
-      {
-        $ref: "#/$defs/IRectangle",
-      },
-    ],
-    discriminator: {
-      propertyName: "type",
-      mapping: {
-        point: "#/$defs/IPoint",
-        line: "#/$defs/ILine",
-        triangle: "#/$defs/ITriangle",
-        rectangle: "#/$defs/IRectangle",
-      },
-    },
-  } satisfies IChatGptSchema as IChatGptSchema)(schema as IChatGptSchema);
+  TestValidator.equals("anyOf")(schema)(
+    typia.assert<IChatGptSchema>({
+      anyOf: [
+        {
+          $ref: "#/$defs/IPoint",
+        },
+        {
+          $ref: "#/$defs/ILine",
+        },
+        {
+          $ref: "#/$defs/ITriangle",
+        },
+        {
+          $ref: "#/$defs/IRectangle",
+        },
+      ],
+    }),
+  );
 };
 
 interface IPoint {

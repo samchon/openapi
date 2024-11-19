@@ -5,38 +5,53 @@ export const test_llm_merge_parameters = (): void => {
   TestValidator.equals("atomics")(
     HttpLlm.mergeParameters({
       function: {
+        strict: true,
         name: "test",
-        parameters: [
-          { type: "boolean" },
-          { type: "number" },
-          { type: "string" },
-          { type: "string" },
-        ],
+        parameters: {
+          type: "object",
+          properties: {
+            a: { type: "boolean" },
+            b: { type: "number" },
+            c: { type: "string" },
+            d: { type: "string" },
+          },
+          additionalProperties: false,
+          required: ["a", "b", "c", "d"],
+        },
         separated: {
-          human: [
-            {
-              schema: { type: "boolean" },
-              index: 0,
+          human: {
+            type: "object",
+            properties: {
+              a: { type: "boolean" },
+              b: { type: "number" },
             },
-            {
-              schema: { type: "number" },
-              index: 1,
+            additionalProperties: false,
+            required: ["a", "b"],
+          },
+          llm: {
+            type: "object",
+            properties: {
+              c: { type: "string" },
+              d: { type: "string" },
             },
-          ],
-          llm: [
-            {
-              schema: { type: "string" },
-              index: 2,
-            },
-            {
-              schema: { type: "string" },
-              index: 3,
-            },
-          ],
+            additionalProperties: false,
+            required: ["c", "d"],
+          },
         },
       },
-      human: [false, 1],
-      llm: ["two", "three"],
+      human: {
+        a: false,
+        b: 1,
+      },
+      llm: {
+        c: "two",
+        d: "three",
+      },
     }),
-  )([false, 1, "two", "three"]);
+  )({
+    a: false,
+    b: 1,
+    c: "two",
+    d: "three",
+  });
 };

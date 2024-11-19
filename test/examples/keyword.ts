@@ -28,13 +28,11 @@ const main = async (): Promise<void> => {
   const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
     model: "3.0",
     document,
-    options: {
-      keyword: true,
-    },
+    options: {},
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
       (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
@@ -48,7 +46,7 @@ const main = async (): Promise<void> => {
     },
     application,
     function: func,
-    arguments: [
+    input: [
       {
         section: "general",
         id: v4(),

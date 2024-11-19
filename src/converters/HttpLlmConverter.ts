@@ -202,7 +202,7 @@ export namespace HttpLlmConverter {
       required: properties.map(([k]) => k),
     } as any as Parameters;
     if (Object.keys($defs).length)
-      (parameters as any as IChatGptSchema.ITopObject).$defs = $defs;
+      (parameters as any as IChatGptSchema.IParameters).$defs = $defs;
     const operation: OpenApi.IOperation = props.route.operation();
 
     // FINALIZATION

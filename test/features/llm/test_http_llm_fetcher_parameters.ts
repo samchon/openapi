@@ -12,7 +12,7 @@ import {
 
 import swagger from "../../swagger.json";
 
-export const test_http_llm_fetcher_keyword_parameters = async (
+export const test_http_llm_fetcher_parameters = async (
   connection: IHttpConnection,
 ): Promise<void> => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
@@ -20,12 +20,11 @@ export const test_http_llm_fetcher_keyword_parameters = async (
     model: "3.0",
     document,
     options: {
-      keyword: false,
       separate: (schema) =>
         LlmTypeCheckerV3.isString(schema) && !!schema.contentMediaType,
     },
   });
-  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
     application.functions.find(
       (f) =>
         f.path === "/{index}/{level}/{optimal}/parameters" &&
@@ -37,10 +36,15 @@ export const test_http_llm_fetcher_keyword_parameters = async (
     connection,
     application,
     function: func,
-    arguments: HttpLlm.mergeParameters({
+    input: HttpLlm.mergeParameters({
       function: func,
-      llm: [123, true],
-      human: ["https://some.url/index.html"],
+      llm: {
+        level: 123,
+        optimal: true,
+      },
+      human: {
+        index: "https://some.url/index.html",
+      },
     }),
   });
   TestValidator.equals("response.status")(response.status)(200);

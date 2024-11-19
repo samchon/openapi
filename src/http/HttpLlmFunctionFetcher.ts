@@ -49,11 +49,8 @@ export namespace HttpLlmFunctionFetcher {
     props: HttpLlm.IFetchProps<Model, Parameters, Operation, Route>,
   ): HttpMigration.IFetchProps => {
     const route: Route = props.function.route();
-    const input: Record<string, any> = props.arguments[0];
-    const valid: boolean =
-      props.arguments.length === 1 &&
-      typeof input === "object" &&
-      input !== null;
+    const input: Record<string, any> = props.input;
+    const valid: boolean = typeof input === "object" && input !== null;
     if (valid === false)
       throw new Error(
         `Error on HttpLlmFunctionFetcher.${from}(): keyworded arguments must be an object`,

@@ -132,9 +132,9 @@ export namespace HttpLlm {
     connection: IHttpConnection;
 
     /**
-     * Arguments for the function call.
+     * Input arguments for the function call.
      */
-    arguments: any[];
+    input: object;
   }
 
   /**
@@ -212,10 +212,10 @@ export namespace HttpLlm {
    */
   export interface IMergeProps<
     Parameters extends
-      | ILlmSchemaV3.IObject
-      | ILlmSchemaV3_1.IObject
-      | IChatGptSchema.ITopObject
-      | IGeminiSchema.IObject,
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   > {
     /**
      * Metadata of the target function.
@@ -250,10 +250,10 @@ export namespace HttpLlm {
    */
   export const mergeParameters = <
     Parameters extends
-      | ILlmSchemaV3.IObject
-      | ILlmSchemaV3_1.IObject
-      | IChatGptSchema.ITopObject
-      | IGeminiSchema.IObject,
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   >(
     props: IMergeProps<Parameters>,
   ): object => LlmDataMerger.parameters(props);

@@ -59,10 +59,10 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  */
 export interface IHttpLlmFunction<
   Parameters extends
-    | ILlmSchemaV3.IObject
-    | ILlmSchemaV3_1.IObject
-    | IChatGptSchema.ITopObject
-    | IGeminiSchema.IObject,
+    | ILlmSchemaV3.IParameters
+    | ILlmSchemaV3_1.IParameters
+    | IChatGptSchema.IParameters
+    | IGeminiSchema.IParameters,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
@@ -233,10 +233,10 @@ export namespace IHttpLlmFunction {
    */
   export interface ISeparated<
     Parameters extends
-      | ILlmSchemaV3.IObject
-      | ILlmSchemaV3_1.IObject
-      | IChatGptSchema.ITopObject
-      | IGeminiSchema.IObject,
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   > {
     /**
      * Parameters that would be composed by the LLM.
