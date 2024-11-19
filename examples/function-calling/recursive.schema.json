@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/IShoppingCategory"
+      }
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "IShoppingCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IShoppingCategory"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "children"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

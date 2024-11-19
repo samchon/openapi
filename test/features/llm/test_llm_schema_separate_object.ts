@@ -1,10 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import {
-  HttpLlm,
-  ILlmSchemaV3,
-  LlmTypeCheckerV3,
-  OpenApi,
-} from "@samchon/openapi";
+import { ILlmSchemaV3, LlmTypeCheckerV3, OpenApi } from "@samchon/openapi";
 import { LlmConverterV3 } from "@samchon/openapi/lib/converters/LlmConverterV3";
 import typia, { tags } from "typia";
 
@@ -46,8 +41,7 @@ const schema = (props: {
   components: OpenApi.IComponents;
   schemas: OpenApi.IJsonSchema[];
 }): ILlmSchemaV3 => {
-  const schema: ILlmSchemaV3 | null = HttpLlm.schema({
-    model: "3.0",
+  const schema: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components: props.components,
     schema: props.schemas[0],
     recursive: false,

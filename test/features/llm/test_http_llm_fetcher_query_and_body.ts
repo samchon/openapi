@@ -12,7 +12,7 @@ import {
 
 import swagger from "../../swagger.json";
 
-export const test_http_llm_fetcher_keyword_query_and_body = async (
+export const test_http_llm_fetcher_query_and_body = async (
   connection: IHttpConnection,
 ): Promise<void> => {
   const document: OpenApi.IDocument = OpenApi.convert(swagger as any);
@@ -20,12 +20,11 @@ export const test_http_llm_fetcher_keyword_query_and_body = async (
     model: "3.0",
     document,
     options: {
-      keyword: false,
       separate: (schema) =>
         LlmTypeCheckerV3.isString(schema) && !!schema.contentMediaType,
     },
   });
-  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
     application.functions.find(
       (f) =>
         f.path === "/{index}/{level}/{optimal}/query/body" &&
@@ -37,26 +36,26 @@ export const test_http_llm_fetcher_keyword_query_and_body = async (
     connection,
     application,
     function: func,
-    arguments: HttpLlm.mergeParameters({
+    input: HttpLlm.mergeParameters({
       function: func,
-      llm: [
-        123,
-        true,
-        {
+      llm: {
+        level: 123,
+        optimal: true,
+        query: {
           summary: "some summary",
         },
-        {
+        body: {
           title: "some title",
           body: "some body",
           draft: false,
         },
-      ],
-      human: [
-        "https://some.url/index.html",
-        {
+      },
+      human: {
+        index: "https://some.url/index.html",
+        query: {
           thumbnail: "https://some.url/file.jpg",
         },
-      ],
+      },
     }),
   });
   TestValidator.equals("response.status")(response.status)(201);

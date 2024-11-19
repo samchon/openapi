@@ -13,14 +13,9 @@ export namespace ChatGptTypeChecker {
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IUnknown =>
     (schema as IChatGptSchema.IUnknown).type === undefined &&
-    !isConstant(schema) &&
-    !isOneOf(schema) &&
+    !isAnyOf(schema) &&
     !isReference(schema);
 
-  export const isConstant = (
-    schema: IChatGptSchema,
-  ): schema is IChatGptSchema.IConstant =>
-    (schema as IChatGptSchema.IConstant).const !== undefined;
   export const isBoolean = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IBoolean =>
@@ -55,17 +50,17 @@ export namespace ChatGptTypeChecker {
   export const isReference = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IReference => (schema as any).$ref !== undefined;
-  export const isOneOf = (
+  export const isAnyOf = (
     schema: IChatGptSchema,
-  ): schema is IChatGptSchema.IOneOf =>
-    (schema as IChatGptSchema.IOneOf).oneOf !== undefined;
+  ): schema is IChatGptSchema.IAnyOf =>
+    (schema as IChatGptSchema.IAnyOf).anyOf !== undefined;
 
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
   export const visit = (props: {
     closure: (schema: IChatGptSchema) => void;
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     schema: IChatGptSchema;
   }): void => {
     const already: Set<string> = new Set();
@@ -75,9 +70,9 @@ export namespace ChatGptTypeChecker {
         const key: string = schema.$ref.split("#/$defs/").pop()!;
         if (already.has(key) === true) return;
         already.add(key);
-        const found: IChatGptSchema | undefined = props.top.$defs?.[key];
+        const found: IChatGptSchema | undefined = props.$defs?.[key];
         if (found !== undefined) next(found);
-      } else if (ChatGptTypeChecker.isOneOf(schema)) schema.oneOf.forEach(next);
+      } else if (ChatGptTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(next);
       else if (ChatGptTypeChecker.isObject(schema)) {
         for (const value of Object.values(schema.properties ?? {})) next(value);
         if (
@@ -99,19 +94,19 @@ export namespace ChatGptTypeChecker {
   };
 
   export const covers = (props: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     x: IChatGptSchema;
     y: IChatGptSchema;
   }): boolean =>
     coverStation({
-      top: props.top,
+      $defs: props.$defs,
       x: props.x,
       y: props.y,
       visited: new Map(),
     });
 
   const coverStation = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema;
     y: IChatGptSchema;
@@ -132,7 +127,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverSchema = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema;
     y: IChatGptSchema;
@@ -143,14 +138,14 @@ export namespace ChatGptTypeChecker {
       return true;
 
     // COMPARE WITH FLATTENING
-    const alpha: IChatGptSchema[] = flatSchema(p.top, p.x);
-    const beta: IChatGptSchema[] = flatSchema(p.top, p.y);
+    const alpha: IChatGptSchema[] = flatSchema(p.$defs, p.x);
+    const beta: IChatGptSchema[] = flatSchema(p.$defs, p.y);
     if (alpha.some((x) => isUnknown(x))) return true;
     else if (beta.some((x) => isUnknown(x))) return false;
     return beta.every((b) =>
       alpha.some((a) =>
         coverEscapedSchema({
-          top: p.top,
+          $defs: p.$defs,
           visited: p.visited,
           x: a,
           y: b,
@@ -160,7 +155,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverEscapedSchema = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema;
     y: IChatGptSchema;
@@ -171,26 +166,16 @@ export namespace ChatGptTypeChecker {
     else if (isUnknown(p.y)) return false;
     else if (isNull(p.x)) return isNull(p.y);
     // ATOMIC CASE
-    else if (isConstant(p.x)) return isConstant(p.y) && p.x.const === p.y.const;
-    else if (isBoolean(p.x))
-      return (
-        isBoolean(p.y) || (isConstant(p.y) && typeof p.y.const === "boolean")
-      );
-    else if (isInteger(p.x))
-      return (isInteger(p.y) || isConstant(p.y)) && coverInteger(p.x, p.y);
-    else if (isNumber(p.x))
-      return (
-        (isConstant(p.y) || isInteger(p.y) || isNumber(p.y)) &&
-        coverNumber(p.x, p.y)
-      );
-    else if (isString(p.x))
-      return (isConstant(p.y) || isString(p.y)) && coverString(p.x, p.y);
+    else if (isBoolean(p.x)) return isBoolean(p.y) && coverBoolean(p.x, p.y);
+    else if (isInteger(p.x)) return isInteger(p.y) && coverInteger(p.x, p.y);
+    else if (isNumber(p.x)) return isNumber(p.y) && coverNumber(p.x, p.y);
+    else if (isString(p.x)) return isString(p.y) && coverString(p.x, p.y);
     // INSTANCE CASE
     else if (isArray(p.x))
       return (
         (isArray(p.y) || isTuple(p.y)) &&
         coverArray({
-          top: p.top,
+          $defs: p.$defs,
           visited: p.visited,
           x: p.x,
           y: p.y,
@@ -200,7 +185,7 @@ export namespace ChatGptTypeChecker {
       return (
         isObject(p.y) &&
         coverObject({
-          top: p.top,
+          $defs: p.$defs,
           visited: p.visited,
           x: p.x,
           y: p.y,
@@ -211,7 +196,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverArray = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema.IArray;
     y: IChatGptSchema.IArray | IChatGptSchema.ITuple;
@@ -220,7 +205,7 @@ export namespace ChatGptTypeChecker {
       return (
         p.y.prefixItems.every((v) =>
           coverStation({
-            top: p.top,
+            $defs: p.$defs,
             visited: p.visited,
             x: p.x.items,
             y: v,
@@ -229,7 +214,7 @@ export namespace ChatGptTypeChecker {
         (p.y.additionalItems === undefined ||
           (typeof p.y.additionalItems === "object" &&
             coverStation({
-              top: p.top,
+              $defs: p.$defs,
               visited: p.visited,
               x: p.x.items,
               y: p.y.additionalItems,
@@ -250,7 +235,7 @@ export namespace ChatGptTypeChecker {
     )
       return false;
     return coverStation({
-      top: p.top,
+      $defs: p.$defs,
       visited: p.visited,
       x: p.x.items,
       y: p.y.items,
@@ -258,7 +243,7 @@ export namespace ChatGptTypeChecker {
   };
 
   const coverObject = (p: {
-    top: IChatGptSchema.ITop;
+    $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema.IObject;
     y: IChatGptSchema.IObject;
@@ -272,7 +257,7 @@ export namespace ChatGptTypeChecker {
         (typeof p.x.additionalProperties === "object" &&
           typeof p.y.additionalProperties === "object" &&
           !coverStation({
-            top: p.top,
+            $defs: p.$defs,
             visited: p.visited,
             x: p.x.additionalProperties,
             y: p.y.additionalProperties,
@@ -288,7 +273,7 @@ export namespace ChatGptTypeChecker {
       )
         return false;
       return coverStation({
-        top: p.top,
+        $defs: p.$defs,
         visited: p.visited,
         x: a,
         y: b,
@@ -296,12 +281,21 @@ export namespace ChatGptTypeChecker {
     });
   };
 
+  const coverBoolean = (
+    x: IChatGptSchema.IBoolean,
+    y: IChatGptSchema.IBoolean,
+  ): boolean => {
+    if (!!x.enum?.length)
+      return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
+    return true;
+  };
+
   const coverInteger = (
     x: IChatGptSchema.IInteger,
-    y: IChatGptSchema.IConstant | IChatGptSchema.IInteger,
+    y: IChatGptSchema.IInteger,
   ): boolean => {
-    if (isConstant(y))
-      return typeof y.const === "number" && Number.isInteger(y.const);
+    if (!!x.enum?.length)
+      return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
     return [
       x.type === y.type,
       x.minimum === undefined ||
@@ -325,12 +319,10 @@ export namespace ChatGptTypeChecker {
 
   const coverNumber = (
     x: IChatGptSchema.INumber,
-    y:
-      | IChatGptSchema.IConstant
-      | IChatGptSchema.IInteger
-      | IChatGptSchema.INumber,
+    y: IChatGptSchema.IInteger | IChatGptSchema.INumber,
   ): boolean => {
-    if (isConstant(y)) return typeof y.const === "number";
+    if (!!x.enum?.length)
+      return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
     return [
       x.type === y.type || (x.type === "number" && y.type === "integer"),
       x.minimum === undefined ||
@@ -354,10 +346,12 @@ export namespace ChatGptTypeChecker {
 
   const coverString = (
     x: IChatGptSchema.IString,
-    y: IChatGptSchema.IConstant | IChatGptSchema.IString,
+    y: IChatGptSchema.IString,
   ): boolean => {
-    if (isConstant(y)) return typeof y.const === "string";
+    if (!!x.enum?.length)
+      return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
     return [
+      x.type === y.type,
       x.format === undefined ||
         (y.format !== undefined && coverFormat(x.format, y.format)),
       x.pattern === undefined || x.pattern === y.pattern,
@@ -380,20 +374,20 @@ export namespace ChatGptTypeChecker {
     (x === "iri-reference" && y === "uri-reference");
 
   const flatSchema = (
-    top: IChatGptSchema.ITop,
+    $defs: Record<string, IChatGptSchema> | undefined,
     schema: IChatGptSchema,
   ): IChatGptSchema[] => {
-    schema = escapeReference(top, schema);
-    if (isOneOf(schema))
-      return schema.oneOf.map((v) => flatSchema(top, v)).flat();
+    schema = escapeReference($defs, schema);
+    if (isAnyOf(schema))
+      return schema.anyOf.map((v) => flatSchema($defs, v)).flat();
     return [schema];
   };
 
   const escapeReference = (
-    top: IChatGptSchema.ITop,
+    $defs: Record<string, IChatGptSchema> | undefined,
     schema: IChatGptSchema,
   ): Exclude<IChatGptSchema, IChatGptSchema.IReference> =>
     isReference(schema)
-      ? escapeReference(top, top.$defs![schema.$ref.replace("#/$defs/", "")]!)
+      ? escapeReference($defs, $defs![schema.$ref.replace("#/$defs/", "")]!)
       : schema;
 }

@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "$ref": "#/$defs/OpeningTime"
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "OpeningTime": {
+      "type": "object",
+      "properties": {
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "temporary": {
+          "type": "boolean"
+        },
+        "time": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "reasons",
+        "temporary",
+        "time"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

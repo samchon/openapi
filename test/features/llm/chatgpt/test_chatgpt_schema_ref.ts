@@ -1,18 +1,19 @@
 import { TestValidator } from "@nestia/e2e";
 import { IChatGptSchema } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
-import typia, { IJsonSchemaCollection, tags } from "typia";
+import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_chatgpt_schema_ref = (): void => {
   test(typia.json.schemas<[IShoppingCategory]>(), {
-    $ref: "#/$defs/IShoppingCategory",
+    schema: {
+      $ref: "#/$defs/IShoppingCategory",
+    },
     $defs: {
       IShoppingCategory: {
         type: "object",
         properties: {
           id: {
             type: "string",
-            format: "uuid",
           },
           name: {
             type: "string",
@@ -30,20 +31,21 @@ export const test_chatgpt_schema_ref = (): void => {
     },
   });
   test(typia.json.schemas<[IShoppingCategory.IInvert]>(), {
-    $ref: "#/$defs/IShoppingCategory.IInvert",
+    schema: {
+      $ref: "#/$defs/IShoppingCategory.IInvert",
+    },
     $defs: {
       "IShoppingCategory.IInvert": {
         type: "object",
         properties: {
           id: {
             type: "string",
-            format: "uuid",
           },
           name: {
             type: "string",
           },
           parent: {
-            oneOf: [
+            anyOf: [
               {
                 type: "null",
               },
@@ -62,23 +64,32 @@ export const test_chatgpt_schema_ref = (): void => {
 
 const test = (
   collection: IJsonSchemaCollection,
-  expected: IChatGptSchema.ITop,
+  expected: {
+    schema: IChatGptSchema;
+    $defs: Record<string, IChatGptSchema>;
+  },
 ): void => {
-  const schema: IChatGptSchema.ITop | null = ChatGptConverter.schema({
+  const $defs: Record<string, IChatGptSchema> = {};
+  const schema: IChatGptSchema | null = ChatGptConverter.schema({
+    $defs,
     components: collection.components,
     schema: collection.schemas[0],
+    escape: true,
   });
-  TestValidator.equals("ref")(schema)(expected);
+  TestValidator.equals("ref")(expected)({
+    $defs,
+    schema: schema!,
+  });
 };
 
 interface IShoppingCategory {
-  id: string & tags.Format<"uuid">;
+  id: string;
   name: string;
   children: IShoppingCategory[];
 }
 namespace IShoppingCategory {
   export interface IInvert {
-    id: string & tags.Format<"uuid">;
+    id: string;
     name: string;
     parent: IShoppingCategory.IInvert | null;
   }

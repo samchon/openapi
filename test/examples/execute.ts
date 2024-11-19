@@ -30,11 +30,11 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<ILlmSchemaV3> | undefined =
+  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
     application.functions.find(
       (f) => f.path === "/bbs/articles" && f.method === "post",
     );
-  typia.assertGuard<IHttpLlmFunction<ILlmSchemaV3>>(func);
+  typia.assertGuard<IHttpLlmFunction<ILlmSchemaV3.IParameters>>(func);
 
   // actual execution is by yourself
   const article = await HttpLlm.execute({
@@ -43,13 +43,13 @@ const main = async (): Promise<void> => {
     },
     application,
     function: func,
-    arguments: [
-      "general",
-      {
+    input: {
+      section: "general",
+      body: {
         title: "Hello, world!",
         body: "Let's imagine that this argument is composed by LLM.",
       },
-    ],
+    },
   });
   console.log("article", article);
 };

@@ -7,31 +7,34 @@ export type IChatGptSchema =
   | IChatGptSchema.ITuple
   | IChatGptSchema.IObject
   | IChatGptSchema.IReference
-  | IChatGptSchema.IOneOf
+  | IChatGptSchema.IAnyOf
   | IChatGptSchema.INull
   | IChatGptSchema.IUnknown;
 export namespace IChatGptSchema {
   /**
-   * The top level schema including `$defs`.
+   * Type of the function parameters.
    */
-  export type ITop<Schema extends IChatGptSchema = IChatGptSchema> = Schema & {
-    $defs?: Record<string, IChatGptSchema | undefined>;
-  };
-
-  /**
-   * Constant value type.
-   */
-  export interface IConstant extends __IAttribute {
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
     /**
-     * The constant value.
+     * Collection of the named types.
      */
-    const: boolean | number | string;
+    $defs?: Record<string, IChatGptSchema | undefined>;
+
+    /**
+     * Do not allow additional properties in the parameters.
+     */
+    additionalProperties: false;
   }
 
   /**
    * Boolean type info.
    */
   export interface IBoolean extends __ISignificant<"boolean"> {
+    /**
+     * Enumeration values.
+     */
+    enum?: Array<boolean>;
+
     /**
      * The default value.
      */
@@ -42,6 +45,11 @@ export namespace IChatGptSchema {
    * Integer type info.
    */
   export interface IInteger extends __ISignificant<"integer"> {
+    /**
+     * Enumeration values.
+     */
+    enum?: Array<number>;
+
     /**
      * Default value.
      *
@@ -97,6 +105,11 @@ export namespace IChatGptSchema {
    */
   export interface INumber extends __ISignificant<"number"> {
     /**
+     * Enumeration values.
+     */
+    enum?: Array<number>;
+
+    /**
      * Default value.
      */
     default?: number;
@@ -143,6 +156,11 @@ export namespace IChatGptSchema {
    * String type info.
    */
   export interface IString extends __ISignificant<"string"> {
+    /**
+     * Enumeration values.
+     */
+    enum?: Array<string>;
+
     /**
      * Default value.
      */
@@ -312,7 +330,7 @@ export namespace IChatGptSchema {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, IChatGptSchema>;
+    properties: Record<string, IChatGptSchema>;
 
     /**
      * Additional properties' info.
@@ -393,37 +411,11 @@ export namespace IChatGptSchema {
    * defined `anyOf` instead of the `oneOf`, {@link IChatGptSchema} forcibly
    * converts it to `oneOf` type.
    */
-  export interface IOneOf extends __IAttribute {
+  export interface IAnyOf extends __IAttribute {
     /**
      * List of the union types.
      */
-    oneOf: Exclude<IChatGptSchema, IChatGptSchema.IOneOf>[];
-
-    /**
-     * Discriminator info of the union type.
-     */
-    discriminator?: IOneOf.IDiscriminator;
-  }
-  export namespace IOneOf {
-    /**
-     * Discriminator info of the union type.
-     */
-    export interface IDiscriminator {
-      /**
-       * Property name for the discriminator.
-       */
-      propertyName: string;
-
-      /**
-       * Mapping of the discriminator value to the schema name.
-       *
-       * This property is valid only for {@link IReference} typed
-       * {@link IOneOf.oneof} elements. Therefore, `key` of `mapping` is
-       * the discriminator value, and `value` of `mapping` is the
-       * schema name like `#/$defs/SomeObject`.
-       */
-      mapping?: Record<string, string>;
-    }
+    anyOf: Exclude<IChatGptSchema, IChatGptSchema.IAnyOf>[];
   }
 
   /**

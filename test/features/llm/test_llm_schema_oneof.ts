@@ -1,12 +1,12 @@
 import { TestValidator } from "@nestia/e2e";
-import { HttpLlm, ILlmSchemaV3 } from "@samchon/openapi";
+import { ILlmSchemaV3 } from "@samchon/openapi";
+import { LlmConverterV3 } from "@samchon/openapi/lib/converters/LlmConverterV3";
 import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_llm_schema_oneof = (): void => {
   const app: IJsonSchemaCollection =
     typia.json.schemas<[Circle | Triangle | Rectangle]>();
-  const casted: ILlmSchemaV3 | null = HttpLlm.schema({
-    model: "3.0",
+  const casted: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components: app.components,
     schema: app.schemas[0],
     recursive: false,

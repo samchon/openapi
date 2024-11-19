@@ -43,6 +43,16 @@ export type IGeminiSchema =
   | IGeminiSchema.INullOnly;
 export namespace IGeminiSchema {
   /**
+   * Type of the function parameters.
+   */
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+    /**
+     * Do not allow additional properties in the parameters.
+     */
+    additionalProperties: false;
+  }
+
+  /**
    * Boolean type schema info.
    */
   export interface IBoolean extends __ISignificant<"boolean"> {
@@ -325,7 +335,7 @@ export namespace IGeminiSchema {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, IGeminiSchema>;
+    properties: Record<string, IGeminiSchema>;
 
     /**
      * List of key values of the required properties.

@@ -58,11 +58,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export interface IHttpLlmFunction<
-  Schema extends
-    | ILlmSchemaV3
-    | ILlmSchemaV3_1
-    | IChatGptSchema.ITop
-    | IGeminiSchema,
+  Parameters extends
+    | ILlmSchemaV3.IParameters
+    | ILlmSchemaV3_1.IParameters
+    | IChatGptSchema.IParameters
+    | IGeminiSchema.IParameters,
   Operation extends OpenApi.IOperation = OpenApi.IOperation,
   Route extends IHttpMigrateRoute = IHttpMigrateRoute,
 > {
@@ -150,14 +150,14 @@ export interface IHttpLlmFunction<
    * ]
    * ```
    */
-  parameters: Schema[];
+  parameters: Parameters;
 
   /**
    * Collection of separated parameters.
    *
    * Filled only when {@link IHttpLlmApplication.IOptions.separate} is configured.
    */
-  separated?: IHttpLlmFunction.ISeparated<Schema>;
+  separated?: IHttpLlmFunction.ISeparated<Parameters>;
 
   /**
    * Expected return type.
@@ -165,7 +165,7 @@ export interface IHttpLlmFunction<
    * If the target operation returns nothing (`void`), the `output`
    * would be `undefined`.
    */
-  output?: Schema | undefined;
+  output?: Parameters | undefined;
 
   /**
    * Description of the function.
@@ -232,43 +232,20 @@ export namespace IHttpLlmFunction {
    * Collection of separated parameters.
    */
   export interface ISeparated<
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema.ITop
-      | IGeminiSchema,
+    Parameters extends
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters
+      | IChatGptSchema.IParameters
+      | IGeminiSchema.IParameters,
   > {
     /**
      * Parameters that would be composed by the LLM.
      */
-    llm: ISeparatedParameter<Schema>[];
+    llm: Parameters | null;
 
     /**
      * Parameters that would be composed by the human.
      */
-    human: ISeparatedParameter<Schema>[];
-  }
-
-  /**
-   * Separated parameter.
-   */
-  export interface ISeparatedParameter<
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema.ITop
-      | IGeminiSchema,
-  > {
-    /**
-     * Index of the parameter.
-     *
-     * @type uint
-     */
-    index: number;
-
-    /**
-     * Type schema info of the parameter.
-     */
-    schema: Schema;
+    human: Parameters | null;
   }
 }

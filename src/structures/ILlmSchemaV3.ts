@@ -29,6 +29,16 @@ export type ILlmSchemaV3 =
   | ILlmSchemaV3.IOneOf;
 export namespace ILlmSchemaV3 {
   /**
+   * Type of the function parameters.
+   */
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+    /**
+     * Do not allow additional properties in the parameters.
+     */
+    additionalProperties: false;
+  }
+
+  /**
    * Boolean type schema info.
    */
   export interface IBoolean extends __ISignificant<"boolean"> {
@@ -278,7 +288,7 @@ export namespace ILlmSchemaV3 {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, Schema>;
+    properties: Record<string, Schema>;
 
     /**
      * List of key values of the required properties.

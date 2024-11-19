@@ -15,7 +15,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * By the way, the LLM function calling application composition, converting
  * `ILlmApplication` instance from TypeScript interface (or class) type is not always
  * successful. As LLM provider like OpenAI cannot understand the recursive reference
- * type that is embodied by {@link OpenApi.IJsonSchema.IReference}, if there're some
+ * type that is embodied by {@link IOpenApiSchemachema.IReference}, if there're some
  * recursive types in the TypeScript interface (or class) type, the conversion would
  * be failed.
  *
@@ -36,11 +36,8 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  */
 export interface ILlmApplication<
   Model extends ILlmApplication.Model,
-  Schema extends
-    | ILlmSchemaV3
-    | ILlmSchemaV3_1
-    | IChatGptSchema.ITop
-    | IGeminiSchema = ILlmApplication.ModelSchema[Model],
+  Parameters extends
+    ILlmApplication.ModelParameters[Model] = ILlmApplication.ModelParameters[Model],
 > {
   /**
    * Model of the LLM.
@@ -52,19 +49,25 @@ export interface ILlmApplication<
    *
    * List of function metadata that can be used for the LLM function call.
    */
-  functions: ILlmFunction<Schema>[];
+  functions: ILlmFunction<Parameters>[];
 
   /**
    * Options for the application.
    */
-  options: ILlmApplication.IOptions<Model, Schema>;
+  options: ILlmApplication.IOptions<Model, Parameters["properties"][string]>;
 }
 export namespace ILlmApplication {
   export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
+  export type ModelParameters = {
+    "3.0": ILlmSchemaV3.IParameters;
+    "3.1": ILlmSchemaV3_1.IParameters;
+    chatgpt: IChatGptSchema.IParameters;
+    gemini: IGeminiSchema.IParameters;
+  };
   export type ModelSchema = {
     "3.0": ILlmSchemaV3;
     "3.1": ILlmSchemaV3_1;
-    chatgpt: IChatGptSchema.ITop;
+    chatgpt: IChatGptSchema;
     gemini: IGeminiSchema;
   };
 
@@ -76,7 +79,7 @@ export namespace ILlmApplication {
     Schema extends
       | ILlmSchemaV3
       | ILlmSchemaV3_1
-      | IChatGptSchema.ITop
+      | IChatGptSchema
       | IGeminiSchema = ILlmApplication.ModelSchema[Model],
   > {
     /**

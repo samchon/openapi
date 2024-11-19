@@ -1,8 +1,11 @@
 import { TestValidator } from "@nestia/e2e";
+import { IChatGptSchema } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
 
 export const test_chatgpt_schema_recursive_array = (): void => {
+  const $defs: Record<string, IChatGptSchema> = {};
   const schema = ChatGptConverter.schema({
+    $defs,
     components: {
       schemas: {
         Department: {
@@ -25,26 +28,27 @@ export const test_chatgpt_schema_recursive_array = (): void => {
     schema: {
       $ref: "#/components/schemas/Department",
     },
+    escape: true,
   });
-  TestValidator.equals("recursive")(schema)({
-    $ref: "#/$defs/Department",
-    $defs: {
-      Department: {
-        type: "object",
-        properties: {
-          name: {
-            type: "string",
-          },
-          children: {
-            type: "array",
-            items: {
-              $ref: "#/$defs/Department",
-            },
+  TestValidator.equals("$defs")($defs)({
+    Department: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+        },
+        children: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/Department",
           },
         },
-        required: ["name", "children"],
-        additionalProperties: false,
       },
+      required: ["name", "children"],
+      additionalProperties: false,
     },
+  });
+  TestValidator.equals("schema")(schema)({
+    $ref: "#/$defs/Department",
   });
 };

@@ -78,10 +78,12 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
         additionalProperties: true,
       },
       y: {
         type: "object",
+        properties: {},
       },
     }),
   );
@@ -90,12 +92,15 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
         additionalProperties: {
           type: "object",
+          properties: {},
         },
       },
       y: {
         type: "object",
+        properties: {},
       },
     }),
   );
@@ -104,10 +109,12 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
         additionalProperties: true,
       },
       y: {
         type: "object",
+        properties: {},
         additionalProperties: {
           type: "object",
           properties: {
@@ -122,10 +129,12 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
         additionalProperties: box3D,
       },
       y: {
         type: "object",
+        properties: {},
         additionalProperties: box2D,
       },
     }),
@@ -184,9 +193,11 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
       },
       y: {
         type: "object",
+        properties: {},
         additionalProperties: true,
       },
     }),
@@ -198,11 +209,14 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
       },
       y: {
         type: "object",
+        properties: {},
         additionalProperties: {
           type: "object",
+          properties: {},
         },
       },
     }),
@@ -214,6 +228,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
         additionalProperties: {
           type: "object",
           properties: {
@@ -223,6 +238,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       },
       y: {
         type: "object",
+        properties: {},
         additionalProperties: true,
       },
     }),
@@ -232,10 +248,12 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       components,
       x: {
         type: "object",
+        properties: {},
         additionalProperties: box2D,
       },
       y: {
         type: "object",
+        properties: {},
         additionalProperties: box3D,
       },
     }),

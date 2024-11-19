@@ -75,18 +75,19 @@ export namespace OpenApiTypeChecker {
     schema: OpenApi.IJsonSchema;
   }): boolean => {
     if (isReference(props.schema) === false) return false;
-    const counter: Map<string, number> = new Map();
+    const current: string = props.schema.$ref.split("#/components/schemas/")[1];
+    let counter: number = 0;
     visit({
       components: props.components,
       schema: props.schema,
       closure: (schema) => {
         if (OpenApiTypeChecker.isReference(schema)) {
-          const key: string = schema.$ref.split("#/components/schemas/")[1];
-          counter.set(key, (counter.get(key) ?? 0) + 1);
+          const next: string = schema.$ref.split("#/components/schemas/")[1];
+          if (current === next) ++counter;
         }
       },
     });
-    return Array.from(counter.values()).some((v) => v > 1);
+    return counter > 1;
   };
 
   /* -----------------------------------------------------------

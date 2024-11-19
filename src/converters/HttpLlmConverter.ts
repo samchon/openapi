@@ -1,12 +1,9 @@
 import { OpenApi } from "../OpenApi";
 import { IChatGptSchema } from "../structures/IChatGptSchema";
-import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
-import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { ChatGptConverter } from "./ChatGptConverter";
 import { GeminiConverter } from "./GeminiConverter";
 import { LlmConverterV3 } from "./LlmConverterV3";
@@ -15,11 +12,8 @@ import { LlmConverterV3_1 } from "./LlmConverterV3_1";
 export namespace HttpLlmConverter {
   export const compose = <
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
     Route extends IHttpMigrateRoute = IHttpMigrateRoute<
       OpenApi.IJsonSchema,
@@ -28,8 +22,11 @@ export namespace HttpLlmConverter {
   >(props: {
     model: Model;
     migrate: IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
-    options: IHttpLlmApplication.IOptions<Model, Schema>;
-  }): IHttpLlmApplication<Model, Schema, Operation, Route> => {
+    options: IHttpLlmApplication.IOptions<
+      Model,
+      Parameters["properties"][string]
+    >;
+  }): IHttpLlmApplication<Model, Parameters, Operation, Route> => {
     // COMPOSE FUNCTIONS
     const errors: IHttpLlmApplication.IError<Operation, Route>[] =
       props.migrate.errors.map((e) => ({
@@ -39,7 +36,7 @@ export namespace HttpLlmConverter {
         operation: () => e.operation(),
         route: () => undefined,
       }));
-    const functions: IHttpLlmFunction<Schema, Operation, Route>[] =
+    const functions: IHttpLlmFunction<Parameters, Operation, Route>[] =
       props.migrate.routes
         .map((route) => {
           if (route.method === "head") {
@@ -68,7 +65,7 @@ export namespace HttpLlmConverter {
             });
             return null;
           }
-          const func: IHttpLlmFunction<Schema> | null = composeFunction({
+          const func: IHttpLlmFunction<Parameters> | null = composeFunction({
             model: props.model,
             options: props.options,
             components: props.migrate.document().components,
@@ -85,7 +82,8 @@ export namespace HttpLlmConverter {
           return func;
         })
         .filter(
-          (v): v is IHttpLlmFunction<Schema, Operation, Route> => v !== null,
+          (v): v is IHttpLlmFunction<Parameters, Operation, Route> =>
+            v !== null,
         );
     return {
       model: props.model,
@@ -95,72 +93,36 @@ export namespace HttpLlmConverter {
     };
   };
 
-  export const schema = <
-    Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
-  >(props: {
-    model: Model;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    recursive: false | number;
-  }): Schema | null => {
-    return CASTERS[props.model]({
-      components: props.components,
-      recursive: props.recursive,
-      schema: props.schema,
-    }) as Schema | null;
-  };
-
   export const separateParameters = <
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema,
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
   >(props: {
     model: Model;
-    parameters: Schema[];
-    predicate: (schema: Schema) => boolean;
-  }): IHttpLlmFunction.ISeparated<Schema> => {
+    parameters: Parameters;
+    predicate: (schema: Parameters["properties"][string]) => boolean;
+  }): IHttpLlmFunction.ISeparated<Parameters> => {
     const separator: (props: {
-      predicate: (schema: Schema) => boolean;
-      schema: Schema;
-    }) => [Schema | null, Schema | null] = SEPARATORS[props.model] as any;
-    const indexes: Array<[Schema | null, Schema | null]> = props.parameters.map(
-      (schema) =>
-        separator({
-          predicate: props.predicate,
-          schema,
-        }),
-    );
+      predicate: (schema: Parameters["properties"][string]) => boolean;
+      schema: Parameters["properties"][string];
+    }) => [
+      Parameters["properties"][string] | null,
+      Parameters["properties"][string] | null,
+    ] = SEPARATORS[props.model] as any;
+    const [llm, human] = separator({
+      predicate: props.predicate,
+      schema: props.parameters as Parameters["properties"][string],
+    });
     return {
-      llm: indexes
-        .map(([llm], index) => ({
-          index,
-          schema: llm!,
-        }))
-        .filter(({ schema }) => schema !== null),
-      human: indexes
-        .map(([, human], index) => ({
-          index,
-          schema: human!,
-        }))
-        .filter(({ schema }) => schema !== null),
+      llm: llm as Parameters | null,
+      human: human as Parameters | null,
     };
   };
 
   const composeFunction = <
     Model extends IHttpLlmApplication.Model,
-    Schema extends
-      | ILlmSchemaV3
-      | ILlmSchemaV3_1
-      | IChatGptSchema
-      | IGeminiSchema = IHttpLlmApplication.ModelSchema[Model],
+    Parameters extends
+      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
     Operation extends OpenApi.IOperation = OpenApi.IOperation,
     Route extends IHttpMigrateRoute = IHttpMigrateRoute<
       OpenApi.IJsonSchema,
@@ -170,20 +132,27 @@ export namespace HttpLlmConverter {
     model: Model;
     components: OpenApi.IComponents;
     route: IHttpMigrateRoute<OpenApi.IJsonSchema, Operation>;
-    options: IHttpLlmApplication.IOptions<Model, Schema>;
-  }): IHttpLlmFunction<Schema, Operation, Route> | null => {
-    const cast = (s: OpenApi.IJsonSchema): Schema | null =>
+    options: IHttpLlmApplication.IOptions<
+      Model,
+      Parameters["properties"][string]
+    >;
+  }): IHttpLlmFunction<Parameters, Operation, Route> | null => {
+    const $defs: Record<string, IChatGptSchema> = {};
+    const cast = (
+      s: OpenApi.IJsonSchema,
+    ): Parameters["properties"][string] | null =>
       CASTERS[props.model]({
         components: props.components,
         recursive: props.options.recursive,
         schema: s,
-      }) as Schema | null;
-    const output: Schema | null | undefined =
+        $defs,
+      }) as Parameters["properties"][string] | null;
+    const output: Parameters["properties"][string] | null | undefined =
       props.route.success && props.route.success
         ? cast(props.route.success.schema)
         : undefined;
     if (output === null) return null;
-    const properties: [string, Schema | null][] = [
+    const properties: [string, Parameters["properties"][string] | null][] = [
       ...props.route.parameters.map((p) => ({
         key: p.key,
         schema: {
@@ -224,15 +193,16 @@ export namespace HttpLlmConverter {
     if (properties.some(([_k, v]) => v === null)) return null;
 
     // COMPOSE PARAMETERS
-    const parameters: Schema[] = props.options.keyword
-      ? [
-          {
-            type: "object",
-            properties: Object.fromEntries(properties as [string, Schema][]),
-            additionalProperties: false,
-          } as any as Schema,
-        ]
-      : properties.map(([_k, v]) => v!);
+    const parameters: Parameters = {
+      type: "object",
+      properties: Object.fromEntries(
+        properties as [string, Parameters["properties"][string]][],
+      ),
+      additionalProperties: false,
+      required: properties.map(([k]) => k),
+    } as any as Parameters;
+    if (Object.keys($defs).length)
+      (parameters as any as IChatGptSchema.IParameters).$defs = $defs;
     const operation: OpenApi.IOperation = props.route.operation();
 
     // FINALIZATION
@@ -249,7 +219,7 @@ export namespace HttpLlmConverter {
             parameters,
           })
         : undefined,
-      output,
+      output: output as any,
       description: (() => {
         if (operation.summary && operation.description) {
           return operation.description.startsWith(operation.summary)
@@ -286,7 +256,12 @@ const CASTERS = {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
-  }) => ChatGptConverter.schema(props),
+    $defs: Record<string, IChatGptSchema>;
+  }) =>
+    ChatGptConverter.schema({
+      ...props,
+      escape: false,
+    }),
   gemini: (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;

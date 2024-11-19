@@ -1,11 +1,10 @@
 import { OpenApi } from "@samchon/openapi";
-import { HttpLlmConverter } from "@samchon/openapi/lib/converters/HttpLlmConverter";
+import { LlmConverterV3_1 } from "@samchon/openapi/lib/converters/LlmConverterV3_1";
 import typia from "typia";
 
 export const test_llm_schema_v31_ultimate_union = (): void => {
   const collection = typia.json.schemas<[IJsonSchemaCollection[]]>();
-  HttpLlmConverter.schema({
-    model: "3.1",
+  LlmConverterV3_1.schema({
     components: collection.components,
     schema: collection.schemas[0],
     recursive: 3,

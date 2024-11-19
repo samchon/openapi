@@ -11,6 +11,16 @@ export type ILlmSchemaV3_1 =
   | ILlmSchemaV3_1.IUnknown;
 export namespace ILlmSchemaV3_1 {
   /**
+   * Type of the function parameters.
+   */
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+    /**
+     * Do not allow additional properties in the parameters.
+     */
+    additionalProperties: false;
+  }
+
+  /**
    * Constant value type.
    */
   export interface IConstant extends __IAttribute {
@@ -304,7 +314,7 @@ export namespace ILlmSchemaV3_1 {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties?: Record<string, ILlmSchemaV3_1>;
+    properties: Record<string, ILlmSchemaV3_1>;
 
     /**
      * Additional properties' info.
