@@ -28,7 +28,7 @@
  * - Forcibly transform every object properties to be required
  *
  * For reference, if you've composed the `IChatGptSchema` type with the
- * {@link ILlmApplication.IChatGptOptions.escape} `true` option, only the recursived
+ * {@link ILlmApplication.IChatGptOptions.reference} `false` option, only the recursived
  * named types would be archived into the {@link IChatGptSchema.IParameters.$defs},
  * and the others would be ecaped from the {@link IChatGptSchema.IReference} type.
  *
