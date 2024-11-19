@@ -257,7 +257,11 @@ const CASTERS = {
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
     $defs: Record<string, IChatGptSchema>;
-  }) => ChatGptConverter.schema(props),
+  }) =>
+    ChatGptConverter.schema({
+      ...props,
+      escape: false,
+    }),
   gemini: (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;

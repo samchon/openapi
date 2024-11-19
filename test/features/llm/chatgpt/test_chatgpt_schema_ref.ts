@@ -1,7 +1,7 @@
 import { TestValidator } from "@nestia/e2e";
 import { IChatGptSchema } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
-import typia, { IJsonSchemaCollection, tags } from "typia";
+import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_chatgpt_schema_ref = (): void => {
   test(typia.json.schemas<[IShoppingCategory]>(), {
@@ -14,7 +14,6 @@ export const test_chatgpt_schema_ref = (): void => {
         properties: {
           id: {
             type: "string",
-            format: "uuid",
           },
           name: {
             type: "string",
@@ -41,7 +40,6 @@ export const test_chatgpt_schema_ref = (): void => {
         properties: {
           id: {
             type: "string",
-            format: "uuid",
           },
           name: {
             type: "string",
@@ -76,6 +74,7 @@ const test = (
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
+    escape: true,
   });
   TestValidator.equals("ref")(expected)({
     $defs,
@@ -84,13 +83,13 @@ const test = (
 };
 
 interface IShoppingCategory {
-  id: string & tags.Format<"uuid">;
+  id: string;
   name: string;
   children: IShoppingCategory[];
 }
 namespace IShoppingCategory {
   export interface IInvert {
-    id: string & tags.Format<"uuid">;
+    id: string;
     name: string;
     parent: IShoppingCategory.IInvert | null;
   }

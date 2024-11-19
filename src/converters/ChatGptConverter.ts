@@ -7,11 +7,15 @@ export namespace ChatGptConverter {
   export const parameters = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
+    escape?: boolean;
+    tag?: boolean;
   }): IChatGptSchema.IParameters | null => {
     const $defs: Record<string, IChatGptSchema> = {};
     const res: IChatGptSchema.IParameters | null = schema({
       components: props.components,
       schema: props.schema,
+      escape: props.escape,
+      tag: props.tag,
       $defs,
     }) as IChatGptSchema.IParameters | null;
     if (res === null) return null;
@@ -23,6 +27,8 @@ export namespace ChatGptConverter {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     $defs: Record<string, IChatGptSchema>;
+    escape?: boolean;
+    tag?: boolean;
   }): IChatGptSchema | null => {
     const union: Array<IChatGptSchema | null> = [];
     const attribute: IChatGptSchema.__IAttribute = {
@@ -37,72 +43,97 @@ export namespace ChatGptConverter {
       ),
     };
     const visit = (input: OpenApi.IJsonSchema): number => {
-      if (OpenApiTypeChecker.isReference(props.schema)) {
-        const key: string = props.schema.$ref.split("#/components/schemas/")[1];
+      if (OpenApiTypeChecker.isReference(input)) {
+        const key: string = input.$ref.split("#/components/schemas/")[1];
         const target: OpenApi.IJsonSchema | undefined =
           props.components.schemas?.[key];
         if (target === undefined) return 0;
-
-        const out = () =>
-          union.push({
-            ...props.schema,
-            $ref: `#/$defs/${key}`,
-          } as IChatGptSchema);
-        if (props.$defs[key] !== undefined) return out();
-        props.$defs[key] = {};
-        const converted: IChatGptSchema | null = schema({
-          components: props.components,
-          $defs: props.$defs,
-          schema: target,
-        });
-        if (converted === null) return union.push(null);
-        props.$defs[key] = converted;
-        return out();
-      } else if (OpenApiTypeChecker.isArray(props.schema)) {
+        if (
+          !!props.escape === false ||
+          OpenApiTypeChecker.isRecursiveReference({
+            components: props.components,
+            schema: input,
+          })
+        ) {
+          const out = () =>
+            union.push({
+              ...input,
+              $ref: `#/$defs/${key}`,
+              title: undefined,
+              description: undefined,
+            } as IChatGptSchema);
+          if (props.$defs[key] !== undefined) return out();
+          props.$defs[key] = {};
+          const converted: IChatGptSchema | null = schema({
+            components: props.components,
+            $defs: props.$defs,
+            escape: props.escape,
+            tag: props.tag,
+            schema: target,
+          });
+          if (converted === null) return union.push(null);
+          props.$defs[key] = converted;
+          return out();
+        } else return visit(target);
+      } else if (OpenApiTypeChecker.isArray(input)) {
         const items: IChatGptSchema | null = schema({
           components: props.components,
           $defs: props.$defs,
-          schema: props.schema.items,
+          escape: props.escape,
+          tag: props.tag,
+          schema: input.items,
         });
         if (items === null) return union.push(null);
         return union.push({
-          ...props.schema,
+          ...input,
           items,
+          ...(!!props.tag
+            ? {}
+            : {
+                maxItems: undefined,
+                minItems: undefined,
+              }),
         });
-      } else if (OpenApiTypeChecker.isTuple(props.schema)) {
-        const prefixItems: Array<IChatGptSchema | null> =
-          props.schema.prefixItems.map((item) =>
+      } else if (OpenApiTypeChecker.isTuple(input)) {
+        const prefixItems: Array<IChatGptSchema | null> = input.prefixItems.map(
+          (item) =>
             schema({
               components: props.components,
               $defs: props.$defs,
+              escape: props.escape,
+              tag: props.tag,
               schema: item,
             }),
-          );
+        );
         if (prefixItems.some((v) => v === null)) return union.push(null);
         const additionalItems =
-          props.schema.additionalItems === undefined
+          input.additionalItems === undefined
             ? false
-            : typeof props.schema.additionalItems === "object" &&
-                props.schema.additionalItems !== null
+            : typeof input.additionalItems === "object" &&
+                input.additionalItems !== null
               ? schema({
                   components: props.components,
                   $defs: props.$defs,
-                  schema: props.schema.additionalItems,
+                  escape: props.escape,
+                  tag: props.tag,
+                  schema: input.additionalItems,
                 })
-              : props.schema.additionalItems;
+              : input.additionalItems;
         if (additionalItems === null) return union.push(null);
         return union.push({
-          ...props.schema,
+          ...input,
           prefixItems: prefixItems.filter((v) => v !== null),
           additionalItems,
         });
-      } else if (OpenApiTypeChecker.isObject(props.schema)) {
+      } else if (OpenApiTypeChecker.isObject(input)) {
         const properties: Record<string, IChatGptSchema | null> =
-          Object.entries(props.schema.properties || {}).reduce(
+          Object.entries(input.properties || {}).reduce(
             (acc, [key, value]) => {
               const converted: IChatGptSchema | null = schema({
                 components: props.components,
                 $defs: props.$defs,
+                escape: props.escape,
+                tag: props.tag,
                 schema: value,
               });
               if (converted === null) return acc;
@@ -114,37 +145,62 @@ export namespace ChatGptConverter {
         if (Object.values(properties).some((v) => v === null))
           return union.push(null);
         const additionalProperties =
-          props.schema.additionalProperties === undefined
+          input.additionalProperties === undefined
             ? false
-            : typeof props.schema.additionalProperties === "object" &&
-                props.schema.additionalProperties !== null
+            : typeof input.additionalProperties === "object" &&
+                input.additionalProperties !== null
               ? schema({
                   components: props.components,
                   $defs: props.$defs,
-                  schema: props.schema.additionalProperties,
+                  escape: props.escape,
+                  tag: props.tag,
+                  schema: input.additionalProperties,
                 })
-              : props.schema.additionalProperties;
+              : input.additionalProperties;
         if (additionalProperties === null) return union.push(null);
         return union.push({
-          ...props.schema,
+          ...input,
           properties: properties as Record<string, IChatGptSchema>,
           additionalProperties,
+          required: Object.keys(properties),
         });
-      } else if (OpenApiTypeChecker.isOneOf(props.schema)) {
-        const oneOf: Array<IChatGptSchema | null> = props.schema.oneOf
-          .filter((e) => !OpenApiTypeChecker.isConstant(e))
-          .map((item) =>
-            schema({
-              components: props.components,
-              $defs: props.$defs,
-              schema: item,
-            }),
-          );
-        return union.push(...oneOf);
+      } else if (OpenApiTypeChecker.isOneOf(input)) {
+        input.oneOf.forEach(visit);
+        return 0;
       } else if (OpenApiTypeChecker.isConstant(input)) return 0;
+      else if (OpenApiTypeChecker.isString(input))
+        return union.push({
+          ...input,
+          ...(!!props.tag
+            ? {}
+            : {
+                contentMediaType: undefined,
+                minLength: undefined,
+                maxLength: undefined,
+                format: undefined,
+                pattern: undefined,
+              }),
+        });
+      else if (
+        OpenApiTypeChecker.isNumber(input) ||
+        OpenApiTypeChecker.isInteger(input)
+      )
+        return union.push({
+          ...input,
+          ...(!!props.tag
+            ? {}
+            : {
+                maximum: undefined,
+                minimum: undefined,
+                exclusiveMaximum: undefined,
+                exclusiveMinimum: undefined,
+                multipleOf: undefined,
+              }),
+        });
+      else if (OpenApiTypeChecker.isBoolean(input)) return union.push(input);
       else return union.push(input);
     };
-    const visitConstant = (schema: OpenApi.IJsonSchema): void => {
+    const visitConstant = (input: OpenApi.IJsonSchema): void => {
       const insert = (value: any): void => {
         const matched: IChatGptSchema.INumber | undefined = union.find(
           (u) =>
@@ -155,10 +211,23 @@ export namespace ChatGptConverter {
           matched.enum.push(value);
         } else union.push({ type: typeof value as "number", enum: [value] });
       };
-      if (OpenApiTypeChecker.isConstant(schema)) insert(schema.const);
-      else if (OpenApiTypeChecker.isOneOf(schema))
-        for (const u of schema.oneOf)
-          if (OpenApiTypeChecker.isConstant(u)) insert(u.const);
+      if (OpenApiTypeChecker.isConstant(input)) insert(input.const);
+      else if (OpenApiTypeChecker.isOneOf(input))
+        input.oneOf.forEach(visitConstant);
+      else if (
+        !!props.escape === true &&
+        OpenApiTypeChecker.isReference(input) &&
+        OpenApiTypeChecker.isRecursiveReference({
+          components: props.components,
+          schema: input,
+        }) === false
+      ) {
+        const target: OpenApi.IJsonSchema | undefined =
+          props.components.schemas?.[
+            input.$ref.split("#/components/schemas/")[1]
+          ];
+        if (target !== undefined) visitConstant(target);
+      }
     };
     visit(props.schema);
     visitConstant(props.schema);
@@ -178,119 +247,6 @@ export namespace ChatGptConverter {
       ...attribute,
       anyOf: union as IChatGptSchema[],
     };
-
-    // if (OpenApiTypeChecker.isReference(props.schema)) {
-    //   const key: string = props.schema.$ref.split("#/components/schemas/")[1];
-    //   const target: OpenApi.IJsonSchema | undefined =
-    //     props.components.schemas?.[key];
-    //   if (target === undefined) return null;
-
-    //   const out = () => ({
-    //     ...props.schema,
-    //     $ref: `#/$defs/${key}`,
-    //   });
-    //   if (props.$defs[key] !== undefined) return out();
-    //   props.$defs[key] = {};
-    //   const converted: IChatGptSchema | null = schema({
-    //     components: props.components,
-    //     $defs: props.$defs,
-    //     schema: target,
-    //   });
-    //   if (converted === null) return null;
-
-    //   props.$defs[key] = converted;
-    //   return out();
-    // } else if (OpenApiTypeChecker.isArray(props.schema)) {
-    //   const items: IChatGptSchema | null = schema({
-    //     components: props.components,
-    //     $defs: props.$defs,
-    //     schema: props.schema.items,
-    //   });
-    //   if (items === null) return null;
-    //   return {
-    //     ...props.schema,
-    //     items,
-    //   };
-    // } else if (OpenApiTypeChecker.isTuple(props.schema)) {
-    //   const prefixItems: Array<IChatGptSchema | null> =
-    //     props.schema.prefixItems.map((item) =>
-    //       schema({
-    //         components: props.components,
-    //         $defs: props.$defs,
-    //         schema: item,
-    //       }),
-    //     );
-    //   if (prefixItems.some((v) => v === null)) return null;
-    //   const additionalItems =
-    //     props.schema.additionalItems === undefined
-    //       ? false
-    //       : typeof props.schema.additionalItems === "object" &&
-    //           props.schema.additionalItems !== null
-    //         ? schema({
-    //             components: props.components,
-    //             $defs: props.$defs,
-    //             schema: props.schema.additionalItems,
-    //           })
-    //         : props.schema.additionalItems;
-    //   if (additionalItems === null) return null;
-    //   return {
-    //     ...props.schema,
-    //     prefixItems: prefixItems.filter((v) => v !== null),
-    //     additionalItems,
-    //   };
-    // } else if (OpenApiTypeChecker.isObject(props.schema)) {
-    //   const properties: Record<string, IChatGptSchema | null> = Object.entries(
-    //     props.schema.properties || {},
-    //   ).reduce(
-    //     (acc, [key, value]) => {
-    //       const converted: IChatGptSchema | null = schema({
-    //         components: props.components,
-    //         $defs: props.$defs,
-    //         schema: value,
-    //       });
-    //       if (converted === null) return acc;
-    //       acc[key] = converted;
-    //       return acc;
-    //     },
-    //     {} as Record<string, IChatGptSchema | null>,
-    //   );
-    //   if (Object.values(properties).some((v) => v === null)) return null;
-    //   const additionalProperties =
-    //     props.schema.additionalProperties === undefined
-    //       ? false
-    //       : typeof props.schema.additionalProperties === "object" &&
-    //           props.schema.additionalProperties !== null
-    //         ? schema({
-    //             components: props.components,
-    //             $defs: props.$defs,
-    //             schema: props.schema.additionalProperties,
-    //           })
-    //         : props.schema.additionalProperties;
-    //   if (additionalProperties === null) return null;
-    //   return {
-    //     ...props.schema,
-    //     properties: properties as Record<string, IChatGptSchema>,
-    //     additionalProperties,
-    //   };
-    // } else if (OpenApiTypeChecker.isOneOf(props.schema)) {
-    //   const oneOf: Array<IChatGptSchema | null> = props.schema.oneOf.map(
-    //     (item) =>
-    //       schema({
-    //         components: props.components,
-    //         $defs: props.$defs,
-    //         schema: item,
-    //       }),
-    //   );
-    //   if (oneOf.some((v) => v === null)) return null;
-    //   return {
-    //     ...props.schema,
-    //     anyOf: oneOf.filter((v) => v !== null),
-    //     ...{
-    //       oneOf: undefined,
-    //     },
-    //   };
-    // }
-    // return props.schema;
   };
 
   export const separate = (props: {

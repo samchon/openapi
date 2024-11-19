@@ -1,6 +1,7 @@
-import { TestValidator } from "@nestia/e2e";
+import { ArrayUtil, TestValidator } from "@nestia/e2e";
 import { IChatGptSchema, OpenApi } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
+import fs from "fs";
 import OpenAI from "openai";
 import { ChatCompletion } from "openai/resources";
 import typia, { IJsonSchemaCollection } from "typia";
@@ -20,11 +21,18 @@ export const test_llm_function_calling_chatgpt_sale =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
+        escape: process.argv.includes("--escape"),
+        tag: process.argv.includes("--tag"),
       });
     if (parameters === null)
       throw new Error(
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
+    await fs.promises.writeFile(
+      `${TestGlobal.ROOT}/examples/function-calling/sale.schema.json`,
+      JSON.stringify(parameters, null, 2),
+      "utf8",
+    );
 
     const client: OpenAI = new OpenAI({
       apiKey: TestGlobal.env.OPENAI_API_KEY,
@@ -33,7 +41,7 @@ export const test_llm_function_calling_chatgpt_sale =
       model: "gpt-4o",
       messages: [
         {
-          role: "system",
+          role: "assistant",
           content: SYSTEM_MESSAGE,
         },
         {
@@ -53,11 +61,18 @@ export const test_llm_function_calling_chatgpt_sale =
         },
       ],
     });
-    (completion.choices[0].message.tool_calls ?? []).forEach((call) => {
+    await ArrayUtil.asyncForEach(
+      completion.choices[0].message.tool_calls ?? [],
+    )(async (call) => {
       TestValidator.equals("name")(call.function.name)("createSale");
-      typia.assert<{
+      const { input } = typia.assert<{
         input: IShoppingSale.ICreate;
       }>(JSON.parse(call.function.arguments));
+      await fs.promises.writeFile(
+        `${TestGlobal.ROOT}/examples/function-calling/sale.input.json`,
+        JSON.stringify(input, null, 2),
+        "utf8",
+      );
     });
   };
 
@@ -71,7 +86,7 @@ const USER_MESSAGE = `
   Also, it has only two unit, the "Surface Pro 8 Entity" and "Warranty Program".
 
   About the "Warranty Program" unit, it is not essential to the sale, 
-  and there is no option to select. Its nominal price is $100, and 
+  and there is no option to select. Its nominal price is $99, and 
   the real price is $89.
 
   About the "Surface Pro 8 Entity", it is essential to the sale, and 
@@ -91,8 +106,8 @@ const USER_MESSAGE = `
       - 512 GB
       
   The final stocks combinated by the options are like below. 
-  The sequence of selected options are 
-  {(CPU, RAM, Storage): (nominal price / real price)}.
+  The sequence of selected options are {(CPU, RAM, Storage): (nominal price / real price)}.
+  Also, quantity of them are fixed to 1,000 value.
 
     - (i3, 8 GB, 128 GB): ($999 / $899)
     - (i3, 16 GB, 256 GB): ($1,199 / $1,099)

@@ -3,7 +3,7 @@ import { IChatGptSchema } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
 import typia, { IJsonSchemaCollection } from "typia";
 
-export const test_chatgpt_schema_oneof_discriminator = (): void => {
+export const test_chatgpt_schema_anyof = (): void => {
   const collection: IJsonSchemaCollection =
     typia.json.schemas<[IPoint | ILine | ITriangle | IRectangle]>();
 
@@ -12,25 +12,21 @@ export const test_chatgpt_schema_oneof_discriminator = (): void => {
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
+    escape: true,
   });
-  TestValidator.equals("anyOf")(schema)(
-    typia.assert<IChatGptSchema>({
-      anyOf: [
-        {
-          $ref: "#/$defs/IPoint",
-        },
-        {
-          $ref: "#/$defs/ILine",
-        },
-        {
-          $ref: "#/$defs/ITriangle",
-        },
-        {
-          $ref: "#/$defs/IRectangle",
-        },
-      ],
-    }),
-  );
+  const type = (str: string) => ({
+    type: "object",
+    properties: {
+      type: {
+        type: "string",
+        enum: [str],
+      },
+    },
+  });
+
+  TestValidator.equals("anyOf")({
+    anyOf: [type("point"), type("line"), type("triangle"), type("rectangle")],
+  })(schema as any);
 };
 
 interface IPoint {

@@ -1,6 +1,7 @@
-import { TestValidator } from "@nestia/e2e";
+import { ArrayUtil, TestValidator } from "@nestia/e2e";
 import { IChatGptSchema, OpenApi } from "@samchon/openapi";
 import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
+import fs from "fs";
 import OpenAI from "openai";
 import { ChatCompletion } from "openai/resources";
 import typia, { IJsonSchemaCollection } from "typia";
@@ -19,11 +20,17 @@ export const test_provider_chatgpt_function_calling_recursive =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
+        escape: false,
       });
     if (parameters === null)
       throw new Error(
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
+    await fs.promises.writeFile(
+      `${TestGlobal.ROOT}/examples/function-calling/recursive.schema.json`,
+      JSON.stringify(parameters, null, 2),
+      "utf8",
+    );
 
     const client: OpenAI = new OpenAI({
       apiKey: TestGlobal.env.OPENAI_API_KEY,
@@ -52,12 +59,19 @@ export const test_provider_chatgpt_function_calling_recursive =
         },
       ],
     });
-    (completion.choices[0].message.tool_calls ?? []).forEach((call) => {
-      TestValidator.equals("name")(call.function.name)("composeCategories");
-      typia.assert<{
-        input: IShoppingCategory[];
-      }>(JSON.parse(call.function.arguments));
-    });
+    await ArrayUtil.asyncMap(completion.choices[0].message.tool_calls ?? [])(
+      async (call) => {
+        TestValidator.equals("name")(call.function.name)("composeCategories");
+        const { input } = typia.assert<{
+          input: IShoppingCategory[];
+        }>(JSON.parse(call.function.arguments));
+        await fs.promises.writeFile(
+          `${TestGlobal.ROOT}/examples/function-calling/recursive.input.json`,
+          JSON.stringify(input, null, 2),
+          "utf8",
+        );
+      },
+    );
   };
 
 interface IShoppingCategory {
