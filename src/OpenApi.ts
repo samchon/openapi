@@ -35,9 +35,9 @@ import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
  *   - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
  *   - Array type utilizes only single {@link OpenAPI.IJsonSchema.IArray.items}
  *   - Tuple type utilizes only {@link OpenApi.IJsonSchema.ITuple.prefixItems}
+ *   - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link OpenApi.IJsonSchema.IObject}
  *   - Merge {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link OpenApi.IJsonSchema.IOneOf}
  *   - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link OpenApi.IJsonSchema.IReference}
- *   - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link OpenApi.IJsonSchema.IObject}
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
@@ -630,9 +630,9 @@ export namespace OpenApi {
    * - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
    * - Array type utilizes only single {@link OpenAPI.IJsonSchema.IArray.items}
    * - Tuple type utilizes only {@link OpenApi.IJsonSchema.ITuple.prefixItems}
+   * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link OpenApi.IJsonSchema.IObject}
    * - Merge {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link OpenApi.IJsonSchema.IOneOf}
    * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link OpenApi.IJsonSchema.IReference}
-   * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link OpenApi.IJsonSchema.IObject}
    */
   export type IJsonSchema =
     | IJsonSchema.IConstant

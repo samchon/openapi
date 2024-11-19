@@ -17,7 +17,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         },
         "temporary": {
           "type": "boolean"
@@ -28,7 +29,8 @@
               "type": "null"
             },
             {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           ]
         }

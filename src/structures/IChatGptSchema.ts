@@ -1,10 +1,68 @@
+/**
+ * Type schema info of the ChatGPT.
+ *
+ * `IChatGptSchema` is a type schema info of the ChatGPT function calling.
+ *
+ * `IChatGptSchema` basically follows the JSON schema definition of the OpenAPI v3.1
+ * speciifcation; {@link OpenApiV3_1.IJsonSchema}.
+ *
+ * However, the `IChatGptSchema` does not follow the entire specification of
+ * the OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
+ * list of how `IChatGptSchema` is different with the OpenAPI v3.1 JSON schema.
+ *
+ * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
+ * - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
+ * - Tuple type is banned: {@link OpenApiV3_1.IJsonSchema.ITuple.prefixItems}
+ * - Constant type is banned: {@link OpenApiV3_1.IJsonSchema.IConstant}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IOneOf} to {@link IChatGptSchema.IAnOf}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link IChatGptSchema.IObject}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link IChatGptSchema.IReference}
+ * - Forcibly transform every object properties to be required
+ *
+ * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema type of
+ *
+ * - {@link IChatGptSchema.IAnyOf} instead of the {@link OpenApi.IJsonSchema.IOneOf}
+ * - {@link IChatGptSchema.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.IComponents.schemas}
+ * - {@link IChatGptSchema.IString.enum} instead of the {@link OpenApi.IJsonSchema.IConstant}
+ * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
+ * - Forcibly transform every object properties to be required
+ *
+ * For reference, if you've composed the `IChatGptSchema` type with the
+ * {@link ILlmApplication.IChatGptOptions.escape} `true` option, only the recursived
+ * named types would be archived into the {@link IChatGptSchema.IParameters.$defs},
+ * and the others would be ecaped from the {@link IChatGptSchema.IReference} type.
+ *
+ * Also, if you've composed the `IChatGptSchema` type with the
+ * {@link ILlmApplication.IChatGptOptions.tag} `false` option, the `IChatGptSchema`
+ * would not compose these properties. Instead, these properties would be written on the
+ * {@link IChatGptSchema.__IAttribute}.descripotion field like `@format uuid` case.
+ *
+ * - {@link IChatGptSchema.INumber.minimum}
+ * - {@link IChatGptSchema.INumber.maximum}
+ * - {@link IChatGptSchema.INumber.multipleOf}
+ * - {@link IChatGptSchema.IString.minLength}
+ * - {@link IChatGptSchema.IString.maxLength}
+ * - {@link IChatGptSchema.IString.format}
+ * - {@link IChatGptSchema.IString.pattern}
+ * - {@link IChatGptSchema.IString.contentMediaType}
+ * - {@link IChatGptSchema.IArray.minItems}
+ * - {@link IChatGptSchema.IArray.maxItems}
+ * - {@link IChatGptSchema.IArray.unique}
+ *
+ * @reference https://platform.openai.com/docs/guides/function-calling
+ * @reference https://platform.openai.com/docs/guides/structured-outputs
+ * @warning Specified not by the ChatGPT documentation, but by my experiments.
+ *          Therefore, its definitions can be inaccurate or be changed in the future.
+ *          If you find any wrong or outdated definitions, please let me know by issue
+ * @issue https://github.com/samchon/openapi/issues
+ * @author Jeongho Nam - https://github.com/samchon
+ */
 export type IChatGptSchema =
   | IChatGptSchema.IBoolean
   | IChatGptSchema.IInteger
   | IChatGptSchema.INumber
   | IChatGptSchema.IString
   | IChatGptSchema.IArray
-  | IChatGptSchema.ITuple
   | IChatGptSchema.IObject
   | IChatGptSchema.IReference
   | IChatGptSchema.IAnyOf
@@ -252,64 +310,6 @@ export namespace IChatGptSchema {
      * Maximum items restriction.
      *
      * Restriction of maximum number of items in the array.
-     *
-     * @type uint64
-     */
-    maxItems?: number;
-  }
-
-  /**
-   * Tuple type info.
-   */
-  export interface ITuple extends __ISignificant<"array"> {
-    /**
-     * Prefix items.
-     *
-     * The `prefixItems` means the type schema info of the prefix items in the
-     * tuple type. In the TypeScript, it is expressed as `[T1, T2]`.
-     *
-     * If you want to express `[T1, T2, ...TO[]]` type, you can configure the
-     * `...TO[]` through the {@link additionalItems} property.
-     */
-    prefixItems: IChatGptSchema[];
-
-    /**
-     * Additional items.
-     *
-     * The `additionalItems` means the type schema info of the additional items
-     * after the {@link prefixItems}. In the TypeScript, if there's a type
-     * `[T1, T2, ...TO[]]`, the `...TO[]` is represented by the `additionalItems`.
-     *
-     * By the way, if you configure the `additionalItems` as `true`, it means
-     * the additional items are not restricted. They can be any type, so that
-     * it is equivalent to the TypeScript type `[T1, T2, ...any[]]`.
-     *
-     * Otherwise configure the `additionalItems` as the {@link IJsonSchema},
-     * it means the additional items must follow the type schema info.
-     * Therefore, it is equivalent to the TypeScript type `[T1, T2, ...TO[]]`.
-     */
-    additionalItems?: boolean | IChatGptSchema;
-
-    /**
-     * Unique items restriction.
-     *
-     * If this property value is `true`, target tuple must have unique items.
-     */
-    uniqueItems?: boolean;
-
-    /**
-     * Minimum items restriction.
-     *
-     * Restriction of minumum number of items in the tuple.
-     *
-     * @type uint64
-     */
-    minItems?: number;
-
-    /**
-     * Maximum items restriction.
-     *
-     * Restriction of maximum number of items in the tuple.
      *
      * @type uint64
      */

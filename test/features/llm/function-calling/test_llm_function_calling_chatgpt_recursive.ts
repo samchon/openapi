@@ -8,7 +8,7 @@ import typia, { IJsonSchemaCollection } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
 
-export const test_provider_chatgpt_function_calling_recursive =
+export const test_llm_function_calling_chatgpt_recursive =
   async (): Promise<void> => {
     if (TestGlobal.env.OPENAI_API_KEY === undefined) return;
 

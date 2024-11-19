@@ -38,11 +38,6 @@ export namespace ChatGptTypeChecker {
   ): schema is IChatGptSchema.IArray =>
     (schema as IChatGptSchema.IArray).type === "array" &&
     (schema as IChatGptSchema.IArray).items !== undefined;
-  export const isTuple = (
-    schema: IChatGptSchema,
-  ): schema is IChatGptSchema.ITuple =>
-    (schema as IChatGptSchema.ITuple).type === "array" &&
-    (schema as IChatGptSchema.ITuple).prefixItems !== undefined;
   export const isObject = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IObject =>
@@ -81,14 +76,6 @@ export namespace ChatGptTypeChecker {
         )
           next(schema.additionalProperties);
       } else if (ChatGptTypeChecker.isArray(schema)) next(schema.items);
-      else if (ChatGptTypeChecker.isTuple(schema)) {
-        (schema.prefixItems ?? []).forEach(next);
-        if (
-          typeof schema.additionalItems === "object" &&
-          schema.additionalItems !== null
-        )
-          next(schema.additionalItems);
-      }
     };
     next(props.schema);
   };
@@ -173,7 +160,7 @@ export namespace ChatGptTypeChecker {
     // INSTANCE CASE
     else if (isArray(p.x))
       return (
-        (isArray(p.y) || isTuple(p.y)) &&
+        isArray(p.y) &&
         coverArray({
           $defs: p.$defs,
           visited: p.visited,
@@ -199,28 +186,9 @@ export namespace ChatGptTypeChecker {
     $defs?: Record<string, IChatGptSchema> | undefined;
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema.IArray;
-    y: IChatGptSchema.IArray | IChatGptSchema.ITuple;
+    y: IChatGptSchema.IArray;
   }): boolean => {
-    if (isTuple(p.y))
-      return (
-        p.y.prefixItems.every((v) =>
-          coverStation({
-            $defs: p.$defs,
-            visited: p.visited,
-            x: p.x.items,
-            y: v,
-          }),
-        ) &&
-        (p.y.additionalItems === undefined ||
-          (typeof p.y.additionalItems === "object" &&
-            coverStation({
-              $defs: p.$defs,
-              visited: p.visited,
-              x: p.x.items,
-              y: p.y.additionalItems,
-            })))
-      );
-    else if (
+    if (
       !(
         p.x.minItems === undefined ||
         (p.y.minItems !== undefined && p.x.minItems <= p.y.minItems)
