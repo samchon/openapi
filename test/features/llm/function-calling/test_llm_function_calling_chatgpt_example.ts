@@ -8,12 +8,12 @@ import typia, { IJsonSchemaCollection, tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
 
-export const test_llm_function_calling_chatgpt_tags =
+export const test_llm_function_calling_chatgpt_example =
   async (): Promise<void> => {
     if (TestGlobal.env.OPENAI_API_KEY === undefined) return;
 
     const collection: IJsonSchemaCollection =
-      typia.json.schemas<[{ input: OpeningTime }]>();
+      typia.json.schemas<[{ input: IPerson }]>();
     const parameters: IChatGptSchema.IParameters | null =
       ChatGptConverter.parameters({
         components: collection.components,
@@ -21,14 +21,13 @@ export const test_llm_function_calling_chatgpt_tags =
           collection.schemas[0],
         ),
         escape: false,
-        tag: true,
       });
     if (parameters === null)
       throw new Error(
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
     await fs.promises.writeFile(
-      `${TestGlobal.ROOT}/examples/function-calling/tags.schema.json`,
+      `${TestGlobal.ROOT}/examples/function-calling/example.schema.json`,
       JSON.stringify(parameters, null, 2),
       "utf8",
     );
@@ -52,21 +51,22 @@ export const test_llm_function_calling_chatgpt_tags =
         {
           type: "function",
           function: {
-            name: "reserve",
-            description: "Reserve some opening time.",
+            name: "enrollPerson",
+            description: "Enroll a person to the restaurant reservation list.",
             parameters: parameters as any,
+            strict: true,
           },
         },
       ],
     });
     await ArrayUtil.asyncMap(completion.choices[0].message.tool_calls ?? [])(
       async (call) => {
-        TestValidator.equals("name")(call.function.name)("reserve");
+        TestValidator.equals("name")(call.function.name)("enrollPerson");
         const { input } = typia.assert<{
-          input: OpeningTime;
+          input: IPerson;
         }>(JSON.parse(call.function.arguments));
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/tags.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/example.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );
@@ -74,14 +74,13 @@ export const test_llm_function_calling_chatgpt_tags =
     );
   };
 
+interface IPerson {
+  name: string & tags.Example<"John Doe">;
+  age: number & tags.Example<42>;
+}
+
 const SYSTEM_MESSAGE =
   "You are a helpful customer support assistant. Use the supplied tools to assist the user.";
-const USER_MESSAGE = `
-  Reserve current date-time permenantely as the reason of marketing sales.
-`;
 
-interface OpeningTime {
-  reasons: Array<string> & tags.MinItems<1>;
-  temporary: boolean;
-  time: (string & tags.Format<"date-time">) | null;
-}
+const USER_MESSAGE =
+  "Just enroll a person whose name and age values exactly same with the example values.";

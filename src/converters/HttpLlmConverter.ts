@@ -261,6 +261,7 @@ const CASTERS = {
     ChatGptConverter.schema({
       ...props,
       escape: false,
+      tag: false,
     }),
   gemini: (props: {
     components: OpenApi.IComponents;

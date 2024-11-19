@@ -5,7 +5,7 @@
   "closed_at": null,
   "content": {
     "title": "Surface Pro 8",
-    "format": "txt",
+    "format": "html",
     "body": "The best laptop for your daily needs.",
     "files": [],
     "thumbnails": []
@@ -64,10 +64,10 @@
       ],
       "stocks": [
         {
-          "name": "(i3, 8 GB, 128 GB)",
+          "name": "i3, 8 GB, 128 GB",
           "price": {
-            "nominal": 999,
-            "real": 899
+            "nominal": 99900,
+            "real": 89900
           },
           "quantity": 1000,
           "choices": [
@@ -86,10 +86,10 @@
           ]
         },
         {
-          "name": "(i3, 16 GB, 256 GB)",
+          "name": "i3, 16 GB, 256 GB",
           "price": {
-            "nominal": 1199,
-            "real": 1099
+            "nominal": 119900,
+            "real": 109900
           },
           "quantity": 1000,
           "choices": [
@@ -108,10 +108,10 @@
           ]
         },
         {
-          "name": "(i3, 16 GB, 512 GB)",
+          "name": "i3, 16 GB, 512 GB",
           "price": {
-            "nominal": 1399,
-            "real": 1299
+            "nominal": 139900,
+            "real": 129900
           },
           "quantity": 1000,
           "choices": [
@@ -130,10 +130,10 @@
           ]
         },
         {
-          "name": "(i5, 16 GB, 256 GB)",
+          "name": "i5, 16 GB, 256 GB",
           "price": {
-            "nominal": 1499,
-            "real": 1399
+            "nominal": 149900,
+            "real": 139900
           },
           "quantity": 1000,
           "choices": [
@@ -152,10 +152,10 @@
           ]
         },
         {
-          "name": "(i5, 32 GB, 512 GB)",
+          "name": "i5, 32 GB, 512 GB",
           "price": {
-            "nominal": 1799,
-            "real": 1699
+            "nominal": 179900,
+            "real": 169900
           },
           "quantity": 1000,
           "choices": [
@@ -174,10 +174,10 @@
           ]
         },
         {
-          "name": "(i7, 16 GB, 512 GB)",
+          "name": "i7, 16 GB, 512 GB",
           "price": {
-            "nominal": 1799,
-            "real": 1699
+            "nominal": 179900,
+            "real": 169900
           },
           "quantity": 1000,
           "choices": [
@@ -196,10 +196,10 @@
           ]
         },
         {
-          "name": "(i7, 32 GB, 512 GB)",
+          "name": "i7, 32 GB, 512 GB",
           "price": {
-            "nominal": 1999,
-            "real": 1899
+            "nominal": 199900,
+            "real": 189900
           },
           "quantity": 1000,
           "choices": [
@@ -220,7 +220,7 @@
       ],
       "name": "Surface Pro 8 Entity",
       "required": true,
-      "primary": false
+      "primary": true
     },
     {
       "options": [],
@@ -228,8 +228,8 @@
         {
           "name": "Warranty Program",
           "price": {
-            "nominal": 99,
-            "real": 89
+            "nominal": 9900,
+            "real": 8900
           },
           "quantity": 1000,
           "choices": []
@@ -240,5 +240,9 @@
       "primary": false
     }
   ],
-  "tags": []
+  "tags": [
+    "laptop",
+    "Surface",
+    "Pro8"
+  ]
 }
