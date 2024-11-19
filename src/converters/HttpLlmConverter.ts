@@ -24,7 +24,9 @@ export namespace HttpLlmConverter {
     migrate: IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
     options: IHttpLlmApplication.IOptions<
       Model,
-      Parameters["properties"][string]
+      Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
+        ? Parameters["properties"][string]
+        : IHttpLlmApplication.ModelSchema[Model]
     >;
   }): IHttpLlmApplication<Model, Parameters, Operation, Route> => {
     // COMPOSE FUNCTIONS
@@ -134,7 +136,9 @@ export namespace HttpLlmConverter {
     route: IHttpMigrateRoute<OpenApi.IJsonSchema, Operation>;
     options: IHttpLlmApplication.IOptions<
       Model,
-      Parameters["properties"][string]
+      Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
+        ? Parameters["properties"][string]
+        : IHttpLlmApplication.ModelSchema[Model]
     >;
   }): IHttpLlmFunction<Parameters, Operation, Route> | null => {
     const $defs: Record<string, IChatGptSchema> = {};
@@ -142,9 +146,9 @@ export namespace HttpLlmConverter {
       s: OpenApi.IJsonSchema,
     ): Parameters["properties"][string] | null =>
       CASTERS[props.model]({
-        components: props.components,
-        recursive: props.options.recursive,
+        options: props.options as any,
         schema: s,
+        components: props.components,
         $defs,
       }) as Parameters["properties"][string] | null;
     const output: Parameters["properties"][string] | null | undefined =
@@ -215,7 +219,7 @@ export namespace HttpLlmConverter {
       separated: props.options.separate
         ? separateParameters({
             model: props.model,
-            predicate: props.options.separate,
+            predicate: props.options.separate as any,
             parameters,
           })
         : undefined,
@@ -245,29 +249,45 @@ const CASTERS = {
   "3.0": (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
-  }) => LlmConverterV3.schema(props),
+    options: IHttpLlmApplication.IOptions<"3.0">;
+  }) =>
+    LlmConverterV3.schema({
+      components: props.components,
+      schema: props.schema,
+      recursive: props.options.recursive,
+    }),
   "3.1": (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
-  }) => LlmConverterV3_1.schema(props),
+    options: IHttpLlmApplication.IOptions<"3.1">;
+  }) =>
+    LlmConverterV3_1.schema({
+      components: props.components,
+      schema: props.schema,
+      recursive: props.options.recursive,
+    }),
   chatgpt: (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
     $defs: Record<string, IChatGptSchema>;
+    options: Omit<IHttpLlmApplication.IChatGptOptions, "separate">;
   }) =>
     ChatGptConverter.schema({
-      ...props,
-      escape: false,
-      tag: false,
+      components: props.components,
+      schema: props.schema,
+      $defs: props.$defs,
+      options: props.options,
     }),
   gemini: (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
-  }) => GeminiConverter.schema(props),
+    options: IHttpLlmApplication.IOptions<"gemini">;
+  }) =>
+    GeminiConverter.schema({
+      components: props.components,
+      schema: props.schema,
+      recursive: props.options.recursive,
+    }),
 };
 
 const SEPARATORS = {

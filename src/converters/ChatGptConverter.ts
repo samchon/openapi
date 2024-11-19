@@ -1,21 +1,20 @@
 import { OpenApi } from "../OpenApi";
 import { IChatGptSchema } from "../structures/IChatGptSchema";
+import { ILlmApplication } from "../structures/ILlmApplication";
 import { ChatGptTypeChecker } from "../utils/ChatGptTypeChecker";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace ChatGptConverter {
   export const parameters = (props: {
+    options: Omit<ILlmApplication.IChatGptOptions, "separate">;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    escape?: boolean;
-    tag?: boolean;
   }): IChatGptSchema.IParameters | null => {
     const $defs: Record<string, IChatGptSchema> = {};
     const res: IChatGptSchema.IParameters | null = schema({
+      options: props.options,
       components: props.components,
       schema: props.schema,
-      escape: props.escape,
-      tag: props.tag,
       $defs,
     }) as IChatGptSchema.IParameters | null;
     if (res === null) return null;
@@ -24,11 +23,10 @@ export namespace ChatGptConverter {
   };
 
   export const schema = (props: {
+    options: Omit<ILlmApplication.IChatGptOptions, "separate">;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
     $defs: Record<string, IChatGptSchema>;
-    escape?: boolean;
-    tag?: boolean;
+    schema: OpenApi.IJsonSchema;
   }): IChatGptSchema | null => {
     const union: Array<IUnionElement> = [];
     const attribute: IChatGptSchema.__IAttribute = {
@@ -52,7 +50,7 @@ export namespace ChatGptConverter {
           props.components.schemas?.[key];
         if (target === undefined) return 0;
         if (
-          !!props.escape === false ||
+          props.options.reference === true ||
           OpenApiTypeChecker.isRecursiveReference({
             components: props.components,
             schema: input,
@@ -71,10 +69,9 @@ export namespace ChatGptConverter {
           if (props.$defs[key] !== undefined) return out();
           props.$defs[key] = {};
           const converted: IChatGptSchema | null = schema({
+            options: props.options,
             components: props.components,
             $defs: props.$defs,
-            escape: props.escape,
-            tag: props.tag,
             schema: target,
           });
           if (converted === null)
@@ -90,10 +87,9 @@ export namespace ChatGptConverter {
           Object.entries(input.properties || {}).reduce(
             (acc, [key, value]) => {
               const converted: IChatGptSchema | null = schema({
+                options: props.options,
                 components: props.components,
                 $defs: props.$defs,
-                escape: props.escape,
-                tag: props.tag,
                 schema: value,
               });
               if (converted === null) return acc;
@@ -113,10 +109,9 @@ export namespace ChatGptConverter {
             : typeof input.additionalProperties === "object" &&
                 input.additionalProperties !== null
               ? schema({
+                  options: props.options,
                   components: props.components,
                   $defs: props.$defs,
-                  escape: props.escape,
-                  tag: props.tag,
                   schema: input.additionalProperties,
                 })
               : input.additionalProperties;
@@ -136,35 +131,34 @@ export namespace ChatGptConverter {
         });
       } else if (OpenApiTypeChecker.isArray(input)) {
         const items: IChatGptSchema | null = schema({
+          options: props.options,
           components: props.components,
           $defs: props.$defs,
-          escape: props.escape,
-          tag: props.tag,
           schema: input.items,
         });
         if (items === null)
           return union.push({
             schema: null,
-            tags: !!props.tag ? [] : getArrayTags(input),
+            tags: props.options.constraint ? [] : getArrayTags(input),
           });
         return union.push({
           schema: {
             ...input,
             items,
-            ...(!!props.tag
+            ...(props.options.constraint
               ? {}
               : {
                   maxItems: undefined,
                   minItems: undefined,
                 }),
           },
-          tags: !!props.tag ? [] : getArrayTags(input),
+          tags: props.options.constraint ? [] : getArrayTags(input),
         });
       } else if (OpenApiTypeChecker.isString(input))
         return union.push({
           schema: {
             ...input,
-            ...(!!props.tag
+            ...(props.options.constraint
               ? {}
               : {
                   contentMediaType: undefined,
@@ -174,7 +168,7 @@ export namespace ChatGptConverter {
                   pattern: undefined,
                 }),
           },
-          tags: !!props.tag ? [] : getStringTags(input),
+          tags: props.options.constraint ? [] : getStringTags(input),
         });
       else if (
         OpenApiTypeChecker.isNumber(input) ||
@@ -183,7 +177,7 @@ export namespace ChatGptConverter {
         return union.push({
           schema: {
             ...input,
-            ...(!!props.tag
+            ...(props.options.constraint
               ? {}
               : {
                   maximum: undefined,
@@ -193,7 +187,7 @@ export namespace ChatGptConverter {
                   multipleOf: undefined,
                 }),
           },
-          tags: !!props.tag ? [] : getNumericTags(input),
+          tags: props.options.constraint ? [] : getNumericTags(input),
         });
       else if (OpenApiTypeChecker.isConstant(input)) return 0;
       else if (OpenApiTypeChecker.isTuple(input))
@@ -231,7 +225,7 @@ export namespace ChatGptConverter {
       else if (OpenApiTypeChecker.isOneOf(input))
         input.oneOf.forEach(visitConstant);
       else if (
-        !!props.escape === true &&
+        props.options.reference === false &&
         OpenApiTypeChecker.isReference(input) &&
         OpenApiTypeChecker.isRecursiveReference({
           components: props.components,

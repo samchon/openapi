@@ -74,7 +74,10 @@ const test = (
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
-    escape: true,
+    options: {
+      reference: false,
+      constraint: true,
+    },
   });
   TestValidator.equals("ref")(expected)({
     $defs,

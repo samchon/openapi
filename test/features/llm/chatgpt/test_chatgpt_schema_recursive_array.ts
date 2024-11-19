@@ -28,7 +28,10 @@ export const test_chatgpt_schema_recursive_array = (): void => {
     schema: {
       $ref: "#/components/schemas/Department",
     },
-    escape: true,
+    options: {
+      constraint: true,
+      reference: false,
+    },
   });
   TestValidator.equals("$defs")($defs)({
     Department: {
