@@ -1,0 +1,88 @@
+{
+  "section_code": "electronics",
+  "status": null,
+  "opened_at": null,
+  "closed_at": null,
+  "content": {
+    "title": "Apple Vision Air",
+    "format": "md",
+    "body": "### Product Introduction\n\nApple Vision Air\n\n### Preface\n\nThe Apple Vision Air is a groundbreaking addition to Apple's lineup of innovative devices, designed to enhance your digital experience through augmented reality. With its sleek design and advanced technology, the Vision Air aims to redefine how users interact with their surroundings, providing a seamless blend of the physical and digital worlds.\n\n### Content\n\nThe Apple Vision Air features a lightweight and comfortable design, making it perfect for extended use. Equipped with high-resolution displays and cutting-edge optics, it offers stunning visuals that immerse users in their augmented reality experiences. The device is powered by the latest Apple silicon, ensuring smooth performance and efficient battery life.\n\nThe Apple Vision Air is more than just a device; it’s a gateway to a new reality. Whether for work, play, or exploration, it represents the future of immersive technology.\n\n### Key Features\n\n- **Augmented Reality Capabilities**: Experience a new dimension of interaction with AR applications that enhance everyday tasks and entertainment.\n\n- **High-Resolution Display**: Enjoy vibrant and crisp visuals, making every detail come to life.\n  \n- **Intuitive Controls**: Navigate effortlessly with gesture controls and voice commands, designed for user convenience.\n\n- **Seamless Integration**: Connect with other Apple devices for a unified ecosystem that enhances productivity and creativity.\n\n- **Durability and Comfort**: Built with premium materials, the Vision Air ensures longevity and comfort during prolonged use.\n\n### SKU\n\n- **AVA-2023-001 | 256GB | ₩2,990,000**\n\n- **AVA-2023-002 | 512GB | ₩3,490,000**\n\n- **AVA-2023-003 | 1TB | ₩3,990,000**",
+    "files": [],
+    "thumbnails": []
+  },
+  "units": [
+    {
+      "options": [
+        {
+          "type": "select",
+          "name": "Storage Capacity",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "256GB"
+            },
+            {
+              "name": "512GB"
+            },
+            {
+              "name": "1TB"
+            }
+          ]
+        }
+      ],
+      "stocks": [
+        {
+          "name": "256GB Variant",
+          "price": {
+            "nominal": 2990000,
+            "real": 2990000
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "512GB Variant",
+          "price": {
+            "nominal": 3490000,
+            "real": 3490000
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "1TB Variant",
+          "price": {
+            "nominal": 3990000,
+            "real": 3990000
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 2
+            }
+          ]
+        }
+      ],
+      "name": "Apple Vision Air",
+      "required": true,
+      "primary": true
+    }
+  ],
+  "tags": [
+    "Augmented Reality",
+    "Apple Vision Air",
+    "Electronics",
+    "Innovative Technology"
+  ]
+}
