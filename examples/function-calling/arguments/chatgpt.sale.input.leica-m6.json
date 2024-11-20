@@ -1,5 +1,5 @@
 {
-  "section_code": "Cameras&Photography",
+  "section_code": "Cameras",
   "status": null,
   "opened_at": null,
   "closed_at": null,
@@ -10,13 +10,13 @@
     "files": [],
     "thumbnails": [
       {
-        "name": "pm-84724-10557_leica_m6_black_front_1",
+        "name": "leica-m6-thumbnail-1",
         "extension": "png",
         "url": "https://leica-camera.com/sites/default/files/styles/r_media_medium_desktop_4_3/public/pm-84724-10557_leica_m6_black_front_1.png?itok=SpVHc0cq"
       },
       {
-        "name": "leica_m6_packaging_ambient_3840x2160",
-        "extension": "jpg.webp",
+        "name": "leica-m6-thumbnail-2",
+        "extension": "webp",
         "url": "https://leica-camera.com/sites/default/files/styles/r_media_fullscreen/public/2022-09/leica_m6_packaging_ambient_3840x2160.jpg.webp?itok=lig4kkiB"
       }
     ]
@@ -27,7 +27,7 @@
         {
           "type": "select",
           "name": "Finish",
-          "variable": true,
+          "variable": false,
           "candidates": [
             {
               "name": "Black Paint Finish"
@@ -91,9 +91,9 @@
     }
   ],
   "tags": [
-    "Leica",
     "Camera",
-    "Film Photography",
-    "Classic"
+    "Leica",
+    "Film",
+    "Photography"
   ]
 }

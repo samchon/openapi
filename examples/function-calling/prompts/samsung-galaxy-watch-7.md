@@ -21,7 +21,7 @@ Below is the content body of the sale.
 
 About the thumbnail images, please fill them from the below image URL addresses.
 
-![galaxy-watch-7.png](https://images.samsung.com/kdp/goods/2024/07/07/597615f6-b6f9-4ae4-a93d-cbba6bdde2c6.png?$944_550_PNG$)
+![galaxy-watch-7-thumbnail.png](https://images.samsung.com/kdp/goods/2024/07/07/597615f6-b6f9-4ae4-a93d-cbba6bdde2c6.png?$944_550_PNG$)
 
 ## **SKU**
 

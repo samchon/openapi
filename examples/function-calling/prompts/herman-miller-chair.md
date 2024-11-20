@@ -18,9 +18,9 @@ Below is the content body of the sale.
 In summary, the Herman Miller chair stands out as a premium choice for users who value comfort, style, and durability. Whether for work or leisure, this chair is ready to enhance your experience and support your well-being.
 > 
 
-About the thumbnail images, please fill from the below image URL addresses.
+About the thumbnail images, please fill from the below image.
 
-  - https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRaJWHEnwGGg-8rHni_2hN8HKUSkEBdU3X4w&s
+![herman-miller-chair-thumbnail.png](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRaJWHEnwGGg-8rHni_2hN8HKUSkEBdU3X4w&s)
 
 ## SKU
 

@@ -1,5 +1,5 @@
 {
-  "section_code": "stanley_tumbler_collection",
+  "section_code": "STB-001",
   "status": null,
   "opened_at": null,
   "closed_at": null,
@@ -10,7 +10,7 @@
     "files": [],
     "thumbnails": [
       {
-        "name": "stanley_tumbler",
+        "name": "stanley-tumbler-collection-thumbnail",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d71322c566d56d9c20ceb/images/ce9a07f2aa831dbec8bb1c287299706e24a52a8e0c119fa162041805038957a7.jpeg"
       }
@@ -54,7 +54,7 @@
       ],
       "stocks": [
         {
-          "name": "16 oz, Matte Black",
+          "name": "Classic Tumbler - 16 oz Matte Black",
           "price": {
             "nominal": 40000,
             "real": 35000
@@ -72,7 +72,7 @@
           ]
         },
         {
-          "name": "20 oz, Hammertone Green",
+          "name": "Classic Tumbler - 20 oz Hammertone Green",
           "price": {
             "nominal": 50000,
             "real": 44000
@@ -90,7 +90,7 @@
           ]
         },
         {
-          "name": "24 oz, Polar White",
+          "name": "Classic Tumbler - 24 oz Polar White",
           "price": {
             "nominal": 60000,
             "real": 54000
@@ -148,10 +148,9 @@
     }
   ],
   "tags": [
-    "Tumblers",
     "Stanley",
-    "Drinkware",
-    "Eco-friendly",
-    "Hydration"
+    "Tumbler",
+    "Collection",
+    "Drinkware"
   ]
 }

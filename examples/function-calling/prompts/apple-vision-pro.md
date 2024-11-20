@@ -8,6 +8,8 @@ The Apple Vision Air is a groundbreaking addition to Apple's lineup of innovativ
 
 ### Content
 
+![apple-vision-pro-thumbnail.png](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdIP_qI0xBL04d0DRIw7tIU9y0cLcwfIqi7g&s)
+
 The Apple Vision Air features a lightweight and comfortable design, making it perfect for extended use. Equipped with high-resolution displays and cutting-edge optics, it offers stunning visuals that immerse users in their augmented reality experiences. The device is powered by the latest Apple silicon, ensuring smooth performance and efficient battery life.
 
 The Apple Vision Air is more than just a device; it’s a gateway to a new reality. Whether for work, play, or exploration, it represents the future of immersive technology.

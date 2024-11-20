@@ -20,8 +20,9 @@ Below is the content body of the sale.
 
 About the thumbnail images, please fill from the below image URL addresses.
 
-- hhttps://leica-camera.com/sites/default/files/styles/r_media_medium_desktop_4_3/public/pm-84724-10557_leica_m6_black_front_1.png?itok=SpVHc0cq
-- https://leica-camera.com/sites/default/files/styles/r_media_fullscreen/public/2022-09/leica_m6_packaging_ambient_3840x2160.jpg.webp?itok=lig4kkiB
+![leica-m6-thumbnail-1.png](https://leica-camera.com/sites/default/files/styles/r_media_medium_desktop_4_3/public/pm-84724-10557_leica_m6_black_front_1.png?itok=SpVHc0cq)
+
+![leica-m6-thumbnail-2.webp](https://leica-camera.com/sites/default/files/styles/r_media_fullscreen/public/2022-09/leica_m6_packaging_ambient_3840x2160.jpg.webp?itok=lig4kkiB)
 
 ### SKU
 

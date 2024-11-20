@@ -1,16 +1,16 @@
 {
-  "section_code": "galaxy_watch",
+  "section_code": "default",
   "status": null,
   "opened_at": null,
   "closed_at": null,
   "content": {
     "title": "Galaxy Watch 7",
     "format": "md",
-    "body": "The Galaxy Watch 7 is a premium smartwatch designed with innovative aesthetics and high-quality materials, making it a perfect fit for both daily life and work. ([samsung.com](https://www.samsung.com/sec/watches/galaxy-watch/galaxy-watch7/))\n\n“Upgrade Your Style”: The Galaxy Watch 7 adds a sophisticated touch to your wrist with its floating glass design and a variety of color options.\n“Personalized Sleep Coaching”: Its sleep tracking feature analyzes your sleep patterns and provides personalized sleep coaching.\n\n“Enhanced Workout Tracking”: Supports a wide range of workout modes and provides detailed data such as heart rate and calorie burn.\n\n“Powerful Performance”: Equipped with the latest processor and long battery life, it offers stable performance for everything from daily use to high-intensity workouts.\n\nIn summary, the Galaxy Watch 7 is a premium smartwatch combining style, functionality, and durability, making it the perfect choice to enhance your health and lifestyle.",
+    "body": "The Galaxy Watch 7 is a premium smartwatch designed with innovative aesthetics and high-quality materials, making it a perfect fit for both daily life and work. ([samsung.com](https://www.samsung.com/sec/watches/galaxy-watch/galaxy-watch7/))\n\n“Upgrade Your Style”: The Galaxy Watch 7 adds a sophisticated touch to your wrist with its floating glass design and a variety of color options. “Personalized Sleep Coaching”: Its sleep tracking feature analyzes your sleep patterns and provides personalized sleep coaching.\n\n“Enhanced Workout Tracking”: Supports a wide range of workout modes and provides detailed data such as heart rate and calorie burn.\n\n“Powerful Performance”: Equipped with the latest processor and long battery life, it offers stable performance for everything from daily use to high-intensity workouts.\n\nIn summary, the Galaxy Watch 7 is a premium smartwatch combining style, functionality, and durability, making it the perfect choice to enhance your health and lifestyle.",
     "files": [],
     "thumbnails": [
       {
-        "name": "galaxy-watch-7",
+        "name": "galaxy-watch-7-thumbnail",
         "extension": "png",
         "url": "https://images.samsung.com/kdp/goods/2024/07/07/597615f6-b6f9-4ae4-a93d-cbba6bdde2c6.png?$944_550_PNG$"
       }
@@ -198,11 +198,5 @@
       "primary": false
     }
   ],
-  "tags": [
-    "smartwatch",
-    "Galaxy Watch",
-    "Samsung",
-    "technology",
-    "wearable"
-  ]
+  "tags": []
 }

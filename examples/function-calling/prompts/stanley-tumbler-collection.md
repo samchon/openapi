@@ -22,7 +22,7 @@ The Stanley Tumbler Collection offers a range of versatile, durable, and stylish
 
 Please use the this for thumbnail images:
 
-![image.png](https://serpapi.com/searches/673d71322c566d56d9c20ceb/images/ce9a07f2aa831dbec8bb1c287299706e24a52a8e0c119fa162041805038957a7.jpeg)
+![stanley-tumbler-collection-thumbnail.jepg](https://serpapi.com/searches/673d71322c566d56d9c20ceb/images/ce9a07f2aa831dbec8bb1c287299706e24a52a8e0c119fa162041805038957a7.jpeg)
 
 ### SKU
 
