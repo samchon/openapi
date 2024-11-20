@@ -1,12 +1,12 @@
 {
-  "section_code": "STB-001",
+  "section_code": "general",
   "status": null,
   "opened_at": null,
   "closed_at": null,
   "content": {
     "title": "Stanley Tumbler Collection",
     "format": "md",
-    "body": "The Stanley Tumbler Collection is the perfect companion for staying hydrated, whether you're at work, on the go, or exploring the great outdoors. Designed with functionality and durability in mind, these tumblers are built to keep your drinks at the perfect temperature all day long.\n\n- **\"Built for Adventure\"**: The Stanley Tumbler features rugged construction, making it ideal for outdoor enthusiasts and urban adventurers alike.\n- **\"Temperature Control at Its Best\"**: With double-wall vacuum insulation, the Stanley Tumbler keeps drinks hot for up to 7 hours or cold for up to 11 hours.\n- **\"Leakproof and Spillproof\"**: Designed for ease of use, these tumblers are 100% leakproof, ensuring your drink stays exactly where it belongs.\n- **\"Eco-Friendly and Sustainable\"**: Made with 18/8 stainless steel, Stanley Tumblers are BPA-free and built to last, reducing waste from disposable cups.\n\nIn summary, the Stanley Tumbler Collection combines durability, functionality, and style. Whether you're sipping coffee during your morning commute or staying hydrated during a hike, Stanley Tumblers are designed to meet your needs. Choose Stanley and enjoy unmatched quality and performance.",
+    "body": "The Stanley Tumbler Collection offers a range of versatile, durable, and stylish tumblers to suit every lifestyle. With customizable options and eco-friendly designs, these tumblers are the ideal choice for anyone looking to elevate their drinkware experience. Don’t miss this opportunity to grab your Stanley Tumbler today!\n\nThe Stanley Tumbler Collection is the perfect companion for staying hydrated, whether you're at work, on the go, or exploring the great outdoors. Designed with functionality and durability in mind, these tumblers are built to keep your drinks at the perfect temperature all day long.\n\n- **\"Built for Adventure\"**: The Stanley Tumbler features rugged construction, making it ideal for outdoor enthusiasts and urban adventurers alike.\n- **\"Temperature Control at Its Best\"**: With double-wall vacuum insulation, the Stanley Tumbler keeps drinks hot for up to 7 hours or cold for up to 11 hours.\n- **\"Leakproof and Spillproof\"**: Designed for ease of use, these tumblers are 100% leakproof, ensuring your drink stays exactly where it belongs.\n- **\"Eco-Friendly and Sustainable\"**: Made with 18/8 stainless steel, Stanley Tumblers are BPA-free and built to last, reducing waste from disposable cups.\n\nIn summary, the Stanley Tumbler Collection combines durability, functionality, and style. Whether you're sipping coffee during your morning commute or staying hydrated during a hike, Stanley Tumblers are designed to meet your needs. Choose Stanley and enjoy unmatched quality and performance.",
     "files": [],
     "thumbnails": [
       {
@@ -16,6 +16,15 @@
       }
     ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "accessories",
+        "others"
+      ]
+    }
+  ],
   "units": [
     {
       "options": [
@@ -37,7 +46,7 @@
         },
         {
           "type": "select",
-          "name": "Color Options",
+          "name": "Color",
           "variable": true,
           "candidates": [
             {
@@ -54,7 +63,7 @@
       ],
       "stocks": [
         {
-          "name": "Classic Tumbler - 16 oz Matte Black",
+          "name": "16 oz, Matte Black",
           "price": {
             "nominal": 40000,
             "real": 35000
@@ -72,7 +81,7 @@
           ]
         },
         {
-          "name": "Classic Tumbler - 20 oz Hammertone Green",
+          "name": "20 oz, Hammertone Green",
           "price": {
             "nominal": 50000,
             "real": 44000
@@ -90,7 +99,7 @@
           ]
         },
         {
-          "name": "Classic Tumbler - 24 oz Polar White",
+          "name": "24 oz, Polar White",
           "price": {
             "nominal": 60000,
             "real": 54000
@@ -150,7 +159,8 @@
   "tags": [
     "Stanley",
     "Tumbler",
-    "Collection",
-    "Drinkware"
+    "Drinkware",
+    "Eco-Friendly",
+    "Durable"
   ]
 }

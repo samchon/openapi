@@ -1,5 +1,5 @@
 {
-  "section_code": "SP9-Sale",
+  "section_code": "general",
   "status": null,
   "opened_at": null,
   "closed_at": null,
@@ -10,22 +10,30 @@
     "files": [],
     "thumbnails": [
       {
-        "name": "thumbnail1",
+        "name": "microsoft-surface-pro-9-thumbnail-1",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg"
       },
       {
-        "name": "thumbnail2",
+        "name": "microsoft-surface-pro-9-thumbnail-2",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg"
       },
       {
-        "name": "thumbnail3",
+        "name": "microsoft-surface-pro-9-thumbnail-3",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg"
       }
     ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "2_in_1_laptops"
+      ]
+    }
+  ],
   "units": [
     {
       "options": [
@@ -234,8 +242,8 @@
           ]
         }
       ],
-      "required": true,
       "name": "Surface Pro 9 Entity",
+      "required": true,
       "primary": true
     },
     {
@@ -251,8 +259,8 @@
           "choices": []
         }
       ],
-      "required": false,
       "name": "Warranty Program",
+      "required": false,
       "primary": false
     },
     {
@@ -268,16 +276,18 @@
           "choices": []
         }
       ],
-      "required": false,
       "name": "Magnetic Keyboard",
+      "required": false,
       "primary": false
     }
   ],
   "tags": [
-    "surface",
-    "laptop",
-    "tablet",
+    "Surface",
+    "Pro 9",
     "2-in-1",
-    "tech"
+    "Laptop",
+    "Tablet",
+    "Microsoft",
+    "Electronics"
   ]
 }

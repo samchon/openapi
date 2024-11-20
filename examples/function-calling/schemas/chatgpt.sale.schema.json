@@ -50,6 +50,8 @@
           ]
         },
         "content": {
+          "title": "Description and image content describing the sale",
+          "description": "Description and image content describing the sale.",
           "type": "object",
           "properties": {
             "title": {
@@ -150,8 +152,37 @@
           ],
           "additionalProperties": false
         },
+        "channels": {
+          "title": "List of channels and categories",
+          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.\n\n\n@minItems 1",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "title": "Target channel's {@link IShoppingChannel.code}",
+                "description": "Target channel's {@link IShoppingChannel.code}.",
+                "type": "string"
+              },
+              "category_codes": {
+                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
+                "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "code",
+              "category_codes"
+            ],
+            "additionalProperties": false
+          }
+        },
         "units": {
-          "description": "@minItems 1",
+          "title": "List of units",
+          "description": "List of units.\n\nRecords about individual product composition informations that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1",
           "type": "array",
           "items": {
             "type": "object",
@@ -162,6 +193,32 @@
                 "type": "array",
                 "items": {
                   "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "title": "Type of descriptive option",
+                          "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
+                          "type": "string",
+                          "enum": [
+                            "string",
+                            "number",
+                            "boolean"
+                          ]
+                        },
+                        "name": {
+                          "title": "Readable name of the option",
+                          "description": "Readable name of the option.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "name"
+                      ],
+                      "description": "Creation information of the descriptive option.",
+                      "additionalProperties": false
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -210,32 +267,6 @@
                         "candidates"
                       ],
                       "description": "Creation information of the selectable option.",
-                      "additionalProperties": false
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "title": "Type of descriptive option",
-                          "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
-                          "type": "string",
-                          "enum": [
-                            "string",
-                            "number",
-                            "boolean"
-                          ]
-                        },
-                        "name": {
-                          "title": "Readable name of the option",
-                          "description": "Readable name of the option.",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "type",
-                        "name"
-                      ],
-                      "description": "Creation information of the descriptive option.",
                       "additionalProperties": false
                     }
                   ]
@@ -313,15 +344,15 @@
                   "additionalProperties": false
                 }
               },
-              "required": {
-                "title": "Whether the unit is required or not",
-                "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
-                "type": "boolean"
-              },
               "name": {
                 "title": "Representative name of the unit",
                 "description": "Representative name of the unit.",
                 "type": "string"
+              },
+              "required": {
+                "title": "Whether the unit is required or not",
+                "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
+                "type": "boolean"
               },
               "primary": {
                 "title": "Whether the unit is primary or not",
@@ -332,14 +363,16 @@
             "required": [
               "options",
               "stocks",
-              "required",
               "name",
+              "required",
               "primary"
             ],
             "additionalProperties": false
           }
         },
         "tags": {
+          "title": "List of search tags",
+          "description": "List of search tags.",
           "type": "array",
           "items": {
             "type": "string"
@@ -352,6 +385,7 @@
         "opened_at",
         "closed_at",
         "content",
+        "channels",
         "units",
         "tags"
       ],

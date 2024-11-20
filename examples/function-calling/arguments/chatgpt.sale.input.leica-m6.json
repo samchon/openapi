@@ -1,12 +1,12 @@
 {
-  "section_code": "Cameras",
+  "section_code": "general",
   "status": null,
   "opened_at": null,
   "closed_at": null,
   "content": {
     "title": "Leica M6 (2022 Reissue): The Return of a Legend",
     "format": "md",
-    "body": "The Leica M6, a beloved classic in the world of film photography, is back! The 2022 reissue brings modern enhancements while staying true to the original’s timeless charm. Designed for enthusiasts and professionals, the new M6 is a tribute to the past, with a touch of the future.\n\n- **\"Rediscover the Classic\":** The Leica M6 reissue retains the original design, offering the same iconic look and feel that photographers fell in love with decades ago.\n- **\"Enhanced for the Modern Era\":** Now featuring improved durability, a brighter viewfinder, and the latest advancements in metering, the M6 reissue ensures a seamless shooting experience.\n- **\"Craftsmanship Meets Tradition\":** Made in Germany, the M6 embodies Leica's dedication to quality and precision, delivering a tool that feels as good as it performs.\n- **\"For the Love of Film\":** The M6 is perfect for those who cherish the art of analog photography, providing an unmatched tactile and creative experience.\n\nIn summary, the 2022 Leica M6 reissue is a perfect blend of heritage and innovation. It’s a must-have for collectors, analog enthusiasts, and anyone seeking the pure joy of shooting on film with a legendary camera.",
+    "body": "The Leica M6, a beloved classic in the world of film photography, is back! The 2022 reissue brings modern enhancements while staying true to the original’s timeless charm. Designed for enthusiasts and professionals, the new M6 is a tribute to the past, with a touch of the future.\n\n- **\"Rediscover the Classic\":** The Leica M6 reissue retains the original design, offering the same iconic look and feel that photographers fell in love with decades ago.\n- **\"Enhanced for the Modern Era\":** Now featuring improved durability, a brighter viewfinder, and the latest advancements in metering, the M6 reissue ensures a seamless shooting experience.\n- **\"Craftsmanship Meets Tradition\":** Made in Germany, the M6 embodies Leica's dedication to quality and precision, delivering a tool that feels as good as it performs.\n- **\"For the Love of Film\":** The M6 is perfect for those who cherish the art of analog photography, providing an unmatched tactile and creative experience.\n\nIn summary, the 2022 Leica M6 reissue is a perfect blend of heritage and innovation. It’s a must-have for collectors, analog enthusiasts, and anyone seeking the pure joy of shooting on film with a legendary camera.\n",
     "files": [],
     "thumbnails": [
       {
@@ -21,13 +21,22 @@
       }
     ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "electronics",
+        "cameras"
+      ]
+    }
+  ],
   "units": [
     {
       "options": [
         {
           "type": "select",
           "name": "Finish",
-          "variable": false,
+          "variable": true,
           "candidates": [
             {
               "name": "Black Paint Finish"
@@ -40,7 +49,7 @@
       ],
       "stocks": [
         {
-          "name": "Black Paint Finish",
+          "name": "Leica M6 Body - Black Paint Finish",
           "price": {
             "nominal": 7200000,
             "real": 6899000
@@ -54,7 +63,7 @@
           ]
         },
         {
-          "name": "Silver Chrome Finish",
+          "name": "Leica M6 Body - Silver Chrome Finish",
           "price": {
             "nominal": 7200000,
             "real": 6899000
@@ -91,9 +100,14 @@
     }
   ],
   "tags": [
-    "Camera",
     "Leica",
-    "Film",
-    "Photography"
+    "M6",
+    "Camera",
+    "Film Photography",
+    "Photography",
+    "2022 Reissue",
+    "Lens",
+    "Summilux",
+    "Analog"
   ]
 }
