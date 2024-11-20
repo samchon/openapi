@@ -1,3 +1,9 @@
+> ## Next version is coming.
+>
+> This is the `next` version README document.
+>
+> If you wanna see the latest version, go to the [`v1.0` branch](https://github.com/samchon/openapi/tree/v1.0).
+
 # `@samchon/openapi`
 ```mermaid
 flowchart
@@ -13,7 +19,7 @@ flowchart
 ```
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/samchon/openapi/blob/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
+[![npm version](https://img.shields.io/npm/v/@samchon/openapi/next.svg)](https://www.npmjs.com/package/@samchon/openapi/next.svg)
 [![Downloads](https://img.shields.io/npm/dm/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Build Status](https://github.com/samchon/openapi/workflows/build/badge.svg)](https://github.com/samchon/openapi/actions?query=workflow%3Abuild)
 
@@ -50,10 +56,10 @@ OpenAPI definitions, converters and LLM function calling application composer.
 
 ## Setup
 ```bash
-npm install @samchon/openapi
+npm install @samchon/openapi --tag next
 ```
 
-Just install by `npm i @samchon/openapi` command.
+Just install by `npm i @samchon/openapi --tag next` command.
 
 Here is an example code utilizing the `@samchon/openapi` for LLM function calling purpose. 
 
