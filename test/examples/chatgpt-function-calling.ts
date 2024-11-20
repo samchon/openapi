@@ -53,8 +53,21 @@ const main = async (): Promise<void> => {
         model: "gpt-4o",
         messages: [
           {
-            role: "assistant",
+            role: "system",
             content,
+          },
+          {
+            role: "assistant",
+            content: [
+              "Here is the list of categories belonged to the samchon channel",
+              "",
+              "```json",
+              await fs.promises.readFile(
+                `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.recursive.input.json`,
+                "utf8",
+              ),
+              "```",
+            ].join("\n"),
           },
           {
             role: "user",

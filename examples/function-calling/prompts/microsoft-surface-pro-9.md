@@ -1,6 +1,8 @@
 ### Preface
 I will create a sale with the following details.
 
+Target section is "general", and  channel is "samchon". About the categories, just select proper things by your decision.
+
 ### Content
 At first, title of the sale is "Surface Pro 9". 
 

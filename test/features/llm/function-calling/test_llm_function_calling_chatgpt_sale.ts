@@ -43,8 +43,21 @@ export const test_llm_function_calling_chatgpt_sale =
       model: "gpt-4o",
       messages: [
         {
-          role: "assistant",
+          role: "system",
           content: SYSTEM_MESSAGE,
+        },
+        {
+          role: "assistant",
+          content: [
+            "Here is the list of categories belonged to the samchon channel",
+            "",
+            "```json",
+            await fs.promises.readFile(
+              `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.recursive.input.json`,
+              "utf8",
+            ),
+            "```",
+          ].join("\n"),
         },
         {
           role: "user",

@@ -2,6 +2,8 @@
 
 I will create a sale with the following details.
 
+Target section is "general", and  channel is "samchon". About the categories, just select proper things by your decision.
+
 ### Content
 
 At first, the title of the sale is **"Leica M6 (2022 Reissue): The Return of a Legend"**.

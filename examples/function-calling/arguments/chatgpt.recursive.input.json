@@ -1,127 +1,147 @@
 [
   {
-    "id": "1",
+    "code": "electronics",
     "name": "electronics",
     "children": [
       {
-        "id": "11",
+        "code": "desktops",
         "name": "desktops",
         "children": []
       },
       {
-        "id": "12",
+        "code": "laptops",
         "name": "laptops",
         "children": [
           {
-            "id": "121",
+            "code": "ultrabooks",
             "name": "ultrabooks",
             "children": []
           },
           {
-            "id": "122",
+            "code": "macbooks",
             "name": "macbooks",
             "children": []
           },
           {
-            "id": "123",
+            "code": "desknotes",
             "name": "desknotes",
             "children": []
           },
           {
-            "id": "124",
+            "code": "2_in_1_laptops",
             "name": "2 in 1 laptops",
             "children": []
           }
         ]
       },
       {
-        "id": "13",
+        "code": "tablets",
         "name": "tablets",
         "children": [
           {
-            "id": "131",
+            "code": "ipads",
             "name": "ipads",
             "children": []
           },
           {
-            "id": "132",
+            "code": "android_tablets",
             "name": "android tablets",
             "children": []
           },
           {
-            "id": "133",
+            "code": "windows_tablets",
             "name": "windows tablets",
             "children": []
           }
         ]
       },
       {
-        "id": "14",
-        "name": "smartphones",
+        "code": "smart_phones",
+        "name": "smart phones",
         "children": [
           {
-            "id": "141",
+            "code": "mini_smartphones",
             "name": "mini smartphones",
             "children": []
           },
           {
-            "id": "142",
+            "code": "phablets",
             "name": "phablets",
             "children": []
           },
           {
-            "id": "143",
+            "code": "gaming_smartphones",
             "name": "gaming smartphones",
             "children": []
           },
           {
-            "id": "144",
+            "code": "rugged_smartphones",
             "name": "rugged smartphones",
             "children": []
           },
           {
-            "id": "145",
+            "code": "foldable_smartphones",
             "name": "foldable smartphones",
             "children": []
           }
         ]
       },
       {
-        "id": "15",
+        "code": "smart_watches",
+        "name": "smart watches",
+        "children": []
+      },
+      {
+        "code": "smart_glasses",
+        "name": "smart glasses",
+        "children": []
+      },
+      {
+        "code": "cameras",
         "name": "cameras",
         "children": []
       },
       {
-        "id": "16",
+        "code": "televisions",
         "name": "televisions",
         "children": []
       }
     ]
   },
   {
-    "id": "2",
+    "code": "furnitures",
     "name": "furnitures",
     "children": []
   },
   {
-    "id": "3",
+    "code": "accessories",
     "name": "accessories",
     "children": [
       {
-        "id": "31",
+        "code": "jewelry",
         "name": "jewelry",
         "children": []
       },
       {
-        "id": "32",
+        "code": "clothing",
         "name": "clothing",
         "children": []
       },
       {
-        "id": "33",
+        "code": "shoes",
         "name": "shoes",
         "children": []
       }
     ]
+  },
+  {
+    "code": "clothes",
+    "name": "clothes",
+    "children": []
+  },
+  {
+    "code": "others",
+    "name": "others",
+    "children": []
   }
 ]

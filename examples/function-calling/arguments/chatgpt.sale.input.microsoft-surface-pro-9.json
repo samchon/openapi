@@ -1,5 +1,5 @@
 {
-  "section_code": "elc",
+  "section_code": "general",
   "status": null,
   "opened_at": null,
   "closed_at": null,
@@ -26,6 +26,15 @@
       }
     ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "2_in_1_laptops",
+        "windows_tablets"
+      ]
+    }
+  ],
   "units": [
     {
       "options": [
@@ -80,7 +89,7 @@
       ],
       "stocks": [
         {
-          "name": "i3-8GB-128GB",
+          "name": "i3, 8 GB, 128 GB",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -102,7 +111,7 @@
           ]
         },
         {
-          "name": "i3-16GB-256GB",
+          "name": "i3, 16 GB, 256 GB",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -124,7 +133,7 @@
           ]
         },
         {
-          "name": "i3-16GB-512GB",
+          "name": "i3, 16 GB, 512 GB",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -146,7 +155,7 @@
           ]
         },
         {
-          "name": "i5-16GB-256GB",
+          "name": "i5, 16 GB, 256 GB",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -168,7 +177,7 @@
           ]
         },
         {
-          "name": "i5-32GB-512GB",
+          "name": "i5, 32 GB, 512 GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -190,7 +199,7 @@
           ]
         },
         {
-          "name": "i7-16GB-512GB",
+          "name": "i7, 16 GB, 512 GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -212,7 +221,7 @@
           ]
         },
         {
-          "name": "i7-32GB-512GB",
+          "name": "i7, 32 GB, 512 GB",
           "price": {
             "nominal": 2000000,
             "real": 1899000
@@ -234,7 +243,7 @@
           ]
         }
       ],
-      "name": "Surface Pro 9 Entity",
+      "name": "Surface Pro 8 Entity",
       "required": true,
       "primary": true
     },
@@ -274,10 +283,10 @@
     }
   ],
   "tags": [
-    "laptop",
-    "tablet",
+    "Surface Pro 9",
     "2-in-1",
-    "Surface",
-    "Microsoft"
+    "5G connectivity",
+    "creative professionals",
+    "students"
   ]
 }
