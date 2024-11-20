@@ -30,7 +30,7 @@ export const test_llm_function_calling_chatgpt_example =
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
     await fs.promises.writeFile(
-      `${TestGlobal.ROOT}/examples/function-calling/example.schema.json`,
+      `${TestGlobal.ROOT}/examples/function-calling/schemas/chatgpt.example.schema.json`,
       JSON.stringify(parameters, null, 2),
       "utf8",
     );
@@ -69,7 +69,7 @@ export const test_llm_function_calling_chatgpt_example =
           input: IPerson;
         }>(JSON.parse(call.function.arguments));
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/example.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.example.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );

@@ -166,32 +166,6 @@
                       "type": "object",
                       "properties": {
                         "type": {
-                          "title": "Type of descriptive option",
-                          "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
-                          "type": "string",
-                          "enum": [
-                            "string",
-                            "number",
-                            "boolean"
-                          ]
-                        },
-                        "name": {
-                          "title": "Readable name of the option",
-                          "description": "Readable name of the option.",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "type",
-                        "name"
-                      ],
-                      "description": "Creation information of the descriptive option.",
-                      "additionalProperties": false
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "type": {
                           "title": "Discriminant for the type of selectable option",
                           "description": "Discriminant for the type of selectable option.",
                           "type": "string",
@@ -236,6 +210,32 @@
                         "candidates"
                       ],
                       "description": "Creation information of the selectable option.",
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "title": "Type of descriptive option",
+                          "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
+                          "type": "string",
+                          "enum": [
+                            "string",
+                            "number",
+                            "boolean"
+                          ]
+                        },
+                        "name": {
+                          "title": "Readable name of the option",
+                          "description": "Readable name of the option.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "name"
+                      ],
+                      "description": "Creation information of the descriptive option.",
                       "additionalProperties": false
                     }
                   ]

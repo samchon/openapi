@@ -30,7 +30,7 @@ export const test_llm_function_calling_chatgpt_recursive =
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
     await fs.promises.writeFile(
-      `${TestGlobal.ROOT}/examples/function-calling/recursive.schema.json`,
+      `${TestGlobal.ROOT}/examples/function-calling/schemas/chatgpt.recursive.schema.json`,
       JSON.stringify(parameters, null, 2),
       "utf8",
     );
@@ -69,7 +69,7 @@ export const test_llm_function_calling_chatgpt_recursive =
           input: IShoppingCategory[];
         }>(JSON.parse(call.function.arguments));
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/recursive.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.recursive.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );
