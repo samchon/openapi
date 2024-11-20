@@ -49,7 +49,7 @@ export const test_llm_function_calling_chatgpt_sale =
         {
           role: "user",
           content: await fs.promises.readFile(
-            `${TestGlobal.ROOT}/examples/function-calling/prompts/surface-pro-9.md`,
+            `${TestGlobal.ROOT}/examples/function-calling/prompts/microsoft-surface-pro-9.md`,
             "utf8",
           ),
         },

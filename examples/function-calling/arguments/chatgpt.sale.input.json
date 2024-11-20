@@ -1,5 +1,5 @@
 {
-  "section_code": "electronic-devices",
+  "section_code": "SP9-Sale",
   "status": null,
   "opened_at": null,
   "closed_at": null,
@@ -10,17 +10,17 @@
     "files": [],
     "thumbnails": [
       {
-        "name": "thumbnail_1",
+        "name": "thumbnail1",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg"
       },
       {
-        "name": "thumbnail_2",
+        "name": "thumbnail2",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg"
       },
       {
-        "name": "thumbnail_3",
+        "name": "thumbnail3",
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg"
       }
@@ -80,7 +80,7 @@
       ],
       "stocks": [
         {
-          "name": "Stock 1",
+          "name": "i3, 8 GB, 128 GB",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -102,7 +102,7 @@
           ]
         },
         {
-          "name": "Stock 2",
+          "name": "i3, 16 GB, 256 GB",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -124,7 +124,7 @@
           ]
         },
         {
-          "name": "Stock 3",
+          "name": "i3, 16 GB, 512 GB",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -146,7 +146,7 @@
           ]
         },
         {
-          "name": "Stock 4",
+          "name": "i5, 16 GB, 256 GB",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -168,7 +168,7 @@
           ]
         },
         {
-          "name": "Stock 5",
+          "name": "i5, 32 GB, 512 GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -190,7 +190,7 @@
           ]
         },
         {
-          "name": "Stock 6",
+          "name": "i7, 16 GB, 512 GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -212,7 +212,7 @@
           ]
         },
         {
-          "name": "Stock 7",
+          "name": "i7, 32 GB, 512 GB",
           "price": {
             "nominal": 2000000,
             "real": 1899000
@@ -242,7 +242,7 @@
       "options": [],
       "stocks": [
         {
-          "name": "Warranty Program Stock",
+          "name": "Warranty Program",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -259,7 +259,7 @@
       "options": [],
       "stocks": [
         {
-          "name": "Magnetic Keyboard Stock",
+          "name": "Magnetic Keyboard",
           "price": {
             "nominal": 200000,
             "real": 169000
@@ -273,5 +273,11 @@
       "primary": false
     }
   ],
-  "tags": []
+  "tags": [
+    "surface",
+    "laptop",
+    "tablet",
+    "2-in-1",
+    "tech"
+  ]
 }

@@ -4,95 +4,95 @@
     "name": "electronics",
     "children": [
       {
-        "id": "1.1",
+        "id": "11",
         "name": "desktops",
         "children": []
       },
       {
-        "id": "1.2",
+        "id": "12",
         "name": "laptops",
         "children": [
           {
-            "id": "1.2.1",
+            "id": "121",
             "name": "ultrabooks",
             "children": []
           },
           {
-            "id": "1.2.2",
+            "id": "122",
             "name": "macbooks",
             "children": []
           },
           {
-            "id": "1.2.3",
+            "id": "123",
             "name": "desknotes",
             "children": []
           },
           {
-            "id": "1.2.4",
+            "id": "124",
             "name": "2 in 1 laptops",
             "children": []
           }
         ]
       },
       {
-        "id": "1.3",
+        "id": "13",
         "name": "tablets",
         "children": [
           {
-            "id": "1.3.1",
+            "id": "131",
             "name": "ipads",
             "children": []
           },
           {
-            "id": "1.3.2",
+            "id": "132",
             "name": "android tablets",
             "children": []
           },
           {
-            "id": "1.3.3",
+            "id": "133",
             "name": "windows tablets",
             "children": []
           }
         ]
       },
       {
-        "id": "1.4",
+        "id": "14",
         "name": "smartphones",
         "children": [
           {
-            "id": "1.4.1",
+            "id": "141",
             "name": "mini smartphones",
             "children": []
           },
           {
-            "id": "1.4.2",
+            "id": "142",
             "name": "phablets",
             "children": []
           },
           {
-            "id": "1.4.3",
+            "id": "143",
             "name": "gaming smartphones",
             "children": []
           },
           {
-            "id": "1.4.4",
+            "id": "144",
             "name": "rugged smartphones",
             "children": []
           },
           {
-            "id": "1.4.5",
+            "id": "145",
             "name": "foldable smartphones",
             "children": []
           }
         ]
       },
       {
-        "id": "1.5",
+        "id": "15",
         "name": "cameras",
         "children": []
       },
       {
-        "id": "1.6",
+        "id": "16",
         "name": "televisions",
         "children": []
       }
@@ -108,17 +108,17 @@
     "name": "accessories",
     "children": [
       {
-        "id": "3.1",
+        "id": "31",
         "name": "jewelry",
         "children": []
       },
       {
-        "id": "3.2",
+        "id": "32",
         "name": "clothing",
         "children": []
       },
       {
-        "id": "3.3",
+        "id": "33",
         "name": "shoes",
         "children": []
       }
