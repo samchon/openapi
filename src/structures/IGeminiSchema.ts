@@ -16,12 +16,12 @@
  *   - {@link OpenApi.IJsonSchema.IOneOf}
  *   - {@link OpenApi.IJsonSchema.ITuple}
  *
- * Also, by the documents of Gemini, these additional properties are not
- * supported, either. However, I can't sure that these additional properties
+ * Also, by the documents of Gemini, these constraint properties are not
+ * supported, either. However, I can't sure that these constraint properties
  * are really not supported in the Geimni, because the Gemini seems like
  * understanding them. Therefore, I've decided to keep them alive.
  *
- * - ex) additional properties
+ * - ex) constraint properties
  *   - {@link IGeminiSchema.IString.default}
  *   - {@link IGeminiSchema.__IAttribute.example}
  *   - {@link IGeminiSchema.__IAttribute.examples}

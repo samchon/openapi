@@ -30,7 +30,7 @@ export const test_llm_function_calling_chatgpt_tags =
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
     await fs.promises.writeFile(
-      `${TestGlobal.ROOT}/examples/function-calling/tags.schema.json`,
+      `${TestGlobal.ROOT}/examples/function-calling/schemas/chatgpt.tags.schema.json`,
       JSON.stringify(parameters, null, 2),
       "utf8",
     );
@@ -68,7 +68,7 @@ export const test_llm_function_calling_chatgpt_tags =
           input: OpeningTime;
         }>(JSON.parse(call.function.arguments));
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/tags.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.tags.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );

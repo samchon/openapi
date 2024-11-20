@@ -150,6 +150,7 @@ export namespace ChatGptConverter {
               : {
                   maxItems: undefined,
                   minItems: undefined,
+                  uniqueItems: undefined,
                 }),
           },
           tags: props.options.constraint ? [] : getArrayTags(input),

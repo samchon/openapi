@@ -252,9 +252,9 @@ In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.exec
 ```typescript
 import {
   HttpLlm,
+  IChatGptSchema,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  ILlmSchemaV3_1,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -277,16 +277,17 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"3.1"> = HttpLlm.application({
-    model: "3.1",
+  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
+    model: "chatgpt",
     document,
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<ILlmSchemaV3_1> | undefined = application.functions.find(
-    // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
-  );
+  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined = 
+    application.functions.find(
+      // (f) => f.name === "llm_selected_fuction_name"
+      (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
+    );
   if (func === undefined) throw new Error("No matched function exists.");
 
   // actual execution is by yourself
@@ -296,94 +297,19 @@ const main = async (): Promise<void> => {
     },
     application,
     function: func,
-    arguments: [
-      "general",
-      v4(),
-      {
+    input: {
+      section: "general",
+      id: v4(),
+      query: {
+        language: "en-US",
+        format: "markdown",
+      },
+      body: {
         title: "Hello, world!",
         body: "Let's imagine that this argument is composed by LLM.",
         thumbnail: null,
       },
-    ],
-  });
-  console.log("article", article);
-};
-main().catch(console.error);
-```
-
-### Keyword Parameter
-Combine parameters into single object.
-
-If you configure `keyword` option when composing the LLM (Large Language Model) function calling appliation, every parameters of OpenAPI operations would be combined to a single object type in the LLM funtion calling schema. This strategy is loved in many A.I. Chatbot developers, because LLM tends to a little professional in the single parameter function case.
-
-Also, do not worry about the function call execution case. You don't need to resolve the keyworded parameter manually. The `HttpLlm.execute()` and `HttpLlm.propagate()` functions will resolve the keyworded parameter automatically by analyzing the `IHttpLlmApplication.options` property.
-
-```typescript
-import {
-  HttpLlm,
-  IHttpLlmApplication,
-  IHttpLlmFunction,
-  ILlmSchemaV3_1,
-  OpenApi,
-  OpenApiV3,
-  OpenApiV3_1,
-  SwaggerV2,
-} from "@samchon/openapi";
-import fs from "fs";
-import typia from "typia";
-import { v4 } from "uuid";
-
-const main = async (): Promise<void> => {
-  // read swagger document and validate it
-  const swagger:
-    | SwaggerV2.IDocument
-    | OpenApiV3.IDocument
-    | OpenApiV3_1.IDocument = JSON.parse(
-    await fs.promises.readFile("swagger.json", "utf8"),
-  );
-  typia.assert(swagger); // recommended
-
-  // convert to emended OpenAPI document,
-  // and compose LLM function calling application
-  const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"3.1"> = HttpLlm.application({
-    model: "3.1",
-    document, 
-    options: {
-      keyword: true,
     },
-  });
-
-  // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<ILlmSchemaV3_1> | undefined = application.functions.find(
-    // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
-  );
-  if (func === undefined) throw new Error("No matched function exists.");
-
-  // actual execution is by yourself
-  const article = await HttpLlm.execute({
-    connection: {
-      host: "http://localhost:3000",
-    },
-    application,
-    function: func,
-    arguments: [
-      // one single object with key-value paired
-      {
-        section: "general",
-        id: v4(),
-        query: {
-          language: "en-US",
-          format: "markdown",
-        },
-        body: {
-          title: "Hello, world!",
-          body: "Let's imagine that this argument is composed by LLM.",
-          thumbnail: null,
-        },
-      },
-    ],
   });
   console.log("article", article);
 };
@@ -402,10 +328,10 @@ Here is the example code separating the file uploading feature from the LLM func
 ```typescript
 import {
   HttpLlm,
+  ChatGptTypeChecker,
+  IChatGptSchema,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  ILlmSchemaV3_1,
-  LlmTypeCheckerV3_1,
   OpenApi,
   OpenApiV3,
   OpenApiV3_1,
@@ -428,21 +354,22 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"3.1"> = HttpLlm.application({
-    model: "3.1",
+  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
+    model: "chatgpt",
     document, 
     options: {
       keyword: false,
       separate: (schema) =>
-        LlmTypeCheckerV3_1.isString(schema) && schema.contentMediaType !== undefined,
+        ChatGptTypeChecker.isString(schema) && schema.contentMediaType !== undefined,
     },
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<ILlmSchemaV3_1> | undefined = application.functions.find(
-    // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
-  );
+  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined = 
+    application.functions.find(
+      // (f) => f.name === "llm_selected_fuction_name"
+      (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+    );
   if (func === undefined) throw new Error("No matched function exists.");
 
   // actual execution is by yourself
@@ -454,23 +381,25 @@ const main = async (): Promise<void> => {
     function: func,
     arguments: HttpLlm.mergeParameters({
       function: func,
-      llm: [
+      llm: {
         // LLM composed parameter values
-        "general",
-        v4(),
-        {
+        section: "general",
+        id: v4(),
+        query: {
           language: "en-US",
           format: "markdown",
         },
-        {
+        body: {
           title: "Hello, world!",
           content: "Let's imagine that this argument is composed by LLM.",
         },
-      ],
-      human: [
+      },
+      human: {
         // Human composed parameter values
-        { thumbnail: "https://example.com/thumbnail.jpg" },
-      ],
+        body: { 
+          thumbnail: "https://example.com/thumbnail.jpg",
+        },
+      },
     }),
   });
   console.log("article", article);
