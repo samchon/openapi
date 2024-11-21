@@ -1,11 +1,11 @@
 {
-  "section_code": "SP9-Sale",
+  "section_code": "default",
   "status": null,
   "opened_at": null,
   "closed_at": null,
   "content": {
     "title": "Surface Pro 9",
-    "format": "md",
+    "format": "txt",
     "body": "The Surface Pro 9 is a versatile 2-in-1 device that combines the power of a laptop with the flexibility of a tablet. It features advanced technology, making it suitable for both professional and personal use.\n\n- \"Unleash Your Creativity Anywhere\": The Surface Pro 9 is designed for those who need power and portability, making it perfect for creative professionals and students alike.\n- \"The Ultimate 2-in-1 Experience\": With its detachable keyboard and touchscreen capabilities, the Surface Pro 9 adapts to your needs, whether you're working, studying, or relaxing.\n- \"Stay Connected with 5G\": Experience lightning-fast internet speeds and seamless connectivity, no matter where you are.\n- \"Power Meets Flexibility\": The Surface Pro 9 combines the performance of a laptop with the convenience of a tablet, making it the ideal device for multitasking.\n\nIn summary, the Surface Pro 9 stands out as a powerful and flexible device, perfect for users who require both performance and portability. With its advanced features and sleek design, it is an excellent choice for anyone looking to enhance their productivity and creativity. Whether for work or play, the Surface Pro 9 is ready to meet your needs.",
     "files": [],
     "thumbnails": [
@@ -234,15 +234,15 @@
           ]
         }
       ],
-      "required": true,
       "name": "Surface Pro 9 Entity",
+      "required": true,
       "primary": true
     },
     {
       "options": [],
       "stocks": [
         {
-          "name": "Warranty Program",
+          "name": "Standard Warranty",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -251,15 +251,15 @@
           "choices": []
         }
       ],
-      "required": false,
       "name": "Warranty Program",
+      "required": false,
       "primary": false
     },
     {
       "options": [],
       "stocks": [
         {
-          "name": "Magnetic Keyboard",
+          "name": "Standard Keyboard",
           "price": {
             "nominal": 200000,
             "real": 169000
@@ -268,16 +268,14 @@
           "choices": []
         }
       ],
-      "required": false,
       "name": "Magnetic Keyboard",
+      "required": false,
       "primary": false
     }
   ],
   "tags": [
-    "surface",
-    "laptop",
-    "tablet",
-    "2-in-1",
-    "tech"
+    "Electronics",
+    "Computers",
+    "SurfacePro"
   ]
 }

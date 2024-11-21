@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/samchon/openapi",
   "devDependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@nestia/core": "4.0.0-dev.20241116",
     "@nestia/e2e": "0.7.0",
     "@nestia/fetcher": "4.0.0-dev.20241116",

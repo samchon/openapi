@@ -10,7 +10,7 @@ import { TestGlobal } from "../TestGlobal";
 import { IShoppingSale } from "../structures/IShoppingSale";
 
 const main = async (): Promise<void> => {
-  if (TestGlobal.env.OPENAI_API_KEY === undefined) return;
+  if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
 
   const collection: IJsonSchemaCollection =
     typia.json.schemas<[{ input: IShoppingSale.ICreate }]>();
@@ -27,7 +27,7 @@ const main = async (): Promise<void> => {
     throw new Error("Failed to convert the JSON schema to the ChatGPT schema.");
 
   const client: OpenAI = new OpenAI({
-    apiKey: TestGlobal.env.OPENAI_API_KEY,
+    apiKey: TestGlobal.env.CHATGPT_API_KEY,
   });
 
   const directory: string[] = await fs.promises.readdir(
