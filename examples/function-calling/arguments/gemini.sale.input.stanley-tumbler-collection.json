@@ -1,0 +1,158 @@
+{
+  "closed_at": "2024-07-30T12:00:00.000Z",
+  "section_code": "general",
+  "units": [
+    {
+      "stocks": [
+        {
+          "choices": [
+            {
+              "candidate_index": 0,
+              "option_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            }
+          ],
+          "price": {
+            "real": 35000,
+            "nominal": 40000
+          },
+          "quantity": 2000,
+          "name": "(16 oz, Matte Black)"
+        },
+        {
+          "price": {
+            "real": 44000,
+            "nominal": 50000
+          },
+          "choices": [
+            {
+              "candidate_index": 1,
+              "option_index": 0
+            },
+            {
+              "candidate_index": 1,
+              "option_index": 1
+            }
+          ],
+          "name": "(20 oz, Hammertone Green)",
+          "quantity": 2000
+        },
+        {
+          "choices": [
+            {
+              "candidate_index": 2,
+              "option_index": 0
+            },
+            {
+              "candidate_index": 2,
+              "option_index": 1
+            }
+          ],
+          "quantity": 2000,
+          "price": {
+            "nominal": 60000,
+            "real": 54000
+          },
+          "name": "(24 oz, Polar White)"
+        }
+      ],
+      "name": "Classic Tumbler",
+      "options": [
+        {
+          "type": "select",
+          "name": "Capacity",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "16 oz"
+            },
+            {
+              "name": "20 oz"
+            },
+            {
+              "name": "24 oz"
+            }
+          ]
+        },
+        {
+          "variable": true,
+          "type": "select",
+          "name": "Color Options",
+          "candidates": [
+            {
+              "name": "Matte Black"
+            },
+            {
+              "name": "Hammertone Green"
+            },
+            {
+              "name": "Polar White"
+            }
+          ]
+        }
+      ],
+      "required": true,
+      "primary": true
+    },
+    {
+      "stocks": [
+        {
+          "name": "Adventure Quencher Tumbler",
+          "choices": [],
+          "price": {
+            "nominal": 70000,
+            "real": 64000
+          },
+          "quantity": 5000
+        }
+      ],
+      "name": "Adventure Quencher Tumbler",
+      "required": false,
+      "primary": false,
+      "options": []
+    },
+    {
+      "stocks": [
+        {
+          "price": {
+            "nominal": 20000,
+            "real": 18000
+          },
+          "choices": [],
+          "quantity": 10000,
+          "name": "Accessories Set"
+        }
+      ],
+      "name": "Accessories Set",
+      "options": [],
+      "required": false,
+      "primary": false
+    }
+  ],
+  "content": {
+    "thumbnails": [
+      {
+        "extension": "jpeg",
+        "name": "stanley-tumbler-collection-thumbnail",
+        "url": "https://serpapi.com/searches/673d71322c566d56d9c20ceb/images/ce9a07f2aa831dbec8bb1c287299706e24a52a8e0c119fa162041805038957a7.jpeg"
+      }
+    ],
+    "title": "Stanley Tumbler Collection",
+    "format": "md",
+    "body": "> The Stanley Tumbler Collection is the perfect companion for staying hydrated, whether you're at work, on the go, or exploring the great outdoors. Designed with functionality and durability in mind, these tumblers are built to keep your drinks at the perfect temperature all day long.\\n> \\n> - **\\\"Built for Adventure\\\"**: The Stanley Tumbler features rugged construction, making it ideal for outdoor enthusiasts and urban adventurers alike.\\n> - **\\\"Temperature Control at Its Best\\\"**: With double-wall vacuum insulation, the Stanley Tumbler keeps drinks hot for up to 7 hours or cold for up to 11 hours.\\n> - **\\\"Leakproof and Spillproof\\\"**: Designed for ease of use, these tumblers are 100% leakproof, ensuring your drink stays exactly where it belongs.\\n> - **\\\"Eco-Friendly and Sustainable\\\"**: Made with 18/8 stainless steel, Stanley Tumblers are BPA-free and built to last, reducing waste from disposable cups.\\n> \\n> In summary, the Stanley Tumbler Collection combines durability, functionality, and style. Whether you're sipping coffee during your morning commute or staying hydrated during a hike, Stanley Tumblers are designed to meet your needs. Choose Stanley and enjoy unmatched quality and performance.\\n> ",
+    "files": []
+  },
+  "channels": [
+    {
+      "category_codes": [
+        "others"
+      ],
+      "code": "samchon"
+    }
+  ],
+  "opened_at": "2024-07-10T12:00:00.000Z",
+  "tags": []
+}

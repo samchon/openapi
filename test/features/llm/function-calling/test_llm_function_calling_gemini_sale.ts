@@ -57,6 +57,23 @@ export const test_llm_function_calling_gemini_sale =
           role: "model",
           parts: [
             {
+              text: [
+                "Here is the list of categories belonged to the samchon channel",
+                "",
+                "```json",
+                await fs.promises.readFile(
+                  `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.recursive.input.json`,
+                  "utf8",
+                ),
+                "```",
+              ].join("\n"),
+            },
+          ],
+        },
+        {
+          role: "model",
+          parts: [
+            {
               text: await fs.promises.readFile(
                 `${TestGlobal.ROOT}/examples/function-calling/prompts/microsoft-surface-pro-9.md`,
                 "utf8",

@@ -1,5 +1,5 @@
 {
-  "section_code": "Cameras&Photography",
+  "section_code": "general",
   "status": null,
   "opened_at": null,
   "closed_at": null,
@@ -10,17 +10,25 @@
     "files": [],
     "thumbnails": [
       {
-        "name": "pm-84724-10557_leica_m6_black_front_1",
+        "name": "leica-m6-thumbnail-1",
         "extension": "png",
         "url": "https://leica-camera.com/sites/default/files/styles/r_media_medium_desktop_4_3/public/pm-84724-10557_leica_m6_black_front_1.png?itok=SpVHc0cq"
       },
       {
-        "name": "leica_m6_packaging_ambient_3840x2160",
-        "extension": "jpg.webp",
+        "name": "leica-m6-thumbnail-2",
+        "extension": "webp",
         "url": "https://leica-camera.com/sites/default/files/styles/r_media_fullscreen/public/2022-09/leica_m6_packaging_ambient_3840x2160.jpg.webp?itok=lig4kkiB"
       }
     ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "cameras"
+      ]
+    }
+  ],
   "units": [
     {
       "options": [
@@ -40,7 +48,7 @@
       ],
       "stocks": [
         {
-          "name": "Black Paint Finish",
+          "name": "Leica M6 Body (Black Paint Finish)",
           "price": {
             "nominal": 7200000,
             "real": 6899000
@@ -54,7 +62,7 @@
           ]
         },
         {
-          "name": "Silver Chrome Finish",
+          "name": "Leica M6 Body (Silver Chrome Finish)",
           "price": {
             "nominal": 7200000,
             "real": 6899000
@@ -91,9 +99,13 @@
     }
   ],
   "tags": [
-    "Leica",
-    "Camera",
-    "Film Photography",
-    "Classic"
+    "Leica M6",
+    "Film Camera",
+    "Photography",
+    "Analog",
+    "Camera Reissue",
+    "Classic Design",
+    "Collector's Item",
+    "Camera Lens"
   ]
 }

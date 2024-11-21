@@ -4,7 +4,7 @@ import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConvert
 import fs from "fs";
 import OpenAI from "openai";
 import { ChatCompletion } from "openai/resources";
-import typia, { IJsonSchemaCollection } from "typia";
+import typia, { IJsonSchemaCollection, tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
 
@@ -21,8 +21,8 @@ export const test_llm_function_calling_chatgpt_recursive =
           collection.schemas[0],
         ),
         options: {
-          reference: false,
-          constraint: true,
+          reference: true,
+          constraint: false,
         },
       });
     if (parameters === null)
@@ -78,8 +78,19 @@ export const test_llm_function_calling_chatgpt_recursive =
   };
 
 interface IShoppingCategory {
-  id: string;
+  /**
+   * Identifier code of the category.
+   */
+  code: string & tags.Pattern<"^[a-z0-9_]+$">;
+
+  /**
+   * Name of the category.
+   */
   name: string;
+
+  /**
+   * Children categories belong to this category.
+   */
   children: IShoppingCategory[];
 }
 
@@ -99,12 +110,14 @@ const USER_MESSAGE = `
       - ipads
       - android tablets
       - windows tablets
-    - smartphones
+    - smart phones
       - mini smartphones
       - phablets
       - gaming smartphones
       - rugged smartphones
       - foldable smartphones
+    - smart watches
+    - smart glasses
     - cameras
     - televisions
   - furnitures
@@ -112,4 +125,6 @@ const USER_MESSAGE = `
     - jewelry
     - clothing
     - shoes
+  - clothes
+  - others
 `;

@@ -73,9 +73,37 @@ export namespace ChatGptConverter {
             schema: target,
           });
           if (converted === null) return union.push(null);
+          converted.description = OpenApiTypeChecker.writeReferenceDescription({
+            components: props.components,
+            $ref: input.$ref,
+            description: converted.description,
+            escape: false,
+          });
           props.$defs[key] = converted;
           return out();
-        } else return visit(target);
+        } else {
+          const length: number = union.length;
+          visit(target);
+          if (length === union.length - 1 && union[union.length - 1] !== null)
+            union[union.length - 1] = {
+              ...union[union.length - 1]!,
+              description: OpenApiTypeChecker.writeReferenceDescription({
+                components: props.components,
+                $ref: input.$ref,
+                description: union[union.length - 1]!.description,
+                escape: true,
+              }),
+            };
+          else
+            attribute.description =
+              OpenApiTypeChecker.writeReferenceDescription({
+                components: props.components,
+                $ref: input.$ref,
+                description: attribute.description,
+                escape: true,
+              });
+          return union.length;
+        }
       } else if (OpenApiTypeChecker.isObject(input)) {
         const properties: Record<string, IChatGptSchema | null> =
           Object.entries(input.properties || {}).reduce(

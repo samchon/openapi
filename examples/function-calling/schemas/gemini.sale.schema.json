@@ -102,6 +102,31 @@
             "thumbnails"
           ]
         },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Target channel's {@link IShoppingChannel.code}."
+              },
+              "category_codes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale."
+              }
+            },
+            "required": [
+              "code",
+              "category_codes"
+            ],
+            "description": "Creation information of the target channel (and categories) of sale to sell.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleChannel.ICreate} type:\n\n> Creation information of the target channel (and categories) of sale to sell."
+          },
+          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.\n\n\n@minItems 1"
+        },
         "units": {
           "type": "array",
           "items": {
@@ -140,7 +165,7 @@
                         "required": [
                           "name"
                         ],
-                        "description": "Creation information of the candidate value."
+                        "description": "Creation information of the candidate value.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitOptionCandidate.ICreate} type:\n\n> Creation information of the candidate value."
                       },
                       "description": "List of candidate values.\n\n\n@minItems 1"
                     }
@@ -151,7 +176,7 @@
                     "variable",
                     "candidates"
                   ],
-                  "description": "Creation information of the selectable option."
+                  "description": "Creation information of the selectable option.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitSelectableOption.ICreate} type:\n\n> Creation information of the selectable option."
                 },
                 "description": "List of options."
               },
@@ -204,7 +229,7 @@
                           "option_index",
                           "candidate_index"
                         ],
-                        "description": "Creation information of stock choice."
+                        "description": "Creation information of stock choice.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitStockChoice.ICreate} type:\n\n> Creation information of stock choice."
                       },
                       "description": "List of choices.\n\nWhich candidate values being chosen for each option."
                     }
@@ -215,7 +240,7 @@
                     "quantity",
                     "choices"
                   ],
-                  "description": "Creation information of the stock."
+                  "description": "Creation information of the stock.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitStock.ICreate} type:\n\n> Creation information of the stock."
                 },
                 "description": "List of final stocks.\n\n\n@minItems 1"
               },
@@ -239,15 +264,16 @@
               "required",
               "primary"
             ],
-            "description": "Creation information of sale unit."
+            "description": "Creation information of sale unit.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnit.ICreate} type:\n\n> Creation information of sale unit."
           },
-          "description": "@minItems 1"
+          "description": "List of units.\n\nRecords about individual product composition informations that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1"
         },
         "tags": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "List of search tags."
         }
       },
       "required": [
@@ -255,10 +281,11 @@
         "opened_at",
         "closed_at",
         "content",
+        "channels",
         "units",
         "tags"
       ],
-      "description": "Creation information of sale."
+      "description": "Creation information of sale.\n\n------------------------------\n\nDescription of the current {@link IShoppingSale.ICreate} type:\n\n> Creation information of sale."
     }
   },
   "required": [

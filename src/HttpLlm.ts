@@ -104,7 +104,7 @@ export namespace HttpLlm {
                 ?.reference ?? false,
             constraint:
               (props.options as IHttpLlmApplication.IChatGptOptions | undefined)
-                ?.constraint ?? true,
+                ?.constraint ?? false,
           } satisfies IHttpLlmApplication.IChatGptOptions)
         : ({
             separate:

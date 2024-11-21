@@ -2,6 +2,8 @@
 
 I will create a sale with the following details.
 
+Target section is "general", and  channel is "samchon". About the categories, just select proper things by your decision.
+
 ### Content
 
 The title of the sale is "Drawfit Women Soft Cashmere Oversized Half Coat."
@@ -18,11 +20,13 @@ Below is the content for the coat.
 > In summary, the Drawfit Women Soft Cashmere Oversized Half Coat is a must-have winter item that combines style and functionality. With its luxurious design and excellent comfort, it’s the perfect choice for any occasion.
 > 
 
-Please fill in the thumbnail images with the following URLs.
+Please fill in the thumbnail images.
 
-- https://image.msscdn.net/thumbnails/images/goods_img/20240927/4472993/4472993_17274236009691_big.jpg?w=1200
-- https://image.msscdn.net/thumbnails/images/goods_img/20230912/3552514/3552514_17276848381488_big.jpg?w=1200
-- https://image.msscdn.net/thumbnails/images/goods_img/20230912/3552513/3552513_17276848899638_big.jpg?w=1200
+![drawfit-women-soft-cashmere-oversized-half-coat-thumbnail-1.jpg](https://image.msscdn.net/thumbnails/images/goods_img/20240927/4472993/4472993_17274236009691_big.jpg?w=1200)
+
+![drawfit-women-soft-cashmere-oversized-half-coat-thumbnail-2.jpg](https://image.msscdn.net/thumbnails/images/goods_img/20230912/3552514/3552514_17276848381488_big.jpg?w=1200)
+
+![drawfit-women-soft-cashmere-oversized-half-coat-thumbnail-3.jpg](https://image.msscdn.net/thumbnails/images/goods_img/20230912/3552513/3552513_17276848899638_big.jpg?w=1200)
 
 ### SKU
 

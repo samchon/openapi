@@ -1,21 +1,29 @@
 {
-  "section_code": "furniture",
+  "section_code": "general",
   "status": null,
   "opened_at": null,
   "closed_at": null,
   "content": {
     "title": "Herman Miller Chair",
-    "format": "txt",
-    "body": "The Herman Miller chair is an iconic ergonomic seating solution designed to provide unparalleled comfort and support. With its innovative design and high-quality materials, it is perfect for both home and office use.\n\n\"Elevate Your Workspace\": The Herman Miller chair enhances your productivity with its ergonomic features, ensuring you stay comfortable during long hours of work. \"Timeless Design\": Combining aesthetics with functionality, this chair fits seamlessly into any environment, adding a touch of elegance to your space. \"Adjustable Comfort\": With customizable settings, the Herman Miller chair adapts to your body, promoting better posture and reducing fatigue. \"Built to Last\": Made from durable materials, this chair is designed for longevity, making it a worthwhile investment for anyone seeking quality seating. In summary, the Herman Miller chair stands out as a premium choice for users who value comfort, style, and durability. Whether for work or leisure, this chair is ready to enhance your experience and support your well-being.",
+    "format": "md",
+    "body": "The Herman Miller chair is an iconic ergonomic seating solution designed to provide unparalleled comfort and support. With its innovative design and high-quality materials, it is perfect for both home and office use.\n\n\"Elevate Your Workspace\": The Herman Miller chair enhances your productivity with its ergonomic features, ensuring you stay comfortable during long hours of work.\n\"Timeless Design\": Combining aesthetics with functionality, this chair fits seamlessly into any environment, adding a touch of elegance to your space.\n\"Adjustable Comfort\": With customizable settings, the Herman Miller chair adapts to your body, promoting better posture and reducing fatigue.\n\"Built to Last\": Made from durable materials, this chair is designed for longevity, making it a worthwhile investment for anyone seeking quality seating.\nIn summary, the Herman Miller chair stands out as a premium choice for users who value comfort, style, and durability. Whether for work or leisure, this chair is ready to enhance your experience and support your well-being.",
     "files": [],
     "thumbnails": [
       {
-        "name": "",
-        "extension": null,
+        "name": "herman-miller-chair-thumbnail",
+        "extension": "png",
         "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRaJWHEnwGGg-8rHni_2hN8HKUSkEBdU3X4w&s"
       }
     ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "furnitures"
+      ]
+    }
+  ],
   "units": [
     {
       "options": [
@@ -51,7 +59,7 @@
       ],
       "stocks": [
         {
-          "name": "Aeron Black",
+          "name": "Herman Miller Chair - Aeron, Black",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -69,7 +77,7 @@
           ]
         },
         {
-          "name": "Aeron Gray",
+          "name": "Herman Miller Chair - Aeron, Gray",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -87,7 +95,7 @@
           ]
         },
         {
-          "name": "Aeron White",
+          "name": "Herman Miller Chair - Aeron, White",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -105,7 +113,7 @@
           ]
         },
         {
-          "name": "Embody Black",
+          "name": "Herman Miller Chair - Embody, Black",
           "price": {
             "nominal": 1800000,
             "real": 1599000
@@ -123,7 +131,7 @@
           ]
         },
         {
-          "name": "Embody Gray",
+          "name": "Herman Miller Chair - Embody, Gray",
           "price": {
             "nominal": 1800000,
             "real": 1599000
@@ -141,7 +149,7 @@
           ]
         },
         {
-          "name": "Embody White",
+          "name": "Herman Miller Chair - Embody, White",
           "price": {
             "nominal": 1800000,
             "real": 1599000
@@ -167,7 +175,7 @@
       "options": [],
       "stocks": [
         {
-          "name": "Single",
+          "name": "Warranty Program",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -184,7 +192,7 @@
       "options": [],
       "stocks": [
         {
-          "name": "Single",
+          "name": "Replacement Cushion",
           "price": {
             "nominal": 50000,
             "real": 39000
@@ -199,11 +207,9 @@
     }
   ],
   "tags": [
-    "HermanMiller",
-    "Furniture",
-    "Chair",
-    "Ergonomic",
-    "Office",
-    "Comfort"
+    "Herman Miller",
+    "Ergonomic Chair",
+    "Office Furniture",
+    "Comfortable Seating"
   ]
 }

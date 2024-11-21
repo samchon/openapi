@@ -1,6 +1,7 @@
 import { tags } from "typia";
 
 import { IShoppingSale } from "./IShoppingSale";
+import { IShoppingSaleChannel } from "./IShoppingSaleChannel";
 import { IShoppingSaleContent } from "./IShoppingSaleContent";
 import { IShoppingSalePriceRange } from "./IShoppingSalePriceRange";
 import { IShoppingSaleUnit } from "./IShoppingSaleUnit";
@@ -100,6 +101,13 @@ export namespace IShoppingSaleSnapshot {
     content: Content;
 
     /**
+     * List of channels and categories.
+     *
+     * Which channels and categories the sale is registered to.
+     */
+    channels: IShoppingSaleChannel[] & tags.MinItems<1>;
+
+    /**
      * List of search tags.
      */
     tags: string[];
@@ -126,8 +134,33 @@ export namespace IShoppingSaleSnapshot {
    * Creation information of the snapshot.
    */
   export interface ICreate {
+    /**
+     * Description and image content describing the sale.
+     */
     content: IShoppingSaleContent.ICreate;
+
+    /**
+     * List of channels and categories.
+     *
+     * Which channels and categories the sale is registered to.
+     */
+    channels: IShoppingSaleChannel.ICreate[] & tags.MinItems<1>;
+
+    /**
+     * List of units.
+     *
+     * Records about individual product composition informations that are sold
+     * in the sale. Each {@link IShoppingSaleUnit unit} record has configurable
+     * {@link IShoppingSaleUnitOption options},
+     * {@link IShoppingSaleUnitOptionCandidate candidate} values for each
+     * option, and {@link IShoppingSaleUnitStock final stocks} determined by
+     * selecting every candidate values of each option.
+     */
     units: IShoppingSaleUnit.ICreate[] & tags.MinItems<1>;
+
+    /**
+     * List of search tags.
+     */
     tags: string[];
   }
 }

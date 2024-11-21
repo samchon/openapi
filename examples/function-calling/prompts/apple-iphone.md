@@ -2,6 +2,8 @@
 
 I will create a sale with the following details.
 
+Target section is "general", and  channel is "samchon". About the categories, just select proper things by your decision.
+
 ### Content
 
 At First, title of the sale is “Apple MacBook Pro”.
@@ -41,9 +43,9 @@ Below is the content body of the sale.
 
 The base price starts from KRW 2_000_000, and the price may be added depending on the options. However, the final price should always be marked with a 10% discount.
 
-About the thumbnail images, please fill from the below image URL addresses.
+About the thumbnail images, please fill from the below image.
 
-- https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-spaceblack-gallery1-202410?wid=4000&hei=3074&fmt=jpeg&qlt=90&.v=1729264981617
+![apple-iphone-thumbnail.jpeg](https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-spaceblack-gallery1-202410?wid=4000&hei=3074&fmt=jpeg&qlt=90&.v=1729264981617)
 
 ### SKU
 

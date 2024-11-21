@@ -2,6 +2,8 @@
 
 I will create a sale with the following details.
 
+Target section is "general", and  channel is "samchon". About the categories, just select proper things by your decision.
+
 ### Stanley Tumbler Collection
 
 The Stanley Tumbler Collection offers a range of versatile, durable, and stylish tumblers to suit every lifestyle. With customizable options and eco-friendly designs, these tumblers are the ideal choice for anyone looking to elevate their drinkware experience. Don’t miss this opportunity to grab your Stanley Tumbler today!
@@ -22,7 +24,7 @@ The Stanley Tumbler Collection offers a range of versatile, durable, and stylish
 
 Please use the this for thumbnail images:
 
-![image.png](https://serpapi.com/searches/673d71322c566d56d9c20ceb/images/ce9a07f2aa831dbec8bb1c287299706e24a52a8e0c119fa162041805038957a7.jpeg)
+![stanley-tumbler-collection-thumbnail.jepg](https://serpapi.com/searches/673d71322c566d56d9c20ceb/images/ce9a07f2aa831dbec8bb1c287299706e24a52a8e0c119fa162041805038957a7.jpeg)
 
 ### SKU
 

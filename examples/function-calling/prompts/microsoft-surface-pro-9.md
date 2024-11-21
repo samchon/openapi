@@ -1,6 +1,8 @@
 ### Preface
 I will create a sale with the following details.
 
+Target section is "general", and  channel is "samchon". About the categories, just select proper things by your decision.
+
 ### Content
 At first, title of the sale is "Surface Pro 9". 
 
@@ -17,9 +19,11 @@ Below is the content body of the sale.
 
 About the thumbnail images, please fill from the below image URL addresses.
 
-  - https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg
-  - https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg
-  - https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg
+![microsoft-surface-pro-9-thumbnail-1.jpeg](https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg)
+
+![microsoft-surface-pro-9-thumbnail-2.jpeg](https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg)
+
+![microsoft-surface-pro-9-thumbnail-3.jpeg](https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg)
 
 ### SKU
 Also, it has only three unit, the "Surface Pro 9 Entity", "Warranty Program" and "Magnetic Keyboard".

@@ -13,7 +13,7 @@ const main = async (): Promise<void> => {
   if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
 
   const collection: IJsonSchemaCollection =
-    typia.json.schemas<[{ input: IShoppingSale.ICreate }]>();
+    typia.json.schemas<[{ input: IShoppingSale.ICreate }, IShoppingSale]>();
   const parameters: IChatGptSchema.IParameters | null =
     ChatGptConverter.parameters({
       components: collection.components,
@@ -53,8 +53,21 @@ const main = async (): Promise<void> => {
         model: "gpt-4o",
         messages: [
           {
-            role: "assistant",
+            role: "system",
             content,
+          },
+          {
+            role: "assistant",
+            content: [
+              "Here is the list of categories belonged to the samchon channel",
+              "",
+              "```json",
+              await fs.promises.readFile(
+                `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.recursive.input.json`,
+                "utf8",
+              ),
+              "```",
+            ].join("\n"),
           },
           {
             role: "user",
