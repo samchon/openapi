@@ -6,8 +6,14 @@
   "content": {
     "title": "Apple MacBook Pro",
     "format": "md",
-    "body": "MacBook Pro\n\n**The Ultimate Tool for Professionals**\n\nMacBook Pro is designed to elevate your creativity and productivity to new heights. Combining exceptional performance, elegant design, and the unparalleled experience only Apple can deliver, this is the device that empowers you to tackle any challenge with confidence.\n\n- **Remarkable Performance**\n    \n    Powered by the next-generation chip, it handles demanding tasks and complex projects effortlessly, delivering unmatched speed and efficiency.\n    \n- **Outstanding Display**\n    \n    The Retina display offers rich colors and sharp contrast, creating an immersive visual experience. With ProMotion technology, enjoy smooth scrolling and fluid animations like never before.\n    \n- **All-Day Battery Life**\n    \n    Stay focused and in the flow wherever you go with a battery that lasts all day. This is a laptop that works as hard as you do.\n    \n- **Sleek Yet Powerful Design**\n    \n    A precision aluminum body that’s lightweight yet durable, paired with a minimalist design that stands out on your desk and on the go.\n    \n- **Smart Connectivity**\n    \n    Versatile ports for high-speed data transfer and seamless compatibility ensure you're ready for any work environment.\n    \n\nWith MacBook Pro, your potential knows no bounds. **It’s time to rediscover what you’re capable of.**\n",
-    "files": [],
+    "body": "MacBook Pro\n\n**The Ultimate Tool for Professionals**\n\nMacBook Pro is designed to elevate your creativity and productivity to new heights. Combining exceptional performance, elegant design, and the unparalleled experience only Apple can deliver, this is the device that empowers you to tackle any challenge with confidence.\n\n- **Remarkable Performance**\n    \n    Powered by the next-generation chip, it handles demanding tasks and complex projects effortlessly, delivering unmatched speed and efficiency.\n    \n- **Outstanding Display**\n    \n    The Retina display offers rich colors and sharp contrast, creating an immersive visual experience. With ProMotion technology, enjoy smooth scrolling and fluid animations like never before.\n    \n- **All-Day Battery Life**\n    \n    Stay focused and in the flow wherever you go with a battery that lasts all day. This is a laptop that works as hard as you do.\n    \n- **Sleek Yet Powerful Design**\n    \n    A precision aluminum body that’s lightweight yet durable, paired with a minimalist design that stands out on your desk and on the go.\n    \n- **Smart Connectivity**\n    \n    Versatile ports for high-speed data transfer and seamless compatibility ensure you're ready for any work environment.\n    \nWith MacBook Pro, your potential knows no bounds. **It’s time to rediscover what you’re capable of.**\n",
+    "files": [
+      {
+        "name": "apple-macbook-pro-thumbnail",
+        "extension": "png",
+        "url": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-spaceblack-gallery1-202410?wid=4000&hei=3074&fmt=jpeg&qlt=90&.v=1729264981617"
+      }
+    ],
     "thumbnails": [
       {
         "name": "apple-macbook-pro-thumbnail",
@@ -21,7 +27,6 @@
       "code": "samchon",
       "category_codes": [
         "electronics",
-        "laptops",
         "macbooks"
       ]
     }
@@ -77,7 +82,7 @@
         {
           "type": "select",
           "name": "Keyboard Language",
-          "variable": false,
+          "variable": true,
           "candidates": [
             {
               "name": "English"
@@ -90,7 +95,7 @@
       ],
       "stocks": [
         {
-          "name": "Silver / 16GB / 512GB / English",
+          "name": "MacBook Pro (Silver, 16GB, 512GB, English)",
           "price": {
             "nominal": 2000000,
             "real": 1800000
@@ -116,7 +121,7 @@
           ]
         },
         {
-          "name": "Silver / 16GB / 512GB / Korean",
+          "name": "MacBook Pro (Silver, 16GB, 512GB, Korean)",
           "price": {
             "nominal": 2000000,
             "real": 1800000
@@ -142,7 +147,7 @@
           ]
         },
         {
-          "name": "Silver / 16GB / 1TB / English",
+          "name": "MacBook Pro (Silver, 16GB, 1TB, English)",
           "price": {
             "nominal": 2300000,
             "real": 2070000
@@ -168,7 +173,7 @@
           ]
         },
         {
-          "name": "Silver / 16GB / 1TB / Korean",
+          "name": "MacBook Pro (Silver, 16GB, 1TB, Korean)",
           "price": {
             "nominal": 2300000,
             "real": 2070000
@@ -194,7 +199,7 @@
           ]
         },
         {
-          "name": "Silver / 16GB / 2TB / English",
+          "name": "MacBook Pro (Silver, 16GB, 2TB, English)",
           "price": {
             "nominal": 2900000,
             "real": 2610000
@@ -220,7 +225,7 @@
           ]
         },
         {
-          "name": "Silver / 16GB / 2TB / Korean",
+          "name": "MacBook Pro (Silver, 16GB, 2TB, Korean)",
           "price": {
             "nominal": 2900000,
             "real": 2610000
@@ -246,7 +251,7 @@
           ]
         },
         {
-          "name": "Silver / 32GB / 512GB / English",
+          "name": "MacBook Pro (Silver, 32GB, 512GB, English)",
           "price": {
             "nominal": 2600000,
             "real": 2340000
@@ -272,7 +277,7 @@
           ]
         },
         {
-          "name": "Silver / 32GB / 512GB / Korean",
+          "name": "MacBook Pro (Silver, 32GB, 512GB, Korean)",
           "price": {
             "nominal": 2600000,
             "real": 2340000
@@ -298,7 +303,7 @@
           ]
         },
         {
-          "name": "Silver / 32GB / 1TB / English",
+          "name": "MacBook Pro (Silver, 32GB, 1TB, English)",
           "price": {
             "nominal": 2900000,
             "real": 2610000
@@ -324,7 +329,7 @@
           ]
         },
         {
-          "name": "Silver / 32GB / 1TB / Korean",
+          "name": "MacBook Pro (Silver, 32GB, 1TB, Korean)",
           "price": {
             "nominal": 2900000,
             "real": 2610000
@@ -350,7 +355,7 @@
           ]
         },
         {
-          "name": "Silver / 32GB / 2TB / English",
+          "name": "MacBook Pro (Silver, 32GB, 2TB, English)",
           "price": {
             "nominal": 3500000,
             "real": 3150000
@@ -376,7 +381,7 @@
           ]
         },
         {
-          "name": "Silver / 32GB / 2TB / Korean",
+          "name": "MacBook Pro (Silver, 32GB, 2TB, Korean)",
           "price": {
             "nominal": 3500000,
             "real": 3150000
@@ -402,7 +407,7 @@
           ]
         },
         {
-          "name": "Silver / 64GB / 512GB / English",
+          "name": "MacBook Pro (Silver, 64GB, 512GB, English)",
           "price": {
             "nominal": 3200000,
             "real": 2880000
@@ -428,7 +433,7 @@
           ]
         },
         {
-          "name": "Silver / 64GB / 512GB / Korean",
+          "name": "MacBook Pro (Silver, 64GB, 512GB, Korean)",
           "price": {
             "nominal": 3200000,
             "real": 2880000
@@ -454,7 +459,7 @@
           ]
         },
         {
-          "name": "Silver / 64GB / 1TB / English",
+          "name": "MacBook Pro (Silver, 64GB, 1TB, English)",
           "price": {
             "nominal": 3500000,
             "real": 3150000
@@ -480,7 +485,7 @@
           ]
         },
         {
-          "name": "Silver / 64GB / 1TB / Korean",
+          "name": "MacBook Pro (Silver, 64GB, 1TB, Korean)",
           "price": {
             "nominal": 3500000,
             "real": 3150000
@@ -506,7 +511,7 @@
           ]
         },
         {
-          "name": "Silver / 64GB / 2TB / English",
+          "name": "MacBook Pro (Silver, 64GB, 2TB, English)",
           "price": {
             "nominal": 4100000,
             "real": 3690000
@@ -532,7 +537,7 @@
           ]
         },
         {
-          "name": "Silver / 64GB / 2TB / Korean",
+          "name": "MacBook Pro (Silver, 64GB, 2TB, Korean)",
           "price": {
             "nominal": 4100000,
             "real": 3690000
@@ -558,7 +563,7 @@
           ]
         },
         {
-          "name": "Space Gray / 16GB / 512GB / English",
+          "name": "MacBook Pro (Space Gray, 16GB, 512GB, English)",
           "price": {
             "nominal": 2050000,
             "real": 1845000
@@ -584,7 +589,7 @@
           ]
         },
         {
-          "name": "Space Gray / 16GB / 512GB / Korean",
+          "name": "MacBook Pro (Space Gray, 16GB, 512GB, Korean)",
           "price": {
             "nominal": 2050000,
             "real": 1845000
@@ -610,7 +615,7 @@
           ]
         },
         {
-          "name": "Space Gray / 16GB / 1TB / English",
+          "name": "MacBook Pro (Space Gray, 16GB, 1TB, English)",
           "price": {
             "nominal": 2350000,
             "real": 2115000
@@ -636,7 +641,7 @@
           ]
         },
         {
-          "name": "Space Gray / 16GB / 1TB / Korean",
+          "name": "MacBook Pro (Space Gray, 16GB, 1TB, Korean)",
           "price": {
             "nominal": 2350000,
             "real": 2115000
@@ -662,7 +667,7 @@
           ]
         },
         {
-          "name": "Space Gray / 16GB / 2TB / English",
+          "name": "MacBook Pro (Space Gray, 16GB, 2TB, English)",
           "price": {
             "nominal": 2950000,
             "real": 2655000
@@ -688,7 +693,7 @@
           ]
         },
         {
-          "name": "Space Gray / 16GB / 2TB / Korean",
+          "name": "MacBook Pro (Space Gray, 16GB, 2TB, Korean)",
           "price": {
             "nominal": 2950000,
             "real": 2655000
@@ -714,7 +719,7 @@
           ]
         },
         {
-          "name": "Space Gray / 32GB / 512GB / English",
+          "name": "MacBook Pro (Space Gray, 32GB, 512GB, English)",
           "price": {
             "nominal": 2650000,
             "real": 2385000
@@ -740,7 +745,7 @@
           ]
         },
         {
-          "name": "Space Gray / 32GB / 512GB / Korean",
+          "name": "MacBook Pro (Space Gray, 32GB, 512GB, Korean)",
           "price": {
             "nominal": 2650000,
             "real": 2385000
@@ -766,7 +771,7 @@
           ]
         },
         {
-          "name": "Space Gray / 32GB / 1TB / English",
+          "name": "MacBook Pro (Space Gray, 32GB, 1TB, English)",
           "price": {
             "nominal": 2950000,
             "real": 2655000
@@ -792,7 +797,7 @@
           ]
         },
         {
-          "name": "Space Gray / 32GB / 1TB / Korean",
+          "name": "MacBook Pro (Space Gray, 32GB, 1TB, Korean)",
           "price": {
             "nominal": 2950000,
             "real": 2655000
@@ -818,7 +823,7 @@
           ]
         },
         {
-          "name": "Space Gray / 32GB / 2TB / English",
+          "name": "MacBook Pro (Space Gray, 32GB, 2TB, English)",
           "price": {
             "nominal": 3550000,
             "real": 3195000
@@ -844,7 +849,7 @@
           ]
         },
         {
-          "name": "Space Gray / 32GB / 2TB / Korean",
+          "name": "MacBook Pro (Space Gray, 32GB, 2TB, Korean)",
           "price": {
             "nominal": 3550000,
             "real": 3195000
@@ -870,7 +875,7 @@
           ]
         },
         {
-          "name": "Space Gray / 64GB / 512GB / English",
+          "name": "MacBook Pro (Space Gray, 64GB, 512GB, English)",
           "price": {
             "nominal": 3250000,
             "real": 2925000
@@ -896,7 +901,7 @@
           ]
         },
         {
-          "name": "Space Gray / 64GB / 512GB / Korean",
+          "name": "MacBook Pro (Space Gray, 64GB, 512GB, Korean)",
           "price": {
             "nominal": 3250000,
             "real": 2925000
@@ -922,7 +927,7 @@
           ]
         },
         {
-          "name": "Space Gray / 64GB / 1TB / English",
+          "name": "MacBook Pro (Space Gray, 64GB, 1TB, English)",
           "price": {
             "nominal": 3550000,
             "real": 3195000
@@ -948,7 +953,7 @@
           ]
         },
         {
-          "name": "Space Gray / 64GB / 1TB / Korean",
+          "name": "MacBook Pro (Space Gray, 64GB, 1TB, Korean)",
           "price": {
             "nominal": 3550000,
             "real": 3195000
@@ -974,7 +979,7 @@
           ]
         },
         {
-          "name": "Space Gray / 64GB / 2TB / English",
+          "name": "MacBook Pro (Space Gray, 64GB, 2TB, English)",
           "price": {
             "nominal": 4150000,
             "real": 3735000
@@ -1000,7 +1005,7 @@
           ]
         },
         {
-          "name": "Space Gray / 64GB / 2TB / Korean",
+          "name": "MacBook Pro (Space Gray, 64GB, 2TB, Korean)",
           "price": {
             "nominal": 4150000,
             "real": 3735000
@@ -1028,7 +1033,7 @@
       ],
       "name": "MacBook M3 Pro 14inch Entity",
       "required": true,
-      "primary": true
+      "primary": false
     },
     {
       "options": [],
@@ -1065,17 +1070,5 @@
       "primary": false
     }
   ],
-  "tags": [
-    "Apple",
-    "MacBook",
-    "Laptop",
-    "Pro",
-    "MacBook Pro",
-    "Electronics",
-    "Computers",
-    "Ultrabooks",
-    "High Performance",
-    "Apple Product",
-    "Professional"
-  ]
+  "tags": []
 }

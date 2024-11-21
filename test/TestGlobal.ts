@@ -15,7 +15,8 @@ export class TestGlobal {
 }
 
 interface IEnvironments {
-  OPENAI_API_KEY?: string;
+  CHATGPT_API_KEY?: string;
+  GEMINI_API_KEY?: string;
 }
 
 const environments = new Singleton(() => {

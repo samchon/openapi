@@ -11,7 +11,7 @@ import { IShoppingSale } from "../../../structures/IShoppingSale";
 
 export const test_llm_function_calling_chatgpt_sale =
   async (): Promise<void> => {
-    if (TestGlobal.env.OPENAI_API_KEY === undefined) return;
+    if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
 
     const collection: IJsonSchemaCollection =
       typia.json.schemas<[{ input: IShoppingSale.ICreate }, IShoppingSale]>();
@@ -37,7 +37,7 @@ export const test_llm_function_calling_chatgpt_sale =
     );
 
     const client: OpenAI = new OpenAI({
-      apiKey: TestGlobal.env.OPENAI_API_KEY,
+      apiKey: TestGlobal.env.CHATGPT_API_KEY,
     });
     const completion: ChatCompletion = await client.chat.completions.create({
       model: "gpt-4o",

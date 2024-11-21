@@ -6,7 +6,7 @@
   "content": {
     "title": "Drawfit Women Soft Cashmere Oversized Half Coat",
     "format": "md",
-    "body": "The Drawfit Women Soft Cashmere Oversized Half Coat is an essential winter item, crafted from a soft cashmere blend that provides warmth and comfort. Its stylish oversized design makes it perfect for pairing with various outfits.\n\n- \"Comfortable Fit\": Made from soft materials, it can be worn comfortably without irritating the skin.\n- \"Stylish Oversized Design\": The relaxed fit allows for easy layering, suitable for both casual daily looks and formal occasions.\n- Luxurious Design\": With classic colors and minimal details, it easily matches with any outfit.\n- \"Warmth and Elegance\": A perfect choice to stay warm in winter while maintaining a stylish appearance.\n\nIn summary, the Drawfit Women Soft Cashmere Oversized Half Coat is a must-have winter item that combines style and functionality. With its luxurious design and excellent comfort, it’s the perfect choice for any occasion.\n",
+    "body": "The Drawfit Women Soft Cashmere Oversized Half Coat is an essential winter item, crafted from a soft cashmere blend that provides warmth and comfort. Its stylish oversized design makes it perfect for pairing with various outfits.\n\n- \"Comfortable Fit\": Made from soft materials, it can be worn comfortably without irritating the skin.\n- \"Stylish Oversized Design\": The relaxed fit allows for easy layering, suitable for both casual daily looks and formal occasions.\n- Luxurious Design\": With classic colors and minimal details, it easily matches with any outfit.\n- \"Warmth and Elegance\": A perfect choice to stay warm in winter while maintaining a stylish appearance.\n\nIn summary, the Drawfit Women Soft Cashmere Oversized Half Coat is a must-have winter item that combines style and functionality. With its luxurious design and excellent comfort, it’s the perfect choice for any occasion.",
     "files": [],
     "thumbnails": [
       {
@@ -30,7 +30,7 @@
     {
       "code": "samchon",
       "category_codes": [
-        "clothing",
+        "accessories",
         "clothes"
       ]
     }
@@ -73,7 +73,7 @@
       ],
       "stocks": [
         {
-          "name": "XS, GREY",
+          "name": "XS-GREY",
           "price": {
             "nominal": 220000,
             "real": 198000
@@ -91,7 +91,7 @@
           ]
         },
         {
-          "name": "XS, NAVY",
+          "name": "XS-NAVY",
           "price": {
             "nominal": 220000,
             "real": 198000
@@ -109,7 +109,7 @@
           ]
         },
         {
-          "name": "XS, BUTTER",
+          "name": "XS-BUTTER",
           "price": {
             "nominal": 220000,
             "real": 198000
@@ -127,7 +127,7 @@
           ]
         },
         {
-          "name": "S, GREY",
+          "name": "S-GREY",
           "price": {
             "nominal": 240000,
             "real": 198000
@@ -145,7 +145,7 @@
           ]
         },
         {
-          "name": "S, NAVY",
+          "name": "S-NAVY",
           "price": {
             "nominal": 240000,
             "real": 198000
@@ -163,7 +163,7 @@
           ]
         },
         {
-          "name": "S, BUTTER",
+          "name": "S-BUTTER",
           "price": {
             "nominal": 240000,
             "real": 198000
@@ -181,7 +181,7 @@
           ]
         },
         {
-          "name": "M, GREY",
+          "name": "M-GREY",
           "price": {
             "nominal": 260000,
             "real": 198000
@@ -199,7 +199,7 @@
           ]
         },
         {
-          "name": "M, NAVY",
+          "name": "M-NAVY",
           "price": {
             "nominal": 260000,
             "real": 198000
@@ -217,7 +217,7 @@
           ]
         },
         {
-          "name": "M, BUTTER",
+          "name": "M-BUTTER",
           "price": {
             "nominal": 260000,
             "real": 198000
@@ -241,11 +241,10 @@
     }
   ],
   "tags": [
-    "winter coat",
-    "cashmere coat",
-    "oversized coat",
-    "women's coat",
-    "fashion",
-    "warm clothing"
+    "Drawfit",
+    "Women",
+    "Soft Cashmere",
+    "Oversized Half Coat",
+    "Winter"
   ]
 }

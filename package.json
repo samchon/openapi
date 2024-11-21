@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "2.0.0-dev.20241121-3",
+  "version": "2.0.0-dev.20241121-4",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/samchon/openapi",
   "devDependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@nestia/core": "4.0.0-dev.20241116",
     "@nestia/e2e": "0.7.0",
     "@nestia/fetcher": "4.0.0-dev.20241116",

@@ -1,0 +1,209 @@
+{
+  "tags": [],
+  "section_code": "general",
+  "channels": [
+    {
+      "category_codes": [
+        "smart_watches"
+      ],
+      "code": "samchon"
+    }
+  ],
+  "content": {
+    "files": [],
+    "title": "Galaxy Watch 7",
+    "format": "md",
+    "body": "The Galaxy Watch 7 is a premium smartwatch designed with innovative aesthetics and high-quality materials, making it a perfect fit for both daily life and work. ([samsung.com](https://www.samsung.com/sec/watches/galaxy-watch/galaxy-watch7/))\\n\\n“Upgrade Your Style”: The Galaxy Watch 7 adds a sophisticated touch to your wrist with its floating glass design and a variety of color options.\\n“Personalized Sleep Coaching”: Its sleep tracking feature analyzes your sleep patterns and provides personalized sleep coaching.\\n\\n“Enhanced Workout Tracking”: Supports a wide range of workout modes and provides detailed data such as heart rate and calorie burn.\\n\\n“Powerful Performance”: Equipped with the latest processor and long battery life, it offers stable performance for everything from daily use to high-intensity workouts.\\n\\nIn summary, the Galaxy Watch 7 is a premium smartwatch combining style, functionality, and durability, making it the perfect choice to enhance your health and lifestyle.",
+    "thumbnails": [
+      {
+        "name": "galaxy-watch-7-thumbnail",
+        "extension": "png",
+        "url": "https://images.samsung.com/kdp/goods/2024/07/07/597615f6-b6f9-4ae4-a93d-cbba6bdde2c6.png?$944_550_PNG$"
+      }
+    ]
+  },
+  "closed_at": "2024-08-31T15:00:00.000Z",
+  "units": [
+    {
+      "primary": false,
+      "required": false,
+      "stocks": [
+        {
+          "quantity": 10000,
+          "choices": [],
+          "name": "Warranty Program",
+          "price": {
+            "real": 89000,
+            "nominal": 100000
+          }
+        }
+      ],
+      "name": "Warranty Program",
+      "options": []
+    },
+    {
+      "primary": false,
+      "stocks": [
+        {
+          "choices": [],
+          "quantity": 5000,
+          "name": "Replacement Strap",
+          "price": {
+            "nominal": 50000,
+            "real": 39000
+          }
+        }
+      ],
+      "name": "Replacement Strap",
+      "options": [],
+      "required": false
+    },
+    {
+      "options": [
+        {
+          "variable": true,
+          "candidates": [
+            {
+              "name": "Standard"
+            },
+            {
+              "name": "Ultra"
+            }
+          ],
+          "name": "Model",
+          "type": "select"
+        },
+        {
+          "candidates": [
+            {
+              "name": "Green"
+            },
+            {
+              "name": "Silver"
+            },
+            {
+              "name": "Cream"
+            }
+          ],
+          "type": "select",
+          "variable": true,
+          "name": "Color"
+        }
+      ],
+      "primary": true,
+      "name": "Galaxy Watch 7",
+      "required": true,
+      "stocks": [
+        {
+          "price": {
+            "real": 359000,
+            "nominal": 400000
+          },
+          "choices": [
+            {
+              "candidate_index": 0,
+              "option_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            }
+          ],
+          "name": "Galaxy Watch 7 (Standard, Green)",
+          "quantity": 1000
+        },
+        {
+          "choices": [
+            {
+              "candidate_index": 0,
+              "option_index": 0
+            },
+            {
+              "candidate_index": 1,
+              "option_index": 1
+            }
+          ],
+          "quantity": 1000,
+          "price": {
+            "nominal": 400000,
+            "real": 359000
+          },
+          "name": "Galaxy Watch 7 (Standard, Silver)"
+        },
+        {
+          "quantity": 1000,
+          "price": {
+            "real": 359000,
+            "nominal": 400000
+          },
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "candidate_index": 2,
+              "option_index": 1
+            }
+          ],
+          "name": "Galaxy Watch 7 (Standard, Cream)"
+        },
+        {
+          "quantity": 1000,
+          "name": "Galaxy Watch 7 (Ultra, Green)",
+          "price": {
+            "real": 549000,
+            "nominal": 600000
+          },
+          "choices": [
+            {
+              "candidate_index": 1,
+              "option_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "Galaxy Watch 7 (Ultra, Silver)",
+          "quantity": 1000,
+          "price": {
+            "nominal": 600000,
+            "real": 549000
+          },
+          "choices": [
+            {
+              "candidate_index": 1,
+              "option_index": 0
+            },
+            {
+              "candidate_index": 1,
+              "option_index": 1
+            }
+          ]
+        },
+        {
+          "choices": [
+            {
+              "candidate_index": 1,
+              "option_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 2
+            }
+          ],
+          "name": "Galaxy Watch 7 (Ultra, Cream)",
+          "price": {
+            "nominal": 600000,
+            "real": 549000
+          },
+          "quantity": 1000
+        }
+      ]
+    }
+  ],
+  "opened_at": "2024-08-01T15:00:00.000Z"
+}

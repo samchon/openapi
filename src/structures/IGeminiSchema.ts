@@ -6,30 +6,52 @@
  *
  * `IGeminiSchema` basically follows the JSON schema definition of the
  * OpenAPI v3.0 specification; {@link OpenApiV3.IJsonSchema}. However,
- * `IGeminiSchema` cannot understand union and reference types, referenced
+ * `IGeminiSchema` cannot understand union and reference types, represented
  * by the `oneOf` and `$ref` properties. Also, as OpenAPI v3.0 specification
  * does not support the tuple type, `IGeminiSchema` does not support the
  * tuple type either.
  *
  * - Does not support
+ *   - {@link OpenApiV3.IJsonSchema.IReference}
+ *   - {@link OpenApiV3.IJsonSchema.IAllOf}
+ *   - {@link OpenApiV3.IJsonSchema.IAnyOf}
+ *   - {@link OpenApiV3.IJsonSchema.IOneOf}
+ *   - {@link OpenApiV3.IJsonSchema.IObject.additionalProperties}
+ *   - {@link OpenApiV3.IJsonSchema.__IAttribute.title}
+ *
+ * If compare with {@link OpenApi.IJsonSchema}, the emended JSON schema type,
+ * these are not supported in the Gemini schema. One thing interesting is,
+ * the Gemini does not support the `title` property, so it would be revealed
+ * in the {@link IGeminiSchema.__IAttribute.description} property instead.
+ *
  *   - {@link OpenApi.IJsonSchema.IReference}
  *   - {@link OpenApi.IJsonSchema.IOneOf}
  *   - {@link OpenApi.IJsonSchema.ITuple}
+ *   - {@link OpenApi.IJsonSchema.IObject.additionalProperties}
+ *   - {@link OpenApi.IJsonSchema.__IAttribute.title}
  *
- * Also, by the documents of Gemini, these constraint properties are not
- * supported, either. However, I can't sure that these constraint properties
- * are really not supported in the Geimni, because the Gemini seems like
- * understanding them. Therefore, I've decided to keep them alive.
+ * Also, Gemini has banned below constraint properties. Instead, I'll will
+ * fill the {@link IGeminiSchema.__IAttribute.description} property with
+ * the comment text like `"@format uuid"`.
  *
- * - ex) constraint properties
- *   - {@link IGeminiSchema.IString.default}
- *   - {@link IGeminiSchema.__IAttribute.example}
- *   - {@link IGeminiSchema.__IAttribute.examples}
- *   - {@link IGeminiSchema.INumber.maximum}
- *   - {@link IGeminiSchema.IObject.additionalProperties}
+ * - {@link OpenApi.IJsonSchema.INumber.minimum}
+ * - {@link OpenApi.IJsonSchema.INumber.maximum}
+ * - {@link OpenApi.IJsonSchema.INumber.multipleOf}
+ * - {@link OpenApi.IJsonSchema.IString.minLength}
+ * - {@link OpenApi.IJsonSchema.IString.maxLength}
+ * - {@link OpenApi.IJsonSchema.IString.format}
+ * - {@link OpenApi.IJsonSchema.IString.pattern}
+ * - {@link OpenApi.IJsonSchema.IString.contentMediaType}
+ * - {@link OpenApi.IJsonSchema.IArray.minItems}
+ * - {@link OpenApi.IJsonSchema.IArray.maxItems}
+ * - {@link OpenApi.IJsonSchema.IArray.unique}
  *
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/function-calling
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
+ * @warning Specified not by the official documentation, but by my experiments.
+ *          Therefore, its definitions can be inaccurate or be changed in the
+ *          future. If you find any wrong or outdated definitions, please let me
+ *          know by issue
  * @author Jeongho Nam - https://github.com/samchon
  */
 export type IGeminiSchema =
@@ -45,12 +67,7 @@ export namespace IGeminiSchema {
   /**
    * Type of the function parameters.
    */
-  export interface IParameters extends Omit<IObject, "additionalProperties"> {
-    /**
-     * Do not allow additional properties in the parameters.
-     */
-    additionalProperties: false;
-  }
+  export type IParameters = IObject;
 
   /**
    * Boolean type schema info.
@@ -87,55 +104,6 @@ export namespace IGeminiSchema {
      * @warning document of Gemini says not supported, but cannot sure
      */
     default?: number | null;
-
-    /**
-     * Minimum value restriction.
-     *
-     * @type int64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    minimum?: number;
-
-    /**
-     * Maximum value restriction.
-     *
-     * @type int64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    maximum?: number;
-
-    /**
-     * Exclusive minimum value restriction.
-     *
-     * For reference, even though your Swagger document has defined the
-     * `exclusiveMinimum` value as `number`, it has been forcibly converted
-     * to `boolean` type, and assigns the numeric value to the
-     * {@link minimum} property in the {@link OpenApi} conversion.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    exclusiveMinimum?: boolean;
-
-    /**
-     * Exclusive maximum value restriction.
-     *
-     * For reference, even though your Swagger document has defined the
-     * `exclusiveMaximum` value as `number`, it has been forcibly converted
-     * to `boolean` type, and assigns the numeric value to the
-     * {@link maximum} property in the {@link OpenApi} conversion.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    exclusiveMaximum?: boolean;
-
-    /**
-     * Multiple of value restriction.
-     *
-     * @type uint64
-     * @exclusiveMinimum 0
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    multipleOf?: number;
   }
 
   /**
@@ -153,52 +121,6 @@ export namespace IGeminiSchema {
      * @warning document of Gemini says not supported, but cannot sure
      */
     default?: number | null;
-
-    /**
-     * Minimum value restriction.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    minimum?: number;
-
-    /**
-     * Maximum value restriction.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    maximum?: number;
-
-    /**
-     * Exclusive minimum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMinimum` value as `number`, {@link OpenAiComposer}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link minimum} property.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    exclusiveMinimum?: boolean;
-
-    /**
-     * Exclusive maximum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMaximum` value as `number`, {@link OpenAiComposer}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link maximum} property.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    exclusiveMaximum?: boolean;
-
-    /**
-     * Multiple of value restriction.
-     *
-     * @exclusiveMinimum 0
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    multipleOf?: number;
   }
 
   /**
@@ -209,74 +131,6 @@ export namespace IGeminiSchema {
      * Enumeration values.
      */
     enum?: Array<string | null>;
-
-    /**
-     * Default value.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    default?: string | null;
-
-    /**
-     * Format restriction.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    format?:
-      | "binary"
-      | "byte"
-      | "password"
-      | "regex"
-      | "uuid"
-      | "email"
-      | "hostname"
-      | "idn-email"
-      | "idn-hostname"
-      | "iri"
-      | "iri-reference"
-      | "ipv4"
-      | "ipv6"
-      | "uri"
-      | "uri-reference"
-      | "uri-template"
-      | "url"
-      | "date-time"
-      | "date"
-      | "time"
-      | "duration"
-      | "json-pointer"
-      | "relative-json-pointer"
-      | (string & {});
-
-    /**
-     * Pattern restriction.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    pattern?: string;
-
-    /**
-     * Minimum length restriction.
-     *
-     * @type uint64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    minLength?: number;
-
-    /**
-     * Maximum length restriction.
-     *
-     * @type uint64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    maxLength?: number;
-
-    /**
-     * Content media type restriction.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    contentMediaType?: string;
   }
 
   /**
@@ -290,35 +144,6 @@ export namespace IGeminiSchema {
      * the type schema info of the `T` in the TypeScript array type `Array<T>`.
      */
     items: IGeminiSchema;
-
-    /**
-     * Unique items restriction.
-     *
-     * If this property value is `true`, target array must have unique items.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    uniqueItems?: boolean;
-
-    /**
-     * Minimum items restriction.
-     *
-     * Restriction of minumum number of items in the array.
-     *
-     * @type uint64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    minItems?: number;
-
-    /**
-     * Maximum items restriction.
-     *
-     * Restriction of maximum number of items in the array.
-     *
-     * @type uint64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    maxItems?: number;
   }
 
   /**
@@ -333,7 +158,7 @@ export namespace IGeminiSchema {
      * and the value is the type schema info.
      *
      * If you need additional properties that is represented by dynamic key,
-     * you can use the {@link additionalProperties} instead.
+     * it is not possible to compose because the Gemini does not support it.
      */
     properties: Record<string, IGeminiSchema>;
 
@@ -371,25 +196,6 @@ export namespace IGeminiSchema {
      * ```
      */
     required?: string[];
-
-    /**
-     * Additional properties' info.
-     *
-     * The `additionalProperties` means the type schema info of the additional
-     * properties that are not listed in the {@link properties}.
-     *
-     * If the value is `true`, it means that the additional properties
-     * are not restricted. They can be any type. Otherwise, if the value is
-     * {@link IGeminiSchema} type, it means that the additional properties
-     * must follow the type schema info.
-     *
-     * - `false`: only regular properties
-     * - `true`: `Record<string, any>`
-     * - `IGeminiSchema`: `Record<string, T>`
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    additionalProperties?: boolean | IGeminiSchema;
   }
 
   /**
@@ -440,11 +246,6 @@ export namespace IGeminiSchema {
    * Common attributes that can be applied to all types.
    */
   export interface __IAttribute {
-    /**
-     * Title of the schema.
-     */
-    title?: string;
-
     /**
      * Detailed description of the schema.
      */
