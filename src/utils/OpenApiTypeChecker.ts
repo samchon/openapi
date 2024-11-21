@@ -134,19 +134,41 @@ export namespace OpenApiTypeChecker {
         const depth: number = props.visited.get(name)!;
         if (depth > props.recursive) return undefined;
         props.visited.set(name, depth + 1);
-        return escapeSchema({
+        const res: OpenApi.IJsonSchema | null | undefined = escapeSchema({
           components: props.components,
           schema: target,
           recursive: props.recursive,
           visited: props.visited,
         });
+        return res
+          ? {
+              ...res,
+              description: writeReferenceDescription({
+                components: props.components,
+                $ref: props.schema.$ref,
+                description: res.description,
+                escape: true,
+              }),
+            }
+          : res;
       }
-      return escapeSchema({
+      const res: OpenApi.IJsonSchema | null | undefined = escapeSchema({
         components: props.components,
         schema: target,
         recursive: props.recursive,
         visited: new Map([...props.visited, [name, 1]]),
       });
+      return res
+        ? {
+            ...res,
+            description: writeReferenceDescription({
+              components: props.components,
+              $ref: props.schema.$ref,
+              description: res.description,
+              escape: true,
+            }),
+          }
+        : res;
     } else if (isOneOf(props.schema)) {
       // UNION
       const elements: Array<OpenApi.IJsonSchema | null | undefined> =
@@ -165,8 +187,7 @@ export namespace OpenApiTypeChecker {
       if (filtered.length === 0) return undefined;
       return {
         ...props,
-        oneOf: filtered.map(flat(props.components)).flat(),
-        discriminator: undefined,
+        oneOf: filtered.map(flatSchema(props.components)).flat(),
       };
     } else if (isObject(props.schema)) {
       // OBJECT
@@ -304,8 +325,8 @@ export namespace OpenApiTypeChecker {
         return true;
 
       // COMPARE WITH FLATTENING
-      const alpha: OpenApi.IJsonSchema[] = flat(components)(x);
-      const beta: OpenApi.IJsonSchema[] = flat(components)(y);
+      const alpha: OpenApi.IJsonSchema[] = flatSchema(components)(x);
+      const beta: OpenApi.IJsonSchema[] = flatSchema(components)(y);
       if (alpha.some((x) => isUnknown(x))) return true;
       else if (beta.some((x) => isUnknown(x))) return false;
       return beta.every((b) =>
@@ -494,24 +515,71 @@ export namespace OpenApiTypeChecker {
     (x === "iri" && y === "uri") ||
     (x === "iri-reference" && y === "uri-reference");
 
-  const flat =
+  const flatSchema =
     (components: OpenApi.IComponents) =>
     (schema: OpenApi.IJsonSchema): OpenApi.IJsonSchema[] => {
-      schema = escapeReference(components)(schema);
-      if (isOneOf(schema)) return schema.oneOf.map(flat(components)).flat();
+      schema = escapeReferenceOfFlatSchema(components)(schema);
+      if (isOneOf(schema))
+        return schema.oneOf.map(flatSchema(components)).flat();
       return [schema];
     };
 
-  const escapeReference =
+  const escapeReferenceOfFlatSchema =
     (components: OpenApi.IComponents) =>
     (
       schema: OpenApi.IJsonSchema,
     ): Exclude<OpenApi.IJsonSchema, OpenApi.IJsonSchema.IReference> =>
       isReference(schema)
-        ? escapeReference(components)(
+        ? escapeReferenceOfFlatSchema(components)(
             components.schemas![
               schema.$ref.replace("#/components/schemas/", "")
             ],
           )
         : schema;
+
+  /**
+   * @internal
+   */
+  export const writeReferenceDescription = (props: {
+    components: OpenApi.IComponents;
+    $ref: string;
+    description: string | undefined;
+    escape: boolean;
+  }): string | undefined => {
+    const index: number = props.$ref.lastIndexOf(".");
+    if (index === -1) return props.description;
+
+    const accessors: string[] = props.$ref
+      .split("#/components/schemas/")[1]
+      .split(".");
+    const pReferences: IParentReference[] = accessors
+      .slice(0, props.escape ? accessors.length : accessors.length - 1)
+      .map((_, i, array) => array.slice(0, i + 1).join("."))
+      .map((key) => ({
+        key,
+        description: props.components.schemas?.[key]?.description,
+      }))
+      .filter((schema): schema is IParentReference => !!schema?.description)
+      .reverse();
+    if (pReferences.length === 0) return props.description;
+    return [
+      ...(props.description?.length ? [props.description] : []),
+      ...pReferences.map(
+        (pRef, i) =>
+          `Description of the ${i === 0 && props.escape ? "current" : "parent"} {@link ${pRef.key}} type:\n\n` +
+          pRef.description
+            .split("\n")
+            .map((str) => `> ${str}`)
+            .join("\n"),
+      ),
+    ].join("\n\n------------------------------\n\n");
+  };
+}
+
+/**
+ * @internal
+ */
+interface IParentReference {
+  key: string;
+  description: string;
 }
