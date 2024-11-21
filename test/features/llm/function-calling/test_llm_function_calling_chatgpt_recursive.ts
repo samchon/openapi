@@ -21,7 +21,7 @@ export const test_llm_function_calling_chatgpt_recursive =
           collection.schemas[0],
         ),
         options: {
-          reference: false,
+          reference: true,
           constraint: false,
         },
       });

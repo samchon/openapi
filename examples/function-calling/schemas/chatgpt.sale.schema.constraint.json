@@ -64,19 +64,21 @@
         },
         "channels": {
           "title": "List of channels and categories",
-          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.\n\n\n@minItems 1",
+          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleChannel.ICreate"
-          }
+          },
+          "minItems": 1
         },
         "units": {
           "title": "List of units",
-          "description": "List of units.\n\nRecords about individual product composition informations that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1",
+          "description": "List of units.\n\nRecords about individual product composition informations that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleUnit.ICreate"
-          }
+          },
+          "minItems": 1
         },
         "tags": {
           "title": "List of search tags",
@@ -149,8 +151,9 @@
       "properties": {
         "name": {
           "title": "File name, except extension",
-          "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
-          "type": "string"
+          "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
+          "type": "string",
+          "maxLength": 255
         },
         "extension": {
           "title": "Extension",
@@ -161,14 +164,16 @@
             },
             {
               "type": "string",
-              "description": "@minLength 1\n@maxLength 8"
+              "minLength": 1,
+              "maxLength": 8
             }
           ]
         },
         "url": {
           "title": "URL path of the real file",
-          "description": "URL path of the real file.\n\n\n@format uri",
-          "type": "string"
+          "description": "URL path of the real file.",
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": [
@@ -216,11 +221,12 @@
         },
         "stocks": {
           "title": "List of final stocks",
-          "description": "List of final stocks.\n\n\n@minItems 1",
+          "description": "List of final stocks.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleUnitStock.ICreate"
-          }
+          },
+          "minItems": 1
         },
         "name": {
           "title": "Representative name of the unit",
@@ -309,11 +315,12 @@
         },
         "candidates": {
           "title": "List of candidate values",
-          "description": "List of candidate values.\n\n\n@minItems 1",
+          "description": "List of candidate values.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleUnitOptionCandidate.ICreate"
-          }
+          },
+          "minItems": 1
         }
       },
       "required": [
@@ -353,8 +360,9 @@
         },
         "quantity": {
           "title": "Initial inventory quantity",
-          "description": "Initial inventory quantity.\n\n\n@minimum 1",
-          "type": "integer"
+          "description": "Initial inventory quantity.",
+          "type": "integer",
+          "minimum": 1
         },
         "choices": {
           "title": "List of choices",
@@ -379,13 +387,15 @@
       "properties": {
         "nominal": {
           "title": "Nominal price",
-          "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.\n\n\n@minimum 0",
-          "type": "number"
+          "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.",
+          "type": "number",
+          "minimum": 0
         },
         "real": {
           "title": "Real price to pay",
-          "description": "Real price to pay.\n\n\n@minimum 0",
-          "type": "number"
+          "description": "Real price to pay.",
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [

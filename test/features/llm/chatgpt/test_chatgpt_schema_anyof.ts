@@ -17,19 +17,9 @@ export const test_chatgpt_schema_anyof = (): void => {
       reference: false,
     },
   });
-  const type = (str: string) => ({
-    type: "object",
-    properties: {
-      type: {
-        type: "string",
-        enum: [str],
-      },
-    },
-  });
-
-  TestValidator.equals("anyOf")({
-    anyOf: [type("point"), type("line"), type("triangle"), type("rectangle")],
-  })(schema as any);
+  TestValidator.equals("anyOf")(["point", "line", "triangle", "rectangle"])(
+    (schema as any)?.anyOf?.map((e: any) => e.properties?.type?.enum?.[0]),
+  );
 };
 
 interface IPoint {

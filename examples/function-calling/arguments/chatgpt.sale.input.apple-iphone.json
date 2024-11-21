@@ -6,8 +6,14 @@
   "content": {
     "title": "Apple MacBook Pro",
     "format": "md",
-    "body": "MacBook Pro\n\n**The Ultimate Tool for Professionals**\n\nMacBook Pro is designed to elevate your creativity and productivity to new heights. Combining exceptional performance, elegant design, and the unparalleled experience only Apple can deliver, this is the device that empowers you to tackle any challenge with confidence.\n\n- **Remarkable Performance**\n    \n    Powered by the next-generation chip, it handles demanding tasks and complex projects effortlessly, delivering unmatched speed and efficiency.\n    \n- **Outstanding Display**\n    \n    The Retina display offers rich colors and sharp contrast, creating an immersive visual experience. With ProMotion technology, enjoy smooth scrolling and fluid animations like never before.\n    \n- **All-Day Battery Life**\n    \n    Stay focused and in the flow wherever you go with a battery that lasts all day. This is a laptop that works as hard as you do.\n    \n- **Sleek Yet Powerful Design**\n    \n    A precision aluminum body that’s lightweight yet durable, paired with a minimalist design that stands out on your desk and on the go.\n    \n- **Smart Connectivity**\n    \n    Versatile ports for high-speed data transfer and seamless compatibility ensure you're ready for any work environment.\n    \n\nWith MacBook Pro, your potential knows no bounds. **It’s time to rediscover what you’re capable of.**",
-    "files": [],
+    "body": "MacBook Pro\n\n**The Ultimate Tool for Professionals**\n\nMacBook Pro is designed to elevate your creativity and productivity to new heights. Combining exceptional performance, elegant design, and the unparalleled experience only Apple can deliver, this is the device that empowers you to tackle any challenge with confidence.\n\n- **Remarkable Performance**\n    \n    Powered by the next-generation chip, it handles demanding tasks and complex projects effortlessly, delivering unmatched speed and efficiency.\n    \n- **Outstanding Display**\n    \n    The Retina display offers rich colors and sharp contrast, creating an immersive visual experience. With ProMotion technology, enjoy smooth scrolling and fluid animations like never before.\n    \n- **All-Day Battery Life**\n    \n    Stay focused and in the flow wherever you go with a battery that lasts all day. This is a laptop that works as hard as you do.\n    \n- **Sleek Yet Powerful Design**\n    \n    A precision aluminum body that’s lightweight yet durable, paired with a minimalist design that stands out on your desk and on the go.\n    \n- **Smart Connectivity**\n    \n    Versatile ports for high-speed data transfer and seamless compatibility ensure you're ready for any work environment.\n\nWith MacBook Pro, your potential knows no bounds. **It’s time to rediscover what you’re capable of.**\n",
+    "files": [
+      {
+        "name": "apple-iphone-thumbnail",
+        "extension": "jpeg",
+        "url": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-spaceblack-gallery1-202410?wid=4000&hei=3074&fmt=jpeg&qlt=90&.v=1729264981617"
+      }
+    ],
     "thumbnails": [
       {
         "name": "apple-iphone-thumbnail",
@@ -35,7 +41,7 @@
           "variable": true,
           "candidates": [
             {
-              "name": "Sliver"
+              "name": "Silver"
             },
             {
               "name": "Space Gray"
@@ -1026,7 +1032,7 @@
           ]
         }
       ],
-      "name": "MacBook Pro Entity",
+      "name": "MacBook M3 Pro 14inch Entity",
       "required": true,
       "primary": true
     },
@@ -1066,10 +1072,10 @@
     }
   ],
   "tags": [
-    "Apple",
     "MacBook Pro",
+    "Apple",
     "Laptop",
     "Electronics",
-    "Computers"
+    "Computing"
   ]
 }

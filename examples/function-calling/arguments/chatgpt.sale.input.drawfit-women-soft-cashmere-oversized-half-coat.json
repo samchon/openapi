@@ -30,7 +30,7 @@
     {
       "code": "samchon",
       "category_codes": [
-        "accessories",
+        "clothing",
         "clothes"
       ]
     }
@@ -235,7 +235,7 @@
           ]
         }
       ],
-      "name": "Drawfit Coat",
+      "name": "Drawfit Women Soft Cashmere Oversized Half Coat",
       "required": true,
       "primary": true
     }
@@ -243,8 +243,9 @@
   "tags": [
     "winter coat",
     "cashmere coat",
-    "women fashion",
-    "stylish coat",
-    "oversized coat"
+    "oversized coat",
+    "women's coat",
+    "fashion",
+    "warm clothing"
   ]
 }
