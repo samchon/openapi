@@ -14,7 +14,7 @@ export const test_llm_function_calling_chatgpt_sale =
     if (TestGlobal.env.OPENAI_API_KEY === undefined) return;
 
     const collection: IJsonSchemaCollection =
-      typia.json.schemas<[{ input: IShoppingSale.ICreate }]>();
+      typia.json.schemas<[{ input: IShoppingSale.ICreate }, IShoppingSale]>();
     const parameters: IChatGptSchema.IParameters | null =
       ChatGptConverter.parameters({
         components: collection.components,
