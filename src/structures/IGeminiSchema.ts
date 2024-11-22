@@ -195,7 +195,7 @@ export namespace IGeminiSchema {
      * }
      * ```
      */
-    required?: string[];
+    required: string[];
   }
 
   /**

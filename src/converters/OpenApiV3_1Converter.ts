@@ -3,7 +3,7 @@ import { OpenApiV3_1 } from "../OpenApiV3_1";
 
 export namespace OpenApiV3_1Converter {
   export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => {
-    if ((input as OpenApi.IDocument)["x-samchon-emended"] === true)
+    if ((input as OpenApi.IDocument)["x-samchon-emend-version"] === "2.0")
       return input as OpenApi.IDocument;
     return {
       ...input,
@@ -28,7 +28,7 @@ export namespace OpenApiV3_1Converter {
               .filter(([_, value]) => value !== undefined),
           )
         : undefined,
-      "x-samchon-emended": true,
+      "x-samchon-emend-version": "2.0",
     };
   };
 
@@ -259,13 +259,11 @@ export namespace OpenApiV3_1Converter {
   const convertComponents = (
     input: OpenApiV3_1.IComponents,
   ): OpenApi.IComponents => ({
-    schemas: input.schemas
-      ? Object.fromEntries(
-          Object.entries(input.schemas)
-            .filter(([_, v]) => v !== undefined)
-            .map(([key, value]) => [key, convertSchema(input)(value)] as const),
-        )
-      : undefined,
+    schemas: Object.fromEntries(
+      Object.entries(input.schemas ?? {})
+        .filter(([_, v]) => v !== undefined)
+        .map(([key, value]) => [key, convertSchema(input)(value)] as const),
+    ),
     securitySchemes: input.securitySchemes,
   });
 
@@ -539,6 +537,7 @@ export namespace OpenApiV3_1Converter {
                   ? convertSchema(components)(schema.additionalProperties)
                   : schema.additionalProperties
                 : undefined,
+              required: schema.required ?? [],
             },
           });
         else if (TypeChecker.isRecursiveReference(schema))
@@ -599,6 +598,7 @@ export namespace OpenApiV3_1Converter {
         ),
         ...{
           allOf: undefined,
+          required: [...new Set(objects.map((o) => o?.required ?? []).flat())],
         },
       };
     };

@@ -30,9 +30,7 @@
     {
       "code": "samchon",
       "category_codes": [
-        "desktops",
-        "2_in_1_laptops",
-        "windows_tablets"
+        "2_in_1_laptops"
       ]
     }
   ],
@@ -90,7 +88,7 @@
       ],
       "stocks": [
         {
-          "name": "Surface Pro 9 (i3/8GB/128GB)",
+          "name": "Surface Pro 9 i3/8GB/128GB",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -112,7 +110,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i3/16GB/256GB)",
+          "name": "Surface Pro 9 i3/16GB/256GB",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -134,7 +132,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i3/16GB/512GB)",
+          "name": "Surface Pro 9 i3/16GB/512GB",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -156,7 +154,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i5/16GB/256GB)",
+          "name": "Surface Pro 9 i5/16GB/256GB",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -178,7 +176,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i5/32GB/512GB)",
+          "name": "Surface Pro 9 i5/32GB/512GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -200,7 +198,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i7/16GB/512GB)",
+          "name": "Surface Pro 9 i7/16GB/512GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -222,7 +220,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i7/32GB/512GB)",
+          "name": "Surface Pro 9 i7/32GB/512GB",
           "price": {
             "nominal": 2000000,
             "real": 1899000
@@ -252,7 +250,7 @@
       "options": [],
       "stocks": [
         {
-          "name": "Warranty Program",
+          "name": "Extended Warranty Program",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -284,9 +282,11 @@
     }
   ],
   "tags": [
+    "Surface Pro 9",
+    "laptop",
     "tablet",
     "2-in-1",
-    "surface",
-    "microsoft"
+    "Microsoft",
+    "technology"
   ]
 }

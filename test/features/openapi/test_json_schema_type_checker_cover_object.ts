@@ -63,6 +63,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         properties: {
           id: { type: "string" },
         },
+        required: [],
       },
       y: {
         type: "object",
@@ -80,10 +81,12 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         type: "object",
         properties: {},
         additionalProperties: true,
+        required: [],
       },
       y: {
         type: "object",
         properties: {},
+        required: [],
       },
     }),
   );
@@ -96,11 +99,14 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         additionalProperties: {
           type: "object",
           properties: {},
+          required: [],
         },
+        required: [],
       },
       y: {
         type: "object",
         properties: {},
+        required: [],
       },
     }),
   );
@@ -111,6 +117,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         type: "object",
         properties: {},
         additionalProperties: true,
+        required: [],
       },
       y: {
         type: "object",
@@ -120,7 +127,9 @@ export const test_json_schema_type_checker_cover_object = (): void => {
           properties: {
             id: { type: "string" },
           },
+          required: ["id"],
         },
+        required: [],
       },
     }),
   );
@@ -131,11 +140,13 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         type: "object",
         properties: {},
         additionalProperties: box3D,
+        required: [],
       },
       y: {
         type: "object",
         properties: {},
         additionalProperties: box2D,
+        required: [],
       },
     }),
   );
@@ -183,6 +194,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         properties: {
           id: { type: "string" },
         },
+        required: [],
       },
     }),
   );
@@ -194,11 +206,13 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       x: {
         type: "object",
         properties: {},
+        required: [],
       },
       y: {
         type: "object",
         properties: {},
         additionalProperties: true,
+        required: [],
       },
     }),
   );
@@ -210,6 +224,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       x: {
         type: "object",
         properties: {},
+        required: [],
       },
       y: {
         type: "object",
@@ -217,7 +232,9 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         additionalProperties: {
           type: "object",
           properties: {},
+          required: [],
         },
+        required: [],
       },
     }),
   );
@@ -234,12 +251,15 @@ export const test_json_schema_type_checker_cover_object = (): void => {
           properties: {
             id: { type: "string" },
           },
+          required: [],
         },
+        required: [],
       },
       y: {
         type: "object",
         properties: {},
         additionalProperties: true,
+        required: [],
       },
     }),
   );
@@ -250,11 +270,13 @@ export const test_json_schema_type_checker_cover_object = (): void => {
         type: "object",
         properties: {},
         additionalProperties: box2D,
+        required: [],
       },
       y: {
         type: "object",
         properties: {},
         additionalProperties: box3D,
+        required: [],
       },
     }),
   );

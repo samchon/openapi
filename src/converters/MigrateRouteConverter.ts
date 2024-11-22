@@ -138,8 +138,10 @@ export namespace MigrateRouteConverter {
             ...(dto ? Object.entries(dto.properties ?? {}) : []),
           ]),
           required: [
-            ...primitives.filter((p) => p.required).map((p) => p.name!),
-            ...(dto ? (dto.required ?? []) : []),
+            ...new Set([
+              ...primitives.filter((p) => p.required).map((p) => p.name!),
+              ...(dto?.required ?? []),
+            ]),
           ],
         },
       ];
@@ -173,9 +175,7 @@ export namespace MigrateRouteConverter {
                       .flat(),
                   ),
                 ]),
-                required: [
-                  ...new Set(entire.map((o) => o.required ?? []).flat()),
-                ],
+                required: [...new Set(entire.map((o) => o.required).flat())],
               },
             }),
           });

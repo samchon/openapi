@@ -140,6 +140,7 @@ const test_object_nullable = (): void => {
             type: "number",
           },
         },
+        required: ["name", "age"],
       },
     },
   };
@@ -171,6 +172,7 @@ const test_object_nullable = (): void => {
             },
           },
           nullable: true,
+          required: ["name", "age"],
         },
       },
     },

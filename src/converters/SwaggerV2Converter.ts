@@ -25,7 +25,7 @@ export namespace SwaggerV2Converter {
       : undefined,
     security: input.security,
     tags: input.tags,
-    "x-samchon-emended": true,
+    "x-samchon-emend-version": "2.0",
   });
 
   /* -----------------------------------------------------------
@@ -175,13 +175,11 @@ export namespace SwaggerV2Converter {
   const convertComponents = (
     input: SwaggerV2.IDocument,
   ): OpenApi.IComponents => ({
-    schemas: input.definitions
-      ? Object.fromEntries(
-          Object.entries(input.definitions)
-            .filter(([_, v]) => v !== undefined)
-            .map(([key, value]) => [key, convertSchema(value)]),
-        )
-      : undefined,
+    schemas: Object.fromEntries(
+      Object.entries(input.definitions ?? {})
+        .filter(([_, v]) => v !== undefined)
+        .map(([key, value]) => [key, convertSchema(value)]),
+    ),
     securitySchemes: input.securityDefinitions
       ? Object.fromEntries(
           Object.entries(input.securityDefinitions)
@@ -354,6 +352,7 @@ export namespace SwaggerV2Converter {
                 schema.examples.map((v, i) => [i.toString(), v]),
               )
             : undefined,
+          required: schema.required ?? [],
         });
       else if (TypeChecker.isReference(schema))
         union.push({

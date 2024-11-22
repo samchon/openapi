@@ -16,7 +16,7 @@ export namespace OpenApiV3Converter {
         )
       : undefined,
     openapi: "3.1.0",
-    "x-samchon-emended": true,
+    "x-samchon-emend-version": "2.0",
   });
 
   /* -----------------------------------------------------------
@@ -232,13 +232,11 @@ export namespace OpenApiV3Converter {
   export const convertComponents = (
     input: OpenApiV3.IComponents,
   ): OpenApi.IComponents => ({
-    schemas: input.schemas
-      ? Object.fromEntries(
-          Object.entries(input.schemas)
-            .filter(([_, v]) => v !== undefined)
-            .map(([key, value]) => [key, convertSchema(input)(value)]),
-        )
-      : undefined,
+    schemas: Object.fromEntries(
+      Object.entries(input.schemas ?? {})
+        .filter(([_, v]) => v !== undefined)
+        .map(([key, value]) => [key, convertSchema(input)(value)]),
+    ),
     securitySchemes: input.securitySchemes,
   });
 
@@ -336,6 +334,7 @@ export namespace OpenApiV3Converter {
                   ? convertSchema(components)(schema.additionalProperties)
                   : schema.additionalProperties
                 : undefined,
+              required: schema.required ?? [],
             },
           });
         else if (TypeChecker.isReference(schema)) union.push(schema);
@@ -404,6 +403,7 @@ export namespace OpenApiV3Converter {
         ),
         ...{
           allOf: undefined,
+          required: [...new Set(objects.map((o) => o?.required ?? []).flat())],
         },
       };
     };

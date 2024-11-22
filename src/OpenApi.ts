@@ -214,7 +214,7 @@ export namespace OpenApi {
     /**
      * Flag for indicating this document is emended by `@samchon/openapi`.
      */
-    "x-samchon-emended": true;
+    "x-samchon-emend-version": "2.0";
   }
   export namespace IDocument {
     /**
@@ -996,7 +996,7 @@ export namespace OpenApi {
        * }
        * ```
        */
-      required?: string[];
+      required: string[];
     }
 
     /**

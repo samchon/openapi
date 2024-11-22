@@ -365,7 +365,7 @@ export namespace ILlmSchemaV3_1 {
      * }
      * ```
      */
-    required?: string[];
+    required: string[];
   }
 
   /**

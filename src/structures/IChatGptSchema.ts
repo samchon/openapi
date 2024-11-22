@@ -75,16 +75,11 @@ export namespace IChatGptSchema {
   /**
    * Type of the function parameters.
    */
-  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+  export interface IParameters extends IObject {
     /**
      * Collection of the named types.
      */
     $defs?: Record<string, IChatGptSchema>;
-
-    /**
-     * Do not allow additional properties in the parameters.
-     */
-    additionalProperties: false;
   }
 
   /**
@@ -341,15 +336,10 @@ export namespace IChatGptSchema {
      * The `additionalProperties` means the type schema info of the additional
      * properties that are not listed in the {@link properties}.
      *
-     * If the value is `true`, it means that the additional properties are not
-     * restricted. They can be any type. Otherwise, if the value is
-     * {@link IOpenAiSchema} type, it means that the additional properties must
-     * follow the type schema info.
-     *
-     * - `true`: `Record<string, any>`
-     * - `IOpenAiSchema`: `Record<string, T>`
+     * By the way, as LLM function calling does not support such dynamic key
+     * typed properties, the `additionalProperties` becomes always `false`.
      */
-    additionalProperties?: boolean | IChatGptSchema;
+    additionalProperties: false;
 
     /**
      * List of key values of the required properties.
@@ -384,7 +374,7 @@ export namespace IChatGptSchema {
      * }
      * ```
      */
-    required?: string[];
+    required: string[];
   }
 
   /**

@@ -261,7 +261,7 @@ export namespace OpenApiTypeChecker {
         return null;
       else if (
         properties.some(
-          ([k, v]) => v === undefined && object.required?.includes(k) === true,
+          ([k, v]) => v === undefined && object.required.includes(k) === true,
         ) === true
       )
         return undefined;
@@ -273,7 +273,7 @@ export namespace OpenApiTypeChecker {
           >,
         ),
         additionalProperties: additionalProperties ?? false,
-        required: object.required?.filter((k) =>
+        required: object.required.filter((k) =>
           properties.some(([key, value]) => key === k && value !== undefined),
         ),
       };
@@ -505,8 +505,8 @@ export namespace OpenApiTypeChecker {
       const a: OpenApi.IJsonSchema | undefined = p.x.properties?.[key];
       if (a === undefined) return false;
       else if (
-        (p.x.required?.includes(key) ?? false) === true &&
-        (p.y.required?.includes(key) ?? false) === false
+        p.x.required.includes(key) === true &&
+        p.y.required.includes(key) === false
       )
         return false;
       return coverStation({
