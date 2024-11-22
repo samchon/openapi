@@ -225,17 +225,14 @@ export namespace HttpLlmConverter {
         : undefined,
       output: output as any,
       description: (() => {
-        if (operation.summary && operation.description) {
-          return operation.description.startsWith(operation.summary)
-            ? operation.description
-            : [
-                operation.summary,
-                operation.summary.endsWith(".") ? "" : ".",
-                "\n\n",
-                operation.description,
-              ].join("");
-        }
-        return operation.description ?? operation.summary;
+        if (!operation.summary?.length || !operation.description?.length)
+          return operation.summary || operation.description;
+        const summary: string = operation.summary.endsWith(".")
+          ? operation.summary.slice(0, -1)
+          : operation.summary;
+        return operation.description.startsWith(summary)
+          ? operation.description
+          : summary + ".\n\n" + operation.description;
       })(),
       deprecated: operation.deprecated,
       tags: operation.tags,

@@ -4,6 +4,13 @@ import { LlmTypeCheckerV3_1 } from "../utils/LlmTypeCheckerV3_1";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace LlmConverterV3_1 {
+  export const parameters = (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema.IObject;
+    recursive: false | number;
+  }): ILlmSchemaV3_1.IParameters | null =>
+    schema(props) as ILlmSchemaV3_1.IParameters | null;
+
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;

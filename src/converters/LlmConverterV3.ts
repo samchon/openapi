@@ -5,6 +5,13 @@ import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
 export namespace LlmConverterV3 {
+  export const parameters = (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema.IObject;
+    recursive: false | number;
+  }): ILlmSchemaV3.IParameters | null =>
+    schema(props) as ILlmSchemaV3.IParameters | null;
+
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;

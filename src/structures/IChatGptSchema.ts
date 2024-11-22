@@ -79,7 +79,7 @@ export namespace IChatGptSchema {
     /**
      * Collection of the named types.
      */
-    $defs?: Record<string, IChatGptSchema | undefined>;
+    $defs?: Record<string, IChatGptSchema>;
 
     /**
      * Do not allow additional properties in the parameters.

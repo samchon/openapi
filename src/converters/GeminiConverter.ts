@@ -31,7 +31,7 @@ export namespace GeminiConverter {
             : v.title;
           v.description = v.description.startsWith(title)
             ? v.description
-            : `${title}\n\n${v.description}`;
+            : `${title}.\n\n${v.description}`;
         }
         delete v.title;
       }
