@@ -58,7 +58,7 @@ const _Propagate = async (
   };
   const init: RequestInit = {
     ...(props.connection.options ?? {}),
-    method: props.route.method,
+    method: props.route.method.toUpperCase(),
     headers: (() => {
       const output: [string, string][] = [];
       for (const [key, value] of Object.entries(headers))
@@ -98,7 +98,7 @@ const _Propagate = async (
 
   if (status === 200 || status === 201) {
     // SUCCESS CASE
-    if (props.route.method === "head") return out(undefined);
+    if (props.route.method.toUpperCase() === "HEAD") return out(undefined);
     else if (
       props.route.success === null ||
       props.route.success.type === "text/plain"
