@@ -87,7 +87,7 @@ export namespace HttpLlm {
   }): IHttpLlmApplication<Model, Parameters> => {
     // MIGRATE
     const migrate: IHttpMigrateApplication =
-      (props.document as OpenApi.IDocument)["x-samchon-emended"] === true
+      (props.document as OpenApi.IDocument)["x-samchon-emend-version"] === "2.0"
         ? HttpMigration.application(props.document as OpenApi.IDocument)
         : (props.document as IHttpMigrateApplication);
     return HttpLlmConverter.compose<Model, Parameters>({

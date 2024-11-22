@@ -122,23 +122,11 @@ export namespace ChatGptConverter {
           );
         if (Object.values(properties).some((v) => v === null))
           return union.push(null);
-        const additionalProperties =
-          input.additionalProperties === undefined
-            ? false
-            : typeof input.additionalProperties === "object" &&
-                input.additionalProperties !== null
-              ? schema({
-                  options: props.options,
-                  components: props.components,
-                  $defs: props.$defs,
-                  schema: input.additionalProperties,
-                })
-              : input.additionalProperties;
-        if (additionalProperties === null) return union.push(null);
+        if (!!input.additionalProperties === null) return union.push(null);
         return union.push({
           ...input,
           properties: properties as Record<string, IChatGptSchema>,
-          additionalProperties,
+          additionalProperties: false,
           required: Object.keys(properties),
         });
       } else if (OpenApiTypeChecker.isArray(input)) {
@@ -325,30 +313,11 @@ export namespace ChatGptConverter {
       if (x !== null) llm.properties[key] = x;
       if (y !== null) human.properties[key] = y;
     }
-    if (
-      typeof props.schema.additionalProperties === "object" &&
-      props.schema.additionalProperties !== null
-    ) {
-      const [x, y] = separate({
-        $defs: props.$defs,
-        predicate: props.predicate,
-        schema: props.schema.additionalProperties,
-      });
-      if (x !== null) llm.additionalProperties = x;
-      if (y !== null) human.additionalProperties = y;
-    } else {
-      llm.additionalProperties = false;
-      human.additionalProperties = false;
-    }
+    llm.additionalProperties = false;
+    human.additionalProperties = false;
     return [
-      Object.keys(llm.properties).length === 0 &&
-      llm.additionalProperties === false
-        ? null
-        : shrinkRequired(llm),
-      Object.keys(human.properties).length === 0 &&
-      human.additionalProperties === false
-        ? null
-        : shrinkRequired(human),
+      Object.keys(llm.properties).length === 0 ? null : shrinkRequired(llm),
+      Object.keys(human.properties).length === 0 ? null : shrinkRequired(human),
     ];
   };
 
@@ -412,10 +381,7 @@ export namespace ChatGptConverter {
   const shrinkRequired = (
     s: IChatGptSchema.IObject,
   ): IChatGptSchema.IObject => {
-    if (s.required !== undefined)
-      s.required = s.required.filter(
-        (key) => s.properties?.[key] !== undefined,
-      );
+    s.required = s.required.filter((key) => s.properties?.[key] !== undefined);
     return s;
   };
 }

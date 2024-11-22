@@ -37,7 +37,8 @@ export namespace GeminiConverter {
       }
       if (LlmTypeCheckerV3.isOneOf(v)) union = true;
       else if (LlmTypeCheckerV3.isObject(v)) {
-        if (v.properties !== undefined) delete v.additionalProperties;
+        if (v.additionalProperties !== undefined)
+          delete (v as Partial<ILlmSchemaV3.IObject>).additionalProperties;
       } else if (LlmTypeCheckerV3.isArray(v))
         OpenApiContraintShifter.shiftArray(v);
       else if (LlmTypeCheckerV3.isString(v))
@@ -52,5 +53,10 @@ export namespace GeminiConverter {
     predicate: (schema: IGeminiSchema) => boolean;
     schema: IGeminiSchema;
   }): [IGeminiSchema | null, IGeminiSchema | null] =>
-    LlmConverterV3.separate(props);
+    LlmConverterV3.separate(
+      props as {
+        predicate: (schema: ILlmSchemaV3) => boolean;
+        schema: ILlmSchemaV3;
+      },
+    );
 }

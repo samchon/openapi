@@ -31,15 +31,10 @@ export namespace LlmTypeCheckerV3 {
   ): void => {
     callback(schema);
     if (isOneOf(schema)) schema.oneOf.forEach((s) => visit(s, callback));
-    else if (isObject(schema)) {
-      for (const [_, s] of Object.entries(schema.properties ?? {}))
+    else if (isObject(schema))
+      for (const [_, s] of Object.entries(schema.properties))
         visit(s, callback);
-      if (
-        typeof schema.additionalProperties === "object" &&
-        schema.additionalProperties !== null
-      )
-        visit(schema.additionalProperties, callback);
-    } else if (isArray(schema)) visit(schema.items, callback);
+    else if (isArray(schema)) visit(schema.items, callback);
   };
 
   /* -----------------------------------------------------------

@@ -24,7 +24,9 @@ export namespace LlmConverterV3 {
     });
     if (resolved === null) return null;
     const downgraded: ILlmSchemaV3 = OpenApiV3Downgrader.downgradeSchema({
-      original: {},
+      original: {
+        schemas: {},
+      },
       downgraded: {},
     })(resolved) as ILlmSchemaV3;
     LlmTypeCheckerV3.visit(downgraded, (schema) => {
@@ -33,6 +35,11 @@ export namespace LlmConverterV3 {
         (schema as any).discriminator !== undefined
       )
         delete (schema as any).discriminator;
+      else if (LlmTypeCheckerV3.isObject(schema)) {
+        schema.properties ??= {};
+        schema.required ??= [];
+        schema.additionalProperties = false;
+      }
     });
     return downgraded;
   };
@@ -116,10 +123,7 @@ export namespace LlmConverterV3 {
   };
 
   const shrinkRequired = (s: ILlmSchemaV3.IObject): ILlmSchemaV3.IObject => {
-    if (s.required !== undefined)
-      s.required = s.required.filter(
-        (key) => s.properties?.[key] !== undefined,
-      );
+    s.required = s.required.filter((key) => s.properties[key] !== undefined);
     return s;
   };
 }

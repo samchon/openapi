@@ -68,14 +68,9 @@ export namespace ChatGptTypeChecker {
         const found: IChatGptSchema | undefined = props.$defs?.[key];
         if (found !== undefined) next(found);
       } else if (ChatGptTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(next);
-      else if (ChatGptTypeChecker.isObject(schema)) {
-        for (const value of Object.values(schema.properties ?? {})) next(value);
-        if (
-          typeof schema.additionalProperties === "object" &&
-          schema.additionalProperties !== null
-        )
-          next(schema.additionalProperties);
-      } else if (ChatGptTypeChecker.isArray(schema)) next(schema.items);
+      else if (ChatGptTypeChecker.isObject(schema))
+        for (const value of Object.values(schema.properties)) next(value);
+      else if (ChatGptTypeChecker.isArray(schema)) next(schema.items);
     };
     next(props.schema);
   };
