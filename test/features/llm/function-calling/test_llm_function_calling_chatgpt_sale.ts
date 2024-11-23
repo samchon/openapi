@@ -21,7 +21,7 @@ export const test_llm_function_calling_chatgpt_sale =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
-        options: {
+        config: {
           reference: process.argv.includes("--reference"),
           constraint: process.argv.includes("--constraint"),
         },

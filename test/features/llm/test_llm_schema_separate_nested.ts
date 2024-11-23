@@ -58,7 +58,10 @@ const schema = (props: {
   const schema: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components: props.components,
     schema: props.schemas[0],
-    recursive: false,
+    config: {
+      recursive: false,
+      constraint: true,
+    },
   });
   if (schema === null) throw new Error("Invalid schema");
   return schema;

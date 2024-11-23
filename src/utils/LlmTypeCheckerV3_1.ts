@@ -1,4 +1,6 @@
+import { OpenApi } from "../OpenApi";
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
+import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
 export namespace LlmTypeCheckerV3_1 {
   /* -----------------------------------------------------------
@@ -6,60 +8,110 @@ export namespace LlmTypeCheckerV3_1 {
   ----------------------------------------------------------- */
   export const isNull = (
     schema: ILlmSchemaV3_1,
-  ): schema is ILlmSchemaV3_1.INull =>
-    (schema as ILlmSchemaV3_1.INull).type === "null";
+  ): schema is ILlmSchemaV3_1.INull => OpenApiTypeCheckerBase.isNull(schema);
 
   export const isUnknown = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.IUnknown =>
-    (schema as ILlmSchemaV3_1.IUnknown).type === undefined &&
-    !isConstant(schema) &&
-    !isOneOf(schema);
+    OpenApiTypeCheckerBase.isUnknown(schema);
 
   export const isConstant = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.IConstant =>
-    (schema as ILlmSchemaV3_1.IConstant).const !== undefined;
+    OpenApiTypeCheckerBase.isConstant(schema);
 
   export const isBoolean = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.IBoolean =>
-    (schema as ILlmSchemaV3_1.IBoolean).type === "boolean";
+    OpenApiTypeCheckerBase.isBoolean(schema);
 
   export const isInteger = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.IInteger =>
-    (schema as ILlmSchemaV3_1.IInteger).type === "integer";
+    OpenApiTypeCheckerBase.isInteger(schema);
 
   export const isNumber = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.INumber =>
-    (schema as ILlmSchemaV3_1.INumber).type === "number";
+    OpenApiTypeCheckerBase.isNumber(schema);
 
   export const isString = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.IString =>
-    (schema as ILlmSchemaV3_1.IString).type === "string";
+    OpenApiTypeCheckerBase.isString(schema);
 
   export const isArray = (
     schema: ILlmSchemaV3_1,
-  ): schema is ILlmSchemaV3_1.IArray =>
-    (schema as ILlmSchemaV3_1.IArray).type === "array" &&
-    (schema as ILlmSchemaV3_1.IArray).items !== undefined;
-
-  export const isTuple = (
-    schema: ILlmSchemaV3_1,
-  ): schema is ILlmSchemaV3_1.ITuple =>
-    (schema as ILlmSchemaV3_1.ITuple).type === "array" &&
-    (schema as ILlmSchemaV3_1.ITuple).prefixItems !== undefined;
+  ): schema is ILlmSchemaV3_1.IArray => OpenApiTypeCheckerBase.isArray(schema);
 
   export const isObject = (
     schema: ILlmSchemaV3_1,
   ): schema is ILlmSchemaV3_1.IObject =>
-    (schema as ILlmSchemaV3_1.IObject).type === "object";
+    OpenApiTypeCheckerBase.isObject(schema);
+
+  export const isReference = (
+    schema: ILlmSchemaV3_1,
+  ): schema is ILlmSchemaV3_1.IReference =>
+    OpenApiTypeCheckerBase.isReference(schema);
 
   export const isOneOf = (
     schema: ILlmSchemaV3_1,
-  ): schema is ILlmSchemaV3_1.IOneOf =>
-    (schema as ILlmSchemaV3_1.IOneOf).oneOf !== undefined;
+  ): schema is ILlmSchemaV3_1.IOneOf => OpenApiTypeCheckerBase.isOneOf(schema);
+
+  export const isRecursiveReference = (props: {
+    $defs?: Record<string, ILlmSchemaV3_1>;
+    schema: ILlmSchemaV3_1;
+  }): boolean =>
+    OpenApiTypeCheckerBase.isRecursiveReference({
+      prefix: "#/$defs/",
+      components: {
+        schemas: props.$defs,
+      },
+      schema: props.schema,
+    });
+
+  /* -----------------------------------------------------------
+    OPERATORS
+  ----------------------------------------------------------- */
+  export const escape = (props: {
+    $defs?: Record<string, ILlmSchemaV3_1>;
+    schema: ILlmSchemaV3_1;
+    recursive: false | number;
+  }): ILlmSchemaV3_1 | null =>
+    OpenApiTypeCheckerBase.escape({
+      prefix: "#/$defs/",
+      components: {
+        schemas: props.$defs,
+      },
+      schema: props.schema,
+      recursive: props.recursive,
+    }) as ILlmSchemaV3_1 | null;
+
+  export const visit = (props: {
+    closure: (schema: ILlmSchemaV3_1) => void;
+    $defs?: Record<string, ILlmSchemaV3_1>;
+    schema: ILlmSchemaV3_1;
+  }): void =>
+    OpenApiTypeCheckerBase.visit({
+      prefix: "#/$defs/",
+      closure: props.closure as (schema: OpenApi.IJsonSchema) => void,
+      components: {
+        schemas: props.$defs,
+      },
+      schema: props.schema,
+    });
+
+  export const covers = (props: {
+    $defs?: Record<string, ILlmSchemaV3_1>;
+    x: ILlmSchemaV3_1;
+    y: ILlmSchemaV3_1;
+  }): boolean =>
+    OpenApiTypeCheckerBase.covers({
+      prefix: "#/$defs/",
+      components: {
+        schemas: props.$defs,
+      },
+      x: props.x,
+      y: props.y,
+    });
 }

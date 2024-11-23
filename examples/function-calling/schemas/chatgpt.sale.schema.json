@@ -372,5 +372,6 @@
   "required": [
     "input"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {}
 }

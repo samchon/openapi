@@ -74,7 +74,7 @@ const test = (
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
-    options: {
+    config: {
       reference: false,
       constraint: true,
     },

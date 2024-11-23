@@ -9,6 +9,7 @@ export namespace ChatGptTypeChecker {
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.INull =>
     (schema as IChatGptSchema.INull).type === "null";
+
   export const isUnknown = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IUnknown =>
@@ -20,14 +21,17 @@ export namespace ChatGptTypeChecker {
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IBoolean =>
     (schema as IChatGptSchema.IBoolean).type === "boolean";
+
   export const isInteger = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IInteger =>
     (schema as IChatGptSchema.IInteger).type === "integer";
+
   export const isNumber = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.INumber =>
     (schema as IChatGptSchema.INumber).type === "number";
+
   export const isString = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IString =>
@@ -38,13 +42,16 @@ export namespace ChatGptTypeChecker {
   ): schema is IChatGptSchema.IArray =>
     (schema as IChatGptSchema.IArray).type === "array" &&
     (schema as IChatGptSchema.IArray).items !== undefined;
+
   export const isObject = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IObject =>
     (schema as IChatGptSchema.IObject).type === "object";
+
   export const isReference = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IReference => (schema as any).$ref !== undefined;
+
   export const isAnyOf = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IAnyOf =>

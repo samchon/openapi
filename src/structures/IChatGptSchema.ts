@@ -19,7 +19,7 @@
  * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link IChatGptSchema.IReference}
  * - Forcibly transform every object properties to be required
  *
- * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema type of
+ * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema specification,
  *
  * - {@link IChatGptSchema.IAnyOf} instead of the {@link OpenApi.IJsonSchema.IOneOf}
  * - {@link IChatGptSchema.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.IComponents.schemas}
@@ -28,13 +28,13 @@
  * - Forcibly transform every object properties to be required
  *
  * For reference, if you've composed the `IChatGptSchema` type with the
- * {@link ILlmApplication.IChatGptOptions.reference} `false` option (default is `false`),
+ * {@link IChatGptSchema.IConfig.reference} `false` option (default is `false`),
  * only the recursived named types would be archived into the
  * {@link IChatGptSchema.IParameters.$defs}, and the others would be ecaped from the
  * {@link IChatGptSchema.IReference} type.
  *
  * Also, if you've composed the `IChatGptSchema` type with the
- * {@link ILlmApplication.IChatGptOptions.constraint} `false` option (default `false`),
+ * {@link IChatGptSchema.IConfig.constraint} `false` option (default `false`),
  * the `IChatGptSchema` would not compose these properties. Instead, these
  * properties would be written on {@link IChatGptSchema.__IAttribute.descripotion}
  * field like `@format uuid` case.
@@ -74,12 +74,19 @@ export type IChatGptSchema =
 export namespace IChatGptSchema {
   /**
    * Type of the function parameters.
+   *
+   * `IChatGptSchema.IParameters` is a type defining a function's parameters
+   * as a keyworded object type.
+   *
+   * It also can be utilized for the structured output metadata.
+   *
+   * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
   export interface IParameters extends IObject {
     /**
      * Collection of the named types.
      */
-    $defs?: Record<string, IChatGptSchema>;
+    $defs: Record<string, IChatGptSchema>;
   }
 
   /**
@@ -380,19 +387,19 @@ export namespace IChatGptSchema {
   /**
    * Reference type directing named schema.
    */
-  export interface IReference<Key = string> extends __IAttribute {
+  export interface IReference extends __IAttribute {
     /**
      * Reference to the named schema.
      *
      * The `ref` is a reference to the named schema. Format of the `$ref` is
      * following the JSON Pointer specification. In the OpenAPI, the `$ref`
      * starts with `#/$defs/` which means the type is stored in
-     * the {@link IChatGptSchema.ITop.$defs} object.
+     * the {@link IChatGptSchema.IParameters.$defs} object.
      *
      * - `#/$defs/SomeObject`
      * - `#/$defs/AnotherObject`
      */
-    $ref: Key;
+    $ref: string;
   }
 
   /**
@@ -469,5 +476,61 @@ export namespace IChatGptSchema {
      * List of example values as key-value pairs.
      */
     examples?: Record<string, any>;
+  }
+
+  /**
+   * Configuration for ChatGPT schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow contraint properties or not.
+     *
+     * If you configure this property to `false`, the schemas do not containt
+     * the constraint properties of below. Instead, below properties would be
+     * written to the {@link IChatGptSchema.__IAttribute.description} property
+     * as a comment string like `"@format uuid"`.
+     *
+     * This is because the ChatGPT function calling understands the constraint
+     * properties when the function parameter types are simple, however it occurs
+     * some errors when the parameter types are complex.
+     *
+     * Therefore, considering the complexity of your parameter types, determine
+     * which is better, to allow the constraint properties or not.
+     *
+     * - {@link IChatGptSchema.INumber.minimum}
+     * - {@link IChatGptSchema.INumber.maximum}
+     * - {@link IChatGptSchema.INumber.multipleOf}
+     * - {@link IChatGptSchema.IString.minLength}
+     * - {@link IChatGptSchema.IString.maxLength}
+     * - {@link IChatGptSchema.IString.format}
+     * - {@link IChatGptSchema.IString.pattern}
+     * - {@link IChatGptSchema.IString.contentMediaType}
+     * - {@link IChatGptSchema.IArray.minItems}
+     * - {@link IChatGptSchema.IArray.maxItems}
+     * - {@link IChatGptSchema.IArray.unique}
+     *
+     * @default false
+     */
+    constraint: boolean;
+
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link IChatGptSchema.IReference} would be escaped to
+     * a plain type unless recursive type case.
+     *
+     * This is because the lower version of ChatGPT does not understand the
+     * reference type well, and even the modern version of ChatGPT sometimes occur
+     * the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that reduces
+     * the LLM token cost. Therefore, if you're using the modern version of ChatGPT,
+     * and want to reduce the LLM token cost, you can configure this property to
+     * `true`.
+     *
+     * @default false
+     */
+    reference: boolean;
   }
 }

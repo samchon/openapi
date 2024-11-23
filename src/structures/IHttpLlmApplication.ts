@@ -1,11 +1,8 @@
 import { OpenApi } from "../OpenApi";
-import { IChatGptSchema } from "./IChatGptSchema";
-import { IGeminiSchema } from "./IGeminiSchema";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmApplication } from "./ILlmApplication";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * Application of LLM function call from OpenAPI document.
@@ -19,11 +16,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *
  * About the {@link OpenApi.IOperation API operations}, they are converted to
  * {@link IHttpLlmFunction} type which represents LLM function calling schema.
- * By the way, if tehre're some recursive types which can't escape the
- * {@link OpenApi.IJsonSchema.IReference} type, the operation would be failed and
- * pushed into the {@link IHttpLlmApplication.errors}. Otherwise not, the operation
- * would be successfully converted to {@link IHttpLlmFunction} and its type schemas
- * are downgraded to {@link OpenApiV3.IJsonSchema} and converted to {@link ILlmSchemaV3}.
+ * By the way, if there're some types which does not supported by LLM, the operation
+ * would be failed and pushed into the {@link IHttpLlmApplication.errors}. Otherwise not,
+ * the operation would be successfully converted to {@link IHttpLlmFunction} and its
+ * type schemas are downgraded to {@link OpenApiV3.IJsonSchema} and converted to
+ * {@link ILlmSchemaV3}.
  *
  * About the options, if you've configured {@link IHttpLlmApplication.options.keyword}
  * (as `true`), number of {@link IHttpLlmFunction.parameters} are always 1 and the first
@@ -98,10 +95,7 @@ export interface IHttpLlmApplication<
   errors: IHttpLlmApplication.IError<Operation, Route>[];
 
   /**
-   * Options for the application.
-   *
-   * Adjusted options when composing the application through
-   * {@link HttpLlm.application} function.
+   * Configuration for the application.
    */
   options: IHttpLlmApplication.IOptions<
     Model,
@@ -111,19 +105,12 @@ export interface IHttpLlmApplication<
   >;
 }
 export namespace IHttpLlmApplication {
-  export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
-  export type ModelParameters = {
-    "3.0": ILlmSchemaV3.IParameters;
-    "3.1": ILlmSchemaV3_1.IParameters;
-    chatgpt: IChatGptSchema.IParameters;
-    gemini: IGeminiSchema.IParameters;
-  };
-  export type ModelSchema = {
-    "3.0": ILlmSchemaV3;
-    "3.1": ILlmSchemaV3_1;
-    chatgpt: IChatGptSchema;
-    gemini: IGeminiSchema;
-  };
+  export import Model = ILlmApplication.Model;
+  export import ModelParameters = ILlmApplication.ModelParameters;
+  export import ModelSchema = ILlmApplication.ModelSchema;
+  export import ModelConfig = ILlmApplication.ModelConfig;
+
+  export import IOptions = ILlmApplication.IOptions;
 
   /**
    * Error occurred in the composition.
@@ -166,8 +153,4 @@ export namespace IHttpLlmApplication {
      */
     route: () => Route | undefined;
   }
-
-  export import IOptions = ILlmApplication.IOptions;
-  export import ICommonOptions = ILlmApplication.ICommonOptions;
-  export import IChatGptOptions = ILlmApplication.IChatGptOptions;
 }

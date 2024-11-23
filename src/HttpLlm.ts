@@ -90,38 +90,31 @@ export namespace HttpLlm {
       (props.document as OpenApi.IDocument)["x-samchon-emend-version"] === "2.0"
         ? HttpMigration.application(props.document as OpenApi.IDocument)
         : (props.document as IHttpMigrateApplication);
-    return HttpLlmConverter.compose<Model, Parameters>({
+    return HttpLlmConverter.application<Model, Parameters>({
       migrate,
       model: props.model,
-      options: (props.model === "chatgpt"
+      options: (props.model === "chatgpt" || props.model === "3.1"
         ? ({
             separate:
               (props.options
-                ?.separate as IHttpLlmApplication.IChatGptOptions["separate"]) ??
+                ?.separate as IHttpLlmApplication.IOptions<any>["separate"]) ??
               null,
             reference:
-              (props.options as IHttpLlmApplication.IChatGptOptions | undefined)
+              (props.options as IHttpLlmApplication.IOptions<any> | undefined)
                 ?.reference ?? false,
             constraint:
-              (props.options as IHttpLlmApplication.IChatGptOptions | undefined)
+              (props.options as IHttpLlmApplication.IOptions<any> | undefined)
                 ?.constraint ?? false,
-          } satisfies IHttpLlmApplication.IChatGptOptions)
+          } satisfies IHttpLlmApplication.IOptions<any>)
         : ({
             separate:
-              (props.options?.separate as IHttpLlmApplication.ICommonOptions<
-                Exclude<Model, "chatgpt">
-              >["separate"]) ?? null,
+              (props.options
+                ?.separate as IHttpLlmApplication.IOptions<any>["separate"]) ??
+              null,
             recursive:
-              (
-                props.options as
-                  | IHttpLlmApplication.ICommonOptions<
-                      Exclude<Model, "chatgpt">
-                    >
-                  | undefined
-              )?.recursive ?? 3,
-          } satisfies IHttpLlmApplication.ICommonOptions<
-            Exclude<Model, "chatgpt">
-          >)) as IHttpLlmApplication.IOptions<Model>,
+              (props.options as IHttpLlmApplication.IOptions<any> | undefined)
+                ?.recursive ?? 3,
+          } satisfies IHttpLlmApplication.IOptions<any>)) as IHttpLlmApplication.IOptions<any>,
     });
   };
 

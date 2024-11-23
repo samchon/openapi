@@ -10,7 +10,7 @@ export const test_llm_schema_union_const = (): void => {
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
-    options: {
+    config: {
       constraint: true,
       reference: false,
     },

@@ -9,7 +9,10 @@ export const test_llm_schema_oneof = (): void => {
   const casted: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components: app.components,
     schema: app.schemas[0],
-    recursive: false,
+    config: {
+      recursive: false,
+      constraint: true,
+    },
   });
   TestValidator.equals("oneOf")(casted)({
     oneOf: [

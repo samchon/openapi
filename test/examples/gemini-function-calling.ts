@@ -23,7 +23,9 @@ const main = async (): Promise<void> => {
     GeminiConverter.parameters({
       components: collection.components,
       schema: typia.assert<OpenApi.IJsonSchema.IObject>(collection.schemas[0]),
-      recursive: 3,
+      config: {
+        recursive: 3,
+      },
     });
   if (parameters === null)
     throw new Error("Failed to convert the JSON schema to the Gemini schema.");

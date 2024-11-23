@@ -26,6 +26,7 @@ export * from "./HttpMigration";
 export * from "./structures/IHttpLlmApplication";
 export * from "./structures/IHttpLlmFunction";
 export * from "./structures/ILlmApplication";
+export * from "./structures/ILlmFunction";
 
 export * from "./structures/IChatGptSchema";
 export * from "./structures/IGeminiSchema";

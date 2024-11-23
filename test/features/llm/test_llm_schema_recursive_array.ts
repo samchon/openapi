@@ -1,8 +1,8 @@
 import { TestValidator } from "@nestia/e2e";
-import { LlmConverterV3_1 } from "@samchon/openapi/lib/converters/LlmConverterV3_1";
+import { LlmConverterV3 } from "@samchon/openapi/lib/converters/LlmConverterV3";
 
 export const test_llm_schema_recursive_array = (): void => {
-  const schema = LlmConverterV3_1.schema({
+  const schema = LlmConverterV3.schema({
     components: {
       schemas: {
         Department: {
@@ -29,7 +29,10 @@ export const test_llm_schema_recursive_array = (): void => {
     schema: {
       $ref: "#/components/schemas/Department",
     },
-    recursive: 3,
+    config: {
+      recursive: 3,
+      constraint: true,
+    },
   });
   TestValidator.equals("recursive")(schema)({
     type: "object",

@@ -1,18 +1,40 @@
 /**
- * Type schema info of LLM function call.
+ * Type schema based on OpenAPI v3.0 for LLM function calling.
  *
- * `ILlmSchemaV3` is a type metadata of LLM (Large Language Model)
- * function calling.
+ * `ILlmSchemaV3` is a type metadata for LLM (Large Language Model)
+ * function calling, based on the OpenAPI v3.0 speicification. This type
+ * is not the final type for the LLM function calling, but the intermediate
+ * structure for the conversion to the final type like {@link IGeminiSchema}.
  *
  * `ILlmSchemaV3` basically follows the JSON schema definition of OpenAPI
  * v3.0 specification; {@link OpenApiV3.IJsonSchema}. However, `ILlmSchemaV3`
  * does not have the reference type; {@link OpenApiV3.IJsonSchema.IReference}.
- * It's because the LLM cannot compose the reference typed arguments.
+ * It's because the LLM cannot compose the reference typed arguments. If
+ * recursive type comes, its type would be repeated in
+ * {@link ILlmSchemaV3.IConfig.recursive} times. Otherwise you've configured
+ * it to `false`, the recursive types are not allowed.
  *
  * For reference, the OpenAPI v3.0 based JSON schema definition can't
  * express the tuple array type. It has been supported since OpenAPI v3.1;
  * {@link OpenApi.IJsonSchema.ITuple}. Therefore, it would better to avoid
  * using the tuple array type in the LLM function calling.
+ *
+ * Also, if you configure {@link ILlmSchemaV3.IConfig.constraint} to `false`,
+ * tehse properties would be banned and written to the
+ * {@link ILlmSchemaV3.__IAttribute.description} property instead. It's because
+ * there are some LLM models which does not support the constraint properties.
+ *
+ * - {@link ILlmSchemaV3.INumber.minimum}
+ * - {@link ILlmSchemaV3.INumber.maximum}
+ * - {@link ILlmSchemaV3.INumber.multipleOf}
+ * - {@link ILlmSchemaV3.IString.minLength}
+ * - {@link ILlmSchemaV3.IString.maxLength}
+ * - {@link ILlmSchemaV3.IString.format}
+ * - {@link ILlmSchemaV3.IString.pattern}
+ * - {@link ILlmSchemaV3.IString.contentMediaType}
+ * - {@link ILlmSchemaV3.IArray.minItems}
+ * - {@link ILlmSchemaV3.IArray.maxItems}
+ * - {@link ILlmSchemaV3.IArray.unique}
  *
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
@@ -30,13 +52,15 @@ export type ILlmSchemaV3 =
 export namespace ILlmSchemaV3 {
   /**
    * Type of the function parameters.
+   *
+   * `ILlmSchemaV3.IParameters` is a type defining a function's parameters
+   * as a keyworded object type.
+   *
+   * It also can be utilized for the structured output metadata.
+   *
+   * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
-  export interface IParameters extends Omit<IObject, "additionalProperties"> {
-    /**
-     * Do not allow additional properties in the parameters.
-     */
-    additionalProperties: false;
-  }
+  export type IParameters = IObject;
 
   /**
    * Boolean type schema info.
@@ -424,5 +448,53 @@ export namespace ILlmSchemaV3 {
      * List of example values as key-value pairs.
      */
     examples?: Record<string, any>;
+  }
+
+  /**
+   * Configuration for OpenAPI v3.0 based LLM schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow contraint properties or not.
+     *
+     * If you configure this property to `false`, the schemas do not containt
+     * the constraint properties of below. Instead, below properties would be
+     * written to the {@link ILlmSchemaV3.__IAttribute.description} property
+     * as a comment string like `"@format uuid"`.
+     *
+     * This is because the some LLM model's function calling understands the constraint
+     * properties when the function parameter types are simple, however it occurs
+     * some errors when the parameter types are complex.
+     *
+     * Therefore, considering the complexity of your parameter types, determine
+     * which is better, to allow the constraint properties or not.
+     *
+     * - {@link ILlmSchemaV3.INumber.minimum}
+     * - {@link ILlmSchemaV3.INumber.maximum}
+     * - {@link ILlmSchemaV3.INumber.multipleOf}
+     * - {@link ILlmSchemaV3.IString.minLength}
+     * - {@link ILlmSchemaV3.IString.maxLength}
+     * - {@link ILlmSchemaV3.IString.format}
+     * - {@link ILlmSchemaV3.IString.pattern}
+     * - {@link ILlmSchemaV3.IString.contentMediaType}
+     * - {@link ILlmSchemaV3.IArray.minItems}
+     * - {@link ILlmSchemaV3.IArray.maxItems}
+     * - {@link ILlmSchemaV3.IArray.unique}
+     *
+     * @default false
+     */
+    constraint: boolean;
+
+    /**
+     * Whether to allow recursive types or not.
+     *
+     * If allow, then how many times to repeat the recursive types.
+     *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
+     * @default 3
+     */
+    recursive: false | number;
   }
 }

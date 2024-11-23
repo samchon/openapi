@@ -8,9 +8,10 @@ import { ChatGptConverter } from "./ChatGptConverter";
 import { GeminiConverter } from "./GeminiConverter";
 import { LlmConverterV3 } from "./LlmConverterV3";
 import { LlmConverterV3_1 } from "./LlmConverterV3_1";
+import { LlmSchemaConverter } from "./LlmSchemaConverter";
 
 export namespace HttpLlmConverter {
-  export const compose = <
+  export const application = <
     Model extends IHttpLlmApplication.Model,
     Parameters extends
       IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
@@ -22,12 +23,7 @@ export namespace HttpLlmConverter {
   >(props: {
     model: Model;
     migrate: IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
-    options: IHttpLlmApplication.IOptions<
-      Model,
-      Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
-        ? Parameters["properties"][string]
-        : IHttpLlmApplication.ModelSchema[Model]
-    >;
+    options: IHttpLlmApplication.IOptions<Model>;
   }): IHttpLlmApplication<Model, Parameters, Operation, Route> => {
     // COMPOSE FUNCTIONS
     const errors: IHttpLlmApplication.IError<Operation, Route>[] =
@@ -95,7 +91,7 @@ export namespace HttpLlmConverter {
     };
   };
 
-  export const separateParameters = <
+  export const separate = <
     Model extends IHttpLlmApplication.Model,
     Parameters extends
       IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
@@ -134,19 +130,14 @@ export namespace HttpLlmConverter {
     model: Model;
     components: OpenApi.IComponents;
     route: IHttpMigrateRoute<OpenApi.IJsonSchema, Operation>;
-    options: IHttpLlmApplication.IOptions<
-      Model,
-      Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
-        ? Parameters["properties"][string]
-        : IHttpLlmApplication.ModelSchema[Model]
-    >;
+    options: IHttpLlmApplication.IOptions<Model>;
   }): IHttpLlmFunction<Parameters, Operation, Route> | null => {
     const $defs: Record<string, IChatGptSchema> = {};
     const cast = (
       s: OpenApi.IJsonSchema,
     ): Parameters["properties"][string] | null =>
-      CASTERS[props.model]({
-        options: props.options as any,
+      LlmSchemaConverter.schema(props.model)({
+        config: props.options as any,
         schema: s,
         components: props.components,
         $defs,
@@ -217,7 +208,7 @@ export namespace HttpLlmConverter {
       strict: true,
       parameters,
       separated: props.options.separate
-        ? separateParameters({
+        ? separate({
             model: props.model,
             predicate: props.options.separate as any,
             parameters,
@@ -241,51 +232,6 @@ export namespace HttpLlmConverter {
     };
   };
 }
-
-const CASTERS = {
-  "3.0": (props: {
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    options: IHttpLlmApplication.IOptions<"3.0">;
-  }) =>
-    LlmConverterV3.schema({
-      components: props.components,
-      schema: props.schema,
-      recursive: props.options.recursive,
-    }),
-  "3.1": (props: {
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    options: IHttpLlmApplication.IOptions<"3.1">;
-  }) =>
-    LlmConverterV3_1.schema({
-      components: props.components,
-      schema: props.schema,
-      recursive: props.options.recursive,
-    }),
-  chatgpt: (props: {
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    $defs: Record<string, IChatGptSchema>;
-    options: Omit<IHttpLlmApplication.IChatGptOptions, "separate">;
-  }) =>
-    ChatGptConverter.schema({
-      components: props.components,
-      schema: props.schema,
-      $defs: props.$defs,
-      options: props.options,
-    }),
-  gemini: (props: {
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    options: IHttpLlmApplication.IOptions<"gemini">;
-  }) =>
-    GeminiConverter.schema({
-      components: props.components,
-      schema: props.schema,
-      recursive: props.options.recursive,
-    }),
-};
 
 const SEPARATORS = {
   "3.0": LlmConverterV3.separate,

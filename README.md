@@ -72,6 +72,7 @@ Here is an example code utilizing the `@samchon/openapi` for LLM function callin
 ```typescript
 import {
   HttpLlm,
+  IChatGptSchema,
   IHttpLlmApplication,
   IHttpLlmFunction,
   OpenApi,
@@ -95,13 +96,17 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication = HttpLlm.application(document);
+  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
+    model: "chatgpt",
+    document,
+  });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction | undefined = application.functions.find(
-    // (f) => f.name === "llm_selected_fuction_name"
-    (f) => f.path === "/bbs/articles" && f.method === "post",
-  );
+  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined = 
+    application.functions.find(
+      // (f) => f.name === "llm_selected_fuction_name"
+      (f) => f.path === "/bbs/articles" && f.method === "post",
+    );
   if (func === undefined) throw new Error("No matched function exists.");
 
   // actual execution is by yourself

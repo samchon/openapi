@@ -9,16 +9,23 @@ export namespace GeminiConverter {
   export const parameters = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
+    config: IGeminiSchema.IConfig;
   }): IGeminiSchema.IParameters | null =>
     schema(props) as IGeminiSchema.IParameters | null;
 
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
+    config: IGeminiSchema.IConfig;
   }): IGeminiSchema | null => {
-    const schema: ILlmSchemaV3 | null = LlmConverterV3.schema(props);
+    const schema: ILlmSchemaV3 | null = LlmConverterV3.schema({
+      components: props.components,
+      schema: props.schema,
+      config: {
+        recursive: props.config.recursive,
+        constraint: false,
+      },
+    });
     if (schema === null) return null;
 
     let union: boolean = false;
