@@ -42,7 +42,6 @@ const PARAMETERS_CASTERS = {
   "3.1": (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    $defs: Record<string, ILlmSchemaV3_1>;
     config: ILlmSchemaV3_1.IConfig;
   }) =>
     LlmConverterV3_1.parameters({
@@ -53,7 +52,6 @@ const PARAMETERS_CASTERS = {
   chatgpt: (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    $defs: Record<string, IChatGptSchema>;
     config: IChatGptSchema.IConfig;
   }) =>
     ChatGptConverter.parameters({
