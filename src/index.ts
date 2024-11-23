@@ -30,6 +30,7 @@ export * from "./structures/ILlmFunction";
 
 export * from "./structures/IChatGptSchema";
 export * from "./structures/IGeminiSchema";
+export * from "./structures/ILlmSchema";
 export * from "./structures/ILlmSchemaV3";
 export * from "./structures/ILlmSchemaV3_1";
 
