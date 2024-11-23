@@ -1,7 +1,7 @@
 /**
- * Type schema info of the Gemini.
+ * Type schema info for the Gemini function calling.
  *
- * `IGeminiSchema` iis a type metadata of LLM (Large Language Model)
+ * `IGeminiSchema` is a type metadata for the LLM (Large Language Model)
  * function calling in the Geminimi.
  *
  * `IGeminiSchema` basically follows the JSON schema definition of the
@@ -48,6 +48,7 @@
  *
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/function-calling
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
+ * @reference https://ai.google.dev/gemini-api/docs/structured-output
  * @warning Specified not by the official documentation, but by my experiments.
  *          Therefore, its definitions can be inaccurate or be changed in the
  *          future. If you find any wrong or outdated definitions, please let me
@@ -66,6 +67,13 @@ export type IGeminiSchema =
 export namespace IGeminiSchema {
   /**
    * Type of the function parameters.
+   *
+   * `IGeminiSchema.IParameters` is a type defining a function's parameters
+   * as a keyworded object type.
+   *
+   * It also can be utilized for the structured output metadata.
+   *
+   * @reference https://ai.google.dev/gemini-api/docs/structured-output
    */
   export type IParameters = IObject;
 
@@ -271,5 +279,22 @@ export namespace IGeminiSchema {
      * @warning document of Gemini says not supported, but cannot sure
      */
     examples?: Record<string, any>;
+  }
+
+  /**
+   * Configuration for the Gemini schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow recursive types or not.
+     *
+     * If allow, then how many times to repeat the recursive types.
+     *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
+     * @default 3
+     */
+    recursive: false | number;
   }
 }

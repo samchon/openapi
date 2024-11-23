@@ -18,7 +18,7 @@ const main = async (): Promise<void> => {
     ChatGptConverter.parameters({
       components: collection.components,
       schema: typia.assert<OpenApi.IJsonSchema.IObject>(collection.schemas[0]),
-      options: {
+      config: {
         reference: process.argv.includes("--reference"),
         constraint: process.argv.includes("--constraint"),
       },

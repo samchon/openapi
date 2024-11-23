@@ -11,7 +11,10 @@ export const test_llm_schema_reference_description = (): void => {
   const schema: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components: collection.components,
     schema: collection.schemas[0],
-    recursive: false,
+    config: {
+      recursive: false,
+      constraint: true,
+    },
   });
   TestValidator.predicate("description")(
     () =>

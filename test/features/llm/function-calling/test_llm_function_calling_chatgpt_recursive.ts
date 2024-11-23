@@ -20,7 +20,7 @@ export const test_llm_function_calling_chatgpt_recursive =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
-        options: {
+        config: {
           reference: true,
           constraint: false,
         },

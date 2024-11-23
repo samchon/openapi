@@ -26,7 +26,9 @@ export const test_llm_function_calling_gemini_sale =
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
-        recursive: 3,
+        config: {
+          recursive: 3,
+        },
       });
     if (parameters === null)
       throw new Error(

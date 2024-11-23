@@ -31,7 +31,10 @@ export const test_llm_schema_union = (): void => {
   const llm: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components,
     schema,
-    recursive: false,
+    config: {
+      recursive: false,
+      constraint: true,
+    },
   });
   TestValidator.equals("union")(llm)({
     type: "number",

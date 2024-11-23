@@ -1,21 +1,203 @@
 import { OpenApi } from "../OpenApi";
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { LlmTypeCheckerV3_1 } from "../utils/LlmTypeCheckerV3_1";
+import { OpenApiContraintShifter } from "../utils/OpenApiContraintShifter";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
+import { JsonDescriptionUtil } from "../utils/internal/JsonDescriptionUtil";
 
 export namespace LlmConverterV3_1 {
   export const parameters = (props: {
+    config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    recursive: false | number;
-  }): ILlmSchemaV3_1.IParameters | null =>
-    schema(props) as ILlmSchemaV3_1.IParameters | null;
+  }): ILlmSchemaV3_1.IParameters | null => {
+    const $defs: Record<string, ILlmSchemaV3_1> = {};
+    const res: ILlmSchemaV3_1.IParameters | null = schema({
+      config: props.config,
+      components: props.components,
+      schema: props.schema,
+      $defs,
+    }) as ILlmSchemaV3_1.IParameters | null;
+    if (res === null) return null;
+    res.$defs = $defs;
+    return res;
+  };
 
   export const schema = (props: {
+    config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
+    $defs: Record<string, ILlmSchemaV3_1>;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
-  }): ILlmSchemaV3_1 | null => OpenApiTypeChecker.escape(props);
+  }): ILlmSchemaV3_1 | null => {
+    const union: Array<ILlmSchemaV3_1 | null> = [];
+    const attribute: ILlmSchemaV3_1.__IAttribute = {
+      title: props.schema.title,
+      description: props.schema.description,
+      example: props.schema.example,
+      examples: props.schema.examples,
+      ...Object.fromEntries(
+        Object.entries(props.schema).filter(
+          ([key, value]) => key.startsWith("x-") && value !== undefined,
+        ),
+      ),
+    };
+    const visit = (input: OpenApi.IJsonSchema): number => {
+      if (OpenApiTypeChecker.isOneOf(input)) {
+        input.oneOf.forEach(visit);
+        return 0;
+      } else if (OpenApiTypeChecker.isReference(input)) {
+        const key: string = input.$ref.split("#/components/schemas/")[1];
+        const target: OpenApi.IJsonSchema | undefined =
+          props.components.schemas?.[key];
+        if (target === undefined) return 0;
+        if (
+          props.config.reference === true ||
+          OpenApiTypeChecker.isRecursiveReference({
+            components: props.components,
+            schema: input,
+          })
+        ) {
+          const out = () =>
+            union.push({
+              ...input,
+              $ref: `#/$defs/${key}`,
+              title: undefined,
+              description: undefined,
+            });
+          if (props.$defs[key] !== undefined) return out();
+          props.$defs[key] = {};
+          const converted: ILlmSchemaV3_1 | null = schema({
+            config: props.config,
+            components: props.components,
+            $defs: props.$defs,
+            schema: target,
+          });
+          if (converted === null) return union.push(null);
+          converted.description = JsonDescriptionUtil.cascade({
+            prefix: "#/components/schemas/",
+            components: props.components,
+            $ref: input.$ref,
+            description: converted.description,
+            escape: false,
+          });
+          props.$defs[key] = converted;
+          return out();
+        } else {
+          const length: number = union.length;
+          visit(target);
+          if (length === union.length - 1 && union[union.length - 1] !== null)
+            union[union.length - 1] = {
+              ...union[union.length - 1]!,
+              description: JsonDescriptionUtil.cascade({
+                prefix: "#/components/schemas/",
+                components: props.components,
+                $ref: input.$ref,
+                description: union[union.length - 1]!.description,
+                escape: true,
+              }),
+            };
+          else
+            attribute.description = JsonDescriptionUtil.cascade({
+              prefix: "#/components/schemas/",
+              components: props.components,
+              $ref: input.$ref,
+              description: attribute.description,
+              escape: true,
+            });
+          return union.length;
+        }
+      } else if (OpenApiTypeChecker.isObject(input)) {
+        const properties: Record<string, ILlmSchemaV3_1 | null> =
+          Object.entries(input.properties || {}).reduce(
+            (acc, [key, value]) => {
+              const converted: ILlmSchemaV3_1 | null = schema({
+                config: props.config,
+                components: props.components,
+                $defs: props.$defs,
+                schema: value,
+              });
+              if (converted === null) return acc;
+              acc[key] = converted;
+              return acc;
+            },
+            {} as Record<string, ILlmSchemaV3_1 | null>,
+          );
+        if (Object.values(properties).some((v) => v === null))
+          return union.push(null);
+        if (!!input.additionalProperties === null) return union.push(null);
+        return union.push({
+          ...input,
+          properties: properties as Record<string, ILlmSchemaV3_1>,
+          additionalProperties: false,
+          required: Object.keys(properties),
+        });
+      } else if (OpenApiTypeChecker.isArray(input)) {
+        const items: ILlmSchemaV3_1 | null = schema({
+          config: props.config,
+          components: props.components,
+          $defs: props.$defs,
+          schema: input.items,
+        });
+        if (items === null) return union.push(null);
+        return union.push(
+          (props.config.constraint
+            ? (x: ILlmSchemaV3_1.IArray) => x
+            : (x: ILlmSchemaV3_1.IArray) =>
+                OpenApiContraintShifter.shiftArray(x))({
+            ...input,
+            items,
+          }),
+        );
+      } else if (OpenApiTypeChecker.isString(input))
+        return union.push(
+          (props.config.constraint
+            ? (x: ILlmSchemaV3_1.IString) => x
+            : (x: ILlmSchemaV3_1.IString) =>
+                OpenApiContraintShifter.shiftString(x))({
+            ...input,
+          }),
+        );
+      else if (
+        OpenApiTypeChecker.isNumber(input) ||
+        OpenApiTypeChecker.isInteger(input)
+      )
+        return union.push(
+          (props.config.constraint
+            ? (x: ILlmSchemaV3_1.INumber | ILlmSchemaV3_1.IInteger) => x
+            : (x: ILlmSchemaV3_1.INumber | ILlmSchemaV3_1.IInteger) =>
+                OpenApiContraintShifter.shiftNumeric(x))({
+            ...input,
+          }),
+        );
+      else if (OpenApiTypeChecker.isTuple(input)) return union.push(null);
+      else return union.push({ ...input });
+    };
+    visit(props.schema);
+
+    if (union.some((u) => u === null)) return null;
+    else if (union.length === 0)
+      return {
+        ...attribute,
+        type: undefined,
+      };
+    else if (union.length === 1)
+      return {
+        ...attribute,
+        ...union[0]!,
+        description: LlmTypeCheckerV3_1.isReference(union[0]!)
+          ? undefined
+          : union[0]!.description,
+      };
+    return {
+      ...attribute,
+      oneOf: union.map((u) => ({
+        ...u!,
+        description: LlmTypeCheckerV3_1.isReference(u!)
+          ? undefined
+          : u!.description,
+      })),
+    };
+  };
 
   export const separate = (props: {
     predicate: (schema: ILlmSchemaV3_1) => boolean;
@@ -84,29 +266,11 @@ export namespace LlmConverterV3_1 {
       if (x !== null) llm.properties[key] = x;
       if (y !== null) human.properties[key] = y;
     }
-    if (
-      typeof props.schema.additionalProperties === "object" &&
-      props.schema.additionalProperties !== null
-    ) {
-      const [x, y] = separate({
-        predicate: props.predicate,
-        schema: props.schema.additionalProperties,
-      });
-      if (x !== null) llm.additionalProperties = x;
-      if (y !== null) human.additionalProperties = y;
-    } else {
-      llm.additionalProperties = false;
-      human.additionalProperties = false;
-    }
+    llm.additionalProperties = false;
+    human.additionalProperties = false;
     return [
-      Object.keys(llm.properties).length === 0 &&
-      llm.additionalProperties === false
-        ? null
-        : shrinkRequired(llm),
-      Object.keys(human.properties).length === 0 &&
-      human.additionalProperties === false
-        ? null
-        : shrinkRequired(human),
+      Object.keys(llm.properties).length === 0 ? null : shrinkRequired(llm),
+      Object.keys(human.properties).length === 0 ? null : shrinkRequired(human),
     ];
   };
 

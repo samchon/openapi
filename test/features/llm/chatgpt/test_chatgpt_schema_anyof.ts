@@ -12,7 +12,7 @@ export const test_chatgpt_schema_anyof = (): void => {
     $defs,
     components: collection.components,
     schema: collection.schemas[0],
-    options: {
+    config: {
       constraint: false,
       reference: false,
     },

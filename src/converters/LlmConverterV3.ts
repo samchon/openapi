@@ -8,19 +8,19 @@ export namespace LlmConverterV3 {
   export const parameters = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    recursive: false | number;
+    config: ILlmSchemaV3.IConfig;
   }): ILlmSchemaV3.IParameters | null =>
     schema(props) as ILlmSchemaV3.IParameters | null;
 
   export const schema = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    recursive: false | number;
+    config: Omit<ILlmSchemaV3.IConfig, "separate">;
   }): ILlmSchemaV3 | null => {
     const resolved: OpenApi.IJsonSchema | null = OpenApiTypeChecker.escape({
       components: props.components,
       schema: props.schema,
-      recursive: props.recursive,
+      recursive: props.config.recursive,
     });
     if (resolved === null) return null;
     const downgraded: ILlmSchemaV3 = OpenApiV3Downgrader.downgradeSchema({

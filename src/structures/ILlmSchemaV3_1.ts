@@ -1,23 +1,84 @@
+/**
+ * Type schema based on OpenAPI v3.1 for LLM function calling.
+ *
+ * `ILlmSchemaV3_1` is a type metadata for LLM (Large Language Model)
+ * function calling, based on the OpenAPI v3.1 speicification. This type
+ * is not the final type for the LLM function calling, but the intermediate
+ * structure for the conversion to the final type like {@link IChatGptSchema}.
+ *
+ * However, the `IChatGptSchema` does not follow the entire specification of
+ * the OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
+ * list of how `ILlmSchemaV3_1` is different with the OpenAPI v3.1 JSON schema.
+ *
+ * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
+ * - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
+ * - Tuple type is banned: {@link OpenApiV3_1.IJsonSchema.ITuple.prefixItems}
+ * - Constant type is banned: {@link OpenApiV3_1.IJsonSchema.IConstant}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link ILlmSchemaV3_1.IOneOf}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link ILlmSchemaV3_1.IObject}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link ILlmSchemaV3_1.IReference}
+ * - Do not support {@link OpenApiV3_1.IJsonSchema.ITuple} type
+ *
+ * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema specification,
+ *
+ * - {@link ILlmSchemaV3_1.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.schemas}
+ * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
+ *
+ * For reference, if you've composed the `ILlmSchemaV3_1` type with the
+ * {@link ILlmSchemaV3_1.IConfig.reference} `false` option (default is `false`),
+ * only the recursived named types would be archived into the
+ * {@link ILlmSchemaV3_1.IParameters.$defs}, and the others would be ecaped from the
+ * {@link ILlmSchemaV3_1.IReference} type.
+ *
+ * Also, if you've composed the `ILlmSchemaV3_1` type with the
+ * {@link ILlmSchemaV3_1.IConfig.constraint} `false` option (default `false`),
+ * the `ILlmSchemaV3_1` would not compose these properties. Instead, these
+ * properties would be written on {@link ILlmSchemaV3_1.__IAttribute.descripotion}
+ * field like `@format uuid` case.
+ *
+ * - {@link ILlmSchemaV3_1.INumber.minimum}
+ * - {@link ILlmSchemaV3_1.INumber.maximum}
+ * - {@link ILlmSchemaV3_1.INumber.multipleOf}
+ * - {@link ILlmSchemaV3_1.IString.minLength}
+ * - {@link ILlmSchemaV3_1.IString.maxLength}
+ * - {@link ILlmSchemaV3_1.IString.format}
+ * - {@link ILlmSchemaV3_1.IString.pattern}
+ * - {@link ILlmSchemaV3_1.IString.contentMediaType}
+ * - {@link ILlmSchemaV3_1.IArray.minItems}
+ * - {@link ILlmSchemaV3_1.IArray.maxItems}
+ * - {@link ILlmSchemaV3_1.IArray.unique}
+ *
+ * @reference https://platform.openai.com/docs/guides/function-calling
+ * @reference https://platform.openai.com/docs/guides/structured-outputs
+ * @author Jeongho Nam - https://github.com/samchon
+ */
 export type ILlmSchemaV3_1 =
   | ILlmSchemaV3_1.IBoolean
   | ILlmSchemaV3_1.IInteger
   | ILlmSchemaV3_1.INumber
   | ILlmSchemaV3_1.IString
   | ILlmSchemaV3_1.IArray
-  | ILlmSchemaV3_1.ITuple
   | ILlmSchemaV3_1.IObject
   | ILlmSchemaV3_1.IOneOf
+  | ILlmSchemaV3_1.IReference
   | ILlmSchemaV3_1.INull
   | ILlmSchemaV3_1.IUnknown;
 export namespace ILlmSchemaV3_1 {
   /**
    * Type of the function parameters.
+   *
+   * `ILlmSchemaV3_1.IParameters` is a type defining a function's parameters
+   * as a keyworded object type.
+   *
+   * It also can be utilized for the structured output metadata.
+   *
+   * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
-  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+  export interface IParameters extends IObject {
     /**
-     * Do not allow additional properties in the parameters.
+     * Collection of the named types.
      */
-    additionalProperties: false;
+    $defs: Record<string, ILlmSchemaV3_1>;
   }
 
   /**
@@ -243,64 +304,6 @@ export namespace ILlmSchemaV3_1 {
   }
 
   /**
-   * Tuple type info.
-   */
-  export interface ITuple extends __ISignificant<"array"> {
-    /**
-     * Prefix items.
-     *
-     * The `prefixItems` means the type schema info of the prefix items in the
-     * tuple type. In the TypeScript, it is expressed as `[T1, T2]`.
-     *
-     * If you want to express `[T1, T2, ...TO[]]` type, you can configure the
-     * `...TO[]` through the {@link additionalItems} property.
-     */
-    prefixItems: ILlmSchemaV3_1[];
-
-    /**
-     * Additional items.
-     *
-     * The `additionalItems` means the type schema info of the additional items
-     * after the {@link prefixItems}. In the TypeScript, if there's a type
-     * `[T1, T2, ...TO[]]`, the `...TO[]` is represented by the `additionalItems`.
-     *
-     * By the way, if you configure the `additionalItems` as `true`, it means
-     * the additional items are not restricted. They can be any type, so that
-     * it is equivalent to the TypeScript type `[T1, T2, ...any[]]`.
-     *
-     * Otherwise configure the `additionalItems` as the {@link IJsonSchema},
-     * it means the additional items must follow the type schema info.
-     * Therefore, it is equivalent to the TypeScript type `[T1, T2, ...TO[]]`.
-     */
-    additionalItems?: boolean | ILlmSchemaV3_1;
-
-    /**
-     * Unique items restriction.
-     *
-     * If this property value is `true`, target tuple must have unique items.
-     */
-    uniqueItems?: boolean;
-
-    /**
-     * Minimum items restriction.
-     *
-     * Restriction of minumum number of items in the tuple.
-     *
-     * @type uint64
-     */
-    minItems?: number;
-
-    /**
-     * Maximum items restriction.
-     *
-     * Restriction of maximum number of items in the tuple.
-     *
-     * @type uint64
-     */
-    maxItems?: number;
-  }
-
-  /**
    * Object type info.
    */
   export interface IObject extends __ISignificant<"object"> {
@@ -322,15 +325,10 @@ export namespace ILlmSchemaV3_1 {
      * The `additionalProperties` means the type schema info of the additional
      * properties that are not listed in the {@link properties}.
      *
-     * If the value is `true`, it means that the additional properties are not
-     * restricted. They can be any type. Otherwise, if the value is
-     * {@link IOpenAiSchema} type, it means that the additional properties must
-     * follow the type schema info.
-     *
-     * - `true`: `Record<string, any>`
-     * - `IOpenAiSchema`: `Record<string, T>`
+     * By the way, as LLM function calling does not support such dynamic key
+     * typed properties, the `additionalProperties` becomes always `false`.
      */
-    additionalProperties?: boolean | ILlmSchemaV3_1;
+    additionalProperties: false;
 
     /**
      * List of key values of the required properties.
@@ -366,6 +364,24 @@ export namespace ILlmSchemaV3_1 {
      * ```
      */
     required: string[];
+  }
+
+  /**
+   * Reference type directing named schema.
+   */
+  export interface IReference extends __IAttribute {
+    /**
+     * Reference to the named schema.
+     *
+     * The `ref` is a reference to the named schema. Format of the `$ref` is
+     * following the JSON Pointer specification. In the OpenAPI, the `$ref`
+     * starts with `#/$defs/` which means the type is stored in
+     * the {@link ILlmSchemaV3_1.IParameters.$defs} object.
+     *
+     * - `#/$defs/SomeObject`
+     * - `#/$defs/AnotherObject`
+     */
+    $ref: string;
   }
 
   /**
@@ -468,5 +484,61 @@ export namespace ILlmSchemaV3_1 {
      * List of example values as key-value pairs.
      */
     examples?: Record<string, any>;
+  }
+
+  /**
+   * Configuration for OpenAPI v3.1 based LLM schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow contraint properties or not.
+     *
+     * If you configure this property to `false`, the schemas do not containt
+     * the constraint properties of below. Instead, below properties would be
+     * written to the {@link ILlmSchemaV3_1.__IAttribute.description} property
+     * as a comment string like `"@format uuid"`.
+     *
+     * This is because the some LLM model's function calling understands the constraint
+     * properties when the function parameter types are simple, however it occurs
+     * some errors when the parameter types are complex.
+     *
+     * Therefore, considering the complexity of your parameter types, determine
+     * which is better, to allow the constraint properties or not.
+     *
+     * - {@link ILlmSchemaV3_1.INumber.minimum}
+     * - {@link ILlmSchemaV3_1.INumber.maximum}
+     * - {@link ILlmSchemaV3_1.INumber.multipleOf}
+     * - {@link ILlmSchemaV3_1.IString.minLength}
+     * - {@link ILlmSchemaV3_1.IString.maxLength}
+     * - {@link ILlmSchemaV3_1.IString.format}
+     * - {@link ILlmSchemaV3_1.IString.pattern}
+     * - {@link ILlmSchemaV3_1.IString.contentMediaType}
+     * - {@link ILlmSchemaV3_1.IArray.minItems}
+     * - {@link ILlmSchemaV3_1.IArray.maxItems}
+     * - {@link ILlmSchemaV3_1.IArray.unique}
+     *
+     * @default false
+     */
+    constraint: boolean;
+
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link ILlmSchemaV3_1.IReference} would be escaped to
+     * a plain type unless recursive type case.
+     *
+     * This is because some low sized LLM models does not understand the
+     * reference type well, and even the large size LLM models sometimes occur
+     * the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that reduces
+     * the LLM token cost. Therefore, if you're using the large size of LLM model,
+     * and want to reduce the LLM token cost, you can configure this property to
+     * `true`.
+     *
+     * @default false
+     */
+    reference: boolean;
   }
 }

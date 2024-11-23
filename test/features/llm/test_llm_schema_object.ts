@@ -8,7 +8,10 @@ export const test_llm_schema_object = (): void => {
   const schema: ILlmSchemaV3 | null = LlmConverterV3.schema({
     components: app.components,
     schema: app.schemas[0],
-    recursive: false,
+    config: {
+      recursive: false,
+      constraint: true,
+    },
   });
   TestValidator.equals("schema")(schema)({
     type: "object",
