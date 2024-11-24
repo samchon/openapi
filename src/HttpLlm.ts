@@ -1,6 +1,7 @@
 import { HttpMigration } from "./HttpMigration";
 import { OpenApi } from "./OpenApi";
 import { HttpLlmConverter } from "./converters/HttpLlmConverter";
+import { LlmSchemaConverter } from "./converters/LlmSchemaConverter";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
 import { IChatGptSchema } from "./structures/IChatGptSchema";
 import { IGeminiSchema } from "./structures/IGeminiSchema";
@@ -87,34 +88,16 @@ export namespace HttpLlm {
   }): IHttpLlmApplication<Model, Parameters> => {
     // MIGRATE
     const migrate: IHttpMigrateApplication =
-      (props.document as OpenApi.IDocument)["x-samchon-emend-version"] === "2.0"
+      (props.document as OpenApi.IDocument)["x-samchon-emend"] === true
         ? HttpMigration.application(props.document as OpenApi.IDocument)
         : (props.document as IHttpMigrateApplication);
     return HttpLlmConverter.application<Model, Parameters>({
       migrate,
       model: props.model,
-      options: (props.model === "chatgpt" || props.model === "3.1"
-        ? ({
-            separate:
-              (props.options
-                ?.separate as IHttpLlmApplication.IOptions<any>["separate"]) ??
-              null,
-            reference:
-              (props.options as IHttpLlmApplication.IOptions<any> | undefined)
-                ?.reference ?? false,
-            constraint:
-              (props.options as IHttpLlmApplication.IOptions<any> | undefined)
-                ?.constraint ?? false,
-          } satisfies IHttpLlmApplication.IOptions<any>)
-        : ({
-            separate:
-              (props.options
-                ?.separate as IHttpLlmApplication.IOptions<any>["separate"]) ??
-              null,
-            recursive:
-              (props.options as IHttpLlmApplication.IOptions<any> | undefined)
-                ?.recursive ?? 3,
-          } satisfies IHttpLlmApplication.IOptions<any>)) as IHttpLlmApplication.IOptions<any>,
+      options: {
+        ...LlmSchemaConverter.defaultConfig(props.model),
+        separate: props.options?.separate ?? null,
+      },
     });
   };
 

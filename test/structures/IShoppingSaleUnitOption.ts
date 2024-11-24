@@ -53,6 +53,7 @@ export namespace IShoppingSaleUnitOption {
   /**
    * Creation information of the option.
    */
-  export type ICreate = IShoppingSaleUnitSelectableOption.ICreate;
-  // | IShoppingSaleUnitDescriptiveOption.ICreate;
+  export type ICreate =
+    | IShoppingSaleUnitSelectableOption.ICreate
+    | IShoppingSaleUnitDescriptiveOption.ICreate;
 }

@@ -16,6 +16,7 @@ export class TestGlobal {
 
 interface IEnvironments {
   CHATGPT_API_KEY?: string;
+  CLAUDE_API_KEY?: string;
   GEMINI_API_KEY?: string;
 }
 

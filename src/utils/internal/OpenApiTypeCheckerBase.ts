@@ -288,7 +288,7 @@ export namespace OpenApiTypeCheckerBase {
         return null;
       else if (
         properties.some(
-          ([k, v]) => v === undefined && object.required.includes(k) === true,
+          ([k, v]) => v === undefined && object.required?.includes(k) === true,
         ) === true
       )
         return undefined;
@@ -300,9 +300,10 @@ export namespace OpenApiTypeCheckerBase {
           >,
         ),
         additionalProperties: additionalProperties ?? false,
-        required: object.required.filter((k) =>
-          properties.some(([key, value]) => key === k && value !== undefined),
-        ),
+        required:
+          object.required?.filter((k) =>
+            properties.some(([key, value]) => key === k && value !== undefined),
+          ) ?? [],
       };
     } else if (isTuple(props.schema)) {
       // TUPLE
@@ -555,8 +556,8 @@ export namespace OpenApiTypeCheckerBase {
       const a: OpenApi.IJsonSchema | undefined = p.x.properties?.[key];
       if (a === undefined) return false;
       else if (
-        p.x.required.includes(key) === true &&
-        p.y.required.includes(key) === false
+        p.x.required?.includes(key) === true &&
+        (p.y.required?.includes(key) ?? false) === false
       )
         return false;
       return coverStation({

@@ -1,32 +1,28 @@
+import Anthropic from "@anthropic-ai/sdk";
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { IChatGptSchema, OpenApi } from "@samchon/openapi";
-import { ChatGptConverter } from "@samchon/openapi/lib/converters/ChatGptConverter";
+import { OpenApi } from "@samchon/openapi";
+import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { IClaudeSchema } from "@samchon/openapi/lib/structures/IClaudeSchema";
 import fs from "fs";
-import OpenAI from "openai";
-import {
-  ChatCompletion,
-  ChatCompletionMessageToolCall,
-} from "openai/resources";
 import typia, { IJsonSchemaCollection } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
 import { IShoppingSale } from "../../../structures/IShoppingSale";
 
-export const test_llm_function_calling_chatgpt_sale =
+export const test_llm_function_calling_claude_sale =
   async (): Promise<void> => {
-    if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
+    if (TestGlobal.env.CLAUDE_API_KEY === undefined) return;
 
     const collection: IJsonSchemaCollection =
       typia.json.schemas<[{ input: IShoppingSale.ICreate }, IShoppingSale]>();
-    const parameters: IChatGptSchema.IParameters | null =
-      ChatGptConverter.parameters({
+    const parameters: IClaudeSchema.IParameters | null =
+      LlmSchemaConverter.parameters("claude")({
         components: collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           collection.schemas[0],
         ),
         config: {
-          reference: process.argv.includes("--reference"),
-          constraint: process.argv.includes("--constraint"),
+          reference: true,
         },
       });
     if (parameters === null)
@@ -34,19 +30,20 @@ export const test_llm_function_calling_chatgpt_sale =
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
     await fs.promises.writeFile(
-      `${TestGlobal.ROOT}/examples/function-calling/schemas/chatgpt.sale.schema.json`,
+      `${TestGlobal.ROOT}/examples/function-calling/schemas/claude.sale.schema.json`,
       JSON.stringify(parameters, null, 2),
       "utf8",
     );
 
-    const client: OpenAI = new OpenAI({
-      apiKey: TestGlobal.env.CHATGPT_API_KEY,
+    const client: Anthropic = new Anthropic({
+      apiKey: TestGlobal.env.CLAUDE_API_KEY,
     });
-    const completion: ChatCompletion = await client.chat.completions.create({
-      model: "gpt-4o",
+    const completion: Anthropic.Message = await client.messages.create({
+      model: "claude-3-5-sonnet-latest",
+      max_tokens: 8_192,
       messages: [
         {
-          role: "system",
+          role: "assistant",
           content: SYSTEM_MESSAGE,
         },
         {
@@ -72,28 +69,25 @@ export const test_llm_function_calling_chatgpt_sale =
       ],
       tools: [
         {
-          type: "function",
-          function: {
-            name: "createSale",
-            description: "Create a sale and returns the detailed information.",
-            parameters: parameters as any,
-            strict: true,
-          },
+          name: "createSale",
+          description: "Create a sale and returns the detailed information.",
+          input_schema: parameters as any,
         },
       ],
     });
 
-    const toolCalls: ChatCompletionMessageToolCall[] =
-      completion.choices[0].message.tool_calls ?? [];
+    const toolCalls: Anthropic.ToolUseBlock[] = completion.content.filter(
+      (c) => c.type === "tool_use",
+    );
     if (toolCalls.length === 0)
       throw new Error("LLM has not called any function.");
     await ArrayUtil.asyncForEach(toolCalls)(async (call) => {
-      TestValidator.equals("name")(call.function.name)("createSale");
+      TestValidator.equals("name")(call.name)("createSale");
       const { input } = typia.assert<{
         input: IShoppingSale.ICreate;
-      }>(JSON.parse(call.function.arguments));
+      }>(call.input);
       await fs.promises.writeFile(
-        `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.sale.input.json`,
+        `${TestGlobal.ROOT}/examples/function-calling/arguments/claude.sale.input.json`,
         JSON.stringify(input, null, 2),
         "utf8",
       );

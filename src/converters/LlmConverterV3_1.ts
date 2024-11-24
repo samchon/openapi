@@ -108,7 +108,7 @@ export namespace LlmConverterV3_1 {
         }
       } else if (OpenApiTypeChecker.isObject(input)) {
         const properties: Record<string, ILlmSchemaV3_1 | null> =
-          Object.entries(input.properties || {}).reduce(
+          Object.entries(input.properties ?? {}).reduce(
             (acc, [key, value]) => {
               const converted: ILlmSchemaV3_1 | null = schema({
                 config: props.config,

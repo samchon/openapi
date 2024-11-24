@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "2.0.0-dev.20241124",
+  "version": "2.0.0-dev.20241124-2",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/samchon/openapi",
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
     "@google/generative-ai": "^0.21.0",
     "@nestia/core": "4.0.0-dev.20241116",
     "@nestia/e2e": "0.7.0",

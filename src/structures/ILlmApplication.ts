@@ -1,4 +1,5 @@
 import { IChatGptSchema } from "./IChatGptSchema";
+import { IClaudeSchema } from "./IClaudeSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlmFunction } from "./ILlmFunction";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
@@ -55,24 +56,27 @@ export interface ILlmApplication<
   >;
 }
 export namespace ILlmApplication {
-  export type Model = "3.0" | "3.1" | "chatgpt" | "gemini";
+  export type Model = "chatgpt" | "claude" | "gemini" | "3.0" | "3.1";
   export type ModelParameters = {
+    chatgpt: IChatGptSchema.IParameters;
+    claude: IClaudeSchema.IParameters;
+    gemini: IGeminiSchema.IParameters;
     "3.0": ILlmSchemaV3.IParameters;
     "3.1": ILlmSchemaV3_1.IParameters;
-    chatgpt: IChatGptSchema.IParameters;
-    gemini: IGeminiSchema.IParameters;
   };
   export type ModelSchema = {
+    chatgpt: IChatGptSchema;
+    claude: IClaudeSchema;
+    gemini: IGeminiSchema;
     "3.0": ILlmSchemaV3;
     "3.1": ILlmSchemaV3_1;
-    chatgpt: IChatGptSchema;
-    gemini: IGeminiSchema;
   };
   export type ModelConfig = {
+    chatgpt: IChatGptSchema.IConfig;
+    claude: IClaudeSchema.IConfig;
+    gemini: IGeminiSchema.IConfig;
     "3.0": ILlmSchemaV3.IConfig;
     "3.1": ILlmSchemaV3_1.IConfig;
-    chatgpt: IChatGptSchema.IConfig;
-    gemini: IGeminiSchema.IConfig;
   };
 
   /**
