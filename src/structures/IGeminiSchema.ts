@@ -49,10 +49,11 @@
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/function-calling
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
  * @reference https://ai.google.dev/gemini-api/docs/structured-output
- * @warning Specified not by the official documentation, but by my experiments.
- *          Therefore, its definitions can be inaccurate or be changed in the
- *          future. If you find any wrong or outdated definitions, please let me
- *          know by issue
+ * @warning Specified not only by the official documentation, but also by my
+ *          experiments. Therefore, its definitions can be inaccurate or be
+ *          changed in the future. If you find any wrong or outdated definitions,
+ *          please let me know by issue.
+ * @issue https://github.com/samchon/openapi/issues
  * @author Jeongho Nam - https://github.com/samchon
  */
 export type IGeminiSchema =
