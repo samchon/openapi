@@ -1,6 +1,7 @@
 import { OpenApi } from "../OpenApi";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
+import { OpenApiContraintShifter } from "../utils/OpenApiContraintShifter";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
@@ -39,7 +40,21 @@ export namespace LlmConverterV3 {
         schema.properties ??= {};
         schema.required ??= [];
         schema.additionalProperties = false;
-      }
+      } else if (
+        props.config.constraint === false &&
+        (LlmTypeCheckerV3.isInteger(schema) ||
+          LlmTypeCheckerV3.isNumber(schema))
+      )
+        OpenApiContraintShifter.shiftNumeric(
+          schema as OpenApi.IJsonSchema.IInteger | OpenApi.IJsonSchema.INumber,
+        );
+      else if (
+        props.config.constraint === false &&
+        LlmTypeCheckerV3.isString(schema)
+      )
+        OpenApiContraintShifter.shiftString(
+          schema as OpenApi.IJsonSchema.IString,
+        );
     });
     return downgraded;
   };

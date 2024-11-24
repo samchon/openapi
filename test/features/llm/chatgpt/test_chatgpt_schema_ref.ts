@@ -76,7 +76,6 @@ const test = (
     schema: collection.schemas[0],
     config: {
       reference: false,
-      constraint: true,
     },
   });
   TestValidator.equals("ref")(expected)({

@@ -29,7 +29,6 @@ export const test_chatgpt_schema_recursive_array = (): void => {
       $ref: "#/components/schemas/Department",
     },
     config: {
-      constraint: true,
       reference: false,
     },
   });

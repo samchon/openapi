@@ -33,23 +33,22 @@
  * {@link IChatGptSchema.IParameters.$defs}, and the others would be ecaped from the
  * {@link IChatGptSchema.IReference} type.
  *
- * Also, if you've composed the `IChatGptSchema` type with the
- * {@link IChatGptSchema.IConfig.constraint} `false` option (default `false`),
- * the `IChatGptSchema` would not compose these properties. Instead, these
- * properties would be written on {@link IChatGptSchema.__IAttribute.descripotion}
- * field like `@format uuid` case.
+ * Also, ChatGPT has banned below constraint properties. Instead, I'll will
+ * fill the {@link IChatGptSchema.__IAttribute.description} property with
+ * the comment text like `"@format uuid"`.
  *
- * - {@link IChatGptSchema.INumber.minimum}
- * - {@link IChatGptSchema.INumber.maximum}
- * - {@link IChatGptSchema.INumber.multipleOf}
- * - {@link IChatGptSchema.IString.minLength}
- * - {@link IChatGptSchema.IString.maxLength}
- * - {@link IChatGptSchema.IString.format}
- * - {@link IChatGptSchema.IString.pattern}
- * - {@link IChatGptSchema.IString.contentMediaType}
- * - {@link IChatGptSchema.IArray.minItems}
- * - {@link IChatGptSchema.IArray.maxItems}
- * - {@link IChatGptSchema.IArray.unique}
+ * - {@link OpenApi.IJsonSchema.INumber.minimum}
+ * - {@link OpenApi.IJsonSchema.INumber.maximum}
+ * - {@link OpenApi.IJsonSchema.INumber.multipleOf}
+ * - {@link OpenApi.IJsonSchema.IString.minLength}
+ * - {@link OpenApi.IJsonSchema.IString.maxLength}
+ * - {@link OpenApi.IJsonSchema.IString.format}
+ * - {@link OpenApi.IJsonSchema.IString.pattern}
+ * - {@link OpenApi.IJsonSchema.IString.contentMediaType}
+ * - {@link OpenApi.IJsonSchema.IString.default}
+ * - {@link OpenApi.IJsonSchema.IArray.minItems}
+ * - {@link OpenApi.IJsonSchema.IArray.maxItems}
+ * - {@link OpenApi.IJsonSchema.IArray.unique}
  *
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @reference https://platform.openai.com/docs/guides/structured-outputs
@@ -97,11 +96,6 @@ export namespace IChatGptSchema {
      * Enumeration values.
      */
     enum?: Array<boolean>;
-
-    /**
-     * The default value.
-     */
-    default?: boolean;
   }
 
   /**
@@ -112,55 +106,6 @@ export namespace IChatGptSchema {
      * Enumeration values.
      */
     enum?: Array<number>;
-
-    /**
-     * Default value.
-     *
-     * @type int64
-     */
-    default?: number;
-
-    /**
-     * Minimum value restriction.
-     *
-     * @type int64
-     */
-    minimum?: number;
-
-    /**
-     * Maximum value restriction.
-     *
-     * @type int64
-     */
-    maximum?: number;
-
-    /**
-     * Exclusive minimum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMinimum` value as `number`, {@link IChatGptSchema}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link minimum} property.
-     */
-    exclusiveMinimum?: boolean;
-
-    /**
-     * Exclusive maximum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMaximum` value as `number`, {@link IChatGptSchema}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link maximum} property.
-     */
-    exclusiveMaximum?: boolean;
-
-    /**
-     * Multiple of value restriction.
-     *
-     * @type uint64
-     * @exclusiveMinimum 0
-     */
-    multipleOf?: number;
   }
 
   /**
@@ -171,48 +116,6 @@ export namespace IChatGptSchema {
      * Enumeration values.
      */
     enum?: Array<number>;
-
-    /**
-     * Default value.
-     */
-    default?: number;
-
-    /**
-     * Minimum value restriction.
-     */
-    minimum?: number;
-
-    /**
-     * Maximum value restriction.
-     */
-    maximum?: number;
-
-    /**
-     * Exclusive minimum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMinimum` value as `number`, {@link OpenAiComposer}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link minimum} property.
-     */
-    exclusiveMinimum?: boolean;
-
-    /**
-     * Exclusive maximum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMaximum` value as `number`, {@link OpenAiComposer}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link maximum} property.
-     */
-    exclusiveMaximum?: boolean;
-
-    /**
-     * Multiple of value restriction.
-     *
-     * @exclusiveMinimum 0
-     */
-    multipleOf?: number;
   }
 
   /**
@@ -223,64 +126,6 @@ export namespace IChatGptSchema {
      * Enumeration values.
      */
     enum?: Array<string>;
-
-    /**
-     * Default value.
-     */
-    default?: string;
-
-    /**
-     * Format restriction.
-     */
-    format?:
-      | "binary"
-      | "byte"
-      | "password"
-      | "regex"
-      | "uuid"
-      | "email"
-      | "hostname"
-      | "idn-email"
-      | "idn-hostname"
-      | "iri"
-      | "iri-reference"
-      | "ipv4"
-      | "ipv6"
-      | "uri"
-      | "uri-reference"
-      | "uri-template"
-      | "url"
-      | "date-time"
-      | "date"
-      | "time"
-      | "duration"
-      | "json-pointer"
-      | "relative-json-pointer"
-      | (string & {});
-
-    /**
-     * Pattern restriction.
-     */
-    pattern?: string;
-
-    /**
-     * Content media type restriction.
-     */
-    contentMediaType?: string;
-
-    /**
-     * Minimum length restriction.
-     *
-     * @type uint64
-     */
-    minLength?: number;
-
-    /**
-     * Maximum length restriction.
-     *
-     * @type uint64
-     */
-    maxLength?: number;
   }
 
   /**
@@ -294,31 +139,6 @@ export namespace IChatGptSchema {
      * the type schema info of the `T` in the TypeScript array type `Array<T>`.
      */
     items: IChatGptSchema;
-
-    /**
-     * Unique items restriction.
-     *
-     * If this property value is `true`, target array must have unique items.
-     */
-    uniqueItems?: boolean;
-
-    /**
-     * Minimum items restriction.
-     *
-     * Restriction of minumum number of items in the array.
-     *
-     * @type uint64
-     */
-    minItems?: number;
-
-    /**
-     * Maximum items restriction.
-     *
-     * Restriction of maximum number of items in the array.
-     *
-     * @type uint64
-     */
-    maxItems?: number;
   }
 
   /**
@@ -421,12 +241,7 @@ export namespace IChatGptSchema {
   /**
    * Null type.
    */
-  export interface INull extends __ISignificant<"null"> {
-    /**
-     * Default value.
-     */
-    default?: null;
-  }
+  export interface INull extends __ISignificant<"null"> {}
 
   /**
    * Unknown, the `any` type.
@@ -482,37 +297,6 @@ export namespace IChatGptSchema {
    * Configuration for ChatGPT schema composition.
    */
   export interface IConfig {
-    /**
-     * Whether to allow contraint properties or not.
-     *
-     * If you configure this property to `false`, the schemas do not containt
-     * the constraint properties of below. Instead, below properties would be
-     * written to the {@link IChatGptSchema.__IAttribute.description} property
-     * as a comment string like `"@format uuid"`.
-     *
-     * This is because the ChatGPT function calling understands the constraint
-     * properties when the function parameter types are simple, however it occurs
-     * some errors when the parameter types are complex.
-     *
-     * Therefore, considering the complexity of your parameter types, determine
-     * which is better, to allow the constraint properties or not.
-     *
-     * - {@link IChatGptSchema.INumber.minimum}
-     * - {@link IChatGptSchema.INumber.maximum}
-     * - {@link IChatGptSchema.INumber.multipleOf}
-     * - {@link IChatGptSchema.IString.minLength}
-     * - {@link IChatGptSchema.IString.maxLength}
-     * - {@link IChatGptSchema.IString.format}
-     * - {@link IChatGptSchema.IString.pattern}
-     * - {@link IChatGptSchema.IString.contentMediaType}
-     * - {@link IChatGptSchema.IArray.minItems}
-     * - {@link IChatGptSchema.IArray.maxItems}
-     * - {@link IChatGptSchema.IArray.unique}
-     *
-     * @default false
-     */
-    constraint: boolean;
-
     /**
      * Whether to allow reference type in everywhere.
      *

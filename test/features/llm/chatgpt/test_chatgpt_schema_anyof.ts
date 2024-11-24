@@ -13,7 +13,6 @@ export const test_chatgpt_schema_anyof = (): void => {
     components: collection.components,
     schema: collection.schemas[0],
     config: {
-      constraint: false,
       reference: false,
     },
   });

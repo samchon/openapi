@@ -10,7 +10,6 @@ export const test_chatgpt_function_calling_sale = async (): Promise<void> =>
   ChatGptFunctionCaller.test({
     config: {
       reference: process.argv.includes("--reference"),
-      constraint: process.argv.includes("--constraint"),
     },
     ...ShoppingSalePrompt.schema(),
     texts: await ShoppingSalePrompt.texts(),
