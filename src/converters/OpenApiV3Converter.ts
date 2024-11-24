@@ -16,7 +16,7 @@ export namespace OpenApiV3Converter {
         )
       : undefined,
     openapi: "3.1.0",
-    "x-samchon-emend": true,
+    "x-samchon-emended": true,
   });
 
   /* -----------------------------------------------------------

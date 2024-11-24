@@ -3,26 +3,11 @@
   "status": null,
   "opened_at": null,
   "closed_at": null,
-  "tags": [
-    "surface",
-    "microsoft",
-    "2in1",
-    "tablet",
-    "laptop"
-  ],
-  "channels": [
-    {
-      "code": "samchon",
-      "category_codes": [
-        "2in1_laptops",
-        "windows_tablets"
-      ]
-    }
-  ],
   "content": {
     "title": "Surface Pro 9",
     "format": "md",
     "body": "The Surface Pro 9 is a versatile 2-in-1 device that combines the power of a laptop with the flexibility of a tablet. It features advanced technology, making it suitable for both professional and personal use.\n\n- \"Unleash Your Creativity Anywhere\": The Surface Pro 9 is designed for those who need power and portability, making it perfect for creative professionals and students alike.\n- \"The Ultimate 2-in-1 Experience\": With its detachable keyboard and touchscreen capabilities, the Surface Pro 9 adapts to your needs, whether you're working, studying, or relaxing.\n- \"Stay Connected with 5G\": Experience lightning-fast internet speeds and seamless connectivity, no matter where you are.\n- \"Power Meets Flexibility\": The Surface Pro 9 combines the performance of a laptop with the convenience of a tablet, making it the ideal device for multitasking.\n\nIn summary, the Surface Pro 9 stands out as a powerful and flexible device, perfect for users who require both performance and portability. With its advanced features and sleek design, it is an excellent choice for anyone looking to enhance their productivity and creativity. Whether for work or play, the Surface Pro 9 is ready to meet your needs.",
+    "files": [],
     "thumbnails": [
       {
         "name": "microsoft-surface-pro-9-thumbnail-1",
@@ -39,14 +24,18 @@
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg"
       }
-    ],
-    "files": []
+    ]
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "2in1_laptops"
+      ]
+    }
+  ],
   "units": [
     {
-      "name": "Surface Pro 9 Entity",
-      "primary": true,
-      "required": true,
       "options": [
         {
           "type": "select",
@@ -99,7 +88,7 @@
       ],
       "stocks": [
         {
-          "name": "Surface Pro 9 (i3/8GB/128GB)",
+          "name": "Surface Pro 9 - i3 8/128",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -121,7 +110,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i3/16GB/256GB)",
+          "name": "Surface Pro 9 - i3 16/256",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -143,7 +132,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i3/16GB/512GB)",
+          "name": "Surface Pro 9 - i3 16/512",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -165,7 +154,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i5/16GB/256GB)",
+          "name": "Surface Pro 9 - i5 16/256",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -187,7 +176,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i5/32GB/512GB)",
+          "name": "Surface Pro 9 - i5 32/512",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -209,7 +198,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i7/16GB/512GB)",
+          "name": "Surface Pro 9 - i7 16/512",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -231,7 +220,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 (i7/32GB/512GB)",
+          "name": "Surface Pro 9 - i7 32/512",
           "price": {
             "nominal": 2000000,
             "real": 1899000
@@ -252,16 +241,16 @@
             }
           ]
         }
-      ]
+      ],
+      "name": "Surface Pro 9 Entity",
+      "primary": true,
+      "required": true
     },
     {
-      "name": "Warranty Program",
-      "primary": false,
-      "required": false,
       "options": [],
       "stocks": [
         {
-          "name": "Surface Pro 9 Warranty Program",
+          "name": "Warranty Program",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -269,16 +258,16 @@
           "quantity": 10000,
           "choices": []
         }
-      ]
+      ],
+      "name": "Warranty Program",
+      "primary": false,
+      "required": false
     },
     {
-      "name": "Magnetic Keyboard",
-      "primary": false,
-      "required": false,
       "options": [],
       "stocks": [
         {
-          "name": "Surface Pro 9 Magnetic Keyboard",
+          "name": "Magnetic Keyboard",
           "price": {
             "nominal": 200000,
             "real": 169000
@@ -286,7 +275,17 @@
           "quantity": 8000,
           "choices": []
         }
-      ]
+      ],
+      "name": "Magnetic Keyboard",
+      "primary": false,
+      "required": false
     }
+  ],
+  "tags": [
+    "Surface",
+    "Pro 9",
+    "2-in-1",
+    "Laptop",
+    "Tablet"
   ]
 }

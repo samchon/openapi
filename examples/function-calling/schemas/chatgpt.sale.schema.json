@@ -326,14 +326,14 @@
                 "description": "Representative name of the unit.",
                 "type": "string"
               },
-              "required": {
-                "title": "Whether the unit is required or not",
-                "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
-                "type": "boolean"
-              },
               "primary": {
                 "title": "Whether the unit is primary or not",
                 "description": "Whether the unit is primary or not.\n\nJust a labeling value.",
+                "type": "boolean"
+              },
+              "required": {
+                "title": "Whether the unit is required or not",
+                "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
                 "type": "boolean"
               }
             },
@@ -341,8 +341,8 @@
               "options",
               "stocks",
               "name",
-              "required",
-              "primary"
+              "primary",
+              "required"
             ],
             "additionalProperties": false
           }
