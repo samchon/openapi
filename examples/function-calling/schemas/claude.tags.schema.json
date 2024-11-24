@@ -2,26 +2,35 @@
   "type": "object",
   "properties": {
     "input": {
+      "$ref": "#/$defs/OpeningTime"
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "OpeningTime": {
       "type": "object",
       "properties": {
         "reasons": {
-          "description": "@minItems 1",
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         },
         "temporary": {
           "type": "boolean"
         },
         "time": {
-          "anyOf": [
+          "oneOf": [
             {
               "type": "null"
             },
             {
               "type": "string",
-              "description": "@format date-time"
+              "format": "date-time"
             }
           ]
         }
@@ -33,10 +42,5 @@
       ],
       "additionalProperties": false
     }
-  },
-  "required": [
-    "input"
-  ],
-  "additionalProperties": false,
-  "$defs": {}
+  }
 }

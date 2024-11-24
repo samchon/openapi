@@ -1,0 +1,103 @@
+{
+  "units": [
+    {
+      "required": true,
+      "primary": true,
+      "name": "Apple Vision Air",
+      "stocks": [
+        {
+          "name": "AVA-2023-001",
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            }
+          ],
+          "price": {
+            "nominal": 2990000,
+            "real": 2990000
+          },
+          "quantity": 100
+        },
+        {
+          "quantity": 100,
+          "price": {
+            "nominal": 3490000,
+            "real": 3490000
+          },
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            }
+          ],
+          "name": "AVA-2023-002"
+        },
+        {
+          "name": "AVA-2023-003",
+          "choices": [
+            {
+              "candidate_index": 2,
+              "option_index": 0
+            }
+          ],
+          "quantity": 100,
+          "price": {
+            "nominal": 3990000,
+            "real": 3990000
+          }
+        }
+      ],
+      "options": [
+        {
+          "variable": true,
+          "type": "select",
+          "candidates": [
+            {
+              "name": "256GB"
+            },
+            {
+              "name": "512GB"
+            },
+            {
+              "name": "1TB"
+            }
+          ],
+          "name": "Storage"
+        }
+      ]
+    }
+  ],
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "smart_glasses"
+      ]
+    }
+  ],
+  "opened_at": "2023-07-20T12:34:56.789Z",
+  "content": {
+    "body": "The Apple Vision Air features a lightweight and comfortable design, making it perfect for extended use. Equipped with high-resolution displays and cutting-edge optics, it offers stunning visuals that immerse users in their augmented reality experiences. The device is powered by the latest Apple silicon, ensuring smooth performance and efficient battery life.\\n\\nThe Apple Vision Air is more than just a device; it’s a gateway to a new reality. Whether for work, play, or exploration, it represents the future of immersive technology.",
+    "thumbnails": [
+      {
+        "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdIP_qI0xBL04d0DRIw7tIU9y0cLcwfIqi7g&s",
+        "name": "apple-vision-pro-thumbnail",
+        "extension": "png"
+      }
+    ],
+    "format": "html",
+    "title": "Apple Vision Air",
+    "files": []
+  },
+  "tags": [
+    "apple",
+    "vision",
+    "air",
+    "ar",
+    "augmented reality",
+    "smart glasses"
+  ],
+  "closed_at": "2024-07-19T12:34:56.789Z",
+  "section_code": "general"
+}

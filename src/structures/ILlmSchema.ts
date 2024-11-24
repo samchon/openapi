@@ -1,4 +1,5 @@
 import { IChatGptSchema } from "./IChatGptSchema";
+import { IClaudeSchema } from "./IClaudeSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
@@ -15,6 +16,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  */
 export type ILlmSchema =
   | IChatGptSchema
+  | IClaudeSchema
   | IGeminiSchema
   | ILlmSchemaV3
   | ILlmSchemaV3_1;
@@ -22,12 +24,14 @@ export type ILlmSchema =
 export namespace ILlmSchema {
   export type IParameters =
     | IChatGptSchema.IParameters
+    | IClaudeSchema.IParameters
     | IGeminiSchema.IParameters
     | ILlmSchemaV3.IParameters
     | ILlmSchemaV3_1.IParameters;
 
   export type IConfig =
     | IChatGptSchema.IConfig
+    | IClaudeSchema.IConfig
     | IGeminiSchema.IConfig
     | ILlmSchemaV3.IConfig
     | ILlmSchemaV3_1.IConfig;
