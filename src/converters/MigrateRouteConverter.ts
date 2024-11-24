@@ -175,7 +175,9 @@ export namespace MigrateRouteConverter {
                       .flat(),
                   ),
                 ]),
-                required: [...new Set(entire.map((o) => o.required).flat())],
+                required: [
+                  ...new Set(entire.map((o) => o.required ?? []).flat()),
+                ],
               },
             }),
           });

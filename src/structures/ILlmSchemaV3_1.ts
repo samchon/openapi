@@ -12,7 +12,6 @@
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
- * - Tuple type is banned: {@link OpenApiV3_1.IJsonSchema.ITuple.prefixItems}
  * - Constant type is banned: {@link OpenApiV3_1.IJsonSchema.IConstant}
  * - Merge {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link ILlmSchemaV3_1.IOneOf}
  * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link ILlmSchemaV3_1.IObject}
@@ -23,12 +22,13 @@
  *
  * - {@link ILlmSchemaV3_1.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.schemas}
  * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
+ * - {@link ILlmSchemaV3_1.additionalProperties} is fixed to `false`
+ * - {@link ILlmSchemaV3_1.properties} and {@link ILlmSchemaV3_1.required} are always defined
  *
  * For reference, if you've composed the `ILlmSchemaV3_1` type with the
- * {@link ILlmSchemaV3_1.IConfig.reference} `false` option (default is `false`),
- * only the recursived named types would be archived into the
- * {@link ILlmSchemaV3_1.IParameters.$defs}, and the others would be ecaped from the
- * {@link ILlmSchemaV3_1.IReference} type.
+ * {@link ILlmSchemaV3_1.IConfig.reference} `false` option (default is `false`), only the
+ * recursived named types would be archived into the {@link ILlmSchemaV3_1.IParameters.$defs},
+ * and the others would be ecaped from the {@link ILlmSchemaV3_1.IReference} type.
  *
  * Also, if you've composed the `ILlmSchemaV3_1` type with the
  * {@link ILlmSchemaV3_1.IConfig.constraint} `false` option (default `false`),
@@ -53,14 +53,15 @@
  * @author Jeongho Nam - https://github.com/samchon
  */
 export type ILlmSchemaV3_1 =
+  | ILlmSchemaV3_1.IConstant
   | ILlmSchemaV3_1.IBoolean
   | ILlmSchemaV3_1.IInteger
   | ILlmSchemaV3_1.INumber
   | ILlmSchemaV3_1.IString
   | ILlmSchemaV3_1.IArray
   | ILlmSchemaV3_1.IObject
-  | ILlmSchemaV3_1.IOneOf
   | ILlmSchemaV3_1.IReference
+  | ILlmSchemaV3_1.IOneOf
   | ILlmSchemaV3_1.INull
   | ILlmSchemaV3_1.IUnknown;
 export namespace ILlmSchemaV3_1 {

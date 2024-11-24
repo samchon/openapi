@@ -214,7 +214,7 @@ export namespace OpenApi {
     /**
      * Flag for indicating this document is emended by `@samchon/openapi`.
      */
-    "x-samchon-emend-version": "2.0";
+    "x-samchon-emend": true;
   }
   export namespace IDocument {
     /**
@@ -945,7 +945,7 @@ export namespace OpenApi {
        * If you need additional properties that is represented by dynamic key,
        * you can use the {@link additionalProperties} instead.
        */
-      properties: Record<string, Schema>;
+      properties?: Record<string, Schema>;
 
       /**
        * Additional properties' info.
@@ -996,7 +996,7 @@ export namespace OpenApi {
        * }
        * ```
        */
-      required: string[];
+      required?: string[];
     }
 
     /**

@@ -1,4 +1,3 @@
-import { OpenApi } from "../OpenApi";
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
@@ -73,34 +72,6 @@ export namespace LlmTypeCheckerV3_1 {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export const escape = (props: {
-    $defs?: Record<string, ILlmSchemaV3_1>;
-    schema: ILlmSchemaV3_1;
-    recursive: false | number;
-  }): ILlmSchemaV3_1 | null =>
-    OpenApiTypeCheckerBase.escape({
-      prefix: "#/$defs/",
-      components: {
-        schemas: props.$defs,
-      },
-      schema: props.schema,
-      recursive: props.recursive,
-    }) as ILlmSchemaV3_1 | null;
-
-  export const visit = (props: {
-    closure: (schema: ILlmSchemaV3_1) => void;
-    $defs?: Record<string, ILlmSchemaV3_1>;
-    schema: ILlmSchemaV3_1;
-  }): void =>
-    OpenApiTypeCheckerBase.visit({
-      prefix: "#/$defs/",
-      closure: props.closure as (schema: OpenApi.IJsonSchema) => void,
-      components: {
-        schemas: props.$defs,
-      },
-      schema: props.schema,
-    });
-
   export const covers = (props: {
     $defs?: Record<string, ILlmSchemaV3_1>;
     x: ILlmSchemaV3_1;
@@ -113,5 +84,19 @@ export namespace LlmTypeCheckerV3_1 {
       },
       x: props.x,
       y: props.y,
+    });
+
+  export const visit = (props: {
+    closure: (schema: ILlmSchemaV3_1) => void;
+    $defs?: Record<string, ILlmSchemaV3_1>;
+    schema: ILlmSchemaV3_1;
+  }): void =>
+    OpenApiTypeCheckerBase.visit({
+      prefix: "#/$defs/",
+      components: {
+        schemas: props.$defs,
+      },
+      closure: props.closure as any,
+      schema: props.schema,
     });
 }

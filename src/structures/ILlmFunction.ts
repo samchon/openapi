@@ -1,4 +1,5 @@
 import { IChatGptSchema } from "./IChatGptSchema";
+import { IClaudeSchema } from "./IClaudeSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
@@ -27,10 +28,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  */
 export interface ILlmFunction<
   Parameters extends
-    | ILlmSchemaV3.IParameters
-    | ILlmSchemaV3_1.IParameters
     | IChatGptSchema.IParameters
-    | IGeminiSchema.IParameters,
+    | IClaudeSchema.IParameters
+    | IGeminiSchema.IParameters
+    | ILlmSchemaV3.IParameters
+    | ILlmSchemaV3_1.IParameters,
 > {
   /**
    * Representative name of the function.
@@ -99,10 +101,11 @@ export namespace ILlmFunction {
    */
   export interface ISeparated<
     Parameters extends
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters
       | IChatGptSchema.IParameters
-      | IGeminiSchema.IParameters,
+      | IClaudeSchema.IParameters
+      | IGeminiSchema.IParameters
+      | ILlmSchemaV3.IParameters
+      | ILlmSchemaV3_1.IParameters,
   > {
     /**
      * Parameters that would be composed by the LLM.
