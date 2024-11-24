@@ -190,20 +190,20 @@ export namespace ChatGptTypeChecker {
     x: IChatGptSchema.IArray;
     y: IChatGptSchema.IArray;
   }): boolean => {
-    if (
-      !(
-        p.x.minItems === undefined ||
-        (p.y.minItems !== undefined && p.x.minItems <= p.y.minItems)
-      )
-    )
-      return false;
-    else if (
-      !(
-        p.x.maxItems === undefined ||
-        (p.y.maxItems !== undefined && p.x.maxItems >= p.y.maxItems)
-      )
-    )
-      return false;
+    // if (
+    //   !(
+    //     p.x.minItems === undefined ||
+    //     (p.y.minItems !== undefined && p.x.minItems <= p.y.minItems)
+    //   )
+    // )
+    //   return false;
+    // else if (
+    //   !(
+    //     p.x.maxItems === undefined ||
+    //     (p.y.maxItems !== undefined && p.x.maxItems >= p.y.maxItems)
+    //   )
+    // )
+    //   return false;
     return coverStation({
       $defs: p.$defs,
       visited: p.visited,
@@ -268,22 +268,22 @@ export namespace ChatGptTypeChecker {
       return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
     return [
       x.type === y.type,
-      x.minimum === undefined ||
-        (y.minimum !== undefined && x.minimum <= y.minimum),
-      x.maximum === undefined ||
-        (y.maximum !== undefined && x.maximum >= y.maximum),
-      x.exclusiveMinimum !== true ||
-        x.minimum === undefined ||
-        (y.minimum !== undefined &&
-          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      x.exclusiveMaximum !== true ||
-        x.maximum === undefined ||
-        (y.maximum !== undefined &&
-          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      x.multipleOf === undefined ||
-        (y.multipleOf !== undefined &&
-          y.multipleOf / x.multipleOf ===
-            Math.floor(y.multipleOf / x.multipleOf)),
+      // x.minimum === undefined ||
+      //   (y.minimum !== undefined && x.minimum <= y.minimum),
+      // x.maximum === undefined ||
+      //   (y.maximum !== undefined && x.maximum >= y.maximum),
+      // x.exclusiveMinimum !== true ||
+      //   x.minimum === undefined ||
+      //   (y.minimum !== undefined &&
+      //     (y.exclusiveMinimum === true || x.minimum < y.minimum)),
+      // x.exclusiveMaximum !== true ||
+      //   x.maximum === undefined ||
+      //   (y.maximum !== undefined &&
+      //     (y.exclusiveMaximum === true || x.maximum > y.maximum)),
+      // x.multipleOf === undefined ||
+      //   (y.multipleOf !== undefined &&
+      //     y.multipleOf / x.multipleOf ===
+      //       Math.floor(y.multipleOf / x.multipleOf)),
     ].every((v) => v);
   };
 
@@ -295,22 +295,22 @@ export namespace ChatGptTypeChecker {
       return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
     return [
       x.type === y.type || (x.type === "number" && y.type === "integer"),
-      x.minimum === undefined ||
-        (y.minimum !== undefined && x.minimum <= y.minimum),
-      x.maximum === undefined ||
-        (y.maximum !== undefined && x.maximum >= y.maximum),
-      x.exclusiveMinimum !== true ||
-        x.minimum === undefined ||
-        (y.minimum !== undefined &&
-          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      x.exclusiveMaximum !== true ||
-        x.maximum === undefined ||
-        (y.maximum !== undefined &&
-          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      x.multipleOf === undefined ||
-        (y.multipleOf !== undefined &&
-          y.multipleOf / x.multipleOf ===
-            Math.floor(y.multipleOf / x.multipleOf)),
+      // x.minimum === undefined ||
+      //   (y.minimum !== undefined && x.minimum <= y.minimum),
+      // x.maximum === undefined ||
+      //   (y.maximum !== undefined && x.maximum >= y.maximum),
+      // x.exclusiveMinimum !== true ||
+      //   x.minimum === undefined ||
+      //   (y.minimum !== undefined &&
+      //     (y.exclusiveMinimum === true || x.minimum < y.minimum)),
+      // x.exclusiveMaximum !== true ||
+      //   x.maximum === undefined ||
+      //   (y.maximum !== undefined &&
+      //     (y.exclusiveMaximum === true || x.maximum > y.maximum)),
+      // x.multipleOf === undefined ||
+      //   (y.multipleOf !== undefined &&
+      //     y.multipleOf / x.multipleOf ===
+      //       Math.floor(y.multipleOf / x.multipleOf)),
     ].every((v) => v);
   };
 
@@ -322,26 +322,15 @@ export namespace ChatGptTypeChecker {
       return !!y.enum?.length && y.enum.every((v) => x.enum!.includes(v));
     return [
       x.type === y.type,
-      x.format === undefined ||
-        (y.format !== undefined && coverFormat(x.format, y.format)),
-      x.pattern === undefined || x.pattern === y.pattern,
-      x.minLength === undefined ||
-        (y.minLength !== undefined && x.minLength <= y.minLength),
-      x.maxLength === undefined ||
-        (y.maxLength !== undefined && x.maxLength >= y.maxLength),
+      // x.format === undefined ||
+      //   (y.format !== undefined && coverFormat(x.format, y.format)),
+      // x.pattern === undefined || x.pattern === y.pattern,
+      // x.minLength === undefined ||
+      //   (y.minLength !== undefined && x.minLength <= y.minLength),
+      // x.maxLength === undefined ||
+      //   (y.maxLength !== undefined && x.maxLength >= y.maxLength),
     ].every((v) => v);
   };
-
-  const coverFormat = (
-    x: Required<IChatGptSchema.IString>["format"],
-    y: Required<IChatGptSchema.IString>["format"],
-  ): boolean =>
-    x === y ||
-    (x === "idn-email" && y === "email") ||
-    (x === "idn-hostname" && y === "hostname") ||
-    (["uri", "iri"].includes(x) && y === "url") ||
-    (x === "iri" && y === "uri") ||
-    (x === "iri-reference" && y === "uri-reference");
 
   const flatSchema = (
     $defs: Record<string, IChatGptSchema> | undefined,

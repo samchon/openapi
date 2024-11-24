@@ -17,7 +17,6 @@ const main = async (): Promise<void> => {
       await StopWatch.trace(title)(async () =>
         ChatGptFunctionCaller.test({
           config: {
-            constraint: process.argv.includes("--constraint"),
             reference: process.argv.includes("--reference"),
           },
           ...ShoppingSalePrompt.schema(),

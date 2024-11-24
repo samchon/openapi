@@ -113,7 +113,6 @@ const SCHEMA_CASTERS = {
 
 const DEFAULT_CONFIGS = {
   chatgpt: {
-    constraint: false,
     reference: false,
   } satisfies IChatGptSchema.IConfig,
   claude: {

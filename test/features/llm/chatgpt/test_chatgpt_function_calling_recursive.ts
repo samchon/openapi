@@ -7,7 +7,6 @@ import { ChatGptFunctionCaller } from "../../../utils/ChatGptFunctionCaller";
 export const test_chatgpt_function_calling_recursive = () =>
   ChatGptFunctionCaller.test({
     config: {
-      constraint: false,
       reference: true,
     },
     name: "composeCategories",

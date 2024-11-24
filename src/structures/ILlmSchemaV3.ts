@@ -477,6 +477,7 @@ export namespace ILlmSchemaV3 {
      * - {@link ILlmSchemaV3.IString.format}
      * - {@link ILlmSchemaV3.IString.pattern}
      * - {@link ILlmSchemaV3.IString.contentMediaType}
+     * - {@link ILlmSchemaV3.IString.default}
      * - {@link ILlmSchemaV3.IArray.minItems}
      * - {@link ILlmSchemaV3.IArray.maxItems}
      * - {@link ILlmSchemaV3.IArray.unique}

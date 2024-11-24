@@ -42,6 +42,7 @@
  * - {@link OpenApi.IJsonSchema.IString.format}
  * - {@link OpenApi.IJsonSchema.IString.pattern}
  * - {@link OpenApi.IJsonSchema.IString.contentMediaType}
+ * - {@link OpenApi.IJsonSchema.IString.default}
  * - {@link OpenApi.IJsonSchema.IArray.minItems}
  * - {@link OpenApi.IJsonSchema.IArray.maxItems}
  * - {@link OpenApi.IJsonSchema.IArray.unique}
@@ -86,13 +87,6 @@ export namespace IGeminiSchema {
      * Enumeration values.
      */
     enum?: Array<boolean | null>;
-
-    /**
-     * Default value.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    default?: boolean | null;
   }
 
   /**
@@ -105,14 +99,6 @@ export namespace IGeminiSchema {
      * @type int64
      */
     enum?: Array<number | null>;
-
-    /**
-     * Default value.
-     *
-     * @type int64
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    default?: number | null;
   }
 
   /**
@@ -123,13 +109,6 @@ export namespace IGeminiSchema {
      * Enumeration values.
      */
     enum?: Array<number | null>;
-
-    /**
-     * Default value.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    default?: number | null;
   }
 
   /**
@@ -227,13 +206,6 @@ export namespace IGeminiSchema {
      * Type is always `null`.
      */
     type: "null";
-
-    /**
-     * Default value.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    default?: null;
   }
 
   /**

@@ -3,22 +3,6 @@
   "status": null,
   "opened_at": null,
   "closed_at": null,
-  "tags": [
-    "surface",
-    "microsoft",
-    "2in1",
-    "tablet",
-    "laptop"
-  ],
-  "channels": [
-    {
-      "code": "samchon",
-      "category_codes": [
-        "2in1_laptops",
-        "windows_tablets"
-      ]
-    }
-  ],
   "content": {
     "title": "Surface Pro 9",
     "format": "md",
@@ -42,11 +26,20 @@
     ],
     "files": []
   },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "2in1_laptops",
+        "windows_tablets"
+      ]
+    }
+  ],
   "units": [
     {
       "name": "Surface Pro 9 Entity",
-      "primary": true,
       "required": true,
+      "primary": true,
       "options": [
         {
           "type": "select",
@@ -256,12 +249,12 @@
     },
     {
       "name": "Warranty Program",
-      "primary": false,
       "required": false,
+      "primary": false,
       "options": [],
       "stocks": [
         {
-          "name": "Surface Pro 9 Warranty Program",
+          "name": "Warranty Program",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -273,12 +266,12 @@
     },
     {
       "name": "Magnetic Keyboard",
-      "primary": false,
       "required": false,
+      "primary": false,
       "options": [],
       "stocks": [
         {
-          "name": "Surface Pro 9 Magnetic Keyboard",
+          "name": "Magnetic Keyboard",
           "price": {
             "nominal": 200000,
             "real": 169000
@@ -288,5 +281,15 @@
         }
       ]
     }
+  ],
+  "tags": [
+    "Surface",
+    "Pro",
+    "9",
+    "Microsoft",
+    "2-in-1",
+    "Laptop",
+    "Tablet",
+    "Windows"
   ]
 }

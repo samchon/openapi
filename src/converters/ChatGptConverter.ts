@@ -14,7 +14,10 @@ export namespace ChatGptConverter {
   }): IChatGptSchema.IParameters | null => {
     const params: ILlmSchemaV3_1.IParameters | null =
       LlmConverterV3_1.parameters({
-        config: props.config,
+        config: {
+          reference: props.config.reference,
+          constraint: false,
+        },
         components: props.components,
         schema: props.schema,
       });
@@ -34,7 +37,10 @@ export namespace ChatGptConverter {
   }): IChatGptSchema | null => {
     const oldbie: Set<string> = new Set(Object.keys(props.$defs));
     const schema: ILlmSchemaV3_1 | null = LlmConverterV3_1.schema({
-      config: props.config,
+      config: {
+        reference: props.config.reference,
+        constraint: false,
+      },
       components: props.components,
       $defs: props.$defs,
       schema: props.schema,

@@ -2,10 +2,11 @@ import fs from "fs";
 import typia, { tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
-import { ChatGptFunctionCaller } from "../../../utils/ChatGptFunctionCaller";
+import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
 
-export const test_chatgpt_function_calling_example = () =>
-  ChatGptFunctionCaller.test({
+export const test_claude_function_calling_default = () =>
+  ClaudeFunctionCaller.test({
+    model: "claude",
     config: {
       reference: true,
     },
@@ -25,7 +26,7 @@ export const test_chatgpt_function_calling_example = () =>
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/chatgpt.example.schema.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/claude.default.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -34,7 +35,7 @@ export const test_chatgpt_function_calling_example = () =>
       typia.assert<IPerson>(input);
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/chatgpt.example.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/claude.default.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );
@@ -42,12 +43,12 @@ export const test_chatgpt_function_calling_example = () =>
   });
 
 interface IPerson {
-  name: string & tags.Example<"John Doe">;
-  age: number & tags.Example<42>;
+  name: string & tags.Default<"John Doe">;
+  age: number & tags.Default<42>;
 }
 
 const SYSTEM_MESSAGE =
   "You are a helpful customer support assistant. Use the supplied tools to assist the user.";
 
 const USER_MESSAGE =
-  "Just enroll a person whose name and age values exactly same with the example values.";
+  "Just enroll a person whose name and age values exactly same with the default values.";

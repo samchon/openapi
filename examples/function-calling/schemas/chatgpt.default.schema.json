@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "$ref": "#/$defs/IPerson"
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "IPerson": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "@default John Doe",
+          "type": "string"
+        },
+        "age": {
+          "description": "@default 42",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "age"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

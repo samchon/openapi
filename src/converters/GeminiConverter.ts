@@ -2,7 +2,6 @@ import { OpenApi } from "../OpenApi";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
-import { OpenApiContraintShifter } from "../utils/OpenApiContraintShifter";
 import { LlmConverterV3 } from "./LlmConverterV3";
 
 export namespace GeminiConverter {
@@ -43,15 +42,11 @@ export namespace GeminiConverter {
         delete v.title;
       }
       if (LlmTypeCheckerV3.isOneOf(v)) union = true;
-      else if (LlmTypeCheckerV3.isObject(v)) {
-        if (v.additionalProperties !== undefined)
-          delete (v as Partial<ILlmSchemaV3.IObject>).additionalProperties;
-      } else if (LlmTypeCheckerV3.isArray(v))
-        OpenApiContraintShifter.shiftArray(v);
-      else if (LlmTypeCheckerV3.isString(v))
-        OpenApiContraintShifter.shiftString(v);
-      else if (LlmTypeCheckerV3.isNumber(v) || LlmTypeCheckerV3.isInteger(v))
-        OpenApiContraintShifter.shiftNumeric(v);
+      else if (
+        LlmTypeCheckerV3.isObject(v) &&
+        v.additionalProperties !== undefined
+      )
+        delete (v as Partial<ILlmSchemaV3.IObject>).additionalProperties;
     });
     return union ? null : schema;
   };
