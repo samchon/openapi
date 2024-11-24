@@ -41,13 +41,17 @@ export namespace LlmConverterV3 {
         schema.required ??= [];
         schema.additionalProperties = false;
       } else if (
-        LlmTypeCheckerV3.isInteger(schema) ||
-        LlmTypeCheckerV3.isNumber(schema)
+        props.config.constraint === false &&
+        (LlmTypeCheckerV3.isInteger(schema) ||
+          LlmTypeCheckerV3.isNumber(schema))
       )
         OpenApiContraintShifter.shiftNumeric(
           schema as OpenApi.IJsonSchema.IInteger | OpenApi.IJsonSchema.INumber,
         );
-      else if (LlmTypeCheckerV3.isString(schema))
+      else if (
+        props.config.constraint === false &&
+        LlmTypeCheckerV3.isString(schema)
+      )
         OpenApiContraintShifter.shiftString(
           schema as OpenApi.IJsonSchema.IString,
         );
