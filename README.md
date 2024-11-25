@@ -50,14 +50,6 @@ OpenAPI definitions, converters and LLM function calling application composer.
     - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
 
-> [!TIP]
->
-> LLM selects proper function and fill arguments.
-> 
-> In nowadays, most LLM (Large Language Model) like OpenAI are supporting "function calling" feature. The "LLM function calling" means that LLM automatically selects a proper function and fills parameter values from conversation with the user (may by chatting text).
-> 
-> https://platform.openai.com/docs/guides/function-calling
-
 
 
 
@@ -252,6 +244,8 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 >
 > You also can compose `ILlmApplication` from a class type through `typia`.
 >
+> https://typia.io/docs/llm/application
+>
 > ```typescript
 > import { ILlmApplication } from "@samchon/openapi";
 > import typia from "typia";
@@ -259,8 +253,6 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 > const app: ILlmApplication<"chatgpt"> =
 >   typia.llm.application<YourClassType, "chatgpt">();
 > ```
->
-> https://typia.io/docs/llm/application
 
 > [!TIP]
 >
