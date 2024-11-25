@@ -245,7 +245,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 
 > [!NOTE]
 >
-> You also can compose `ILlmApplication` from a class type through `typia`.
+> You also can compose [`ILlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts) from a class type through `typia`.
 >
 > https://typia.io/docs/llm/application
 >

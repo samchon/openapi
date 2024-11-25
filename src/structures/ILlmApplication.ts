@@ -11,7 +11,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *
  * `ILlmApplication` is a data structure representing a collection of
  * {@link ILlmFunction LLM function calling schemas}, composed from a native
- * TypeScript class (or interface) type by the `typia.llm.application<App>()`
+ * TypeScript class (or interface) type by the `typia.llm.application<App, Model>()`
  * function.
  *
  * Also, there can be some parameters (or their nested properties) which must be
