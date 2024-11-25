@@ -2,14 +2,11 @@ import fs from "fs";
 import typia, { tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
-import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
+import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 
-export const test_claude_function_calling_example = () =>
-  ClaudeFunctionCaller.test({
-    model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
-    config: {
-      reference: true,
-    },
+export const test_llama_function_calling_example = () =>
+  LlamaFunctionCaller.test({
+    model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     name: "enrollPerson",
     description: "Enroll a person to the restaurant reservation list.",
     collection: typia.json.schemas<[{ input: IPerson }]>(),
@@ -26,7 +23,7 @@ export const test_claude_function_calling_example = () =>
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
         fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/claude.example.schema.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/llama.example.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -35,7 +32,7 @@ export const test_claude_function_calling_example = () =>
       typia.assert<IPerson>(input);
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/claude.example.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/llama.example.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );

@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "$ref": "#/$defs/Shape"
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Shape": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IRectangle"
+        },
+        {
+          "$ref": "#/$defs/ICircle"
+        }
+      ]
+    },
+    "IRectangle": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "rectangle"
+        },
+        "p1": {
+          "$ref": "#/$defs/IPoint"
+        },
+        "p2": {
+          "$ref": "#/$defs/IPoint"
+        }
+      },
+      "required": [
+        "type",
+        "p1",
+        "p2"
+      ],
+      "additionalProperties": false
+    },
+    "IPoint": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "ICircle": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "circle"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "center": {
+          "$ref": "#/$defs/IPoint"
+        }
+      },
+      "required": [
+        "type",
+        "radius",
+        "center"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -99,9 +99,7 @@ export interface IHttpLlmApplication<
    */
   options: IHttpLlmApplication.IOptions<
     Model,
-    Parameters["properties"][string] extends IHttpLlmApplication.ModelSchema[Model]
-      ? Parameters["properties"][string]
-      : IHttpLlmApplication.ModelSchema[Model]
+    IHttpLlmApplication.ModelSchema[Model]
   >;
 }
 export namespace IHttpLlmApplication {

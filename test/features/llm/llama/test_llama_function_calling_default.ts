@@ -2,14 +2,11 @@ import fs from "fs";
 import typia, { tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
-import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
+import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 
-export const test_claude_function_calling_example = () =>
-  ClaudeFunctionCaller.test({
-    model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
-    config: {
-      reference: true,
-    },
+export const test_llama_function_calling_default = () =>
+  LlamaFunctionCaller.test({
+    model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     name: "enrollPerson",
     description: "Enroll a person to the restaurant reservation list.",
     collection: typia.json.schemas<[{ input: IPerson }]>(),
@@ -25,8 +22,8 @@ export const test_claude_function_calling_example = () =>
     ],
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
-        fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/claude.example.schema.json`,
+        await fs.promises.writeFile(
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/llama.default.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -35,7 +32,7 @@ export const test_claude_function_calling_example = () =>
       typia.assert<IPerson>(input);
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/claude.example.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/llama.default.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );
@@ -43,12 +40,12 @@ export const test_claude_function_calling_example = () =>
   });
 
 interface IPerson {
-  name: string & tags.Example<"John Doe">;
-  age: number & tags.Example<42>;
+  name: string & tags.Default<"John Doe">;
+  age: number & tags.Default<42>;
 }
 
 const SYSTEM_MESSAGE =
   "You are a helpful customer support assistant. Use the supplied tools to assist the user.";
 
 const USER_MESSAGE =
-  "Just enroll a person whose name and age values exactly same with the example values.";
+  "Just enroll a person whose name and age values exactly same with the default values.";

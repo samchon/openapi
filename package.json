@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "2.0.0-dev.20241125-2",
+  "version": "2.0.0-dev.20241126",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
@@ -47,6 +47,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.12.7",
     "@types/uuid": "^10.0.0",
+    "axios": "^1.7.7",
     "chalk": "^4.1.2",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^12.0.0",

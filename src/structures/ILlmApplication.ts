@@ -1,6 +1,7 @@
 import { IChatGptSchema } from "./IChatGptSchema";
 import { IClaudeSchema } from "./IClaudeSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
+import { ILlamaSchema } from "./ILlamaSchema";
 import { ILlmFunction } from "./ILlmFunction";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
@@ -48,19 +49,15 @@ export interface ILlmApplication<
   /**
    * Configuration for the application.
    */
-  options: ILlmApplication.IOptions<
-    Model,
-    Parameters["properties"][string] extends ILlmApplication.ModelSchema[Model]
-      ? Parameters["properties"][string]
-      : ILlmApplication.ModelSchema[Model]
-  >;
+  options: ILlmApplication.IOptions<Model, ILlmApplication.ModelSchema[Model]>;
 }
 export namespace ILlmApplication {
-  export type Model = "chatgpt" | "claude" | "gemini" | "3.0" | "3.1";
+  export type Model = "chatgpt" | "claude" | "gemini" | "llama" | "3.0" | "3.1";
   export type ModelParameters = {
     chatgpt: IChatGptSchema.IParameters;
     claude: IClaudeSchema.IParameters;
     gemini: IGeminiSchema.IParameters;
+    llama: ILlamaSchema.IParameters;
     "3.0": ILlmSchemaV3.IParameters;
     "3.1": ILlmSchemaV3_1.IParameters;
   };
@@ -68,6 +65,7 @@ export namespace ILlmApplication {
     chatgpt: IChatGptSchema;
     claude: IClaudeSchema;
     gemini: IGeminiSchema;
+    llama: ILlamaSchema;
     "3.0": ILlmSchemaV3;
     "3.1": ILlmSchemaV3_1;
   };
@@ -75,6 +73,7 @@ export namespace ILlmApplication {
     chatgpt: IChatGptSchema.IConfig;
     claude: IClaudeSchema.IConfig;
     gemini: IGeminiSchema.IConfig;
+    llama: ILlamaSchema.IConfig;
     "3.0": ILlmSchemaV3.IConfig;
     "3.1": ILlmSchemaV3_1.IConfig;
   };

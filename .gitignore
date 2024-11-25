@@ -1,6 +1,7 @@
 bin/
 examples/converted/
 lib/
+models/
 node_modules/
 
 package-lock.json

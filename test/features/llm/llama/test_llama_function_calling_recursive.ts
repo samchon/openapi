@@ -2,14 +2,11 @@ import fs from "fs";
 import typia, { tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
-import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
+import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 
-export const test_claude_function_calling_recursive = () =>
-  ClaudeFunctionCaller.test({
-    model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
-    config: {
-      reference: true,
-    },
+export const test_llama_function_calling_recursive = () =>
+  LlamaFunctionCaller.test({
+    model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     name: "composeCategories",
     description: "Compose categories from the input.",
     collection: typia.json.schemas<[{ input: IShoppingCategory[] }]>(),
@@ -26,7 +23,7 @@ export const test_claude_function_calling_recursive = () =>
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/claude.recursive.schema.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/llama.recursive.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -35,7 +32,7 @@ export const test_claude_function_calling_recursive = () =>
       typia.assert<IShoppingCategory[]>(input);
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/claude.recursive.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/llama.recursive.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );

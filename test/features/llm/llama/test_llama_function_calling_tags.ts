@@ -2,14 +2,11 @@ import fs from "fs";
 import typia, { tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
-import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
+import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 
-export const test_claude_function_calling_tags = (): Promise<void> =>
-  ClaudeFunctionCaller.test({
-    model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
-    config: {
-      reference: true,
-    },
+export const test_llama_function_calling_tags = (): Promise<void> =>
+  LlamaFunctionCaller.test({
+    model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     name: "reserve",
     description: "Reserve some opening time.",
     collection: typia.json.schemas<[{ input: OpeningTime }]>(),
@@ -26,7 +23,7 @@ export const test_claude_function_calling_tags = (): Promise<void> =>
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/claude.tags.schema.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/llama.tags.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -35,7 +32,7 @@ export const test_claude_function_calling_tags = (): Promise<void> =>
       typia.assert<OpeningTime>(input);
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/claude.tags.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/llama.tags.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );

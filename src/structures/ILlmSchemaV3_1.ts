@@ -4,9 +4,13 @@
  * `ILlmSchemaV3_1` is a type metadata for LLM (Large Language Model)
  * function calling, based on the OpenAPI v3.1 speicification. This type
  * is not the final type for the LLM function calling, but the intermediate
- * structure for the conversion to the final type like {@link IChatGptSchema}.
+ * structure for the conversion to the final type of below:
  *
- * However, the `IChatGptSchema` does not follow the entire specification of
+ * - {@link IChatGptSchema}
+ * - {@link IClaudeSchema}
+ * - {@link ILlamaSchema}
+ *
+ * However, the `ILlmSchemaV3_1` does not follow the entire specification of
  * the OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
  * list of how `ILlmSchemaV3_1` is different with the OpenAPI v3.1 JSON schema.
  *

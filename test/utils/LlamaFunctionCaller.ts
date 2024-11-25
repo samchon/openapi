@@ -1,49 +1,53 @@
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { IChatGptSchema, OpenApi } from "@samchon/openapi";
+import { ILlmApplication, OpenApi } from "@samchon/openapi";
 import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
 import OpenAI from "openai";
 import typia, { IJsonSchemaCollection } from "typia";
 
+// import { v4 } from "uuid";
 import { TestGlobal } from "../TestGlobal";
 import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
 
-export namespace ChatGptFunctionCaller {
-  export const test = async (props: {
+export namespace LlamaFunctionCaller {
+  export const test = async <Model extends ILlmApplication.Model>(props: {
+    model: Model;
+    config?: Partial<ILlmApplication.ModelConfig[Model]>;
     name: string;
     description: string;
     collection: IJsonSchemaCollection;
     texts: ILlmTextPrompt[];
     handleCompletion: (input: any) => Promise<void>;
     handleParameters?: (
-      parameters: IChatGptSchema.IParameters,
+      parameters: ILlmApplication.ModelParameters[Model],
     ) => Promise<void>;
-    config?: Partial<IChatGptSchema.IConfig>;
   }): Promise<void> => {
-    if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
+    if (TestGlobal.env.LLAMA_API_KEY === undefined) return;
 
-    const parameters: IChatGptSchema.IParameters | null =
-      LlmSchemaConverter.parameters("chatgpt")({
+    const parameters: ILlmApplication.ModelParameters[Model] | null =
+      LlmSchemaConverter.parameters(props.model)({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           props.collection.schemas[0],
         ),
         config: {
-          ...LlmSchemaConverter.defaultConfig("chatgpt"),
+          ...LlmSchemaConverter.defaultConfig(props.model),
           ...(props.config ?? {}),
-        },
-      });
+        } satisfies ILlmApplication.ModelConfig[Model] as any,
+      }) as ILlmApplication.ModelParameters[Model] | null;
+
     if (parameters === null)
       throw new Error(
-        "Failed to convert the JSON schema to the ChatGPT schema.",
+        "Failed to convert the JSON schema to the Claude schema.",
       );
     else if (props.handleParameters) await props.handleParameters(parameters);
 
     const client: OpenAI = new OpenAI({
-      apiKey: TestGlobal.env.CHATGPT_API_KEY,
+      apiKey: TestGlobal.env.LLAMA_API_KEY,
+      baseURL: "https://api.llama-api.com",
     });
     const completion: OpenAI.ChatCompletion =
       await client.chat.completions.create({
-        model: "gpt-4o",
+        model: "llama3.2-90b-vision",
         messages: props.texts,
         tools: [
           {
@@ -52,16 +56,31 @@ export namespace ChatGptFunctionCaller {
               name: props.name,
               description: props.description,
               parameters: parameters as any,
-              strict: true,
             },
           },
         ],
       });
 
-    const toolCalls: OpenAI.ChatCompletionMessageToolCall[] =
-      completion.choices[0].message.tool_calls ?? [];
+    const toolCalls: OpenAI.ChatCompletionMessageToolCall[] = [
+      ...(completion.choices[0].message.tool_calls ?? []),
+      // ...completion.choices
+      //   .map((c) => c.message.content)
+      //   .filter((str) => str !== null)
+      //   .filter((str) => str.startsWith(`<function=${props.name}>`))
+      //   .map(
+      //     (str) =>
+      //       ({
+      //         id: v4(),
+      //         type: "function",
+      //         function: {
+      //           name: props.name,
+      //           arguments: str.substring(`<function="${props.name}>`.length),
+      //         },
+      //       }) satisfies OpenAI.ChatCompletionMessageToolCall,
+      //   ),
+    ];
     if (toolCalls.length === 0)
-      throw new Error("ChatGPT has not called any function.");
+      throw new Error("Llama has not called any function.");
     await ArrayUtil.asyncForEach(toolCalls)(async (call) => {
       TestValidator.equals("name")(call.function.name)(props.name);
       const { input } = typia.assert<{ input: any }>(
