@@ -1,0 +1,8 @@
+{
+  "type": "circle",
+  "radius": 5,
+  "center": {
+    "x": 0,
+    "y": 0
+  }
+}
