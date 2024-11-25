@@ -1,38 +1,41 @@
-import { IChatGptSchema } from "./IChatGptSchema";
-import { IClaudeSchema } from "./IClaudeSchema";
-import { IGeminiSchema } from "./IGeminiSchema";
-import { ILlmSchemaV3 } from "./ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
+import { ILlmApplication } from "./ILlmApplication";
 
 /**
  * The schemas for the LLM function calling.
  *
- * `ILlmSchema` is an union type collecting all the schemas for the
+ * `ILlmSchema` is an union type collecting every the schemas for the
  * LLM function calling.
  *
  * Select a proper schema type according to the LLM provider you're using.
  *
+ * @template Model Name of the target LLM model
+ * @reference https://platform.openai.com/docs/guides/function-calling
+ * @reference https://platform.openai.com/docs/guides/structured-outputs
  * @author Jeongho Nam - https://github.com/samchon
  */
-export type ILlmSchema =
-  | IChatGptSchema
-  | IClaudeSchema
-  | IGeminiSchema
-  | ILlmSchemaV3
-  | ILlmSchemaV3_1;
+export type ILlmSchema<
+  Model extends ILlmApplication.Model = ILlmApplication.Model,
+> = ILlmApplication.ModelSchema[Model];
 
 export namespace ILlmSchema {
-  export type IParameters =
-    | IChatGptSchema.IParameters
-    | IClaudeSchema.IParameters
-    | IGeminiSchema.IParameters
-    | ILlmSchemaV3.IParameters
-    | ILlmSchemaV3_1.IParameters;
+  /**
+   * Type of function parameters.
+   *
+   * `ILlmSchema.IParameters` is a type defining a function's pamameters
+   * as a keyworded object type.
+   *
+   * It also can be utilized for the structured output metadata.
+   *
+   * @reference https://platform.openai.com/docs/guides/structured-outputs
+   */
+  export type IParameters<
+    Model extends ILlmApplication.Model = ILlmApplication.Model,
+  > = ILlmApplication.ModelParameters[Model];
 
-  export type IConfig =
-    | IChatGptSchema.IConfig
-    | IClaudeSchema.IConfig
-    | IGeminiSchema.IConfig
-    | ILlmSchemaV3.IConfig
-    | ILlmSchemaV3_1.IConfig;
+  /**
+   * Configuration for the LLM schema composition.
+   */
+  export type IConfig<
+    Model extends ILlmApplication.Model = ILlmApplication.Model,
+  > = ILlmApplication.ModelConfig[Model];
 }
