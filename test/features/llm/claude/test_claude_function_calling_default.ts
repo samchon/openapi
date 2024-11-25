@@ -6,7 +6,7 @@ import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
 
 export const test_claude_function_calling_default = () =>
   ClaudeFunctionCaller.test({
-    model: "claude",
+    model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
     config: {
       reference: true,
     },

@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "reasons": {
+          "description": "@minItems 1",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "temporary": {
+          "type": "boolean"
+        },
+        "time": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "description": "@format date-time"
+            }
+          ]
+        }
+      },
+      "required": [
+        "reasons",
+        "temporary",
+        "time"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {}
+}

@@ -7,6 +7,7 @@ import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { ChatGptConverter } from "./ChatGptConverter";
 import { ClaudeConverter } from "./ClaudeConverter";
 import { GeminiConverter } from "./GeminiConverter";
+import { LlamaConverter } from "./LlamaConverter";
 import { LlmConverterV3 } from "./LlmConverterV3";
 import { LlmConverterV3_1 } from "./LlmConverterV3_1";
 import { LlmSchemaConverter } from "./LlmSchemaConverter";
@@ -238,6 +239,7 @@ const SEPARATORS = {
   chatgpt: ChatGptConverter.separate,
   claude: ClaudeConverter.separate,
   gemini: GeminiConverter.separate,
+  llama: LlamaConverter.separate,
   "3.0": LlmConverterV3.separate,
   "3.1": LlmConverterV3_1.separate,
 };

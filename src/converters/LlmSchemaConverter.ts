@@ -2,12 +2,14 @@ import { OpenApi } from "../OpenApi";
 import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { IClaudeSchema } from "../structures/IClaudeSchema";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
+import { ILlamaSchema } from "../structures/ILlamaSchema";
 import { ILlmApplication } from "../structures/ILlmApplication";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { ChatGptConverter } from "./ChatGptConverter";
 import { ClaudeConverter } from "./ClaudeConverter";
 import { GeminiConverter } from "./GeminiConverter";
+import { LlamaConverter } from "./LlamaConverter";
 import { LlmConverterV3 } from "./LlmConverterV3";
 import { LlmConverterV3_1 } from "./LlmConverterV3_1";
 
@@ -40,6 +42,11 @@ const PARAMETERS_CASTERS = {
     schema: OpenApi.IJsonSchema.IObject;
     config: IGeminiSchema.IConfig;
   }) => GeminiConverter.parameters(props),
+  llama: (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema.IObject;
+    config: ILlamaSchema.IConfig;
+  }) => LlamaConverter.parameters(props),
   "3.0": (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
@@ -87,6 +94,18 @@ const SCHEMA_CASTERS = {
       schema: props.schema,
       config: props.config,
     }),
+  llama: (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema;
+    $defs: Record<string, ILlamaSchema>;
+    config: ILlamaSchema.IConfig;
+  }) =>
+    LlamaConverter.schema({
+      components: props.components,
+      schema: props.schema,
+      $defs: props.$defs,
+      config: props.config,
+    }),
   "3.0": (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
@@ -121,6 +140,9 @@ const DEFAULT_CONFIGS = {
   gemini: {
     recursive: 3,
   } satisfies IGeminiSchema.IConfig,
+  llama: {
+    reference: false,
+  } satisfies ILlamaSchema.IConfig,
   "3.0": {
     constraint: false,
     recursive: 3,

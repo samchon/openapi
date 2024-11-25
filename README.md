@@ -42,13 +42,13 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - [`IHttpLlmApplication<Model, Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
   - [`IHttpLlmFunction<Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
   - Supported schemas
-    - ✔️[`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
-    - ✔️[`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude (same with [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts))
-    - ✔️[`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts): Google Gemini
-    - ✍️`ILlamaSchema`: Meta (Facebook) Llama
+    - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
+    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude (same with [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts))
+    - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts): Google Gemini
+    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta (Facebook) Llama
   - Midldle layer schemas
-    - ✔️[`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
-    - ✔️[`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
+    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
+    - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
 
 > [!TIP]
 >
@@ -250,7 +250,17 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 
 > [!NOTE]
 >
-> Preparing playground website utilizing [`web-llm`](https://github.com/mlc-ai/web-llm).
+> You also can compose `ILlmApplication` from a class type through `typia`.
+>
+> ```typescript
+> import { ILlmApplication } from "@samchon/openapi";
+> import typia from "typia";
+>
+> const app: ILlmApplication<"chatgpt"> =
+>   typia.llm.application<YourClassType, "chatgpt">();
+> ```
+>
+> https://typia.io/docs/llm/application
 
 > [!TIP]
 >

@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "@default John Doe",
+          "type": "string"
+        },
+        "age": {
+          "description": "@default 42",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "age"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {}
+}
