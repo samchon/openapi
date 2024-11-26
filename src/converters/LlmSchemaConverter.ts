@@ -3,7 +3,7 @@ import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { IClaudeSchema } from "../structures/IClaudeSchema";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { ILlamaSchema } from "../structures/ILlamaSchema";
-import { ILlmApplication } from "../structures/ILlmApplication";
+import { ILlmSchema } from "../structures/ILlmSchema";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { ChatGptConverter } from "./ChatGptConverter";
@@ -14,57 +14,55 @@ import { LlmConverterV3 } from "./LlmConverterV3";
 import { LlmConverterV3_1 } from "./LlmConverterV3_1";
 
 export namespace LlmSchemaConverter {
-  export const parameters = <Model extends ILlmApplication.Model>(
-    model: Model,
-  ) => PARAMETERS_CASTERS[model];
+  export const parameters = <Model extends ILlmSchema.Model>(model: Model) =>
+    PARAMETERS_CASTERS[model];
 
-  export const schema = <Model extends ILlmApplication.Model>(model: Model) =>
+  export const schema = <Model extends ILlmSchema.Model>(model: Model) =>
     SCHEMA_CASTERS[model];
 
-  export const defaultConfig = <Model extends ILlmApplication.Model>(
-    model: Model,
-  ) => DEFAULT_CONFIGS[model];
+  export const defaultConfig = <Model extends ILlmSchema.Model>(model: Model) =>
+    DEFAULT_CONFIGS[model];
 }
 
 const PARAMETERS_CASTERS = {
   chatgpt: (props: {
+    config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: IChatGptSchema.IConfig;
   }) => ChatGptConverter.parameters(props),
   claude: (props: {
+    config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: IClaudeSchema.IConfig;
   }) => ClaudeConverter.parameters(props),
   gemini: (props: {
+    config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: IGeminiSchema.IConfig;
   }) => GeminiConverter.parameters(props),
   llama: (props: {
+    config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: ILlamaSchema.IConfig;
   }) => LlamaConverter.parameters(props),
   "3.0": (props: {
+    config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: ILlmSchemaV3.IConfig;
   }) => LlmConverterV3.parameters(props),
   "3.1": (props: {
+    config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: ILlmSchemaV3_1.IConfig;
   }) => LlmConverterV3_1.parameters(props),
 };
 
 const SCHEMA_CASTERS = {
   chatgpt: (props: {
+    config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     $defs: Record<string, IChatGptSchema>;
-    config: IChatGptSchema.IConfig;
   }) =>
     ChatGptConverter.schema({
       components: props.components,
@@ -73,10 +71,10 @@ const SCHEMA_CASTERS = {
       config: props.config,
     }),
   claude: (props: {
+    config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     $defs: Record<string, IClaudeSchema>;
-    config: IClaudeSchema.IConfig;
   }) =>
     ClaudeConverter.schema({
       components: props.components,
@@ -85,9 +83,9 @@ const SCHEMA_CASTERS = {
       config: props.config,
     }),
   gemini: (props: {
+    config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    config: IGeminiSchema.IConfig;
   }) =>
     GeminiConverter.schema({
       components: props.components,
@@ -95,10 +93,10 @@ const SCHEMA_CASTERS = {
       config: props.config,
     }),
   llama: (props: {
+    config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     $defs: Record<string, ILlamaSchema>;
-    config: ILlamaSchema.IConfig;
   }) =>
     LlamaConverter.schema({
       components: props.components,
@@ -107,9 +105,9 @@ const SCHEMA_CASTERS = {
       config: props.config,
     }),
   "3.0": (props: {
+    config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    config: ILlmSchemaV3.IConfig;
   }) =>
     LlmConverterV3.schema({
       components: props.components,
@@ -117,10 +115,10 @@ const SCHEMA_CASTERS = {
       config: props.config,
     }),
   "3.1": (props: {
+    config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     $defs: Record<string, ILlmSchemaV3_1>;
-    config: ILlmSchemaV3_1.IConfig;
   }) =>
     LlmConverterV3_1.schema({
       config: props.config,

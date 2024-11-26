@@ -1,4 +1,4 @@
-import { ILlmApplication, OpenApi } from "@samchon/openapi";
+import { ILlmApplication, ILlmSchema, OpenApi } from "@samchon/openapi";
 import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
 import fs from "fs";
 import typia, { IJsonSchemaCollection, tags } from "typia";
@@ -36,7 +36,7 @@ const SYSTEM_MESSAGE =
   "You are a helpful customer support assistant. Use the supplied tools to assist the user.";
 
 const archive = async (props: {
-  models: ILlmApplication.Model[];
+  models: ILlmSchema.Model[];
   file: string;
   collection: IJsonSchemaCollection;
   name: string;
@@ -44,14 +44,14 @@ const archive = async (props: {
   texts: ILlmTextPrompt[];
 }): Promise<void> => {
   for (const model of props.models) {
-    const parameters: ILlmApplication<ILlmApplication.Model> | null =
+    const parameters: ILlmApplication<ILlmSchema.Model> | null =
       LlmSchemaConverter.parameters(model)({
         config: LlmSchemaConverter.defaultConfig(model) as any,
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           props.collection.schemas[0],
         ),
-      }) as ILlmApplication<ILlmApplication.Model> | null;
+      }) as ILlmApplication<ILlmSchema.Model> | null;
     if (parameters === null) continue;
     await fs.promises.writeFile(
       `${TestGlobal.ROOT}/test-web-llm/assets/schemas/${props.file}.${model}.schema.json`,
@@ -72,7 +72,7 @@ const archive = async (props: {
 };
 
 const main = async (): Promise<void> => {
-  const models: ILlmApplication.Model[] = [
+  const models: ILlmSchema.Model[] = [
     "chatgpt",
     "claude",
     "gemini",

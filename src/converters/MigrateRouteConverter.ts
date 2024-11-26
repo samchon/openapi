@@ -178,7 +178,7 @@ export namespace MigrateRouteConverter {
                 required: [
                   ...new Set(entire.map((o) => o.required ?? []).flat()),
                 ],
-              },
+              } satisfies OpenApi.IJsonSchema.IObject,
             }),
           });
     });
@@ -263,8 +263,8 @@ export namespace MigrateRouteConverter {
         })),
       headers: headers || null,
       query: query || null,
-      body: body as IHttpMigrateRoute.IBody | null,
-      success: success as IHttpMigrateRoute.IBody | null,
+      body: body || null,
+      success: success || null,
       exceptions: Object.fromEntries(
         Object.entries(props.operation.responses ?? {})
           .filter(
@@ -273,10 +273,13 @@ export namespace MigrateRouteConverter {
           .map(([status, response]) => [
             status,
             {
-              schema: response.content?.["application/json"]?.schema ?? {},
+              schema: (response.content?.["application/json"]?.schema ??
+                {}) satisfies OpenApi.IJsonSchema,
               response: () => response,
-              media: () => response.content?.["application/json"] ?? {},
-            },
+              media: () =>
+                (response.content?.["application/json"] ??
+                  {}) satisfies OpenApi.IJsonSchema,
+            } satisfies IHttpMigrateRoute.IException,
           ]),
       ),
       comment: () =>
@@ -287,7 +290,7 @@ export namespace MigrateRouteConverter {
           body: body || null,
         }),
       operation: () => props.operation,
-    };
+    } satisfies IHttpMigrateRoute as IHttpMigrateRoute;
   };
 
   const writeRouteComment = (props: {
@@ -449,7 +452,9 @@ export namespace MigrateRouteConverter {
   }): OpenApi.IJsonSchema.IReference => {
     props.document.components.schemas ??= {};
     props.document.components.schemas[props.name] = props.schema;
-    return { $ref: `#/components/schemas/${props.name}` };
+    return {
+      $ref: `#/components/schemas/${props.name}`,
+    } satisfies OpenApi.IJsonSchema.IReference;
   };
 
   const isNotObjectLiteral = (schema: OpenApi.IJsonSchema): boolean =>

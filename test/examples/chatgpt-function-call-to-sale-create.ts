@@ -1,6 +1,5 @@
 import {
   HttpLlm,
-  IChatGptSchema,
   IHttpLlmApplication,
   IHttpLlmFunction,
   OpenApi,
@@ -32,7 +31,7 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined =
+  const func: IHttpLlmFunction<"chatgpt"> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
       (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",

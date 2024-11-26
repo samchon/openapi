@@ -7,16 +7,16 @@ import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
 export namespace LlmConverterV3 {
   export const parameters = (props: {
+    config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject;
-    config: ILlmSchemaV3.IConfig;
   }): ILlmSchemaV3.IParameters | null =>
     schema(props) as ILlmSchemaV3.IParameters | null;
 
   export const schema = (props: {
+    config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    config: Omit<ILlmSchemaV3.IConfig, "separate">;
   }): ILlmSchemaV3 | null => {
     const resolved: OpenApi.IJsonSchema | null = OpenApiTypeChecker.escape({
       components: props.components,

@@ -13,10 +13,7 @@ import { OpenApi } from "../OpenApi";
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IHttpMigrateRoute<
-  Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
-> {
+export interface IHttpMigrateRoute {
   /**
    * Method of the route.
    *
@@ -78,7 +75,7 @@ export interface IHttpMigrateRoute<
    *
    * Note that, not a list of every parameters, but only path parameters.
    */
-  parameters: IHttpMigrateRoute.IParameter<Schema>[];
+  parameters: IHttpMigrateRoute.IParameter[];
 
   /**
    * Metadata of headers.
@@ -95,7 +92,7 @@ export interface IHttpMigrateRoute<
    * forcibly, its property {@link IHttpMigrateRoute.IHeaders.name name} and
    * {@link IHttpMigrateRoute.IHeaders.key key} are always "headers".
    */
-  headers: IHttpMigrateRoute.IHeaders<Schema> | null;
+  headers: IHttpMigrateRoute.IHeaders | null;
 
   /**
    * Metadata of query values.
@@ -112,7 +109,7 @@ export interface IHttpMigrateRoute<
    * forcibly, its property {@link IHttpMigrateRoute.IQuery.name name} and
    * {@link IHttpMigrateRoute.IQuery.key key} are always "headers".
    */
-  query: IHttpMigrateRoute.IQuery<Schema> | null;
+  query: IHttpMigrateRoute.IQuery | null;
 
   /**
    * Metadata of request body.
@@ -123,7 +120,7 @@ export interface IHttpMigrateRoute<
    * If the `body` property is `null`, it means the operation does not require
    * the request body data.
    */
-  body: IHttpMigrateRoute.IBody<Schema> | null;
+  body: IHttpMigrateRoute.IBody | null;
 
   /**
    * Metadata of response body for success case.
@@ -134,7 +131,7 @@ export interface IHttpMigrateRoute<
    * If the `success` property is `null`, it means the operation does not have
    * the response body data. In other words, the RPC function would return `void`.
    */
-  success: IHttpMigrateRoute.IBody<Schema> | null;
+  success: IHttpMigrateRoute.IBody | null;
 
   /**
    * Metadata of response body for exceptional status cases.
@@ -147,7 +144,7 @@ export interface IHttpMigrateRoute<
    * stringified number, but sometimes it could be a string like "default",
    * because the OpenAPI document allows the status code to be a string.
    */
-  exceptions: Record<string, IHttpMigrateRoute.IException<Schema>>;
+  exceptions: Record<string, IHttpMigrateRoute.IException>;
 
   /**
    * Description comment for the route function.
@@ -171,15 +168,13 @@ export interface IHttpMigrateRoute<
    * The `operation` is a function returning the original
    * {@link OpenApi.IOperation} from the {@link OpenAPI} document.
    */
-  operation: () => Operation;
+  operation: () => OpenApi.IOperation;
 }
 export namespace IHttpMigrateRoute {
   /**
    * Metadata of path parameter.
    */
-  export interface IParameter<
-    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  > {
+  export interface IParameter {
     /**
      * Name of the path parameter.
      */
@@ -193,7 +188,7 @@ export namespace IHttpMigrateRoute {
     /**
      * Metadata of path parameter data type.
      */
-    schema: Schema;
+    schema: OpenApi.IJsonSchema;
 
     /**
      * Original parameter info from the OpenAPI document.
@@ -201,15 +196,13 @@ export namespace IHttpMigrateRoute {
      * The `parameter` is a function returning the original
      * {@link OpenApi.IOperation.IParameter} from the {@link OpenAPI} document.
      */
-    parameter: () => OpenApi.IOperation.IParameter<Schema>;
+    parameter: () => OpenApi.IOperation.IParameter;
   }
 
   /**
    * Metadata of headers.
    */
-  export interface IHeaders<
-    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  > {
+  export interface IHeaders {
     /**
      * Name of the headers parameter.
      */
@@ -223,7 +216,7 @@ export namespace IHttpMigrateRoute {
     /**
      * Metadata of headers data type.
      */
-    schema: Schema;
+    schema: OpenApi.IJsonSchema;
     title: () => string | undefined;
     description: () => string | undefined;
     example: () => any | undefined;
@@ -233,12 +226,10 @@ export namespace IHttpMigrateRoute {
   /**
    * Metadata of query values.
    */
-  export interface IQuery<
-    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  > {
+  export interface IQuery {
     name: string;
     key: string;
-    schema: Schema;
+    schema: OpenApi.IJsonSchema;
     title: () => string | undefined;
     description: () => string | undefined;
     example: () => any | undefined;
@@ -248,9 +239,7 @@ export namespace IHttpMigrateRoute {
   /**
    * Metadata of request/response body.
    */
-  export interface IBody<
-    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  > {
+  export interface IBody {
     /**
      * Name of the body parameter.
      */
@@ -273,7 +262,7 @@ export namespace IHttpMigrateRoute {
     /**
      * Metadata of response body data type.
      */
-    schema: Schema;
+    schema: OpenApi.IJsonSchema;
 
     /**
      * Description comment for the request/response body.
@@ -283,7 +272,7 @@ export namespace IHttpMigrateRoute {
     /**
      * Media type of the request/response body.
      */
-    media: () => OpenApi.IOperation.IMediaType<Schema>;
+    media: () => OpenApi.IOperation.IMediaType;
 
     /**
      * Whether the body is encrypted or not.
@@ -294,22 +283,20 @@ export namespace IHttpMigrateRoute {
   /**
    * Metadata of response body for exceptional status cases.
    */
-  export interface IException<
-    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  > {
+  export interface IException {
     /**
      * Metadata of response body data type.
      */
-    schema: Schema;
+    schema: OpenApi.IJsonSchema;
 
     /**
      * Description comment for the exception.
      */
-    response: () => OpenApi.IOperation.IResponse<Schema>;
+    response: () => OpenApi.IOperation.IResponse;
 
     /**
      * Media type of the response body.
      */
-    media: () => OpenApi.IOperation.IMediaType<Schema>;
+    media: () => OpenApi.IOperation.IMediaType;
   }
 }

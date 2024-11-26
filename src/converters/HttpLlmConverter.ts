@@ -4,6 +4,7 @@ import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
+import { ILlmSchema } from "../structures/ILlmSchema";
 import { ChatGptConverter } from "./ChatGptConverter";
 import { ClaudeConverter } from "./ClaudeConverter";
 import { GeminiConverter } from "./GeminiConverter";
@@ -13,78 +14,64 @@ import { LlmConverterV3_1 } from "./LlmConverterV3_1";
 import { LlmSchemaConverter } from "./LlmSchemaConverter";
 
 export namespace HttpLlmConverter {
-  export const application = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-      OpenApi.IJsonSchema,
-      Operation
-    >,
-  >(props: {
+  export const application = <Model extends ILlmSchema.Model>(props: {
     model: Model;
-    migrate: IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
+    migrate: IHttpMigrateApplication;
     options: IHttpLlmApplication.IOptions<Model>;
-  }): IHttpLlmApplication<Model, Parameters, Operation, Route> => {
+  }): IHttpLlmApplication<Model> => {
     // COMPOSE FUNCTIONS
-    const errors: IHttpLlmApplication.IError<Operation, Route>[] =
-      props.migrate.errors.map((e) => ({
+    const errors: IHttpLlmApplication.IError[] = props.migrate.errors.map(
+      (e) => ({
         method: e.method,
         path: e.path,
         messages: e.messages,
         operation: () => e.operation(),
         route: () => undefined,
-      }));
-    const functions: IHttpLlmFunction<Parameters, Operation, Route>[] =
-      props.migrate.routes
-        .map((route) => {
-          if (route.method === "head") {
-            errors.push({
-              method: route.method,
-              path: route.path,
-              messages: [
-                "HEAD method is not supported in the LLM application.",
-              ],
-              operation: () => route.operation(),
-              route: () => route as any as Route,
-            });
-            return null;
-          } else if (
-            route.body?.type === "multipart/form-data" ||
-            route.success?.type === "multipart/form-data"
-          ) {
-            errors.push({
-              method: route.method,
-              path: route.path,
-              messages: [
-                `The "multipart/form-data" content type is not supported in the LLM application.`,
-              ],
-              operation: () => route.operation(),
-              route: () => route as any as Route,
-            });
-            return null;
-          }
-          const func: IHttpLlmFunction<Parameters> | null = composeFunction({
-            model: props.model,
-            options: props.options,
-            components: props.migrate.document().components,
-            route,
+      }),
+    );
+    const functions: IHttpLlmFunction<Model>[] = props.migrate.routes
+      .map((route) => {
+        if (route.method === "head") {
+          errors.push({
+            method: route.method,
+            path: route.path,
+            messages: ["HEAD method is not supported in the LLM application."],
+            operation: () => route.operation(),
+            route: () => route as any as IHttpMigrateRoute,
           });
-          if (func === null)
-            errors.push({
-              method: route.method,
-              path: route.path,
-              messages: ["Failed to escape $ref"],
-              operation: () => route.operation(),
-              route: () => route as any as Route,
-            });
-          return func;
-        })
-        .filter(
-          (v): v is IHttpLlmFunction<Parameters, Operation, Route> =>
-            v !== null,
-        );
+          return null;
+        } else if (
+          route.body?.type === "multipart/form-data" ||
+          route.success?.type === "multipart/form-data"
+        ) {
+          errors.push({
+            method: route.method,
+            path: route.path,
+            messages: [
+              `The "multipart/form-data" content type is not supported in the LLM application.`,
+            ],
+            operation: () => route.operation(),
+            route: () => route as any as IHttpMigrateRoute,
+          });
+          return null;
+        }
+        const func: IHttpLlmFunction<Model> | null = composeFunction<Model>({
+          model: props.model,
+          options: props.options,
+          components: props.migrate.document().components,
+          route: route,
+        });
+        if (func === null)
+          errors.push({
+            method: route.method,
+            path: route.path,
+            messages: ["Failed to escape $ref"],
+            operation: () => route.operation(),
+            route: () => route as any as IHttpMigrateRoute,
+          });
+        return func;
+      })
+      .filter((v): v is IHttpLlmFunction<Model> => v !== null);
     return {
       model: props.model,
       options: props.options,
@@ -93,63 +80,52 @@ export namespace HttpLlmConverter {
     };
   };
 
-  export const separate = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-  >(props: {
+  export const separate = <Model extends ILlmSchema.Model>(props: {
     model: Model;
-    parameters: Parameters;
-    predicate: (schema: Parameters["properties"][string]) => boolean;
-  }): IHttpLlmFunction.ISeparated<Parameters> => {
+    parameters: ILlmSchema.ModelParameters[Model];
+    predicate: (schema: ILlmSchema.ModelSchema[Model]) => boolean;
+  }): IHttpLlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]> => {
     const separator: (props: {
-      predicate: (schema: Parameters["properties"][string]) => boolean;
-      schema: Parameters["properties"][string];
+      predicate: (schema: ILlmSchema.ModelSchema[Model]) => boolean;
+      schema: ILlmSchema.ModelSchema[Model];
     }) => [
-      Parameters["properties"][string] | null,
-      Parameters["properties"][string] | null,
+      ILlmSchema.ModelParameters[Model] | null,
+      ILlmSchema.ModelParameters[Model] | null,
     ] = SEPARATORS[props.model] as any;
     const [llm, human] = separator({
       predicate: props.predicate,
-      schema: props.parameters as Parameters["properties"][string],
+      schema: props.parameters,
     });
     return {
-      llm: llm as Parameters | null,
-      human: human as Parameters | null,
-    };
+      llm,
+      human,
+    } satisfies IHttpLlmFunction.ISeparated<
+      ILlmSchema.ModelParameters[Model]
+    > as IHttpLlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]>;
   };
 
-  const composeFunction = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-      OpenApi.IJsonSchema,
-      Operation
-    >,
-  >(props: {
+  const composeFunction = <Model extends ILlmSchema.Model>(props: {
     model: Model;
     components: OpenApi.IComponents;
-    route: IHttpMigrateRoute<OpenApi.IJsonSchema, Operation>;
+    route: IHttpMigrateRoute;
     options: IHttpLlmApplication.IOptions<Model>;
-  }): IHttpLlmFunction<Parameters, Operation, Route> | null => {
+  }): IHttpLlmFunction<Model> | null => {
     const $defs: Record<string, IChatGptSchema> = {};
     const cast = (
       s: OpenApi.IJsonSchema,
-    ): Parameters["properties"][string] | null =>
+    ): ILlmSchema.ModelSchema[Model] | null =>
       LlmSchemaConverter.schema(props.model)({
         config: props.options as any,
         schema: s,
         components: props.components,
         $defs,
-      }) as Parameters["properties"][string] | null;
-    const output: Parameters["properties"][string] | null | undefined =
+      }) as ILlmSchema.ModelSchema[Model] | null;
+    const output: ILlmSchema.ModelSchema[Model] | null | undefined =
       props.route.success && props.route.success
         ? cast(props.route.success.schema)
         : undefined;
     if (output === null) return null;
-    const properties: [string, Parameters["properties"][string] | null][] = [
+    const properties: [string, ILlmSchema.ModelSchema[Model] | null][] = [
       ...props.route.parameters.map((p) => ({
         key: p.key,
         schema: {
@@ -190,14 +166,14 @@ export namespace HttpLlmConverter {
     if (properties.some(([_k, v]) => v === null)) return null;
 
     // COMPOSE PARAMETERS
-    const parameters: Parameters = {
+    const parameters: ILlmSchema.ModelParameters[Model] = {
       type: "object",
       properties: Object.fromEntries(
-        properties as [string, Parameters["properties"][string]][],
+        properties as [string, ILlmSchema.ModelSchema[Model]][],
       ),
       additionalProperties: false,
       required: properties.map(([k]) => k),
-    } as any as Parameters;
+    } as any as ILlmSchema.ModelParameters[Model];
     if (Object.keys($defs).length)
       (parameters as any as IChatGptSchema.IParameters).$defs = $defs;
     const operation: OpenApi.IOperation = props.route.operation();
@@ -212,7 +188,7 @@ export namespace HttpLlmConverter {
       separated: props.options.separate
         ? separate({
             model: props.model,
-            predicate: props.options.separate as any,
+            predicate: props.options.separate,
             parameters,
           })
         : undefined,

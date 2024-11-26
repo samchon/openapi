@@ -2,6 +2,7 @@ import { OpenApi } from "../OpenApi";
 import { IChatGptSchema } from "./IChatGptSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
+import { ILlmSchema } from "./ILlmSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
@@ -57,15 +58,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IHttpLlmFunction<
-  Parameters extends
-    | ILlmSchemaV3.IParameters
-    | ILlmSchemaV3_1.IParameters
-    | IChatGptSchema.IParameters
-    | IGeminiSchema.IParameters,
-  Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  Route extends IHttpMigrateRoute = IHttpMigrateRoute,
-> {
+export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
   /**
    * HTTP method of the endpoint.
    */
@@ -150,14 +143,14 @@ export interface IHttpLlmFunction<
    * ]
    * ```
    */
-  parameters: Parameters;
+  parameters: ILlmSchema.ModelParameters[Model];
 
   /**
    * Collection of separated parameters.
    *
    * Filled only when {@link IHttpLlmApplication.IOptions.separate} is configured.
    */
-  separated?: IHttpLlmFunction.ISeparated<Parameters>;
+  separated?: IHttpLlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]>;
 
   /**
    * Expected return type.
@@ -165,7 +158,7 @@ export interface IHttpLlmFunction<
    * If the target operation returns nothing (`void`), the `output`
    * would be `undefined`.
    */
-  output?: Parameters | undefined;
+  output?: ILlmSchema.ModelSchema[Model] | undefined;
 
   /**
    * Description of the function.
@@ -216,7 +209,7 @@ export interface IHttpLlmFunction<
    *
    * @returns Swagger operation metadata.
    */
-  operation: () => Operation;
+  operation: () => OpenApi.IOperation;
 
   /**
    * Get the migration route metadata.
@@ -225,7 +218,7 @@ export interface IHttpLlmFunction<
    *
    * @returns Migration route metadata.
    */
-  route: () => Route;
+  route: () => IHttpMigrateRoute;
 }
 export namespace IHttpLlmFunction {
   /**

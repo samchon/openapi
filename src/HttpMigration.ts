@@ -72,13 +72,9 @@ export namespace HttpMigration {
    * @param document OpenAPI document to migrate.
    * @returns Migrated application.
    */
-  export const application = <
-    Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-    Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
-  >(
-    document: OpenApi.IDocument<Schema, Operation>,
-  ): IHttpMigrateApplication<Schema, Operation> =>
-    MigrateConverter.convert(document);
+  export const application = (
+    document: OpenApi.IDocument,
+  ): IHttpMigrateApplication => MigrateConverter.convert(document);
 
   /**
    * Properties for the request to the HTTP server.

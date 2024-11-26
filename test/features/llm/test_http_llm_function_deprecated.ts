@@ -3,7 +3,6 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  ILlmSchemaV3,
   OpenApi,
 } from "@samchon/openapi";
 
@@ -15,9 +14,8 @@ export const test_http_llm_function_deprecated = (): void => {
     model: "3.0",
     document,
   });
-  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
-    application.functions.find(
-      (f) => f.method === "get" && f.path === "/nothing",
-    );
+  const func: IHttpLlmFunction<"3.0"> | undefined = application.functions.find(
+    (f) => f.method === "get" && f.path === "/nothing",
+  );
   TestValidator.equals("deprecated")(func?.deprecated)(true);
 };

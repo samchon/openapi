@@ -1,4 +1,9 @@
-import { ILlmApplication } from "./ILlmApplication";
+import { IChatGptSchema } from "./IChatGptSchema";
+import { IClaudeSchema } from "./IClaudeSchema";
+import { IGeminiSchema } from "./IGeminiSchema";
+import { ILlamaSchema } from "./ILlamaSchema";
+import { ILlmSchemaV3 } from "./ILlmSchemaV3";
+import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * The schemas for the LLM function calling.
@@ -13,11 +18,36 @@ import { ILlmApplication } from "./ILlmApplication";
  * @reference https://platform.openai.com/docs/guides/structured-outputs
  * @author Jeongho Nam - https://github.com/samchon
  */
-export type ILlmSchema<
-  Model extends ILlmApplication.Model = ILlmApplication.Model,
-> = ILlmApplication.ModelSchema[Model];
+export type ILlmSchema<Model extends ILlmSchema.Model = ILlmSchema.Model> =
+  ILlmSchema.ModelSchema[Model];
 
 export namespace ILlmSchema {
+  export type Model = "chatgpt" | "claude" | "gemini" | "llama" | "3.0" | "3.1";
+  export interface ModelConfig {
+    chatgpt: IChatGptSchema.IConfig;
+    claude: IClaudeSchema.IConfig;
+    gemini: IGeminiSchema.IConfig;
+    llama: ILlamaSchema.IConfig;
+    "3.0": ILlmSchemaV3.IConfig;
+    "3.1": ILlmSchemaV3_1.IConfig;
+  }
+  export interface ModelParameters {
+    chatgpt: IChatGptSchema.IParameters;
+    claude: IClaudeSchema.IParameters;
+    gemini: IGeminiSchema.IParameters;
+    llama: ILlamaSchema.IParameters;
+    "3.0": ILlmSchemaV3.IParameters;
+    "3.1": ILlmSchemaV3_1.IParameters;
+  }
+  export interface ModelSchema {
+    chatgpt: IChatGptSchema;
+    claude: IClaudeSchema;
+    gemini: IGeminiSchema;
+    llama: ILlamaSchema;
+    "3.0": ILlmSchemaV3;
+    "3.1": ILlmSchemaV3_1;
+  }
+
   /**
    * Type of function parameters.
    *
@@ -28,14 +58,12 @@ export namespace ILlmSchema {
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
-  export type IParameters<
-    Model extends ILlmApplication.Model = ILlmApplication.Model,
-  > = ILlmApplication.ModelParameters[Model];
+  export type IParameters<Model extends ILlmSchema.Model = ILlmSchema.Model> =
+    ILlmSchema.ModelParameters[Model];
 
   /**
    * Configuration for the LLM schema composition.
    */
-  export type IConfig<
-    Model extends ILlmApplication.Model = ILlmApplication.Model,
-  > = ILlmApplication.ModelConfig[Model];
+  export type IConfig<Model extends ILlmSchema.Model = ILlmSchema.Model> =
+    ILlmSchema.ModelConfig[Model];
 }

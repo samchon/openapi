@@ -15,37 +15,31 @@ import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IHttpMigrateApplication<
-  Schema extends OpenApi.IJsonSchema = OpenApi.IJsonSchema,
-  Operation extends OpenApi.IOperation<Schema> = OpenApi.IOperation<Schema>,
-> {
+export interface IHttpMigrateApplication {
   /**
    * List of routes for migration.
    */
-  routes: IHttpMigrateRoute<Schema, Operation>[];
+  routes: IHttpMigrateRoute[];
 
   /**
    * List of errors occurred during the migration.
    */
-  errors: IHttpMigrateApplication.IError<Operation>[];
+  errors: IHttpMigrateApplication.IError[];
 
   /**
    * Source OpenAPI document.
    */
-  document: () => OpenApi.IDocument<Schema, Operation>;
+  document: () => OpenApi.IDocument;
 }
 export namespace IHttpMigrateApplication {
   /**
    * Error of migration in the operation level.
    */
-  export interface IError<
-    Operation extends
-      OpenApi.IOperation<any> = OpenApi.IOperation<OpenApi.IJsonSchema>,
-  > {
+  export interface IError {
     /**
      * Target operation causing the error.
      */
-    operation: () => Operation;
+    operation: () => OpenApi.IOperation;
 
     /**
      * Method of the operation.
