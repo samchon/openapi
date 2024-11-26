@@ -5,7 +5,6 @@ import {
   IHttpLlmApplication,
   IHttpLlmFunction,
   IHttpResponse,
-  ILlmSchemaV3,
   LlmTypeCheckerV3,
   OpenApi,
 } from "@samchon/openapi";
@@ -24,12 +23,10 @@ export const test_http_llm_fetcher_parameters = async (
         LlmTypeCheckerV3.isString(schema) && !!schema.contentMediaType,
     },
   });
-  const func: IHttpLlmFunction<ILlmSchemaV3.IParameters> | undefined =
-    application.functions.find(
-      (f) =>
-        f.path === "/{index}/{level}/{optimal}/parameters" &&
-        f.method === "get",
-    );
+  const func: IHttpLlmFunction<"3.0"> | undefined = application.functions.find(
+    (f) =>
+      f.path === "/{index}/{level}/{optimal}/parameters" && f.method === "get",
+  );
   if (func === undefined) throw new Error("Function not found");
 
   const response: IHttpResponse = await HttpLlm.propagate({

@@ -1,5 +1,5 @@
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { ILlmApplication, OpenApi } from "@samchon/openapi";
+import { ILlmSchema, OpenApi } from "@samchon/openapi";
 import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
 import OpenAI from "openai";
 import typia, { IJsonSchemaCollection } from "typia";
@@ -9,21 +9,21 @@ import { TestGlobal } from "../TestGlobal";
 import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
 
 export namespace LlamaFunctionCaller {
-  export const test = async <Model extends ILlmApplication.Model>(props: {
+  export const test = async <Model extends ILlmSchema.Model>(props: {
     model: Model;
-    config?: Partial<ILlmApplication.ModelConfig[Model]>;
+    config?: Partial<ILlmSchema.ModelConfig[Model]>;
     name: string;
     description: string;
     collection: IJsonSchemaCollection;
     texts: ILlmTextPrompt[];
     handleCompletion: (input: any) => Promise<void>;
     handleParameters?: (
-      parameters: ILlmApplication.ModelParameters[Model],
+      parameters: ILlmSchema.ModelParameters[Model],
     ) => Promise<void>;
   }): Promise<void> => {
     if (TestGlobal.env.LLAMA_API_KEY === undefined) return;
 
-    const parameters: ILlmApplication.ModelParameters[Model] | null =
+    const parameters: ILlmSchema.ModelParameters[Model] | null =
       LlmSchemaConverter.parameters(props.model)({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
@@ -32,8 +32,8 @@ export namespace LlamaFunctionCaller {
         config: {
           ...LlmSchemaConverter.defaultConfig(props.model),
           ...(props.config ?? {}),
-        } satisfies ILlmApplication.ModelConfig[Model] as any,
-      }) as ILlmApplication.ModelParameters[Model] | null;
+        } satisfies ILlmSchema.ModelConfig[Model] as any,
+      }) as ILlmSchema.ModelParameters[Model] | null;
 
     if (parameters === null)
       throw new Error(

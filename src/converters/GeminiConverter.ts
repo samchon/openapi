@@ -6,16 +6,16 @@ import { LlmConverterV3 } from "./LlmConverterV3";
 
 export namespace GeminiConverter {
   export const parameters = (props: {
+    config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    config: IGeminiSchema.IConfig;
   }): IGeminiSchema.IParameters | null =>
     schema(props) as IGeminiSchema.IParameters | null;
 
   export const schema = (props: {
+    config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    config: IGeminiSchema.IConfig;
   }): IGeminiSchema | null => {
     const schema: ILlmSchemaV3 | null = LlmConverterV3.schema({
       components: props.components,

@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import {
   ClaudeTypeChecker,
   HttpLlm,
-  IClaudeSchema,
   IHttpLlmApplication,
   IHttpLlmFunction,
   OpenApi,
@@ -39,7 +38,7 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IClaudeSchema.IParameters> | undefined =
+  const func: IHttpLlmFunction<"claude"> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
       (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",

@@ -2,6 +2,7 @@ import { OpenApi } from "../OpenApi";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmApplication } from "./ILlmApplication";
+import { ILlmSchema } from "./ILlmSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 
 /**
@@ -67,13 +68,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IHttpLlmApplication<
-  Model extends IHttpLlmApplication.Model,
-  Parameters extends
-    IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-  Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  Route extends IHttpMigrateRoute = IHttpMigrateRoute,
-> {
+export interface IHttpLlmApplication<Model extends ILlmSchema.Model> {
   /**
    * Model of the target LLM.
    */
@@ -87,36 +82,25 @@ export interface IHttpLlmApplication<
    * When you want to execute the function with LLM constructed arguments,
    * you can do it through {@link LlmFetcher.execute} function.
    */
-  functions: IHttpLlmFunction<Parameters, Operation, Route>[];
+  functions: IHttpLlmFunction<Model>[];
 
   /**
    * List of errors occurred during the composition.
    */
-  errors: IHttpLlmApplication.IError<Operation, Route>[];
+  errors: IHttpLlmApplication.IError[];
 
   /**
    * Configuration for the application.
    */
-  options: IHttpLlmApplication.IOptions<
-    Model,
-    IHttpLlmApplication.ModelSchema[Model]
-  >;
+  options: IHttpLlmApplication.IOptions<Model>;
 }
 export namespace IHttpLlmApplication {
-  export import Model = ILlmApplication.Model;
-  export import ModelParameters = ILlmApplication.ModelParameters;
-  export import ModelSchema = ILlmApplication.ModelSchema;
-  export import ModelConfig = ILlmApplication.ModelConfig;
-
   export import IOptions = ILlmApplication.IOptions;
 
   /**
    * Error occurred in the composition.
    */
-  export interface IError<
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute,
-  > {
+  export interface IError {
     /**
      * HTTP method of the endpoint.
      */
@@ -137,7 +121,7 @@ export namespace IHttpLlmApplication {
      *
      * Get the Swagger operation metadata, of the source.
      */
-    operation: () => Operation;
+    operation: () => OpenApi.IOperation;
 
     /**
      * Get the migration route metadata.
@@ -149,6 +133,6 @@ export namespace IHttpLlmApplication {
      *
      * @returns Migration route metadata.
      */
-    route: () => Route | undefined;
+    route: () => IHttpMigrateRoute | undefined;
   }
 }

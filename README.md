@@ -43,9 +43,9 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - [`IHttpLlmFunction<Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
   - Supported schemas
     - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude (same with [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts))
+    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude
     - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts): Google Gemini
-    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta (Facebook) Llama (same with [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts))
+    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta Llama
   - Midldle layer schemas
     - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
@@ -109,13 +109,14 @@ const main = async (): Promise<void> => {
     },
     application,
     function: func,
-    arguments: [
-      {
+    arguments: {
+      // arguments composed by LLM 
+      body: {
         title: "Hello, world!",
         body: "Let's imagine that this argument is composed by LLM.",
         thumbnail: null,
       },
-    ],
+    },
   });
   console.log("article", article);
 };
@@ -318,7 +319,7 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined =
+  const func: IHttpLlmFunction<"chatgpt"> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
       (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
@@ -428,7 +429,7 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IClaudeSchema.IParameters> | undefined =
+  const func: IHttpLlmFunction<"claude"> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
       (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",

@@ -1,8 +1,5 @@
-import { IChatGptSchema } from "../structures/IChatGptSchema";
-import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { ILlmFunction } from "../structures/ILlmFunction";
-import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
+import { ILlmSchema } from "../structures/ILlmSchema";
 
 /**
  * Data combiner for LLM function call.
@@ -13,17 +10,11 @@ export namespace LlmDataMerger {
   /**
    * Properties of {@link parameters} function.
    */
-  export interface IProps<
-    Parameters extends
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters
-      | IChatGptSchema.IParameters
-      | IGeminiSchema.IParameters,
-  > {
+  export interface IProps {
     /**
      * Target function to call.
      */
-    function: ILlmFunction<Parameters>;
+    function: ILlmFunction<ILlmSchema.Model>;
 
     /**
      * Arguments composed by LLM (Large Language Model).
@@ -51,15 +42,7 @@ export namespace LlmDataMerger {
    * @param props Properties to combine LLM and human arguments with metadata.
    * @returns Combined arguments
    */
-  export const parameters = <
-    Parameters extends
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters
-      | IChatGptSchema.IParameters
-      | IGeminiSchema.IParameters,
-  >(
-    props: IProps<Parameters>,
-  ): object => {
+  export const parameters = (props: IProps): object => {
     const separated = props.function.separated;
     if (separated === undefined)
       throw new Error(

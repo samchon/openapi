@@ -61,25 +61,19 @@ export namespace OpenApi {
    * @param input Swagger or OpenAPI document to convert
    * @returns Emended OpenAPI v3.1 document
    */
-  export function convert<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  >(
+  export function convert(
     input:
       | SwaggerV2.IDocument
       | OpenApiV3.IDocument
       | OpenApiV3_1.IDocument
-      | OpenApi.IDocument<Schema, Operation>,
-  ): IDocument<Schema, Operation> {
+      | OpenApi.IDocument,
+  ): IDocument {
     if (OpenApiV3_1.is(input))
-      return OpenApiV3_1Converter.convert(input) as IDocument<
-        Schema,
-        Operation
-      >;
+      return OpenApiV3_1Converter.convert(input) as IDocument;
     else if (OpenApiV3.is(input))
-      return OpenApiV3Converter.convert(input) as IDocument<Schema, Operation>;
+      return OpenApiV3Converter.convert(input) as IDocument;
     else if (SwaggerV2.is(input))
-      return SwaggerV2Converter.convert(input) as IDocument<Schema, Operation>;
+      return SwaggerV2Converter.convert(input) as IDocument;
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
   }
 
@@ -92,11 +86,8 @@ export namespace OpenApi {
    * @param version Version to downgrade
    * @returns Swagger v2.0 document
    */
-  export function downgrade<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  >(
-    document: IDocument<Schema, Operation>,
+  export function downgrade(
+    document: IDocument,
     version: "2.0",
   ): SwaggerV2.IDocument;
 
@@ -109,22 +100,16 @@ export namespace OpenApi {
    * @param version Version to downgrade
    * @returns OpenAPI v3.0 document
    */
-  export function downgrade<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  >(
-    document: IDocument<Schema, Operation>,
+  export function downgrade(
+    document: IDocument,
     version: "3.0",
   ): OpenApiV3.IDocument;
 
   /**
    * @internal
    */
-  export function downgrade<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  >(
-    document: IDocument<Schema, Operation>,
+  export function downgrade(
+    document: IDocument,
     version: string,
   ): SwaggerV2.IDocument | OpenApiV3.IDocument {
     if (version === "2.0") return SwaggerV2Downgrader.downgrade(document);
@@ -143,14 +128,8 @@ export namespace OpenApi {
    * In other words, `OpenApi.IDocument` is a structure of `swagger.json` file of
    * OpenAPI v3.1 specification, but a little bit shrinked to remove ambiguous and
    * duplicated expressions of OpenAPI v3.1 for the convenience and clarity.
-   *
-   * @template Schema JSON schema type
-   * @template Operation HTTP operation type
    */
-  export interface IDocument<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  > {
+  export interface IDocument {
     /**
      * OpenAPI version number.
      */
@@ -174,14 +153,14 @@ export namespace OpenApi {
      * For reference, `nestia` defines every object and alias types as reusable DTO
      * schemas. The alias type means that defined by `type` keyword in TypeScript.
      */
-    components: IComponents<Schema>;
+    components: IComponents;
 
     /**
      * The available paths and operations for the API.
      *
      * The 1st key is the path, and the 2nd key is the HTTP method.
      */
-    paths?: Record<string, IPath<Schema, Operation>>;
+    paths?: Record<string, IPath>;
 
     /**
      * An object to hold Webhooks.
@@ -189,7 +168,7 @@ export namespace OpenApi {
      * Its structure is same with {@link paths}, so that the 1st key is the path,
      * and the 2nd key is the HTTP method.
      */
-    webhooks?: Record<string, IPath<Schema, Operation>>;
+    webhooks?: Record<string, IPath>;
 
     /**
      * A declaration of which security mechanisms can be used across the API.
@@ -378,10 +357,7 @@ export namespace OpenApi {
    * `OpenApi.IPath` represents a path item of emended OpenAPI v3.1,
    * collecting multiple method operations in a single path.
    */
-  export interface IPath<
-    Schema extends IJsonSchema = IJsonSchema,
-    Operation extends IOperation<Schema> = IOperation<Schema>,
-  > extends Partial<Record<Method, Operation>> {
+  export interface IPath extends Partial<Record<Method, IOperation>> {
     /**
      * Servers that provide the path operations.
      */
@@ -404,7 +380,7 @@ export namespace OpenApi {
    * `OpenApi.IOperation` represents an Restful API operation provided by the
    * remote server.
    */
-  export interface IOperation<Schema extends IJsonSchema = IJsonSchema> {
+  export interface IOperation {
     /**
      * Unique string used to identify the operation.
      */
@@ -413,19 +389,19 @@ export namespace OpenApi {
     /**
      * List of parameters that are applicable for this operation.
      */
-    parameters?: IOperation.IParameter<Schema>[];
+    parameters?: IOperation.IParameter[];
 
     /**
      * The request body applicable for this operation.
      */
-    requestBody?: IOperation.IRequestBody<Schema>;
+    requestBody?: IOperation.IRequestBody;
 
     /**
      * The list of possible responses as they are returned from executing this
      * operation. Its key is the HTTP status code, and the value is the metadata of
      * the response in the HTTP status code.
      */
-    responses?: Record<string, IOperation.IResponse<Schema>>;
+    responses?: Record<string, IOperation.IResponse>;
 
     /**
      * A list of servers providing this API operation.
@@ -470,7 +446,7 @@ export namespace OpenApi {
     /**
      * Parameter of the operation.
      */
-    export interface IParameter<Schema extends IJsonSchema = IJsonSchema> {
+    export interface IParameter {
       /**
        * Representative name of the parameter.
        *
@@ -499,7 +475,7 @@ export namespace OpenApi {
       /**
        * Type info of the parameter.
        */
-      schema: Schema;
+      schema: IJsonSchema;
 
       /**
        * Whether the parameter is required for execution or not.
@@ -537,8 +513,8 @@ export namespace OpenApi {
     /**
      * Request body of the operation.
      */
-    export interface IRequestBody<Schema extends IJsonSchema = IJsonSchema> {
-      content?: IContent<Schema>;
+    export interface IRequestBody {
+      content?: IContent;
       description?: string;
       required?: boolean;
       "x-nestia-encrypted"?: boolean;
@@ -547,9 +523,9 @@ export namespace OpenApi {
     /**
      * Response of the operation.
      */
-    export interface IResponse<Schema extends IJsonSchema = IJsonSchema> {
-      headers?: Record<string, IOperation.IParameter<Schema>>;
-      content?: IContent<Schema>;
+    export interface IResponse {
+      headers?: Record<string, IOperation.IParameter>;
+      content?: IContent;
       description?: string;
       "x-nestia-encrypted"?: boolean;
     }
@@ -557,14 +533,14 @@ export namespace OpenApi {
     /**
      * List of content types supported in request/response body.
      */
-    export interface IContent<Schema extends IJsonSchema = IJsonSchema>
-      extends Partial<Record<ContentType, IMediaType<Schema>>> {}
+    export interface IContent
+      extends Partial<Record<ContentType, IMediaType>> {}
 
     /**
      * Media type of a request/response body.
      */
-    export interface IMediaType<Schema extends IJsonSchema = IJsonSchema> {
-      schema?: Schema;
+    export interface IMediaType {
+      schema?: IJsonSchema;
       example?: any;
       examples?: Record<string, IExample>;
     }
@@ -601,13 +577,13 @@ export namespace OpenApi {
    *
    * In other words, it is a storage of named DTO schemas and security schemes.
    */
-  export interface IComponents<Schema extends IJsonSchema = IJsonSchema> {
+  export interface IComponents {
     /**
      * An object to hold reusable DTO schemas.
      *
      * In other words, a collection of named JSON schemas.
      */
-    schemas?: Record<string, Schema>;
+    schemas?: Record<string, IJsonSchema>;
 
     /**
      * An object to hold reusable security schemes.
@@ -835,15 +811,14 @@ export namespace OpenApi {
     /**
      * Array type info.
      */
-    export interface IArray<Schema extends IJsonSchema = IJsonSchema>
-      extends __ISignificant<"array"> {
+    export interface IArray extends __ISignificant<"array"> {
       /**
        * Items type info.
        *
        * The `items` means the type of the array elements. In other words, it is
        * the type schema info of the `T` in the TypeScript array type `Array<T>`.
        */
-      items: Schema;
+      items: IJsonSchema;
 
       /**
        * Unique items restriction.
@@ -874,8 +849,7 @@ export namespace OpenApi {
     /**
      * Tuple type info.
      */
-    export interface ITuple<Schema extends IJsonSchema = IJsonSchema>
-      extends __ISignificant<"array"> {
+    export interface ITuple extends __ISignificant<"array"> {
       /**
        * Prefix items.
        *
@@ -885,7 +859,7 @@ export namespace OpenApi {
        * If you want to express `[T1, T2, ...TO[]]` type, you can configure the
        * `...TO[]` through the {@link additionalItems} property.
        */
-      prefixItems: Schema[];
+      prefixItems: IJsonSchema[];
 
       /**
        * Additional items.
@@ -902,7 +876,7 @@ export namespace OpenApi {
        * it means the additional items must follow the type schema info.
        * Therefore, it is equivalent to the TypeScript type `[T1, T2, ...TO[]]`.
        */
-      additionalItems?: boolean | Schema;
+      additionalItems?: boolean | IJsonSchema;
 
       /**
        * Unique items restriction.
@@ -933,8 +907,7 @@ export namespace OpenApi {
     /**
      * Object type info.
      */
-    export interface IObject<Schema extends IJsonSchema = IJsonSchema>
-      extends __ISignificant<"object"> {
+    export interface IObject extends __ISignificant<"object"> {
       /**
        * Properties of the object.
        *
@@ -945,7 +918,7 @@ export namespace OpenApi {
        * If you need additional properties that is represented by dynamic key,
        * you can use the {@link additionalProperties} instead.
        */
-      properties?: Record<string, Schema>;
+      properties?: Record<string, IJsonSchema>;
 
       /**
        * Additional properties' info.
@@ -961,7 +934,7 @@ export namespace OpenApi {
        * - `true`: `Record<string, any>`
        * - `IOpenAiSchema`: `Record<string, T>`
        */
-      additionalProperties?: boolean | Schema;
+      additionalProperties?: boolean | IJsonSchema;
 
       /**
        * List of key values of the required properties.
@@ -1026,12 +999,11 @@ export namespace OpenApi {
      * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
      * converts it to `oneOf` type.
      */
-    export interface IOneOf<Schema extends IJsonSchema = IJsonSchema>
-      extends __IAttribute {
+    export interface IOneOf extends __IAttribute {
       /**
        * List of the union types.
        */
-      oneOf: Exclude<Schema, IJsonSchema.IOneOf<Schema>>[];
+      oneOf: Exclude<IJsonSchema, IJsonSchema.IOneOf>[];
 
       /**
        * Discriminator info of the union type.

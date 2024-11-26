@@ -3,17 +3,13 @@ import { OpenApi } from "./OpenApi";
 import { HttpLlmConverter } from "./converters/HttpLlmConverter";
 import { LlmSchemaConverter } from "./converters/LlmSchemaConverter";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
-import { IChatGptSchema } from "./structures/IChatGptSchema";
-import { IGeminiSchema } from "./structures/IGeminiSchema";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "./structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
-import { IHttpMigrateRoute } from "./structures/IHttpMigrateRoute";
 import { IHttpResponse } from "./structures/IHttpResponse";
 import { ILlmFunction } from "./structures/ILlmFunction";
-import { ILlmSchemaV3 } from "./structures/ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./structures/ILlmSchemaV3_1";
+import { ILlmSchema } from "./structures/ILlmSchema";
 import { LlmDataMerger } from "./utils/LlmDataMerger";
 
 /**
@@ -43,6 +39,17 @@ export namespace HttpLlm {
     COMPOSERS
   ----------------------------------------------------------- */
   /**
+   * Properties for the LLM function calling application composer.
+   *
+   * @template Model Target LLM model
+   */
+  export interface IApplicationProps<Model extends ILlmSchema.Model> {
+    model: Model;
+    document: OpenApi.IDocument;
+    options?: Partial<IHttpLlmApplication.IOptions<Model>>;
+  }
+
+  /**
    * Convert OpenAPI document to LLM function calling application.
    *
    * Converts {@link OpenApi.IDocument OpenAPI document} or
@@ -67,29 +74,14 @@ export namespace HttpLlm {
    * @param options Options for the LLM function calling application conversion
    * @returns LLM function calling application
    */
-  export const application = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  >(props: {
-    model: Model;
-    document:
-      | OpenApi.IDocument<OpenApi.IJsonSchema, Operation>
-      | IHttpMigrateApplication<OpenApi.IJsonSchema, Operation>;
-    options?: Partial<
-      IHttpLlmApplication.IOptions<
-        Model,
-        IHttpLlmApplication.ModelSchema[Model]
-      >
-    >;
-  }): IHttpLlmApplication<Model, Parameters> => {
+  export const application = <Model extends ILlmSchema.Model>(
+    props: IApplicationProps<Model>,
+  ): IHttpLlmApplication<Model> => {
     // MIGRATE
-    const migrate: IHttpMigrateApplication =
-      (props.document as OpenApi.IDocument)["x-samchon-emended"] === true
-        ? HttpMigration.application(props.document as OpenApi.IDocument)
-        : (props.document as IHttpMigrateApplication);
-    return HttpLlmConverter.application<Model, Parameters>({
+    const migrate: IHttpMigrateApplication = HttpMigration.application(
+      props.document as OpenApi.IDocument,
+    );
+    return HttpLlmConverter.application<Model>({
       migrate,
       model: props.model,
       options: {
@@ -105,25 +97,16 @@ export namespace HttpLlm {
   /**
    * Properties for the LLM function call.
    */
-  export interface IFetchProps<
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-      OpenApi.IJsonSchema,
-      Operation
-    >,
-  > {
+  export interface IFetchProps<Model extends ILlmSchema.Model> {
     /**
      * Application of the LLM function calling.
      */
-    application: IHttpLlmApplication<Model, Parameters, Operation>;
+    application: IHttpLlmApplication<Model>;
 
     /**
      * LLM function schema to call.
      */
-    function: IHttpLlmFunction<Parameters, Operation, Route>;
+    function: IHttpLlmFunction<ILlmSchema.Model>;
 
     /**
      * Connection info to the HTTP server.
@@ -161,14 +144,9 @@ export namespace HttpLlm {
    * @returns Return value (response body) from the API endpoint
    * @throws HttpError when the API endpoint responds none 200/201 status
    */
-  export const execute = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  >(
-    props: IFetchProps<Model, Parameters, Operation>,
-  ): Promise<unknown> => HttpLlmFunctionFetcher.execute(props);
+  export const execute = <Model extends ILlmSchema.Model>(
+    props: IFetchProps<Model>,
+  ): Promise<unknown> => HttpLlmFunctionFetcher.execute<Model>(props);
 
   /**
    * Propagate the LLM function call.
@@ -194,14 +172,9 @@ export namespace HttpLlm {
    * @returns Response from the API endpoint
    * @throws Error only when the connection is failed
    */
-  export const propagate = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-  >(
-    props: IFetchProps<Model, Parameters, Operation>,
-  ): Promise<IHttpResponse> => HttpLlmFunctionFetcher.propagate(props);
+  export const propagate = <Model extends ILlmSchema.Model>(
+    props: IFetchProps<Model>,
+  ): Promise<IHttpResponse> => HttpLlmFunctionFetcher.propagate<Model>(props);
 
   /* -----------------------------------------------------------
     MERGERS
@@ -209,17 +182,11 @@ export namespace HttpLlm {
   /**
    * Properties for the parameters' merging.
    */
-  export interface IMergeProps<
-    Parameters extends
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters
-      | IChatGptSchema.IParameters
-      | IGeminiSchema.IParameters,
-  > {
+  export interface IMergeProps {
     /**
      * Metadata of the target function.
      */
-    function: ILlmFunction<Parameters>;
+    function: ILlmFunction<any>;
 
     /**
      * Arguments composed by the LLM.
@@ -247,15 +214,8 @@ export namespace HttpLlm {
    * @param props Properties for the parameters' merging
    * @returns Merged parameter values
    */
-  export const mergeParameters = <
-    Parameters extends
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters
-      | IChatGptSchema.IParameters
-      | IGeminiSchema.IParameters,
-  >(
-    props: IMergeProps<Parameters>,
-  ): object => LlmDataMerger.parameters(props);
+  export const mergeParameters = (props: IMergeProps): object =>
+    LlmDataMerger.parameters(props);
 
   /**
    * Merge two values.

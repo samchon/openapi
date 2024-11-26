@@ -1,10 +1,6 @@
-import { IChatGptSchema } from "./IChatGptSchema";
-import { IClaudeSchema } from "./IClaudeSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
-import { ILlamaSchema } from "./ILlamaSchema";
 import { ILlmFunction } from "./ILlmFunction";
-import { ILlmSchemaV3 } from "./ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
+import { ILlmSchema } from "./ILlmSchema";
 
 /**
  * Application of LLM function calling.
@@ -29,11 +25,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface ILlmApplication<
-  Model extends ILlmApplication.Model,
-  Parameters extends
-    ILlmApplication.ModelParameters[Model] = ILlmApplication.ModelParameters[Model],
-> {
+export interface ILlmApplication<Model extends ILlmSchema.Model> {
   /**
    * Model of the LLM.
    */
@@ -44,47 +36,18 @@ export interface ILlmApplication<
    *
    * List of function metadata that can be used for the LLM function call.
    */
-  functions: ILlmFunction<Parameters>[];
+  functions: ILlmFunction<Model>[];
 
   /**
    * Configuration for the application.
    */
-  options: ILlmApplication.IOptions<Model, ILlmApplication.ModelSchema[Model]>;
+  options: ILlmApplication.IOptions<Model>;
 }
 export namespace ILlmApplication {
-  export type Model = "chatgpt" | "claude" | "gemini" | "llama" | "3.0" | "3.1";
-  export type ModelParameters = {
-    chatgpt: IChatGptSchema.IParameters;
-    claude: IClaudeSchema.IParameters;
-    gemini: IGeminiSchema.IParameters;
-    llama: ILlamaSchema.IParameters;
-    "3.0": ILlmSchemaV3.IParameters;
-    "3.1": ILlmSchemaV3_1.IParameters;
-  };
-  export type ModelSchema = {
-    chatgpt: IChatGptSchema;
-    claude: IClaudeSchema;
-    gemini: IGeminiSchema;
-    llama: ILlamaSchema;
-    "3.0": ILlmSchemaV3;
-    "3.1": ILlmSchemaV3_1;
-  };
-  export type ModelConfig = {
-    chatgpt: IChatGptSchema.IConfig;
-    claude: IClaudeSchema.IConfig;
-    gemini: IGeminiSchema.IConfig;
-    llama: ILlamaSchema.IConfig;
-    "3.0": ILlmSchemaV3.IConfig;
-    "3.1": ILlmSchemaV3_1.IConfig;
-  };
-
   /**
    * Options for application composition.
    */
-  export type IOptions<
-    Model extends ILlmApplication.Model,
-    Schema extends ModelSchema[Model] = ModelSchema[Model],
-  > = {
+  export type IOptions<Model extends ILlmSchema.Model> = {
     /**
      * Separator function for the parameters.
      *
@@ -113,6 +76,6 @@ export namespace ILlmApplication {
      * @returns Whether the schema value must be composed by human or not.
      * @default null
      */
-    separate: null | ((schema: Schema) => boolean);
-  } & ModelConfig[Model];
+    separate: null | ((schema: ILlmSchema.ModelSchema[Model]) => boolean);
+  } & ILlmSchema.ModelConfig[Model];
 }

@@ -261,15 +261,14 @@ export namespace ILlmSchemaV3 {
   /**
    * Array type schema info.
    */
-  export interface IArray<Schema extends ILlmSchemaV3 = ILlmSchemaV3>
-    extends __ISignificant<"array"> {
+  export interface IArray extends __ISignificant<"array"> {
     /**
      * Items type schema info.
      *
      * The `items` means the type of the array elements. In other words, it is
      * the type schema info of the `T` in the TypeScript array type `Array<T>`.
      */
-    items: Schema;
+    items: ILlmSchemaV3;
 
     /**
      * Unique items restriction.
@@ -300,8 +299,7 @@ export namespace ILlmSchemaV3 {
   /**
    * Object type schema info.
    */
-  export interface IObject<Schema extends ILlmSchemaV3 = ILlmSchemaV3>
-    extends __ISignificant<"object"> {
+  export interface IObject extends __ISignificant<"object"> {
     /**
      * Properties of the object.
      *
@@ -312,7 +310,7 @@ export namespace ILlmSchemaV3 {
      * If you need additional properties that is represented by dynamic key,
      * you can use the {@link additionalProperties} instead.
      */
-    properties: Record<string, Schema>;
+    properties: Record<string, ILlmSchemaV3>;
 
     /**
      * List of key values of the required properties.
@@ -397,12 +395,11 @@ export namespace ILlmSchemaV3 {
    * defined `anyOf` instead of the `oneOf`, it has been forcibly converted
    * to `oneOf` type by {@link OpenApi.convert OpenAPI conversion}.
    */
-  export interface IOneOf<Schema extends ILlmSchemaV3 = ILlmSchemaV3>
-    extends __IAttribute {
+  export interface IOneOf extends __IAttribute {
     /**
      * List of the union types.
      */
-    oneOf: Exclude<Schema, ILlmSchemaV3.IOneOf<Schema>>[];
+    oneOf: Exclude<ILlmSchemaV3, ILlmSchemaV3.IOneOf>[];
   }
 
   /**

@@ -1,54 +1,28 @@
 import type { HttpLlm } from "../HttpLlm";
 import type { HttpMigration } from "../HttpMigration";
-import { OpenApi } from "../OpenApi";
-import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { IHttpResponse } from "../structures/IHttpResponse";
+import { ILlmSchema } from "../structures/ILlmSchema";
 import { HttpMigrateRouteFetcher } from "./HttpMigrateRouteFetcher";
 
 export namespace HttpLlmFunctionFetcher {
-  export const execute = async <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-      OpenApi.IJsonSchema,
-      Operation
-    >,
-  >(
-    props: HttpLlm.IFetchProps<Model, Parameters, Operation, Route>,
+  export const execute = <Model extends ILlmSchema.Model>(
+    props: HttpLlm.IFetchProps<Model>,
   ): Promise<unknown> =>
-    HttpMigrateRouteFetcher.execute(getFetchArguments("execute", props));
+    HttpMigrateRouteFetcher.execute(getFetchArguments<Model>("execute", props));
 
-  export const propagate = async <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-      OpenApi.IJsonSchema,
-      Operation
-    >,
-  >(
-    props: HttpLlm.IFetchProps<Model, Parameters, Operation, Route>,
+  export const propagate = <Model extends ILlmSchema.Model>(
+    props: HttpLlm.IFetchProps<Model>,
   ): Promise<IHttpResponse> =>
-    HttpMigrateRouteFetcher.propagate(getFetchArguments("propagate", props));
+    HttpMigrateRouteFetcher.propagate(
+      getFetchArguments<Model>("propagate", props),
+    );
 
-  const getFetchArguments = <
-    Model extends IHttpLlmApplication.Model,
-    Parameters extends
-      IHttpLlmApplication.ModelParameters[Model] = IHttpLlmApplication.ModelParameters[Model],
-    Operation extends OpenApi.IOperation = OpenApi.IOperation,
-    Route extends IHttpMigrateRoute = IHttpMigrateRoute<
-      OpenApi.IJsonSchema,
-      Operation
-    >,
-  >(
+  const getFetchArguments = <Model extends ILlmSchema.Model>(
     from: string,
-    props: HttpLlm.IFetchProps<Model, Parameters, Operation, Route>,
+    props: HttpLlm.IFetchProps<Model>,
   ): HttpMigration.IFetchProps => {
-    const route: Route = props.function.route();
+    const route: IHttpMigrateRoute = props.function.route();
     const input: Record<string, any> = props.input;
     const valid: boolean = typeof input === "object" && input !== null;
     if (valid === false)

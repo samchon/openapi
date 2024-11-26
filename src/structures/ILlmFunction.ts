@@ -1,6 +1,7 @@
 import { IChatGptSchema } from "./IChatGptSchema";
 import { IClaudeSchema } from "./IClaudeSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
+import { ILlmSchema } from "./ILlmSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
@@ -26,14 +27,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface ILlmFunction<
-  Parameters extends
-    | IChatGptSchema.IParameters
-    | IClaudeSchema.IParameters
-    | IGeminiSchema.IParameters
-    | ILlmSchemaV3.IParameters
-    | ILlmSchemaV3_1.IParameters,
-> {
+export interface ILlmFunction<Model extends ILlmSchema.Model> {
   /**
    * Representative name of the function.
    */
@@ -42,12 +36,12 @@ export interface ILlmFunction<
   /**
    * List of parameter types.
    */
-  parameters: Parameters;
+  parameters: ILlmSchema.ModelParameters[Model];
 
   /**
    * Collection of separated parameters.
    */
-  separated?: ILlmFunction.ISeparated<Parameters>;
+  separated?: ILlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]>;
 
   /**
    * Expected return type.
@@ -55,7 +49,7 @@ export interface ILlmFunction<
    * If the function returns nothing (`void`), the `output` value would
    * be `undefined`.
    */
-  output?: Parameters["properties"][string];
+  output?: ILlmSchema.ModelSchema[Model];
 
   /**
    * Whether the function schema types are strict or not.

@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { ILlmApplication, OpenApi } from "@samchon/openapi";
+import { ILlmSchema, OpenApi } from "@samchon/openapi";
 import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -12,19 +12,19 @@ export namespace ClaudeFunctionCaller {
     Model extends "chatgpt" | "claude" | "gemini",
   >(props: {
     model: Model;
-    config: Partial<ILlmApplication.ModelConfig[Model]>;
+    config: Partial<ILlmSchema.ModelConfig[Model]>;
     name: string;
     description: string;
     collection: IJsonSchemaCollection;
     texts: ILlmTextPrompt[];
     handleCompletion: (input: any) => Promise<void>;
     handleParameters?: (
-      parameters: ILlmApplication.ModelParameters[Model],
+      parameters: ILlmSchema.ModelParameters[Model],
     ) => Promise<void>;
   }): Promise<void> => {
     if (TestGlobal.env.CLAUDE_API_KEY === undefined) return;
 
-    const parameters: ILlmApplication.ModelParameters[Model] | null =
+    const parameters: ILlmSchema.ModelParameters[Model] | null =
       LlmSchemaConverter.parameters(props.model)({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
@@ -33,8 +33,8 @@ export namespace ClaudeFunctionCaller {
         config: {
           ...LlmSchemaConverter.defaultConfig(props.model),
           ...(props.config ?? {}),
-        } satisfies ILlmApplication.ModelConfig[Model] as any,
-      }) as ILlmApplication.ModelParameters[Model] | null;
+        } satisfies ILlmSchema.ModelConfig[Model] as any,
+      }) as ILlmSchema.ModelParameters[Model] | null;
     if (parameters === null)
       throw new Error(
         "Failed to convert the JSON schema to the Claude schema.",
