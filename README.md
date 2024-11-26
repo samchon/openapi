@@ -245,7 +245,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 
 > [!NOTE]
 >
-> You also can compose [`ILlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts) from a class type through `typia`.
+> You also can compose [`ILlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts) from a class type with `typia`.
 >
 > https://typia.io/docs/llm/application
 >
@@ -277,6 +277,12 @@ In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.exec
   - LLM function schema to call
   - Arguments for the function call (maybe composed by LLM)
 
+Here is the example code executing the LLM function call with `@samchon/openapi`.
+
+  - Example Code: [`test/examples/chatgpt-function-call-to-sale-create.ts`](https://github.com/samchon/openapi/blob/master/test/examples/chatgpt-function-call-to-sale-create.ts)
+  - Prompt describing the produc to create:  [`Microsoft Surpace Pro 9`](https://github.com/samchon/openapi/blob/master/test/executable/chatgpt-function-calling.ts)
+  - Result of the Function Calling: [`examples/arguments/chatgpt.microsoft-surface-pro-9.input.json`](https://github.com/samchon/openapi/blob/master/examples/function-calling/arguments/chatgpt.microsoft-surface-pro-9.input.json)
+
 ```typescript
 import {
   HttpLlm,
@@ -288,17 +294,18 @@ import {
   OpenApiV3_1,
   SwaggerV2,
 } from "@samchon/openapi";
-import fs from "fs";
+import OpenAI from "openai";
 import typia from "typia";
-import { v4 } from "uuid";
 
 const main = async (): Promise<void> => {
-  // read swagger document and validate it
+  // Read swagger document and validate it
   const swagger:
     | SwaggerV2.IDocument
     | OpenApiV3.IDocument
     | OpenApiV3_1.IDocument = JSON.parse(
-    await fs.promises.readFile("swagger.json", "utf8"),
+    await fetch(
+      "https://github.com/samchon/shopping-backend/blob/master/packages/api/swagger.json",
+    ).then((r) => r.json()),
   );
   typia.assert(swagger); // recommended
 
@@ -311,33 +318,55 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined = 
+  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
-      (f) => f.path === "/bbs/{section}/articles/{id}" && f.method === "put",
+      (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
     );
   if (func === undefined) throw new Error("No matched function exists.");
 
-  // actual execution is by yourself
+  // Get arguments by ChatGPT function calling
+  const client: OpenAI = new OpenAI({
+    apiKey: "<YOUR_OPENAI_API_KEY>",
+  });
+  const completion: OpenAI.ChatCompletion =
+    await client.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "assistant",
+          content:
+            "You are a helpful customer support assistant. Use the supplied tools to assist the user.",
+        },
+        {
+          role: "user",
+          content: "<DESCRIPTION ABOUT THE SALE>",
+          // https://github.com/samchon/openapi/blob/master/examples/function-calling/prompts/microsoft-surface-pro-9.md
+        },
+      ],
+      tools: [
+        {
+          type: "function",
+          function: {
+            name: func.name,
+            description: func.description,
+            parameters: func.parameters as Record<string, any>,
+            strict: true,
+          },
+        },
+      ],
+    });
+  const toolCall: OpenAI.ChatCompletionMessageToolCall =
+    completion.choices[0].message.tool_calls![0];
+
+  // Actual execution by yourself
   const article = await HttpLlm.execute({
     connection: {
-      host: "http://localhost:3000",
+      host: "http://localhost:37001",
     },
     application,
     function: func,
-    input: {
-      section: "general",
-      id: v4(),
-      query: {
-        language: "en-US",
-        format: "markdown",
-      },
-      body: {
-        title: "Hello, world!",
-        body: "Let's imagine that this argument is composed by LLM.",
-        thumbnail: null,
-      },
-    },
+    input: JSON.parse(toolCall.function.arguments),
   });
   console.log("article", article);
 };
@@ -353,11 +382,16 @@ In that case, you can configure the LLM function calling schemas to exclude such
 
 Here is the example code separating the file uploading feature from the LLM function calling schema, and combining both Human and LLM composed parameters into one before the LLM function call execution.
 
+  - Example Code: [`test/examples/claude-function-call-separate-to-sale-create.ts`](https://github.com/samchon/openapi/blob/master/test/examples/claude-function-call-separate-to-sale-create.ts)
+  - Prompt describing the produc to create:  [`Microsoft Surpace Pro 9`](https://github.com/samchon/openapi/blob/master/test/executable/chatgpt-function-calling.ts)
+  - Result of the Function Calling: [`examples/arguments/claude.microsoft-surface-pro-9.input.json`](https://github.com/samchon/openapi/blob/master/examples/function-calling/arguments/claude.microsoft-surface-pro-9.input.json)
+
 ```typescript
+import Anthropic from "@anthropic-ai/sdk";
 import {
+  ClaudeTypeChecker,
   HttpLlm,
-  ChatGptTypeChecker,
-  IChatGptSchema,
+  IClaudeSchema,
   IHttpLlmApplication,
   IHttpLlmFunction,
   OpenApi,
@@ -365,67 +399,95 @@ import {
   OpenApiV3_1,
   SwaggerV2,
 } from "@samchon/openapi";
-import fs from "fs";
 import typia from "typia";
-import { v4 } from "uuid";
 
 const main = async (): Promise<void> => {
-  // read swagger document and validate it
+  // Read swagger document and validate it
   const swagger:
     | SwaggerV2.IDocument
     | OpenApiV3.IDocument
     | OpenApiV3_1.IDocument = JSON.parse(
-    await fs.promises.readFile("swagger.json", "utf8"),
+    await fetch(
+      "https://github.com/samchon/shopping-backend/blob/master/packages/api/swagger.json",
+    ).then((r) => r.json()),
   );
   typia.assert(swagger); // recommended
 
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
-    model: "chatgpt",
-    document, 
+  const application: IHttpLlmApplication<"claude"> = HttpLlm.application({
+    model: "claude",
+    document,
     options: {
-      keyword: false,
+      reference: true,
       separate: (schema) =>
-        ChatGptTypeChecker.isString(schema) && schema.contentMediaType !== undefined,
+        ClaudeTypeChecker.isString(schema) &&
+        !!schema.contentMediaType?.startsWith("image"),
     },
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined = 
+  const func: IHttpLlmFunction<IClaudeSchema.IParameters> | undefined =
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
-      (f) => f.path === "/bbs/articles/{id}" && f.method === "put",
+      (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
     );
   if (func === undefined) throw new Error("No matched function exists.");
 
-  // actual execution is by yourself
+  // Get arguments by ChatGPT function calling
+  const client: Anthropic = new Anthropic({
+    apiKey: "<YOUR_ANTHROPIC_API_KEY>",
+  });
+  const completion: Anthropic.Message = await client.messages.create({
+    model: "claude-3-5-sonnet-latest",
+    max_tokens: 8_192,
+    messages: [
+      {
+        role: "assistant",
+        content:
+          "You are a helpful customer support assistant. Use the supplied tools to assist the user.",
+      },
+      {
+        role: "user",
+        content: "<DESCRIPTION ABOUT THE SALE>",
+        // https://github.com/samchon/openapi/blob/master/examples/function-calling/prompts/microsoft-surface-pro-9.md
+      },
+    ],
+    tools: [
+      {
+        name: func.name,
+        description: func.description,
+        input_schema: func.separated!.llm as any,
+      },
+    ],
+  });
+  const toolCall: Anthropic.ToolUseBlock = completion.content.filter(
+    (c) => c.type === "tool_use",
+  )[0]!;
+
+  // Actual execution by yourself
   const article = await HttpLlm.execute({
     connection: {
-      host: "http://localhost:3000",
+      host: "http://localhost:37001",
     },
     application,
     function: func,
-    arguments: HttpLlm.mergeParameters({
+    input: HttpLlm.mergeParameters({
       function: func,
-      llm: {
-        // LLM composed parameter values
-        section: "general",
-        id: v4(),
-        query: {
-          language: "en-US",
-          format: "markdown",
-        },
-        body: {
-          title: "Hello, world!",
-          content: "Let's imagine that this argument is composed by LLM.",
-        },
-      },
+      llm: toolCall.input as any,
       human: {
         // Human composed parameter values
-        body: { 
-          thumbnail: "https://example.com/thumbnail.jpg",
+        content: {
+          files: [],
+          thumbnails: [
+            {
+              name: "thumbnail",
+              extension: "jpeg",
+              url: "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg",
+            },
+            // ...
+          ],
         },
       },
     }),
