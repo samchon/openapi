@@ -51,7 +51,7 @@ export namespace ChatGptFunctionCaller {
             function: {
               name: props.name,
               description: props.description,
-              parameters: parameters as any,
+              parameters: parameters as Record<string, any>,
               strict: true,
             },
           },
