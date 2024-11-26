@@ -39,8 +39,8 @@ OpenAPI definitions, converters and LLM function calling application composer.
 `@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts) module, you can perform the LLM funtion calling extremely easily just by delivering the OpenAPI (Swagger) document.
 
   - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
-  - [`IHttpLlmApplication<Model, Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
-  - [`IHttpLlmFunction<Schema>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - [`IHttpLlmApplication<Model>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
+  - [`IHttpLlmFunction<Model>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
   - Supported schemas
     - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
     - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude
@@ -95,7 +95,7 @@ const main = async (): Promise<void> => {
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<IChatGptSchema.IParameters> | undefined = 
+  const func: IHttpLlmFunction<"chatgpt"> | undefined = 
     application.functions.find(
       // (f) => f.name === "llm_selected_fuction_name"
       (f) => f.path === "/bbs/articles" && f.method === "post",
