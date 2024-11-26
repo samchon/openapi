@@ -382,7 +382,7 @@ In that case, you can configure the LLM function calling schemas to exclude such
 
 Here is the example code separating the file uploading feature from the LLM function calling schema, and combining both Human and LLM composed parameters into one before the LLM function call execution.
 
-  - Example Code: [`test/examples/claude-function-call-separate-to-sale-create.ts`](https://github.com/samchon/openapi/blob/master/test/examples/claude-function-call-separate-to-sale-create.ts)
+  - Example Code: [`test/examples/claude-function-call-separate-to-sale-create.ts`](https://github.com/samchon/openapi/blob/master/test/examples/claude-function-call-separate-to-sale-create.ts.ts)
   - Prompt describing the produc to create:  [`Microsoft Surpace Pro 9`](https://github.com/samchon/openapi/blob/master/test/executable/chatgpt-function-calling.ts)
   - Result of the Function Calling: [`examples/arguments/claude.microsoft-surface-pro-9.input.json`](https://github.com/samchon/openapi/blob/master/examples/function-calling/arguments/claude.microsoft-surface-pro-9.input.json)
 
