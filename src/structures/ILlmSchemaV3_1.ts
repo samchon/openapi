@@ -26,7 +26,6 @@
  *
  * - {@link ILlmSchemaV3_1.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.schemas}
  * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
- * - {@link ILlmSchemaV3_1.additionalProperties} is fixed to `false`
  * - {@link ILlmSchemaV3_1.properties} and {@link ILlmSchemaV3_1.required} are always defined
  *
  * For reference, if you've composed the `ILlmSchemaV3_1` type with the
@@ -330,10 +329,15 @@ export namespace ILlmSchemaV3_1 {
      * The `additionalProperties` means the type schema info of the additional
      * properties that are not listed in the {@link properties}.
      *
-     * By the way, as LLM function calling does not support such dynamic key
-     * typed properties, the `additionalProperties` becomes always `false`.
+     * If the value is `true`, it means that the additional properties are not
+     * restricted. They can be any type. Otherwise, if the value is
+     * {@link IOpenAiSchema} type, it means that the additional properties must
+     * follow the type schema info.
+     *
+     * - `true`: `Record<string, any>`
+     * - `IOpenAiSchema`: `Record<string, T>`
      */
-    additionalProperties: false;
+    additionalProperties?: boolean | ILlmSchemaV3_1;
 
     /**
      * List of key values of the required properties.

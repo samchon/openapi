@@ -24,6 +24,7 @@
  * - {@link IChatGptSchema.IAnyOf} instead of the {@link OpenApi.IJsonSchema.IOneOf}
  * - {@link IChatGptSchema.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.IComponents.schemas}
  * - {@link IChatGptSchema.IString.enum} instead of the {@link OpenApi.IJsonSchema.IConstant}
+ * - {@link IChatGptSchema.additionalProperties} is fixed to `false`
  * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
  * - Forcibly transform every object properties to be required
  *
@@ -151,9 +152,6 @@ export namespace IChatGptSchema {
      * The `properties` means a list of key-value pairs of the object's
      * regular properties. The key is the name of the regular property,
      * and the value is the type schema info.
-     *
-     * If you need additional properties that is represented by dynamic key,
-     * you can use the {@link additionalProperties} instead.
      */
     properties: Record<string, IChatGptSchema>;
 
@@ -163,8 +161,9 @@ export namespace IChatGptSchema {
      * The `additionalProperties` means the type schema info of the additional
      * properties that are not listed in the {@link properties}.
      *
-     * By the way, as LLM function calling does not support such dynamic key
-     * typed properties, the `additionalProperties` becomes always `false`.
+     * By the way, as ChatGPT function calling does not support such
+     * dynamic key typed properties, the `additionalProperties` becomes
+     * always `false`.
      */
     additionalProperties: false;
 

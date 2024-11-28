@@ -9,13 +9,17 @@ export namespace LlmConverterV3_1 {
   export const parameters = (props: {
     config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }): ILlmSchemaV3_1.IParameters | null => {
     const $defs: Record<string, ILlmSchemaV3_1> = {};
+    const entity: OpenApi.IJsonSchema | null =
+      OpenApiTypeChecker.unreference(props);
+    if (entity === null || OpenApiTypeChecker.isObject(entity) === false)
+      return null;
     const res: ILlmSchemaV3_1.IParameters | null = schema({
       config: props.config,
       components: props.components,
-      schema: props.schema,
+      schema: entity,
       $defs,
     }) as ILlmSchemaV3_1.IParameters | null;
     if (res === null) return null;
@@ -124,11 +128,25 @@ export namespace LlmConverterV3_1 {
           );
         if (Object.values(properties).some((v) => v === null))
           return union.push(null);
-        if (!!input.additionalProperties === null) return union.push(null);
+        const additionalProperties:
+          | ILlmSchemaV3_1
+          | boolean
+          | null
+          | undefined =
+          typeof input.additionalProperties === "object" &&
+          input.additionalProperties !== null
+            ? schema({
+                config: props.config,
+                components: props.components,
+                $defs: props.$defs,
+                schema: input.additionalProperties,
+              })
+            : input.additionalProperties;
+        if (additionalProperties === null) return union.push(null);
         return union.push({
           ...input,
           properties: properties as Record<string, ILlmSchemaV3_1>,
-          additionalProperties: false,
+          additionalProperties,
           required: Object.keys(properties),
         });
       } else if (OpenApiTypeChecker.isArray(input)) {

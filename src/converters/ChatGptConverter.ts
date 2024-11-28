@@ -10,7 +10,7 @@ export namespace ChatGptConverter {
   export const parameters = (props: {
     config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }): IChatGptSchema.IParameters | null => {
     const params: ILlmSchemaV3_1.IParameters | null =
       LlmConverterV3_1.parameters({
@@ -24,9 +24,7 @@ export namespace ChatGptConverter {
     if (params === null) return null;
     for (const key of Object.keys(params.$defs))
       params.$defs[key] = transform(params.$defs[key]);
-    for (const key of Object.keys(params.properties))
-      params.properties[key] = transform(params.properties[key]);
-    return params;
+    return transform(params) as IChatGptSchema.IParameters;
   };
 
   export const schema = (props: {
@@ -81,6 +79,7 @@ export namespace ChatGptConverter {
               transform(value),
             ]),
           ),
+          additionalProperties: false,
         });
       else if (LlmTypeCheckerV3_1.isConstant(input) === false)
         union.push(input);

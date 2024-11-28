@@ -29,7 +29,6 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *
  * - {@link IClaudeSchema.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.schemas}
  * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
- * - {@link IClaudeSchema.additionalProperties} is fixed to `false`
  * - {@link IClaudeSchema.properties} and {@link IClaudeSchema.required} are always defined
  *
  * For reference, if you've composed the `IClaudeSchema` type with the

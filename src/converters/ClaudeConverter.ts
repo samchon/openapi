@@ -6,7 +6,7 @@ export namespace ClaudeConverter {
   export const parameters = (props: {
     config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }): IClaudeSchema.IParameters | null =>
     LlmConverterV3_1.parameters({
       config: {

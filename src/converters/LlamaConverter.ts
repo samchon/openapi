@@ -6,7 +6,7 @@ export namespace LlamaConverter {
   export const parameters = (props: {
     config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }): ILlamaSchema.IParameters | null =>
     LlmConverterV3_1.parameters({
       config: {

@@ -99,6 +99,18 @@ export namespace OpenApiTypeCheckerBase {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
+  export const unreference = (props: {
+    prefix: string;
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema;
+  }): OpenApi.IJsonSchema | null => {
+    if (isReference(props.schema) === false) return props.schema;
+    const key: string = props.schema.$ref.split(props.prefix).pop()!;
+    const found: OpenApi.IJsonSchema | undefined =
+      props.components.schemas?.[key];
+    return found ? unreference({ ...props, schema: found }) : null;
+  };
+
   export const escape = (props: {
     prefix: string;
     components: OpenApi.IComponents;

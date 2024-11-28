@@ -9,9 +9,18 @@ export namespace LlmConverterV3 {
   export const parameters = (props: {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
-  }): ILlmSchemaV3.IParameters | null =>
-    schema(props) as ILlmSchemaV3.IParameters | null;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+  }): ILlmSchemaV3.IParameters | null => {
+    const entity: OpenApi.IJsonSchema | null =
+      OpenApiTypeChecker.unreference(props);
+    if (entity === null || OpenApiTypeChecker.isObject(entity) === false)
+      return null;
+    return schema({
+      config: props.config,
+      components: props.components,
+      schema: entity,
+    }) as ILlmSchemaV3.IParameters | null;
+  };
 
   export const schema = (props: {
     config: ILlmSchemaV3.IConfig;

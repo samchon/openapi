@@ -16,11 +16,11 @@ export namespace GeminiTypeChecker {
     closure: (schema: IGeminiSchema) => void,
   ): void => {
     closure(schema);
-    if (isObject(schema)) {
+    if (isObject(schema))
       Object.values(schema.properties ?? {}).forEach((child) =>
         visit(child, closure),
       );
-    } else if (isArray(schema)) visit(schema.items, closure);
+    else if (isArray(schema)) visit(schema.items, closure);
   };
 
   export const covers = (x: IGeminiSchema, y: IGeminiSchema): boolean => {
@@ -62,25 +62,7 @@ export namespace GeminiTypeChecker {
   ): boolean => {
     if (x.enum !== undefined)
       return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
-    return [
-      x.type === y.type,
-      // x.minimum === undefined ||
-      //   (y.minimum !== undefined && x.minimum <= y.minimum),
-      // x.maximum === undefined ||
-      //   (y.maximum !== undefined && x.maximum >= y.maximum),
-      // x.exclusiveMinimum !== true ||
-      //   x.minimum === undefined ||
-      //   (y.minimum !== undefined &&
-      //     (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      // x.exclusiveMaximum !== true ||
-      //   x.maximum === undefined ||
-      //   (y.maximum !== undefined &&
-      //     (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      // x.multipleOf === undefined ||
-      //   (y.multipleOf !== undefined &&
-      //     y.multipleOf / x.multipleOf ===
-      //       Math.floor(y.multipleOf / x.multipleOf)),
-    ].every((v) => v);
+    return x.type === y.type;
   };
 
   /**
@@ -92,25 +74,7 @@ export namespace GeminiTypeChecker {
   ): boolean => {
     if (x.enum !== undefined)
       return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
-    return [
-      x.type === y.type,
-      // x.minimum === undefined ||
-      //   (y.minimum !== undefined && x.minimum <= y.minimum),
-      // x.maximum === undefined ||
-      //   (y.maximum !== undefined && x.maximum >= y.maximum),
-      // x.exclusiveMinimum !== true ||
-      //   x.minimum === undefined ||
-      //   (y.minimum !== undefined &&
-      //     (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      // x.exclusiveMaximum !== true ||
-      //   x.maximum === undefined ||
-      //   (y.maximum !== undefined &&
-      //     (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      // x.multipleOf === undefined ||
-      //   (y.multipleOf !== undefined &&
-      //     y.multipleOf / x.multipleOf ===
-      //       Math.floor(y.multipleOf / x.multipleOf)),
-    ].every((v) => v);
+    return x.type === y.type;
   };
 
   /**
@@ -122,31 +86,8 @@ export namespace GeminiTypeChecker {
   ): boolean => {
     if (x.enum !== undefined)
       return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
-    return [
-      x.type === y.type,
-      // x.format === undefined ||
-      //   (y.format !== undefined && coverFormat(x.format, y.format)),
-      // x.pattern === undefined || x.pattern === y.pattern,
-      // x.minLength === undefined ||
-      //   (y.minLength !== undefined && x.minLength <= y.minLength),
-      // x.maxLength === undefined ||
-      //   (y.maxLength !== undefined && x.maxLength >= y.maxLength),
-    ].every((v) => v);
+    return x.type === y.type;
   };
-
-  // /**
-  //  * @internal
-  //  */
-  // const coverFormat = (
-  //   x: Required<IGeminiSchema.IString>["format"],
-  //   y: Required<IGeminiSchema.IString>["format"],
-  // ): boolean =>
-  //   x === y ||
-  //   (x === "idn-email" && y === "email") ||
-  //   (x === "idn-hostname" && y === "hostname") ||
-  //   (["uri", "iri"].includes(x) && y === "url") ||
-  //   (x === "iri" && y === "uri") ||
-  //   (x === "iri-reference" && y === "uri-reference");
 
   /**
    * @internal
@@ -154,23 +95,7 @@ export namespace GeminiTypeChecker {
   const coverArray = (
     x: IGeminiSchema.IArray,
     y: IGeminiSchema.IArray,
-  ): boolean => {
-    // if (
-    //   !(
-    //     x.minItems === undefined ||
-    //     (y.minItems !== undefined && x.minItems <= y.minItems)
-    //   )
-    // )
-    //   return false;
-    // else if (
-    //   !(
-    //     x.maxItems === undefined ||
-    //     (y.maxItems !== undefined && x.maxItems >= y.maxItems)
-    //   )
-    // )
-    //   return false;
-    return covers(x.items, y.items);
-  };
+  ): boolean => covers(x.items, y.items);
 
   /**
    * @internal
@@ -178,8 +103,8 @@ export namespace GeminiTypeChecker {
   const coverObject = (
     x: IGeminiSchema.IObject,
     y: IGeminiSchema.IObject,
-  ): boolean => {
-    return Object.entries(y.properties ?? {}).every(([key, b]) => {
+  ): boolean =>
+    Object.entries(y.properties ?? {}).every(([key, b]) => {
       const a: IGeminiSchema | undefined = x.properties?.[key];
       if (a === undefined) return false;
       else if (
@@ -189,7 +114,6 @@ export namespace GeminiTypeChecker {
         return false;
       return covers(a, b);
     });
-  };
 
   /* -----------------------------------------------------------
     TYPE CHECKERS
