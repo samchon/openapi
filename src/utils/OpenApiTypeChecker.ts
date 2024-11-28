@@ -90,6 +90,16 @@ export namespace OpenApiTypeChecker {
       recursive: props.recursive,
     });
 
+  export const unreference = (props: {
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema;
+  }): OpenApi.IJsonSchema | null =>
+    OpenApiTypeCheckerBase.unreference({
+      prefix: "#/components/schemas/",
+      components: props.components,
+      schema: props.schema,
+    });
+
   export const visit = (props: {
     closure: (schema: OpenApi.IJsonSchema) => void;
     components: OpenApi.IComponents;

@@ -11,7 +11,7 @@ export const test_chatgpt_function_calling_default = () =>
     },
     name: "enrollPerson",
     description: "Enroll a person to the restaurant reservation list.",
-    collection: typia.json.schemas<[{ input: IPerson }]>(),
+    collection: typia.json.schemas<[IParameters]>(),
     texts: [
       {
         role: "assistant",
@@ -41,6 +41,9 @@ export const test_chatgpt_function_calling_default = () =>
     },
   });
 
+interface IParameters {
+  input: IPerson;
+}
 interface IPerson {
   name: string & tags.Default<"John Doe">;
   age: number & tags.Default<42>;

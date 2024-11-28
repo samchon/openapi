@@ -24,9 +24,9 @@ export namespace ChatGptFunctionCaller {
     const parameters: IChatGptSchema.IParameters | null =
       LlmSchemaConverter.parameters("chatgpt")({
         components: props.collection.components,
-        schema: typia.assert<OpenApi.IJsonSchema.IObject>(
-          props.collection.schemas[0],
-        ),
+        schema: typia.assert<
+          OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
+        >(props.collection.schemas[0]),
         config: {
           ...LlmSchemaConverter.defaultConfig("chatgpt"),
           ...(props.config ?? {}),

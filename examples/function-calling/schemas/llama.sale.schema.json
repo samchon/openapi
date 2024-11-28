@@ -111,8 +111,7 @@
                   "name",
                   "extension",
                   "url"
-                ],
-                "additionalProperties": false
+                ]
               }
             },
             "thumbnails": {
@@ -152,8 +151,7 @@
                   "name",
                   "extension",
                   "url"
-                ],
-                "additionalProperties": false
+                ]
               }
             }
           },
@@ -163,8 +161,7 @@
             "body",
             "files",
             "thumbnails"
-          ],
-          "additionalProperties": false
+          ]
         },
         "channels": {
           "title": "List of channels and categories",
@@ -191,8 +188,7 @@
             "required": [
               "code",
               "category_codes"
-            ],
-            "additionalProperties": false
+            ]
           },
           "minItems": 1
         },
@@ -243,8 +239,7 @@
                         },
                         "required": [
                           "name"
-                        ],
-                        "additionalProperties": false
+                        ]
                       },
                       "minItems": 1
                     }
@@ -254,8 +249,7 @@
                     "name",
                     "variable",
                     "candidates"
-                  ],
-                  "additionalProperties": false
+                  ]
                 }
               },
               "stocks": {
@@ -292,8 +286,7 @@
                       "required": [
                         "nominal",
                         "real"
-                      ],
-                      "additionalProperties": false
+                      ]
                     },
                     "quantity": {
                       "title": "Initial inventory quantity",
@@ -321,8 +314,7 @@
                         "required": [
                           "option_index",
                           "candidate_index"
-                        ],
-                        "additionalProperties": false
+                        ]
                       }
                     }
                   },
@@ -331,8 +323,7 @@
                     "price",
                     "quantity",
                     "choices"
-                  ],
-                  "additionalProperties": false
+                  ]
                 },
                 "minItems": 1
               },
@@ -358,8 +349,7 @@
               "name",
               "required",
               "primary"
-            ],
-            "additionalProperties": false
+            ]
           },
           "minItems": 1
         },
@@ -381,13 +371,11 @@
         "channels",
         "units",
         "tags"
-      ],
-      "additionalProperties": false
+      ]
     }
   },
   "required": [
     "input"
   ],
-  "additionalProperties": false,
   "$defs": {}
 }

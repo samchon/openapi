@@ -29,7 +29,6 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *
  * - {@link ILlamaSchema.IParameters.$defs} instead of the {@link OpenApi.IJsonSchema.schemas}
  * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
- * - {@link ILlamaSchema.additionalProperties} is fixed to `false`
  * - {@link ILlamaSchema.properties} and {@link ILlamaSchema.required} are always defined
  *
  * For reference, if you've composed the `ILlamaSchema` type with the

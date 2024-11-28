@@ -28,32 +28,32 @@ const PARAMETERS_CASTERS = {
   chatgpt: (props: {
     config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }) => ChatGptConverter.parameters(props),
   claude: (props: {
     config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }) => ClaudeConverter.parameters(props),
   gemini: (props: {
     config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }) => GeminiConverter.parameters(props),
   llama: (props: {
     config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }) => LlamaConverter.parameters(props),
   "3.0": (props: {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }) => LlmConverterV3.parameters(props),
   "3.1": (props: {
     config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
   }) => LlmConverterV3_1.parameters(props),
 };
 

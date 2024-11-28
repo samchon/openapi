@@ -353,10 +353,15 @@ export namespace ILlmSchemaV3 {
      * The `additionalProperties` means the type schema info of the additional
      * properties that are not listed in the {@link properties}.
      *
-     * By the way, as LLM function calling does not support such dynamic key
-     * typed properties, the `additionalProperties` becomes always `false`.
+     * If the value is `true`, it means that the additional properties are not
+     * restricted. They can be any type. Otherwise, if the value is
+     * {@link ILlmSchemaV3} type, it means that the additional properties must
+     * follow the type schema info.
+     *
+     * - `true`: `Record<string, any>`
+     * - `IOpenAiSchema`: `Record<string, T>`
      */
-    additionalProperties: false;
+    additionalProperties?: boolean | ILlmSchemaV3;
   }
 
   /**

@@ -12,7 +12,7 @@ export namespace ClaudeFunctionCaller {
     Model extends "chatgpt" | "claude" | "gemini",
   >(props: {
     model: Model;
-    config: Partial<ILlmSchema.ModelConfig[Model]>;
+    config?: Partial<ILlmSchema.ModelConfig[Model]>;
     name: string;
     description: string;
     collection: IJsonSchemaCollection;

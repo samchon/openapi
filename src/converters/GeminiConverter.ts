@@ -2,6 +2,7 @@ import { OpenApi } from "../OpenApi";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { LlmConverterV3 } from "./LlmConverterV3";
 
 export namespace GeminiConverter {
@@ -9,8 +10,17 @@ export namespace GeminiConverter {
     config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-  }): IGeminiSchema.IParameters | null =>
-    schema(props) as IGeminiSchema.IParameters | null;
+  }): IGeminiSchema.IParameters | null => {
+    const entity: OpenApi.IJsonSchema | null =
+      OpenApiTypeChecker.unreference(props);
+    if (entity === null || OpenApiTypeChecker.isObject(entity) === false)
+      return null;
+    return schema({
+      config: props.config,
+      components: props.components,
+      schema: entity,
+    }) as IGeminiSchema.IParameters | null;
+  };
 
   export const schema = (props: {
     config: IGeminiSchema.IConfig;
