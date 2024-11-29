@@ -21,23 +21,39 @@ export namespace MigrateRouteConverter {
     )((schema) =>
       emplaceReference({
         document: props.document,
-        name: "body",
+        name:
+          StringUtil.pascal(`I/Api/${props.path}`) +
+          "." +
+          StringUtil.pascal(`${props.method}/Body`),
         schema,
       }),
     )(props.operation.requestBody);
-    const success: false | null | IHttpMigrateRoute.IBody = emplaceBodySchema(
-      "response",
-    )((schema) =>
-      emplaceReference({
-        document: props.document,
-        name: "response",
-        schema,
-      }),
-    )(
-      props.operation.responses?.["201"] ??
-        props.operation.responses?.["200"] ??
-        props.operation.responses?.default,
-    );
+    const success: false | null | IHttpMigrateRoute.ISuccess = (() => {
+      const body = emplaceBodySchema("response")((schema) =>
+        emplaceReference({
+          document: props.document,
+          name:
+            StringUtil.pascal(`I/Api/${props.path}`) +
+            "." +
+            StringUtil.pascal(`${props.method}/Response`),
+          schema,
+        }),
+      )(
+        props.operation.responses?.["201"] ??
+          props.operation.responses?.["200"] ??
+          props.operation.responses?.default,
+      );
+      return body
+        ? {
+            ...body,
+            status: props.operation.responses?.["201"]
+              ? "201"
+              : props.operation.responses?.["200"]
+                ? "200"
+                : "default",
+          }
+        : body;
+    })();
 
     const failures: string[] = [];
     if (body === false)
@@ -80,7 +96,8 @@ export namespace MigrateRouteConverter {
           OpenApiTypeChecker.isInteger(p.schema) ||
           OpenApiTypeChecker.isNumber(p.schema) ||
           OpenApiTypeChecker.isString(p.schema) ||
-          OpenApiTypeChecker.isArray(p.schema),
+          OpenApiTypeChecker.isArray(p.schema) ||
+          OpenApiTypeChecker.isTuple(p.schema),
       );
       const out = (elem: {
         schema: OpenApi.IJsonSchema;

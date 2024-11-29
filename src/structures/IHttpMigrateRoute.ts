@@ -131,7 +131,7 @@ export interface IHttpMigrateRoute {
    * If the `success` property is `null`, it means the operation does not have
    * the response body data. In other words, the RPC function would return `void`.
    */
-  success: IHttpMigrateRoute.IBody | null;
+  success: IHttpMigrateRoute.ISuccess | null;
 
   /**
    * Metadata of response body for exceptional status cases.
@@ -237,7 +237,7 @@ export namespace IHttpMigrateRoute {
   }
 
   /**
-   * Metadata of request/response body.
+   * Metadata of request body.
    */
   export interface IBody {
     /**
@@ -278,6 +278,16 @@ export namespace IHttpMigrateRoute {
      * Whether the body is encrypted or not.
      */
     "x-nestia-encrypted"?: boolean;
+  }
+
+  /**
+   * Metadata of response body.
+   */
+  export interface ISuccess extends IBody {
+    /**
+     * Status code of the response.
+     */
+    status: string;
   }
 
   /**

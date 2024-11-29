@@ -87,9 +87,11 @@ export namespace LlmTypeCheckerV3_1 {
     });
 
   export const visit = (props: {
-    closure: (schema: ILlmSchemaV3_1) => void;
+    closure: (schema: ILlmSchemaV3_1, accessor: string) => void;
     $defs?: Record<string, ILlmSchemaV3_1>;
     schema: ILlmSchemaV3_1;
+    accessor?: string;
+    refAccessor?: string;
   }): void =>
     OpenApiTypeCheckerBase.visit({
       prefix: "#/$defs/",
@@ -98,5 +100,7 @@ export namespace LlmTypeCheckerV3_1 {
       },
       closure: props.closure as any,
       schema: props.schema,
+      accessor: props.accessor,
+      refAccessor: props.refAccessor,
     });
 }

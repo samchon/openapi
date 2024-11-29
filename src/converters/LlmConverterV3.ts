@@ -3,6 +3,7 @@ import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
 import { OpenApiContraintShifter } from "../utils/OpenApiContraintShifter";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
+import { LlmParametersFinder } from "./LlmParametersFinder";
 import { OpenApiV3Downgrader } from "./OpenApiV3Downgrader";
 
 export namespace LlmConverterV3 {
@@ -10,14 +11,14 @@ export namespace LlmConverterV3 {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    errors?: string[];
+    accessor?: string;
   }): ILlmSchemaV3.IParameters | null => {
-    const entity: OpenApi.IJsonSchema | null =
-      OpenApiTypeChecker.unreference(props);
-    if (entity === null || OpenApiTypeChecker.isObject(entity) === false)
-      return null;
+    const entity: OpenApi.IJsonSchema.IObject | null =
+      LlmParametersFinder.find(props);
+    if (entity === null) return null;
     return schema({
-      config: props.config,
-      components: props.components,
+      ...props,
       schema: entity,
     }) as ILlmSchemaV3.IParameters | null;
   };
@@ -26,44 +27,83 @@ export namespace LlmConverterV3 {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
+    errors?: string[];
+    accessor?: string;
+    refAccessor?: string;
+    validate?: (schema: OpenApi.IJsonSchema, accessor: string) => boolean;
   }): ILlmSchemaV3 | null => {
-    const resolved: OpenApi.IJsonSchema | null = OpenApiTypeChecker.escape({
+    // CHECK TUPLE TYPE
+    let valid: boolean = true;
+    OpenApiTypeChecker.visit({
+      closure: (next, accessor) => {
+        if (props.validate && props.validate(next, accessor) === false)
+          valid &&= false;
+        if (OpenApiTypeChecker.isTuple(next)) {
+          if (props.errors)
+            props.errors.push(
+              `${accessor ?? "$input"}: LLM does not allow tuple type.`,
+            );
+          valid &&= false;
+        } else if (OpenApiTypeChecker.isReference(next)) {
+          // UNABLE TO FIND MATCHED REFERENCE
+          const key = next.$ref.split("#/components/schemas/")[1];
+          if (props.components.schemas?.[key] === undefined) {
+            if (props.errors !== undefined)
+              props.errors.push(
+                `${accessor}: unable to find reference type ${JSON.stringify(key)}.`,
+              );
+            valid &&= false;
+          }
+        }
+      },
       components: props.components,
       schema: props.schema,
+      accessor: props.accessor ?? "$input.schema",
+      refAccessor: props.refAccessor ?? "$input.components.schemas",
+    });
+    if ((valid as boolean) === false) return null;
+
+    // CHECK MISMATCHES
+    const schema: OpenApi.IJsonSchema | null = OpenApiTypeChecker.escape({
+      ...props,
       recursive: props.config.recursive,
     });
-    if (resolved === null) return null;
+    if (schema === null) return null; // UNREACHABLE
+
+    // SPECIALIZATIONS
     const downgraded: ILlmSchemaV3 = OpenApiV3Downgrader.downgradeSchema({
       original: {
         schemas: {},
       },
       downgraded: {},
-    })(resolved) as ILlmSchemaV3;
-    LlmTypeCheckerV3.visit(downgraded, (schema) => {
-      if (
-        LlmTypeCheckerV3.isOneOf(schema) &&
-        (schema as any).discriminator !== undefined
-      )
-        delete (schema as any).discriminator;
-      else if (LlmTypeCheckerV3.isObject(schema)) {
-        schema.properties ??= {};
-        schema.required ??= [];
-        schema.additionalProperties = false;
-      } else if (
-        props.config.constraint === false &&
-        (LlmTypeCheckerV3.isInteger(schema) ||
-          LlmTypeCheckerV3.isNumber(schema))
-      )
-        OpenApiContraintShifter.shiftNumeric(
-          schema as OpenApi.IJsonSchema.IInteger | OpenApi.IJsonSchema.INumber,
-        );
-      else if (
-        props.config.constraint === false &&
-        LlmTypeCheckerV3.isString(schema)
-      )
-        OpenApiContraintShifter.shiftString(
-          schema as OpenApi.IJsonSchema.IString,
-        );
+    })(schema) as ILlmSchemaV3;
+    LlmTypeCheckerV3.visit({
+      closure: (next) => {
+        if (
+          LlmTypeCheckerV3.isOneOf(next) &&
+          (next as any).discriminator !== undefined
+        )
+          delete (next as any).discriminator;
+        else if (LlmTypeCheckerV3.isObject(next)) {
+          next.properties ??= {};
+          next.required ??= [];
+          next.additionalProperties = false;
+        } else if (
+          props.config.constraint === false &&
+          (LlmTypeCheckerV3.isInteger(next) || LlmTypeCheckerV3.isNumber(next))
+        )
+          OpenApiContraintShifter.shiftNumeric(
+            next as OpenApi.IJsonSchema.IInteger | OpenApi.IJsonSchema.INumber,
+          );
+        else if (
+          props.config.constraint === false &&
+          LlmTypeCheckerV3.isString(next)
+        )
+          OpenApiContraintShifter.shiftString(
+            next as OpenApi.IJsonSchema.IString,
+          );
+      },
+      schema: downgraded,
     });
     return downgraded;
   };

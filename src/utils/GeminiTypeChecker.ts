@@ -11,16 +11,27 @@ export namespace GeminiTypeChecker {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
-  export const visit = (
-    schema: IGeminiSchema,
-    closure: (schema: IGeminiSchema) => void,
-  ): void => {
-    closure(schema);
-    if (isObject(schema))
-      Object.values(schema.properties ?? {}).forEach((child) =>
-        visit(child, closure),
+  export const visit = (props: {
+    closure: (schema: IGeminiSchema, accessor: string) => void;
+    schema: IGeminiSchema;
+    accessor?: string;
+  }): void => {
+    const accessor: string = props.accessor ?? "$input";
+    props.closure(props.schema, accessor);
+    if (isObject(props.schema))
+      Object.entries(props.schema.properties ?? {}).forEach(([key, value]) =>
+        visit({
+          closure: props.closure,
+          schema: value,
+          accessor: `${accessor}.properties[${JSON.stringify(key)}]`,
+        }),
       );
-    else if (isArray(schema)) visit(schema.items, closure);
+    else if (isArray(props.schema))
+      visit({
+        closure: props.closure,
+        schema: props.schema.items,
+        accessor: `${accessor}.items`,
+      });
   };
 
   export const covers = (x: IGeminiSchema, y: IGeminiSchema): boolean => {

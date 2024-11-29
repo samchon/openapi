@@ -25,21 +25,43 @@ export namespace LlmTypeCheckerV3 {
    * @param schema Target schema to visit
    * @param callback Callback function to apply
    */
-  export const visit = (
-    schema: ILlmSchemaV3,
-    callback: (schema: ILlmSchemaV3) => void,
-  ): void => {
-    callback(schema);
-    if (isOneOf(schema)) schema.oneOf.forEach((s) => visit(s, callback));
-    else if (isObject(schema)) {
-      for (const [_, s] of Object.entries(schema.properties))
-        visit(s, callback);
+  export const visit = (props: {
+    closure: (schema: ILlmSchemaV3, accessor: string) => void;
+    schema: ILlmSchemaV3;
+    accessor?: string;
+  }): void => {
+    const accessor: string = props.accessor ?? "$input";
+    props.closure(props.schema, accessor);
+    if (isOneOf(props.schema))
+      props.schema.oneOf.forEach((s, i) =>
+        visit({
+          closure: props.closure,
+          schema: s,
+          accessor: `${accessor}.oneOf[${i}]`,
+        }),
+      );
+    else if (isObject(props.schema)) {
+      for (const [k, s] of Object.entries(props.schema.properties))
+        visit({
+          closure: props.closure,
+          schema: s,
+          accessor: `${accessor}.properties[${JSON.stringify(k)}]`,
+        });
       if (
-        typeof schema.additionalProperties === "object" &&
-        schema.additionalProperties !== null
+        typeof props.schema.additionalProperties === "object" &&
+        props.schema.additionalProperties !== null
       )
-        visit(schema.additionalProperties, callback);
-    } else if (isArray(schema)) visit(schema.items, callback);
+        visit({
+          closure: props.closure,
+          schema: props.schema.additionalProperties,
+          accessor: `${accessor}.additionalProperties`,
+        });
+    } else if (isArray(props.schema))
+      visit({
+        closure: props.closure,
+        schema: props.schema.items,
+        accessor: `${accessor}.items`,
+      });
   };
 
   /* -----------------------------------------------------------

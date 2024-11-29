@@ -1,4 +1,3 @@
-import { OpenApi } from "../OpenApi";
 import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { IClaudeSchema } from "../structures/IClaudeSchema";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
@@ -25,107 +24,33 @@ export namespace LlmSchemaConverter {
 }
 
 const PARAMETERS_CASTERS = {
-  chatgpt: (props: {
-    config: IChatGptSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-  }) => ChatGptConverter.parameters(props),
-  claude: (props: {
-    config: IClaudeSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-  }) => ClaudeConverter.parameters(props),
-  gemini: (props: {
-    config: IGeminiSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-  }) => GeminiConverter.parameters(props),
-  llama: (props: {
-    config: ILlamaSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-  }) => LlamaConverter.parameters(props),
-  "3.0": (props: {
-    config: ILlmSchemaV3.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-  }) => LlmConverterV3.parameters(props),
-  "3.1": (props: {
-    config: ILlmSchemaV3_1.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-  }) => LlmConverterV3_1.parameters(props),
+  chatgpt: (props: Parameters<typeof ChatGptConverter.parameters>[0]) =>
+    ChatGptConverter.parameters(props),
+  claude: (props: Parameters<typeof ClaudeConverter.parameters>[0]) =>
+    ClaudeConverter.parameters(props),
+  gemini: (props: Parameters<typeof GeminiConverter.parameters>[0]) =>
+    GeminiConverter.parameters(props),
+  llama: (props: Parameters<typeof LlamaConverter.parameters>[0]) =>
+    LlamaConverter.parameters(props),
+  "3.0": (props: Parameters<typeof LlmConverterV3.parameters>[0]) =>
+    LlmConverterV3.parameters(props),
+  "3.1": (props: Parameters<typeof LlmConverterV3_1.parameters>[0]) =>
+    LlmConverterV3_1.parameters(props),
 };
 
 const SCHEMA_CASTERS = {
-  chatgpt: (props: {
-    config: IChatGptSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    $defs: Record<string, IChatGptSchema>;
-  }) =>
-    ChatGptConverter.schema({
-      components: props.components,
-      schema: props.schema,
-      $defs: props.$defs,
-      config: props.config,
-    }),
-  claude: (props: {
-    config: IClaudeSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    $defs: Record<string, IClaudeSchema>;
-  }) =>
-    ClaudeConverter.schema({
-      components: props.components,
-      schema: props.schema,
-      $defs: props.$defs,
-      config: props.config,
-    }),
-  gemini: (props: {
-    config: IGeminiSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-  }) =>
-    GeminiConverter.schema({
-      components: props.components,
-      schema: props.schema,
-      config: props.config,
-    }),
-  llama: (props: {
-    config: ILlamaSchema.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    $defs: Record<string, ILlamaSchema>;
-  }) =>
-    LlamaConverter.schema({
-      components: props.components,
-      schema: props.schema,
-      $defs: props.$defs,
-      config: props.config,
-    }),
-  "3.0": (props: {
-    config: ILlmSchemaV3.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-  }) =>
-    LlmConverterV3.schema({
-      components: props.components,
-      schema: props.schema,
-      config: props.config,
-    }),
-  "3.1": (props: {
-    config: ILlmSchemaV3_1.IConfig;
-    components: OpenApi.IComponents;
-    schema: OpenApi.IJsonSchema;
-    $defs: Record<string, ILlmSchemaV3_1>;
-  }) =>
-    LlmConverterV3_1.schema({
-      config: props.config,
-      $defs: props.$defs,
-      components: props.components,
-      schema: props.schema,
-    }),
+  chatgpt: (props: Parameters<typeof ChatGptConverter.schema>[0]) =>
+    ChatGptConverter.schema(props),
+  claude: (props: Parameters<typeof ClaudeConverter.schema>[0]) =>
+    ClaudeConverter.schema(props),
+  gemini: (props: Parameters<typeof GeminiConverter.schema>[0]) =>
+    GeminiConverter.schema(props),
+  llama: (props: Parameters<typeof LlamaConverter.schema>[0]) =>
+    LlamaConverter.schema(props),
+  "3.0": (props: Parameters<typeof LlmConverterV3.schema>[0]) =>
+    LlmConverterV3.schema(props),
+  "3.1": (props: Parameters<typeof LlmConverterV3_1.schema>[0]) =>
+    LlmConverterV3_1.schema(props),
 };
 
 const DEFAULT_CONFIGS = {
