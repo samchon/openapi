@@ -18,6 +18,13 @@ export namespace LlmConverterV3_1 {
     const entity: OpenApi.IJsonSchema.IObject | null =
       LlmParametersFinder.find(props);
     if (entity === null) return null;
+    else if (!!entity.additionalProperties) {
+      if (props.errors)
+        props.errors.push(
+          `${props.accessor ?? "$input"}.additionalProperties: LLM does not allow additional properties on parameters.`,
+        );
+      return null;
+    }
 
     const $defs: Record<string, ILlmSchemaV3_1> = {};
     const res: ILlmSchemaV3_1.IParameters | null = schema({
@@ -28,6 +35,7 @@ export namespace LlmConverterV3_1 {
     }) as ILlmSchemaV3_1.IParameters | null;
     if (res === null) return null;
     res.$defs = $defs;
+    res.additionalProperties = false;
     return res;
   };
 
