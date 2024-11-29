@@ -2,6 +2,7 @@ import { OpenApi } from "../OpenApi";
 import { IGeminiSchema } from "../structures/IGeminiSchema";
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
+import { MapUtil } from "../utils/MapUtil";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { LlmConverterV3 } from "./LlmConverterV3";
 import { LlmParametersFinder } from "./LlmParametersFinder";
@@ -47,6 +48,40 @@ export namespace GeminiConverter {
             return false;
           }
         } else if (OpenApiTypeChecker.isOneOf(next)) {
+          // NULLABLE CASE
+          const notNull = next.oneOf.filter(
+            (v) => OpenApiTypeChecker.isNull(v) === false,
+          );
+          if (notNull.length < 2) return true;
+
+          // ENUM CASE
+          const constants: OpenApi.IJsonSchema.IConstant[] = notNull.filter(
+            (v) => OpenApiTypeChecker.isConstant(v),
+          );
+          const dict: Map<"boolean" | "number" | "string", any> = new Map();
+          for (const v of constants)
+            MapUtil.take(dict)(typeof v.const as "number")(() => []).push(
+              v.const,
+            );
+          if (dict.size === 1) {
+            if (notNull.length === constants.length) return true;
+            const atomic = notNull.filter(
+              (v) =>
+                OpenApiTypeChecker.isBoolean(v) ||
+                OpenApiTypeChecker.isInteger(v) ||
+                OpenApiTypeChecker.isNumber(v) ||
+                OpenApiTypeChecker.isString(v),
+            );
+            if (atomic.length === 1)
+              if (atomic[0].type === "integer")
+                return (
+                  dict.has("number") &&
+                  dict.get("number")!.every((v: number) => Number.isInteger(v))
+                );
+              else return dict.has(atomic[0].type);
+          }
+
+          // REAL ONE-OF TYPE
           if (props.errors)
             props.errors.push(`${accessor}: Gemini does not allow union type.`);
           return false;

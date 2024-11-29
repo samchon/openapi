@@ -21,6 +21,7 @@ export namespace ChatGptConverter {
           reference: props.config.reference,
           constraint: false,
         },
+        validate: validate(props.errors),
       });
     if (params === null) return null;
     for (const key of Object.keys(params.$defs))
@@ -44,19 +45,7 @@ export namespace ChatGptConverter {
         reference: props.config.reference,
         constraint: false,
       },
-      validate: (schema, accessor) => {
-        if (
-          OpenApiTypeChecker.isObject(schema) &&
-          !!schema.additionalProperties
-        ) {
-          if (props.errors)
-            props.errors.push(
-              `${accessor}.additionalProperties: ChatGPT does not allow additionalProperties, the dynamic key typed object.`,
-            );
-          return false;
-        }
-        return true;
-      },
+      validate: validate(props.errors),
     });
     if (schema === null) return null;
     for (const key of Object.keys(props.$defs))
@@ -64,6 +53,22 @@ export namespace ChatGptConverter {
         props.$defs[key] = transform(props.$defs[key]);
     return transform(schema);
   };
+
+  const validate =
+    (errors: string[] | undefined) =>
+    (schema: OpenApi.IJsonSchema, accessor: string): boolean => {
+      if (
+        OpenApiTypeChecker.isObject(schema) &&
+        !!schema.additionalProperties
+      ) {
+        if (errors)
+          errors.push(
+            `${accessor}.additionalProperties: ChatGPT does not allow additionalProperties, the dynamic key typed object.`,
+          );
+        return false;
+      }
+      return true;
+    };
 
   const transform = (schema: ILlmSchemaV3_1): IChatGptSchema => {
     const union: Array<IChatGptSchema> = [];
