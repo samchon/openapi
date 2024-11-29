@@ -11,15 +11,16 @@ export namespace ChatGptConverter {
     config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    errors?: string[];
+    accessor?: string;
   }): IChatGptSchema.IParameters | null => {
     const params: ILlmSchemaV3_1.IParameters | null =
       LlmConverterV3_1.parameters({
+        ...props,
         config: {
           reference: props.config.reference,
           constraint: false,
         },
-        components: props.components,
-        schema: props.schema,
       });
     if (params === null) return null;
     for (const key of Object.keys(params.$defs))
@@ -32,16 +33,30 @@ export namespace ChatGptConverter {
     components: OpenApi.IComponents;
     $defs: Record<string, IChatGptSchema>;
     schema: OpenApi.IJsonSchema;
+    errors?: string[];
+    accessor?: string;
+    refAccessor?: string;
   }): IChatGptSchema | null => {
     const oldbie: Set<string> = new Set(Object.keys(props.$defs));
     const schema: ILlmSchemaV3_1 | null = LlmConverterV3_1.schema({
+      ...props,
       config: {
         reference: props.config.reference,
         constraint: false,
       },
-      components: props.components,
-      $defs: props.$defs,
-      schema: props.schema,
+      validate: (schema, accessor) => {
+        if (
+          OpenApiTypeChecker.isObject(schema) &&
+          !!schema.additionalProperties
+        ) {
+          if (props.errors)
+            props.errors.push(
+              `${accessor}.additionalProperties: ChatGPT does not allow additionalProperties, the dynamic key typed object.`,
+            );
+          return false;
+        }
+        return true;
+      },
     });
     if (schema === null) return null;
     for (const key of Object.keys(props.$defs))

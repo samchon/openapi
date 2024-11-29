@@ -82,34 +82,37 @@ export namespace OpenApiTypeChecker {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
+    errors?: string[];
+    accessor?: string;
+    refAccessor?: string;
   }): OpenApi.IJsonSchema | null =>
     OpenApiTypeCheckerBase.escape({
+      ...props,
       prefix: "#/components/schemas/",
-      components: props.components,
-      schema: props.schema,
-      recursive: props.recursive,
     });
 
   export const unreference = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
+    mismatches?: Set<string>;
   }): OpenApi.IJsonSchema | null =>
     OpenApiTypeCheckerBase.unreference({
       prefix: "#/components/schemas/",
       components: props.components,
       schema: props.schema,
+      mismatches: props.mismatches,
     });
 
   export const visit = (props: {
-    closure: (schema: OpenApi.IJsonSchema) => void;
+    closure: (schema: OpenApi.IJsonSchema, accessor: string) => void;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
+    accessor?: string;
+    refAccessor?: string;
   }): void =>
     OpenApiTypeCheckerBase.visit({
+      ...props,
       prefix: "#/components/schemas/",
-      closure: props.closure,
-      components: props.components,
-      schema: props.schema,
     });
 
   export const covers = (props: {

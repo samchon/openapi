@@ -61,25 +61,31 @@ export namespace ChatGptTypeChecker {
     OPERATORS
   ----------------------------------------------------------- */
   export const visit = (props: {
-    closure: (schema: IChatGptSchema) => void;
+    closure: (schema: IChatGptSchema, accessor: string) => void;
     $defs?: Record<string, IChatGptSchema> | undefined;
     schema: IChatGptSchema;
+    accessor?: string;
+    refAccessor?: string;
   }): void => {
     const already: Set<string> = new Set();
-    const next = (schema: IChatGptSchema): void => {
-      props.closure(schema);
+    const next = (schema: IChatGptSchema, accessor: string): void => {
+      props.closure(schema, accessor);
       if (ChatGptTypeChecker.isReference(schema)) {
         const key: string = schema.$ref.split("#/$defs/").pop()!;
         if (already.has(key) === true) return;
         already.add(key);
         const found: IChatGptSchema | undefined = props.$defs?.[key];
-        if (found !== undefined) next(found);
-      } else if (ChatGptTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(next);
+        if (found !== undefined)
+          next(found, `${props.refAccessor ?? "$defs"}[${key}]`);
+      } else if (ChatGptTypeChecker.isAnyOf(schema))
+        schema.anyOf.forEach((s, i) => next(s, `${accessor}.anyOf[${i}]`));
       else if (ChatGptTypeChecker.isObject(schema))
-        for (const value of Object.values(schema.properties)) next(value);
-      else if (ChatGptTypeChecker.isArray(schema)) next(schema.items);
+        for (const [key, value] of Object.entries(schema.properties))
+          next(value, `${accessor}.properties[${JSON.stringify(key)}]`);
+      else if (ChatGptTypeChecker.isArray(schema))
+        next(schema.items, `${accessor}.items`);
     };
-    next(props.schema);
+    next(props.schema, props.accessor ?? "$input");
   };
 
   export const covers = (props: {

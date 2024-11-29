@@ -7,14 +7,15 @@ export namespace LlamaConverter {
     config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    errors?: string[];
+    accessor?: string;
   }): ILlamaSchema.IParameters | null =>
     LlmConverterV3_1.parameters({
+      ...props,
       config: {
         reference: props.config.reference,
         constraint: true,
       },
-      components: props.components,
-      schema: props.schema,
     });
 
   export const schema = (props: {
@@ -22,15 +23,16 @@ export namespace LlamaConverter {
     components: OpenApi.IComponents;
     $defs: Record<string, ILlamaSchema>;
     schema: OpenApi.IJsonSchema;
+    errors?: string[];
+    accessor?: string;
+    refAccessor?: string;
   }): ILlamaSchema | null =>
     LlmConverterV3_1.schema({
+      ...props,
       config: {
         reference: props.config.reference,
         constraint: true,
       },
-      components: props.components,
-      $defs: props.$defs,
-      schema: props.schema,
     });
 
   export const separate = (props: {

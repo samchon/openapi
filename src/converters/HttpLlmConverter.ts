@@ -30,7 +30,7 @@ export namespace HttpLlmConverter {
       }),
     );
     const functions: IHttpLlmFunction<Model>[] = props.migrate.routes
-      .map((route) => {
+      .map((route, i) => {
         if (route.method === "head") {
           errors.push({
             method: route.method,
@@ -55,17 +55,20 @@ export namespace HttpLlmConverter {
           });
           return null;
         }
+        const localErrors: string[] = [];
         const func: IHttpLlmFunction<Model> | null = composeFunction<Model>({
           model: props.model,
           options: props.options,
           components: props.migrate.document().components,
           route: route,
+          errors: localErrors,
+          index: i,
         });
         if (func === null)
           errors.push({
             method: route.method,
             path: route.path,
-            messages: ["Failed to escape $ref"],
+            messages: localErrors,
             operation: () => route.operation(),
             route: () => route as any as IHttpMigrateRoute,
           });
@@ -109,61 +112,86 @@ export namespace HttpLlmConverter {
     components: OpenApi.IComponents;
     route: IHttpMigrateRoute;
     options: IHttpLlmApplication.IOptions<Model>;
+    errors: string[];
+    index: number;
   }): IHttpLlmFunction<Model> | null => {
     const $defs: Record<string, IChatGptSchema> = {};
     const cast = (
       s: OpenApi.IJsonSchema,
+      accessor: string,
     ): ILlmSchema.ModelSchema[Model] | null =>
       LlmSchemaConverter.schema(props.model)({
         config: props.options as any,
         schema: s,
         components: props.components,
         $defs,
+        errors: props.errors,
+        accessor,
+        refAccessor: `$input.components.schemas`,
       }) as ILlmSchema.ModelSchema[Model] | null;
-    const output: ILlmSchema.ModelSchema[Model] | null | undefined =
-      props.route.success && props.route.success
-        ? cast(props.route.success.schema)
-        : undefined;
-    if (output === null) return null;
-    const properties: [string, ILlmSchema.ModelSchema[Model] | null][] = [
-      ...props.route.parameters.map((p) => ({
-        key: p.key,
-        schema: {
-          ...p.schema,
-          title: p.parameter().title ?? p.schema.title,
-          description: p.parameter().description ?? p.schema.description,
-        },
-      })),
+
+    const endpoint: string = `$input.paths[${JSON.stringify(props.route.path)}][${JSON.stringify(props.route.method)}]`;
+    const output: ILlmSchema.ModelSchema[Model] | null | undefined = props.route
+      .success
+      ? cast(
+          props.route.success.schema,
+          `${endpoint}.responses[${JSON.stringify(props.route.success.status)}][${JSON.stringify(props.route.success.type)}].schema`,
+        )
+      : undefined;
+    const properties: Array<
+      readonly [string, ILlmSchema.ModelSchema[Model] | null]
+    > = [
+      ...props.route.parameters.map(
+        (s) =>
+          [
+            s.key,
+            cast(
+              {
+                ...s.schema,
+                title: s.parameter().title ?? s.schema.title,
+                description: s.parameter().description ?? s.schema.description,
+              },
+              `${endpoint}.parameters[${JSON.stringify(s.key)}].schema`,
+            ),
+          ] as const,
+      ),
       ...(props.route.query
         ? [
-            {
-              key: props.route.query.key,
-              schema: {
-                ...props.route.query.schema,
-                title:
-                  props.route.query.title() ?? props.route.query.schema.title,
-                description:
-                  props.route.query.description() ??
-                  props.route.query.schema.description,
-              },
-            },
+            [
+              props.route.query.key,
+              cast(
+                {
+                  ...props.route.query.schema,
+                  title:
+                    props.route.query.title() ?? props.route.query.schema.title,
+                  description:
+                    props.route.query.description() ??
+                    props.route.query.schema.description,
+                },
+                `${endpoint}.parameters[${JSON.stringify(props.route.query.key)}].schema`,
+              ),
+            ] as const,
           ]
         : []),
       ...(props.route.body
         ? [
-            {
-              key: props.route.body.key,
-              schema: {
-                ...props.route.body.schema,
-                description:
-                  props.route.body.description() ??
-                  props.route.body.schema.description,
-              },
-            },
+            [
+              props.route.body.key,
+              cast(
+                {
+                  ...props.route.body.schema,
+                  description:
+                    props.route.body.description() ??
+                    props.route.body.schema.description,
+                },
+                `${endpoint}.requestBody.content[${JSON.stringify(props.route.body.type)}].schema`,
+              ),
+            ] as const,
           ]
         : []),
-    ].map((o) => [o.key, cast(o.schema)]);
-    if (properties.some(([_k, v]) => v === null)) return null;
+    ];
+    if (output === null || properties.some(([_k, v]) => v === null))
+      return null;
 
     // COMPOSE PARAMETERS
     const parameters: ILlmSchema.ModelParameters[Model] = {

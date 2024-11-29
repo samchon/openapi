@@ -4,23 +4,26 @@ import { LlmTypeCheckerV3_1 } from "../utils/LlmTypeCheckerV3_1";
 import { OpenApiContraintShifter } from "../utils/OpenApiContraintShifter";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { JsonDescriptionUtil } from "../utils/internal/JsonDescriptionUtil";
+import { LlmParametersFinder } from "./LlmParametersFinder";
 
 export namespace LlmConverterV3_1 {
   export const parameters = (props: {
     config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    errors?: string[];
+    accessor?: string;
   }): ILlmSchemaV3_1.IParameters | null => {
+    const entity: OpenApi.IJsonSchema.IObject | null =
+      LlmParametersFinder.find(props);
+    if (entity === null) return null;
+
     const $defs: Record<string, ILlmSchemaV3_1> = {};
-    const entity: OpenApi.IJsonSchema | null =
-      OpenApiTypeChecker.unreference(props);
-    if (entity === null || OpenApiTypeChecker.isObject(entity) === false)
-      return null;
     const res: ILlmSchemaV3_1.IParameters | null = schema({
-      config: props.config,
-      components: props.components,
-      schema: entity,
+      ...props,
       $defs,
+      schema: entity,
+      refAccessor: props.accessor ? `${props.accessor}/$defs` : undefined,
     }) as ILlmSchemaV3_1.IParameters | null;
     if (res === null) return null;
     res.$defs = $defs;
@@ -32,6 +35,10 @@ export namespace LlmConverterV3_1 {
     components: OpenApi.IComponents;
     $defs: Record<string, ILlmSchemaV3_1>;
     schema: OpenApi.IJsonSchema;
+    errors?: string[];
+    accessor?: string;
+    refAccessor?: string;
+    validate?: (input: OpenApi.IJsonSchema, accessor: string) => boolean;
   }): ILlmSchemaV3_1 | null => {
     const union: Array<ILlmSchemaV3_1 | null> = [];
     const attribute: ILlmSchemaV3_1.__IAttribute = {
@@ -45,16 +52,52 @@ export namespace LlmConverterV3_1 {
         ),
       ),
     };
-    const visit = (input: OpenApi.IJsonSchema): number => {
+
+    let valid: boolean = true;
+    OpenApiTypeChecker.visit({
+      closure: (next, accessor) => {
+        if (props.validate && props.validate(next, accessor) === false) {
+          // CUSTOM VALIDATION
+          valid &&= false;
+        }
+        if (OpenApiTypeChecker.isTuple(next)) {
+          // TUPLE IS BANNED
+          if (props.errors !== undefined)
+            props.errors.push(`${accessor}: LLM does not allow tuple type.`);
+          valid &&= false;
+        } else if (OpenApiTypeChecker.isReference(next)) {
+          // UNABLE TO FIND MATCHED REFERENCE
+          const key = next.$ref.split("#/components/schemas/")[1];
+          if (props.components.schemas?.[key] === undefined) {
+            if (props.errors !== undefined)
+              props.errors.push(
+                `${accessor}: unable to find reference type ${JSON.stringify(key)}.`,
+              );
+            valid &&= false;
+          }
+        }
+      },
+      components: props.components,
+      schema: props.schema,
+      accessor: props.accessor ?? "$input.schema",
+      refAccessor: props.refAccessor ?? "$input.components.schemas",
+    });
+    if ((valid as boolean) === false) return null;
+
+    const visit = (input: OpenApi.IJsonSchema, accessor: string): number => {
       if (OpenApiTypeChecker.isOneOf(input)) {
-        input.oneOf.forEach(visit);
+        // UNION TYPE
+        input.oneOf.forEach((s, i) => visit(s, `${accessor}.oneOf[${i}]`));
         return 0;
       } else if (OpenApiTypeChecker.isReference(input)) {
+        // REFERENCE TYPE
         const key: string = input.$ref.split("#/components/schemas/")[1];
         const target: OpenApi.IJsonSchema | undefined =
           props.components.schemas?.[key];
-        if (target === undefined) return 0;
-        if (
+        if (target === undefined)
+          return union.push(null); // UNREACHABLEE
+        else if (
+          // KEEP THE REFERENCE TYPE
           props.config.reference === true ||
           OpenApiTypeChecker.isRecursiveReference({
             components: props.components,
@@ -75,6 +118,9 @@ export namespace LlmConverterV3_1 {
             components: props.components,
             $defs: props.$defs,
             schema: target,
+            errors: props.errors,
+            refAccessor: props.refAccessor,
+            accessor: `${props.refAccessor ?? "$def"}[${JSON.stringify(key)}]`,
           });
           if (converted === null) return union.push(null);
           converted.description = JsonDescriptionUtil.cascade({
@@ -87,8 +133,9 @@ export namespace LlmConverterV3_1 {
           props.$defs[key] = converted;
           return out();
         } else {
+          // DISCARD THE REFERENCE TYPE
           const length: number = union.length;
-          visit(target);
+          visit(target, accessor);
           if (length === union.length - 1 && union[union.length - 1] !== null)
             union[union.length - 1] = {
               ...union[union.length - 1]!,
@@ -111,6 +158,7 @@ export namespace LlmConverterV3_1 {
           return union.length;
         }
       } else if (OpenApiTypeChecker.isObject(input)) {
+        // OBJECT TYPE
         const properties: Record<string, ILlmSchemaV3_1 | null> =
           Object.entries(input.properties ?? {}).reduce(
             (acc, [key, value]) => {
@@ -119,8 +167,10 @@ export namespace LlmConverterV3_1 {
                 components: props.components,
                 $defs: props.$defs,
                 schema: value,
+                errors: props.errors,
+                refAccessor: props.refAccessor,
+                accessor: `${accessor}.properties[${JSON.stringify(key)}]`,
               });
-              if (converted === null) return acc;
               acc[key] = converted;
               return acc;
             },
@@ -140,6 +190,9 @@ export namespace LlmConverterV3_1 {
                 components: props.components,
                 $defs: props.$defs,
                 schema: input.additionalProperties,
+                errors: props.errors,
+                refAccessor: props.refAccessor,
+                accessor: `${accessor}.additionalProperties`,
               })
             : input.additionalProperties;
         if (additionalProperties === null) return union.push(null);
@@ -155,6 +208,9 @@ export namespace LlmConverterV3_1 {
           components: props.components,
           $defs: props.$defs,
           schema: input.items,
+          errors: props.errors,
+          refAccessor: props.refAccessor,
+          accessor: `${accessor}.items`,
         });
         if (items === null) return union.push(null);
         return union.push(
@@ -187,10 +243,11 @@ export namespace LlmConverterV3_1 {
             ...input,
           }),
         );
-      else if (OpenApiTypeChecker.isTuple(input)) return union.push(null);
+      else if (OpenApiTypeChecker.isTuple(input))
+        return union.push(null); // UNREACHABLE
       else return union.push({ ...input });
     };
-    visit(props.schema);
+    visit(props.schema, props.accessor ?? "$input.schema");
 
     if (union.some((u) => u === null)) return null;
     else if (union.length === 0)
