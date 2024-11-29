@@ -87,7 +87,7 @@ export namespace HttpLlmConverter {
     model: Model;
     parameters: ILlmSchema.ModelParameters[Model];
     predicate: (schema: ILlmSchema.ModelSchema[Model]) => boolean;
-  }): IHttpLlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]> => {
+  }): IHttpLlmFunction.ISeparated<Model> => {
     const separator: (props: {
       predicate: (schema: ILlmSchema.ModelSchema[Model]) => boolean;
       schema: ILlmSchema.ModelSchema[Model];
@@ -102,9 +102,7 @@ export namespace HttpLlmConverter {
     return {
       llm,
       human,
-    } satisfies IHttpLlmFunction.ISeparated<
-      ILlmSchema.ModelParameters[Model]
-    > as IHttpLlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]>;
+    } satisfies IHttpLlmFunction.ISeparated<Model>;
   };
 
   const composeFunction = <Model extends ILlmSchema.Model>(props: {
