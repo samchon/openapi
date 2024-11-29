@@ -17,10 +17,19 @@ export namespace LlmConverterV3 {
     const entity: OpenApi.IJsonSchema.IObject | null =
       LlmParametersFinder.find(props);
     if (entity === null) return null;
-    return schema({
+    else if (!!entity.additionalProperties) {
+      if (props.errors)
+        props.errors.push(
+          `${props.accessor ?? "$input"}.additionalProperties: LLM does not allow additional properties on parameters.`,
+        );
+      return null;
+    }
+    const res = schema({
       ...props,
       schema: entity,
     }) as ILlmSchemaV3.IParameters | null;
+    if (res !== null) res.additionalProperties = false;
+    return res;
   };
 
   export const schema = (props: {
@@ -87,7 +96,6 @@ export namespace LlmConverterV3 {
         else if (LlmTypeCheckerV3.isObject(next)) {
           next.properties ??= {};
           next.required ??= [];
-          next.additionalProperties = false;
         } else if (
           props.config.constraint === false &&
           (LlmTypeCheckerV3.isInteger(next) || LlmTypeCheckerV3.isNumber(next))
