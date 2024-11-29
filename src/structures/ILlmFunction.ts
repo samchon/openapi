@@ -1,9 +1,4 @@
-import { IChatGptSchema } from "./IChatGptSchema";
-import { IClaudeSchema } from "./IClaudeSchema";
-import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlmSchema } from "./ILlmSchema";
-import { ILlmSchemaV3 } from "./ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * LLM function metadata.
@@ -41,7 +36,7 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
   /**
    * Collection of separated parameters.
    */
-  separated?: ILlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]>;
+  separated?: ILlmFunction.ISeparated<Model>;
 
   /**
    * Expected return type.
@@ -93,22 +88,15 @@ export namespace ILlmFunction {
   /**
    * Collection of separated parameters.
    */
-  export interface ISeparated<
-    Parameters extends
-      | IChatGptSchema.IParameters
-      | IClaudeSchema.IParameters
-      | IGeminiSchema.IParameters
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters,
-  > {
+  export interface ISeparated<Model extends ILlmSchema.Model> {
     /**
      * Parameters that would be composed by the LLM.
      */
-    llm: Parameters | null;
+    llm: ILlmSchema.ModelParameters[Model] | null;
 
     /**
      * Parameters that would be composed by the human.
      */
-    human: Parameters | null;
+    human: ILlmSchema.ModelParameters[Model] | null;
   }
 }

@@ -1,10 +1,6 @@
 import { OpenApi } from "../OpenApi";
-import { IChatGptSchema } from "./IChatGptSchema";
-import { IGeminiSchema } from "./IGeminiSchema";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmSchema } from "./ILlmSchema";
-import { ILlmSchemaV3 } from "./ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
  * LLM function calling schema from HTTP (OpenAPI) operation.
@@ -150,7 +146,7 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    *
    * Filled only when {@link IHttpLlmApplication.IOptions.separate} is configured.
    */
-  separated?: IHttpLlmFunction.ISeparated<ILlmSchema.ModelParameters[Model]>;
+  separated?: IHttpLlmFunction.ISeparated<Model>;
 
   /**
    * Expected return type.
@@ -224,21 +220,15 @@ export namespace IHttpLlmFunction {
   /**
    * Collection of separated parameters.
    */
-  export interface ISeparated<
-    Parameters extends
-      | ILlmSchemaV3.IParameters
-      | ILlmSchemaV3_1.IParameters
-      | IChatGptSchema.IParameters
-      | IGeminiSchema.IParameters,
-  > {
+  export interface ISeparated<Model extends ILlmSchema.Model> {
     /**
      * Parameters that would be composed by the LLM.
      */
-    llm: Parameters | null;
+    llm: ILlmSchema.ModelParameters[Model] | null;
 
     /**
      * Parameters that would be composed by the human.
      */
-    human: Parameters | null;
+    human: ILlmSchema.ModelParameters[Model] | null;
   }
 }
