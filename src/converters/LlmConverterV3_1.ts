@@ -13,6 +13,7 @@ export namespace LlmConverterV3_1 {
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
     errors?: string[];
     accessor?: string;
+    validate?: (input: OpenApi.IJsonSchema, accessor: string) => boolean;
   }): ILlmSchemaV3_1.IParameters | null => {
     const entity: OpenApi.IJsonSchema.IObject | null =
       LlmParametersFinder.find(props);
