@@ -24,7 +24,7 @@ const validate_llm_parameters_separate_ref = <
   constraint: boolean,
 ): void => {
   const separator = (schema: ILlmSchema.IParameters<Model>) =>
-    LlmSchemaComposer.separate(model)({
+    LlmSchemaComposer.separateParameters(model)({
       predicate: (s) =>
         LlmSchemaComposer.typeChecker(model).isString(
           s as OpenApi.IJsonSchema.IString,
@@ -32,7 +32,7 @@ const validate_llm_parameters_separate_ref = <
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
           : s.description?.includes("@contentMediaType") === true),
-      schema: schema as any,
+      parameters: schema as any,
     });
   const member: ILlmSchema.IParameters<Model> = schema(
     model,
@@ -47,19 +47,23 @@ const validate_llm_parameters_separate_ref = <
     constraint,
   )(typia.json.schemas<[IWrapper<ICombined>]>());
 
-  TestValidator.equals("member")(separator(member))([member, null]);
-  TestValidator.equals("upload")(separator(upload))([null, upload]);
-  TestValidator.equals("combined")(
-    separator(combined).map((p) =>
-      p !== null
-        ? {
-            ...p,
-            $defs: {},
-          }
-        : null,
-    ),
-  )([
-    {
+  TestValidator.equals("member")(separator(member))({
+    llm: member,
+    human: null,
+  });
+  TestValidator.equals("upload")(separator(upload))({
+    llm: null,
+    human: upload,
+  });
+  TestValidator.equals("combined")({
+    llm: separator(combined).llm
+      ? { ...separator(combined).llm, $defs: {} }
+      : null,
+    human: separator(combined).human
+      ? { ...separator(combined).human, $defs: {} }
+      : null,
+  })({
+    llm: {
       $defs: {},
       type: "object",
       properties: {
@@ -70,7 +74,7 @@ const validate_llm_parameters_separate_ref = <
       required: ["value"],
       additionalProperties: false,
     } satisfies IChatGptSchema.IParameters,
-    {
+    human: {
       $defs: {},
       type: "object",
       properties: {
@@ -81,7 +85,7 @@ const validate_llm_parameters_separate_ref = <
       required: ["value"],
       additionalProperties: false,
     } satisfies IChatGptSchema.IParameters,
-  ]);
+  });
 };
 
 interface IWrapper<T> {

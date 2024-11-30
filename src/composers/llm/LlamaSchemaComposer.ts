@@ -1,5 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { ILlamaSchema } from "../../structures/ILlamaSchema";
+import { ILlmFunction } from "../../structures/ILlmFunction";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace LlamaSchemaComposer {
@@ -35,9 +36,11 @@ export namespace LlamaSchemaComposer {
       },
     });
 
-  export const separate = (props: {
+  export const separateParameters = (props: {
     predicate: (schema: ILlamaSchema) => boolean;
-    schema: ILlamaSchema.IParameters;
-  }): [ILlamaSchema | null, ILlamaSchema | null] =>
-    LlmSchemaV3_1Composer.separate(props);
+    parameters: ILlamaSchema.IParameters;
+  }): ILlmFunction.ISeparated<"llama"> =>
+    LlmSchemaV3_1Composer.separateParameters(
+      props,
+    ) as any as ILlmFunction.ISeparated<"llama">;
 }

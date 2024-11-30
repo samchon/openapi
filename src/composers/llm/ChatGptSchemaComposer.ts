@@ -1,5 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { IChatGptSchema } from "../../structures/IChatGptSchema";
+import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
 import { ChatGptTypeChecker } from "../../utils/ChatGptTypeChecker";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
@@ -150,44 +151,41 @@ export namespace ChatGptSchemaComposer {
     };
   };
 
-  export const separate = (props: {
+  export const separateParameters = (props: {
     predicate: (schema: IChatGptSchema) => boolean;
-    schema: IChatGptSchema.IParameters;
-  }): [
-    IChatGptSchema.IParameters | null,
-    IChatGptSchema.IParameters | null,
-  ] => {
+    parameters: IChatGptSchema.IParameters;
+  }): ILlmFunction.ISeparated<"chatgpt"> => {
     const [llm, human] = separateObject({
-      $defs: props.schema.$defs,
+      $defs: props.parameters.$defs,
       predicate: props.predicate,
-      schema: props.schema,
+      schema: props.parameters,
     });
     if (llm === null || human === null)
-      return [
-        llm as IChatGptSchema.IParameters | null,
-        human as IChatGptSchema.IParameters | null,
-      ];
-    const output: [IChatGptSchema.IParameters, IChatGptSchema.IParameters] = [
-      {
+      return {
+        llm: llm as IChatGptSchema.IParameters | null,
+        human: human as IChatGptSchema.IParameters | null,
+      };
+    const output: ILlmFunction.ISeparated<"chatgpt"> = {
+      llm: {
         ...llm,
         $defs: Object.fromEntries(
-          Object.entries(props.schema.$defs).filter(([key]) =>
+          Object.entries(props.parameters.$defs).filter(([key]) =>
             key.endsWith(".Llm"),
           ),
         ),
       },
-      {
+      human: {
         ...human,
         $defs: Object.fromEntries(
-          Object.entries(props.schema.$defs).filter(([key]) =>
+          Object.entries(props.parameters.$defs).filter(([key]) =>
             key.endsWith(".Human"),
           ),
         ),
       },
-    ];
-    for (const key of Object.keys(props.schema.$defs))
+    };
+    for (const key of Object.keys(props.parameters.$defs))
       if (key.endsWith(".Llm") === false && key.endsWith(".Human") === false)
-        delete props.schema.$defs[key];
+        delete props.parameters.$defs[key];
     return output;
   };
 

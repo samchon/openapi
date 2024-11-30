@@ -30,7 +30,7 @@ const validate_llm_schema_separate_string = <Model extends ILlmSchema.Model>(
   constraint: boolean,
 ): void => {
   const separator = (schema: ILlmSchema.IParameters<Model>) =>
-    LlmSchemaComposer.separate(model)({
+    LlmSchemaComposer.separateParameters(model)({
       predicate: (s) =>
         LlmSchemaComposer.typeChecker(model).isString(
           s as OpenApi.IJsonSchema.IString,
@@ -38,7 +38,7 @@ const validate_llm_schema_separate_string = <Model extends ILlmSchema.Model>(
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
           : s.description?.includes("@contentMediaType") === true),
-      schema: schema as any,
+      parameters: schema as any,
     });
   const plain: ILlmSchema.IParameters<Model> = schema(
     model,
@@ -64,8 +64,14 @@ const validate_llm_schema_separate_string = <Model extends ILlmSchema.Model>(
       ]
     >(),
   );
-  TestValidator.equals("plain")(separator(plain))([plain, null]);
-  TestValidator.equals("upload")(separator(upload))([null, upload]);
+  TestValidator.equals("plain")(separator(plain))({
+    llm: plain,
+    human: null,
+  });
+  TestValidator.equals("upload")(separator(upload))({
+    llm: null,
+    human: upload,
+  });
 };
 
 const schema =

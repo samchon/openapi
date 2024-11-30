@@ -1,5 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { OpenApiV3Downgrader } from "../../converters/OpenApiV3Downgrader";
+import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiContraintShifter } from "../../utils/OpenApiContraintShifter";
@@ -122,14 +123,16 @@ export namespace LlmSchemaV3Composer {
     return downgraded;
   };
 
-  export const separate = (props: {
+  export const separateParameters = (props: {
     predicate: (schema: ILlmSchemaV3) => boolean;
-    schema: ILlmSchemaV3.IParameters;
-  }): [ILlmSchemaV3.IParameters | null, ILlmSchemaV3.IParameters | null] =>
-    separateObject({
+    parameters: ILlmSchemaV3.IParameters;
+  }): ILlmFunction.ISeparated<"3.0"> => {
+    const [llm, human] = separateObject({
       predicate: props.predicate,
-      schema: props.schema,
+      schema: props.parameters,
     });
+    return { llm, human };
+  };
 
   const separateStation = (props: {
     predicate: (schema: ILlmSchemaV3) => boolean;

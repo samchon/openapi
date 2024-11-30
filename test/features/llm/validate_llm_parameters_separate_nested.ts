@@ -32,7 +32,7 @@ const validate_llm_parameters_separate_nested = <
   constraint: boolean,
 ): void => {
   const separator = (schema: ILlmSchema.IParameters<Model>) =>
-    LlmSchemaComposer.separate(model)({
+    LlmSchemaComposer.separateParameters(model)({
       predicate: (s) =>
         LlmSchemaComposer.typeChecker(model).isString(
           s as OpenApi.IJsonSchema.IString,
@@ -40,7 +40,7 @@ const validate_llm_parameters_separate_nested = <
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
           : s.description?.includes("@contentMediaType") === true),
-      schema: schema as any,
+      parameters: schema as any,
     });
   const member: ILlmSchema.IParameters<Model> = schema(
     model,
@@ -55,9 +55,18 @@ const validate_llm_parameters_separate_nested = <
     constraint,
   )(typia.json.schemas<[INested<ICombined>]>());
 
-  TestValidator.equals("member")(separator(member))([member, null]);
-  TestValidator.equals("upload")(separator(upload))([null, upload]);
-  TestValidator.equals("combined")(separator(combined))([member, upload]);
+  TestValidator.equals("member")(separator(member))({
+    llm: member,
+    human: null,
+  });
+  TestValidator.equals("upload")(separator(upload))({
+    llm: null,
+    human: upload,
+  });
+  TestValidator.equals("combined")(separator(combined))({
+    llm: member,
+    human: upload,
+  });
 };
 
 interface INested<T> {

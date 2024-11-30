@@ -25,14 +25,15 @@ export namespace LlmSchemaComposer {
   export const schema = <Model extends ILlmSchema.Model>(model: Model) =>
     SCHEMA_CASTERS[model];
 
-  export const separate = <Model extends ILlmSchema.Model>(model: Model) =>
-    SEPARATORS[model];
-
   export const defaultConfig = <Model extends ILlmSchema.Model>(model: Model) =>
     DEFAULT_CONFIGS[model];
 
   export const typeChecker = <Model extends ILlmSchema.Model>(model: Model) =>
     TYPE_CHECKERS[model];
+
+  export const separateParameters = <Model extends ILlmSchema.Model>(
+    model: Model,
+  ) => SEPARATE_PARAMETERS[model];
 }
 
 const PARAMETERS_CASTERS = {
@@ -53,13 +54,13 @@ const SCHEMA_CASTERS = {
   "3.1": LlmSchemaV3_1Composer.schema,
 };
 
-const SEPARATORS = {
-  chatgpt: ChatGptSchemaComposer.separate,
-  claude: ClaudeSchemaComposer.separate,
-  gemini: GeminiSchemaComposer.separate,
-  llama: LlamaSchemaComposer.separate,
-  "3.0": LlmSchemaV3Composer.separate,
-  "3.1": LlmSchemaV3_1Composer.separate,
+const SEPARATE_PARAMETERS = {
+  chatgpt: ChatGptSchemaComposer.separateParameters,
+  claude: ClaudeSchemaComposer.separateParameters,
+  gemini: GeminiSchemaComposer.separateParameters,
+  llama: LlamaSchemaComposer.separateParameters,
+  "3.0": LlmSchemaV3Composer.separateParameters,
+  "3.1": LlmSchemaV3_1Composer.separateParameters,
 };
 
 const DEFAULT_CONFIGS = {

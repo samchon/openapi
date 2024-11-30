@@ -4,6 +4,7 @@ import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
+import { ILlmFunction } from "../structures/ILlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
 import { LlmSchemaComposer } from "./LlmSchemaComposer";
 
@@ -75,29 +76,6 @@ export namespace HttpLlmComposer {
       functions,
       errors,
     };
-  };
-
-  export const separate = <Model extends ILlmSchema.Model>(props: {
-    model: Model;
-    parameters: ILlmSchema.ModelParameters[Model];
-    predicate: (schema: ILlmSchema.ModelSchema[Model]) => boolean;
-  }): IHttpLlmFunction.ISeparated<Model> => {
-    const separator: (props: {
-      predicate: (schema: ILlmSchema.ModelSchema[Model]) => boolean;
-      schema: ILlmSchema.ModelSchema[Model];
-    }) => [
-      ILlmSchema.ModelParameters[Model] | null,
-      ILlmSchema.ModelParameters[Model] | null,
-    ] = LlmSchemaComposer.separate(props.model) as any;
-
-    const [llm, human] = separator({
-      predicate: props.predicate,
-      schema: props.parameters,
-    });
-    return {
-      llm,
-      human,
-    } satisfies IHttpLlmFunction.ISeparated<Model>;
   };
 
   const composeFunction = <Model extends ILlmSchema.Model>(props: {
@@ -207,11 +185,11 @@ export namespace HttpLlmComposer {
       strict: true,
       parameters,
       separated: props.options.separate
-        ? separate({
-            model: props.model,
-            predicate: props.options.separate,
-            parameters,
-          })
+        ? (LlmSchemaComposer.separateParameters(props.model)({
+            predicate: props.options.separate as any,
+            parameters:
+              parameters satisfies ILlmSchema.ModelParameters[Model] as any,
+          }) as ILlmFunction.ISeparated<Model>)
         : undefined,
       output: output as any,
       description: (() => {

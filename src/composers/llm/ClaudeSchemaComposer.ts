@@ -1,5 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { IClaudeSchema } from "../../structures/IClaudeSchema";
+import { ILlmFunction } from "../../structures/ILlmFunction";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ClaudeSchemaComposer {
@@ -35,9 +36,11 @@ export namespace ClaudeSchemaComposer {
       },
     });
 
-  export const separate = (props: {
+  export const separateParameters = (props: {
     predicate: (schema: IClaudeSchema) => boolean;
-    schema: IClaudeSchema.IParameters;
-  }): [IClaudeSchema | null, IClaudeSchema | null] =>
-    LlmSchemaV3_1Composer.separate(props);
+    parameters: IClaudeSchema.IParameters;
+  }): ILlmFunction.ISeparated<"claude"> =>
+    LlmSchemaV3_1Composer.separateParameters(
+      props,
+    ) as any as ILlmFunction.ISeparated<"claude">;
 }

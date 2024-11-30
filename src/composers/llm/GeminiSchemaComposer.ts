@@ -2,6 +2,7 @@ import { OpenApi } from "../../OpenApi";
 import { OpenApiV3 } from "../../OpenApiV3";
 import { OpenApiV3_1 } from "../../OpenApiV3_1";
 import { IGeminiSchema } from "../../structures/IGeminiSchema";
+import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
@@ -91,16 +92,16 @@ export namespace GeminiSchemaComposer {
     return schema as IGeminiSchema;
   };
 
-  export const separate = (props: {
+  export const separateParameters = (props: {
     predicate: (schema: IGeminiSchema) => boolean;
-    schema: IGeminiSchema.IParameters;
-  }): [IGeminiSchema.IParameters | null, IGeminiSchema.IParameters | null] =>
-    LlmSchemaV3Composer.separate(
+    parameters: IGeminiSchema.IParameters;
+  }): ILlmFunction.ISeparated<"gemini"> =>
+    LlmSchemaV3Composer.separateParameters(
       props as {
         predicate: (schema: ILlmSchemaV3) => boolean;
-        schema: ILlmSchemaV3.IParameters;
+        parameters: ILlmSchemaV3.IParameters;
       },
-    );
+    ) as any as ILlmFunction.ISeparated<"gemini">;
 }
 
 const isOneOf =
