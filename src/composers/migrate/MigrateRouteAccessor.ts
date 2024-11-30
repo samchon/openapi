@@ -1,7 +1,7 @@
 import { IHttpMigrateRoute } from "../../structures/IHttpMigrateRoute";
+import { EndpointUtil } from "../../utils/EndpointUtil";
 import { Escaper } from "../../utils/Escaper";
 import { MapUtil } from "../../utils/MapUtil";
-import { StringUtil } from "../../utils/StringUtil";
 
 export namespace MigrateRouteAccessor {
   export const overwrite = (routes: IHttpMigrateRoute[]): void => {
@@ -9,17 +9,17 @@ export namespace MigrateRouteAccessor {
       op.emendedPath
         .split("/")
         .filter((str) => !!str.length && str[0] !== ":")
-        .map(StringUtil.normalize)
+        .map(EndpointUtil.normalize)
         .map((str) => (Escaper.variable(str) ? str : `_${str}`)),
     )(routes) as Map<string, IElement>;
     for (const props of dict.values())
       props.entries.forEach((entry, i) => {
-        entry.alias = StringUtil.escapeDuplicate(
+        entry.alias = EndpointUtil.escapeDuplicate(
           [
             ...props.children,
             ...props.entries.filter((_, j) => i !== j).map((e) => e.alias),
-          ].map(StringUtil.normalize),
-        )(StringUtil.normalize(entry.alias));
+          ].map(EndpointUtil.normalize),
+        )(EndpointUtil.normalize(entry.alias));
         entry.route.accessor = [...props.namespace, entry.alias];
 
         const parameters: { name: string; key: string }[] = [
@@ -30,7 +30,7 @@ export namespace MigrateRouteAccessor {
         ];
         parameters.forEach(
           (p, i) =>
-            (p.key = StringUtil.escapeDuplicate([
+            (p.key = EndpointUtil.escapeDuplicate([
               "connection",
               entry.alias,
               ...parameters.filter((_, j) => i !== j).map((y) => y.key),
@@ -81,7 +81,7 @@ export namespace MigrateRouteAccessor {
     return (
       method +
       "By" +
-      op.parameters.map((p) => StringUtil.capitalize(p.key)).join("And")
+      op.parameters.map((p) => EndpointUtil.capitalize(p.key)).join("And")
     );
   };
 

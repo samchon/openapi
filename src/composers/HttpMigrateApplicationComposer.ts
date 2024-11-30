@@ -1,8 +1,8 @@
 import { OpenApi } from "../OpenApi";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
+import { EndpointUtil } from "../utils/EndpointUtil";
 import { Escaper } from "../utils/Escaper";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
-import { StringUtil } from "../utils/StringUtil";
 
 export namespace HttpMigrateApplicationComposer {
   export interface IProps {
@@ -22,9 +22,9 @@ export namespace HttpMigrateApplicationComposer {
       emplaceReference({
         document: props.document,
         name:
-          StringUtil.pascal(`I/Api/${props.path}`) +
+          EndpointUtil.pascal(`I/Api/${props.path}`) +
           "." +
-          StringUtil.pascal(`${props.method}/Body`),
+          EndpointUtil.pascal(`${props.method}/Body`),
         schema,
       }),
     )(props.operation.requestBody);
@@ -33,9 +33,9 @@ export namespace HttpMigrateApplicationComposer {
         emplaceReference({
           document: props.document,
           name:
-            StringUtil.pascal(`I/Api/${props.path}`) +
+            EndpointUtil.pascal(`I/Api/${props.path}`) +
             "." +
-            StringUtil.pascal(`${props.method}/Response`),
+            EndpointUtil.pascal(`${props.method}/Response`),
           schema,
         }),
       )(
@@ -168,9 +168,9 @@ export namespace HttpMigrateApplicationComposer {
             schema: emplaceReference({
               document: props.document,
               name:
-                StringUtil.pascal(`I/Api/${props.path}`) +
+                EndpointUtil.pascal(`I/Api/${props.path}`) +
                 "." +
-                StringUtil.pascal(`${props.method}/${type}`),
+                EndpointUtil.pascal(`${props.method}/${type}`),
               schema: {
                 type: "object",
                 properties: Object.fromEntries([
@@ -203,7 +203,7 @@ export namespace HttpMigrateApplicationComposer {
     //----
     // PATH PARAMETERS
     //----
-    const parameterNames: string[] = StringUtil.splitWithNormalization(
+    const parameterNames: string[] = EndpointUtil.splitWithNormalization(
       props.emendedPath,
     )
       .filter((str) => str[0] === ":")
@@ -247,7 +247,7 @@ export namespace HttpMigrateApplicationComposer {
         // FILL KEY NAME IF NOT EXISTsS
         name: parameterNames[i],
         key: (() => {
-          let key: string = StringUtil.normalize(parameterNames[i]);
+          let key: string = EndpointUtil.normalize(parameterNames[i]);
           if (Escaper.variable(key)) return key;
           while (true) {
             key = "_" + key;
@@ -268,7 +268,7 @@ export namespace HttpMigrateApplicationComposer {
           // FILL KEY NAME IF NOT EXISTsS
           name: parameterNames[i],
           key: (() => {
-            let key: string = StringUtil.normalize(parameterNames[i]);
+            let key: string = EndpointUtil.normalize(parameterNames[i]);
             if (Escaper.variable(key)) return key;
             while (true) {
               key = "_" + key;
