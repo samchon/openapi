@@ -507,12 +507,13 @@ export namespace ILlmSchemaV3_1 {
      * written to the {@link ILlmSchemaV3_1.__IAttribute.description} property
      * as a comment string like `"@format uuid"`.
      *
-     * This is because the some LLM model's function calling understands the constraint
-     * properties when the function parameter types are simple, however it occurs
-     * some errors when the parameter types are complex.
+     * This is because some LLM schema model like {@link IChatGptSchema}
+     * has banned such constraint, because their LLM cannot understand the
+     * constraint properties and occur the hallucination.
      *
-     * Therefore, considering the complexity of your parameter types, determine
-     * which is better, to allow the constraint properties or not.
+     * Therefore, considering your LLM model's performance, capability,
+     * and the complexity of your parameter types, determine which is better,
+     * to allow the constraint properties or not.
      *
      * - {@link ILlmSchemaV3_1.INumber.minimum}
      * - {@link ILlmSchemaV3_1.INumber.maximum}
@@ -527,7 +528,7 @@ export namespace ILlmSchemaV3_1 {
      * - {@link ILlmSchemaV3_1.IArray.maxItems}
      * - {@link ILlmSchemaV3_1.IArray.unique}
      *
-     * @default false
+     * @default true
      */
     constraint: boolean;
 

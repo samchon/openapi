@@ -67,11 +67,11 @@ const DEFAULT_CONFIGS = {
     reference: false,
   } satisfies ILlamaSchema.IConfig,
   "3.0": {
-    constraint: false,
+    constraint: true,
     recursive: 3,
   } satisfies ILlmSchemaV3.IConfig,
   "3.1": {
-    constraint: false,
+    constraint: true,
     reference: false,
   } satisfies ILlmSchemaV3_1.IConfig,
 };
