@@ -5,9 +5,9 @@ import {
   IHttpLlmApplication,
   IHttpLlmFunction,
   IHttpResponse,
-  LlmTypeCheckerV3,
   OpenApi,
 } from "@samchon/openapi";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 
 import swagger from "../../swagger.json";
 
@@ -20,7 +20,8 @@ export const test_http_llm_fetcher_parameters = async (
     document,
     options: {
       separate: (schema) =>
-        LlmTypeCheckerV3.isString(schema) && !!schema.contentMediaType,
+        LlmSchemaComposer.typeChecker("3.0").isString(schema) &&
+        !!schema.contentMediaType,
     },
   });
   const func: IHttpLlmFunction<"3.0"> | undefined = application.functions.find(

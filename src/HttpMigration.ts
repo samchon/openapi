@@ -1,5 +1,5 @@
 import { OpenApi } from "./OpenApi";
-import { MigrateConverter } from "./converters/MigrateConverter";
+import { MigrateConverter } from "./composers/migrate/MigrateConverter";
 import { HttpMigrateRouteFetcher } from "./http/HttpMigrateRouteFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";

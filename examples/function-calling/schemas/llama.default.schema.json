@@ -5,19 +5,18 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "@default John Doe",
-          "type": "string"
+          "type": "string",
+          "default": "John Doe"
         },
         "age": {
-          "description": "@default 42",
-          "type": "number"
+          "type": "number",
+          "default": 42
         }
       },
       "required": [
         "name",
         "age"
-      ],
-      "additionalProperties": false
+      ]
     }
   },
   "required": [

@@ -37,8 +37,7 @@
         "type",
         "p1",
         "p2"
-      ],
-      "additionalProperties": false
+      ]
     },
     "IPoint": {
       "type": "object",
@@ -53,8 +52,7 @@
       "required": [
         "x",
         "y"
-      ],
-      "additionalProperties": false
+      ]
     },
     "ICircle": {
       "type": "object",
@@ -73,8 +71,7 @@
         "type",
         "radius",
         "center"
-      ],
-      "additionalProperties": false
+      ]
     }
   }
 }

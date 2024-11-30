@@ -35,5 +35,6 @@
   "required": [
     "input"
   ],
+  "additionalProperties": false,
   "$defs": {}
 }

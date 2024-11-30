@@ -1,6 +1,6 @@
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
 import { IChatGptSchema, OpenApi } from "@samchon/openapi";
-import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import OpenAI from "openai";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -22,13 +22,13 @@ export namespace ChatGptFunctionCaller {
     if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
 
     const parameters: IChatGptSchema.IParameters | null =
-      LlmSchemaConverter.parameters("chatgpt")({
+      LlmSchemaComposer.parameters("chatgpt")({
         components: props.collection.components,
         schema: typia.assert<
           OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
         >(props.collection.schemas[0]),
         config: {
-          ...LlmSchemaConverter.defaultConfig("chatgpt"),
+          ...LlmSchemaComposer.defaultConfig("chatgpt"),
           ...(props.config ?? {}),
         },
       });

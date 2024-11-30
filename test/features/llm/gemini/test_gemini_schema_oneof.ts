@@ -1,6 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
 import { ILlmSchema, OpenApi } from "@samchon/openapi";
-import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_llm_gemini_schema_oneof = (): void => {
@@ -38,10 +38,10 @@ const validate =
   (schema: OpenApi.IJsonSchema) =>
   (expected: string[]): void => {
     const errors: string[] = [];
-    const converted: ILlmSchema<"gemini"> | null = LlmSchemaConverter.schema(
+    const converted: ILlmSchema<"gemini"> | null = LlmSchemaComposer.schema(
       "gemini",
     )({
-      config: LlmSchemaConverter.defaultConfig("gemini"),
+      config: LlmSchemaComposer.defaultConfig("gemini"),
       components,
       schema,
       errors,

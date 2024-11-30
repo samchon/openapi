@@ -1,6 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
 import { OpenApi, OpenApiV3 } from "@samchon/openapi";
-import { OpenApiV3Converter } from "@samchon/openapi/lib/converters/OpenApiV3Converter";
+import { OpenApiV3Upgrader } from "@samchon/openapi/lib/converters/OpenApiV3Upgrader";
 
 export const test_json_schema_convert_v30_example = (): void => {
   const input: OpenApiV3.IJsonSchema = {
@@ -9,7 +9,7 @@ export const test_json_schema_convert_v30_example = (): void => {
     example: 4,
     title: "Sequence number",
   };
-  const output: OpenApi.IJsonSchema = OpenApiV3Converter.convertSchema({})(
+  const output: OpenApi.IJsonSchema = OpenApiV3Upgrader.convertSchema({})(
     input,
   );
   TestValidator.equals("example")(output)({

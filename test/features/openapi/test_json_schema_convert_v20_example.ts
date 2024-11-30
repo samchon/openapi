@@ -1,6 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
 import { OpenApi, SwaggerV2 } from "@samchon/openapi";
-import { SwaggerV2Converter } from "@samchon/openapi/lib/converters/SwaggerV2Converter";
+import { SwaggerV2Upgrader } from "@samchon/openapi/lib/converters/SwaggerV2Upgrader";
 
 export const test_json_schema_convert_v20_example = (): void => {
   const input: SwaggerV2.IJsonSchema = {
@@ -9,7 +9,7 @@ export const test_json_schema_convert_v20_example = (): void => {
     example: 4,
     title: "Sequence number",
   };
-  const output: OpenApi.IJsonSchema = SwaggerV2Converter.convertSchema(input);
+  const output: OpenApi.IJsonSchema = SwaggerV2Upgrader.convertSchema(input);
   TestValidator.equals("example")(output)({
     oneOf: [
       {

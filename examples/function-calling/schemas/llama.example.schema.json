@@ -16,8 +16,7 @@
       "required": [
         "name",
         "age"
-      ],
-      "additionalProperties": false
+      ]
     }
   },
   "required": [

@@ -22,8 +22,7 @@
               "required": [
                 "x",
                 "y"
-              ],
-              "additionalProperties": false
+              ]
             },
             "p2": {
               "type": "object",
@@ -38,16 +37,14 @@
               "required": [
                 "x",
                 "y"
-              ],
-              "additionalProperties": false
+              ]
             }
           },
           "required": [
             "type",
             "p1",
             "p2"
-          ],
-          "additionalProperties": false
+          ]
         },
         {
           "type": "object",
@@ -71,16 +68,14 @@
               "required": [
                 "x",
                 "y"
-              ],
-              "additionalProperties": false
+              ]
             }
           },
           "required": [
             "type",
             "radius",
             "center"
-          ],
-          "additionalProperties": false
+          ]
         }
       ]
     }

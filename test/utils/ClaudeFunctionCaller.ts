@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
 import { ILlmSchema, OpenApi } from "@samchon/openapi";
-import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
@@ -25,13 +25,13 @@ export namespace ClaudeFunctionCaller {
     if (TestGlobal.env.CLAUDE_API_KEY === undefined) return;
 
     const parameters: ILlmSchema.ModelParameters[Model] | null =
-      LlmSchemaConverter.parameters(props.model)({
+      LlmSchemaComposer.parameters(props.model)({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           props.collection.schemas[0],
         ),
         config: {
-          ...LlmSchemaConverter.defaultConfig(props.model),
+          ...LlmSchemaComposer.defaultConfig(props.model),
           ...(props.config ?? {}),
         } satisfies ILlmSchema.ModelConfig[Model] as any,
       }) as ILlmSchema.ModelParameters[Model] | null;
