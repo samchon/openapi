@@ -39,8 +39,7 @@
         "reasons",
         "temporary",
         "time"
-      ],
-      "additionalProperties": false
+      ]
     }
   }
 }

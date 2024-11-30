@@ -1,6 +1,6 @@
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
 import { ILlmSchema, OpenApi } from "@samchon/openapi";
-import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import OpenAI from "openai";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -24,13 +24,13 @@ export namespace LlamaFunctionCaller {
     if (TestGlobal.env.LLAMA_API_KEY === undefined) return;
 
     const parameters: ILlmSchema.ModelParameters[Model] | null =
-      LlmSchemaConverter.parameters(props.model)({
+      LlmSchemaComposer.parameters(props.model)({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           props.collection.schemas[0],
         ),
         config: {
-          ...LlmSchemaConverter.defaultConfig(props.model),
+          ...LlmSchemaComposer.defaultConfig(props.model),
           ...(props.config ?? {}),
         } satisfies ILlmSchema.ModelConfig[Model] as any,
       }) as ILlmSchema.ModelParameters[Model] | null;

@@ -252,21 +252,21 @@
                 "type": "string",
                 "description": "Representative name of the unit."
               },
-              "primary": {
-                "type": "boolean",
-                "description": "Whether the unit is primary or not.\n\nJust a labeling value."
-              },
               "required": {
                 "type": "boolean",
                 "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case."
+              },
+              "primary": {
+                "type": "boolean",
+                "description": "Whether the unit is primary or not.\n\nJust a labeling value."
               }
             },
             "required": [
               "options",
               "stocks",
               "name",
-              "primary",
-              "required"
+              "required",
+              "primary"
             ],
             "description": "Creation information of sale unit.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnit.ICreate} type:\n\n> Creation information of sale unit.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnit} type:\n\n> Product composition information handled in the sale.\n> \n> `IShoppingSaleUnit` is an entity that embodies the \"individual product\"\n> information handled in the {@link IShoppingSale sale}.\n> \n> For reference, the reason why `IShoppingSaleUnit` is separated from\n> {@link IShoppingSaleSnapshot} by an algebraic relationship of 1: N is because\n> there are some cases where multiple products are sold in one listing. This is\n> the case with so-called \"bundled products\".\n> \n> - Bundle from regular product (Mackbook Set)\n>   - Main Body\n>   - Keyboard\n>   - Mouse\n>   - Apple Care (Free A/S Voucher)\n> \n> And again, `IShoppingSaleUnit` does not in itself refer to the\n> {@link IShoppingSaleUnitStock final stock} that the\n> {@link IShoppingCustomer customer} will {@link IShoppingOrder purchase}.\n> The final stock can be found only after selecting all given\n> {@link IShoppingSaleUnitOption options} and their\n> {@link IShoppingSaleUnitOptionCandidate candidate values}.\n> \n> For example, even if you buy a Macbook, the final stocks are determined only\n> after selecting all the options (CPU / RAM / SSD), etc."
           },

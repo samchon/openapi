@@ -7,7 +7,7 @@ import {
 } from "@google/generative-ai";
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
 import { IGeminiSchema, OpenApi } from "@samchon/openapi";
-import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
@@ -26,7 +26,7 @@ export namespace GeminiFunctionCaller {
     if (TestGlobal.env.GEMINI_API_KEY === undefined) return;
 
     const parameters: IGeminiSchema.IParameters | null =
-      LlmSchemaConverter.parameters("gemini")({
+      LlmSchemaComposer.parameters("gemini")({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           props.collection.schemas[0],

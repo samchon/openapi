@@ -18,8 +18,9 @@
       "properties": {
         "code": {
           "title": "Identifier code of the category",
-          "description": "Identifier code of the category.\n\n\n@pattern ^[a-z0-9_]+$",
-          "type": "string"
+          "description": "Identifier code of the category.",
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
         },
         "name": {
           "title": "Name of the category",
@@ -39,8 +40,7 @@
         "code",
         "name",
         "children"
-      ],
-      "additionalProperties": false
+      ]
     }
   }
 }

@@ -1,5 +1,5 @@
 import { ILlmApplication, ILlmSchema, OpenApi } from "@samchon/openapi";
-import { LlmSchemaConverter } from "@samchon/openapi/lib/converters/LlmSchemaConverter";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import fs from "fs";
 import typia, { IJsonSchemaCollection, tags } from "typia";
 
@@ -45,8 +45,8 @@ const archive = async (props: {
 }): Promise<void> => {
   for (const model of props.models) {
     const parameters: ILlmApplication<ILlmSchema.Model> | null =
-      LlmSchemaConverter.parameters(model)({
-        config: LlmSchemaConverter.defaultConfig(model) as any,
+      LlmSchemaComposer.parameters(model)({
+        config: LlmSchemaComposer.defaultConfig(model) as any,
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
           props.collection.schemas[0],

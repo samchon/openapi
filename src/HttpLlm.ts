@@ -1,7 +1,7 @@
 import { HttpMigration } from "./HttpMigration";
 import { OpenApi } from "./OpenApi";
-import { HttpLlmConverter } from "./converters/HttpLlmConverter";
-import { LlmSchemaConverter } from "./converters/LlmSchemaConverter";
+import { HttpLlmComposer } from "./composers/HttpLlmApplicationComposer";
+import { LlmSchemaComposer } from "./composers/LlmSchemaComposer";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
@@ -44,8 +44,19 @@ export namespace HttpLlm {
    * @template Model Target LLM model
    */
   export interface IApplicationProps<Model extends ILlmSchema.Model> {
+    /**
+     * Target LLM model.
+     */
     model: Model;
+
+    /**
+     * OpenAPI document to convert.
+     */
     document: OpenApi.IDocument;
+
+    /**
+     * Options for the LLM function calling schema conversion.
+     */
     options?: Partial<IHttpLlmApplication.IOptions<Model>>;
   }
 
@@ -81,11 +92,11 @@ export namespace HttpLlm {
     const migrate: IHttpMigrateApplication = HttpMigration.application(
       props.document as OpenApi.IDocument,
     );
-    return HttpLlmConverter.application<Model>({
+    return HttpLlmComposer.application<Model>({
       migrate,
       model: props.model,
       options: {
-        ...LlmSchemaConverter.defaultConfig(props.model),
+        ...LlmSchemaComposer.defaultConfig(props.model),
         separate: props.options?.separate ?? null,
       },
     });

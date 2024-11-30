@@ -1,11 +1,11 @@
 import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
-import { OpenApiV3Converter } from "./converters/OpenApiV3Converter";
 import { OpenApiV3Downgrader } from "./converters/OpenApiV3Downgrader";
-import { OpenApiV3_1Converter } from "./converters/OpenApiV3_1Converter";
-import { SwaggerV2Converter } from "./converters/SwaggerV2Converter";
+import { OpenApiV3Upgrader } from "./converters/OpenApiV3Upgrader";
+import { OpenApiV3_1Emender } from "./converters/OpenApiV3_1Emender";
 import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
+import { SwaggerV2Upgrader } from "./converters/SwaggerV2Upgrader";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -69,11 +69,11 @@ export namespace OpenApi {
       | OpenApi.IDocument,
   ): IDocument {
     if (OpenApiV3_1.is(input))
-      return OpenApiV3_1Converter.convert(input) as IDocument;
+      return OpenApiV3_1Emender.convert(input) as IDocument;
     else if (OpenApiV3.is(input))
-      return OpenApiV3Converter.convert(input) as IDocument;
+      return OpenApiV3Upgrader.convert(input) as IDocument;
     else if (SwaggerV2.is(input))
-      return SwaggerV2Converter.convert(input) as IDocument;
+      return SwaggerV2Upgrader.convert(input) as IDocument;
     throw new TypeError("Unrecognized Swagger/OpenAPI version.");
   }
 

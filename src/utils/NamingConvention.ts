@@ -1,5 +1,3 @@
-import { StringUtil } from "./StringUtil";
-
 export namespace NamingConvention {
   export function snake(str: string): string {
     const indexes: number[] = [];
@@ -77,12 +75,15 @@ export namespace NamingConvention {
         else {
           const [prevFirst, prevLength] = indexes[i - 1]!;
           const piece: string = str.substring(prevFirst + prevLength, first);
-          if (piece.length) ret += StringUtil.capitalize(piece);
+          if (piece.length) ret += capitalize(piece);
         }
       }
       const last = indexes[indexes.length - 1]!;
       const piece: string = str.substring(last[0] + last[1]);
-      if (last.length) ret += StringUtil.capitalize(piece);
+      if (last.length) ret += capitalize(piece);
       return prefix + escaper(ret);
     };
 }
+
+const capitalize = (str: string): string =>
+  str.length !== 0 ? str[0].toUpperCase() + str.slice(1).toLowerCase() : str;

@@ -5,11 +5,11 @@
       "type": "object",
       "properties": {
         "reasons": {
-          "description": "@minItems 1",
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "minItems": 1
         },
         "temporary": {
           "type": "boolean"
@@ -21,7 +21,7 @@
             },
             {
               "type": "string",
-              "description": "@format date-time"
+              "format": "date-time"
             }
           ]
         }
@@ -30,8 +30,7 @@
         "reasons",
         "temporary",
         "time"
-      ],
-      "additionalProperties": false
+      ]
     }
   },
   "required": [
