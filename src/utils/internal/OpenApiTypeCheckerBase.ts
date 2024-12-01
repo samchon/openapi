@@ -136,7 +136,7 @@ export namespace OpenApiTypeCheckerBase {
       };
     return {
       success: true,
-      data: result,
+      value: result,
     };
   };
 
@@ -169,7 +169,7 @@ export namespace OpenApiTypeCheckerBase {
       };
     return {
       success: true,
-      data: result,
+      value: result,
     };
   };
 

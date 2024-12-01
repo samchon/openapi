@@ -44,7 +44,7 @@ export namespace GeminiFunctionCaller {
       throw new Error(
         "Failed to convert the JSON schema to the Gemini schema.",
       );
-    if (props.handleParameters) await props.handleParameters(parameters.data);
+    if (props.handleParameters) await props.handleParameters(parameters.value);
 
     const model: GenerativeModel = new GoogleGenerativeAI(
       TestGlobal.env.GEMINI_API_KEY,
@@ -66,7 +66,7 @@ export namespace GeminiFunctionCaller {
             {
               name: props.name,
               description: props.description,
-              parameters: parameters.data as any,
+              parameters: parameters.value as any,
             },
           ],
         },

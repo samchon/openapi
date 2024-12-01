@@ -17,19 +17,19 @@ export namespace LlmParametersFinder {
     const entity: IResult<OpenApi.IJsonSchema, IOpenApiSchemaError> =
       OpenApiTypeChecker.unreference(props);
     if (entity.success === false) return entity;
-    else if (OpenApiTypeChecker.isObject(entity.data) === false)
+    else if (OpenApiTypeChecker.isObject(entity.value) === false)
       return reportError({
         ...props,
         message: "LLM only accepts object type as parameters.",
       });
-    else if (!!entity.data.additionalProperties)
+    else if (!!entity.value.additionalProperties)
       return reportError({
         ...props,
         message: "LLM does not allow additional properties on parameters.",
       });
     return {
       success: true,
-      data: entity.data,
+      value: entity.value,
     };
   };
 

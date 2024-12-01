@@ -42,7 +42,7 @@ export namespace ChatGptFunctionCaller {
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
     else if (props.handleParameters)
-      await props.handleParameters(parameters.data);
+      await props.handleParameters(parameters.value);
 
     const client: OpenAI = new OpenAI({
       apiKey: TestGlobal.env.CHATGPT_API_KEY,
@@ -57,7 +57,7 @@ export namespace ChatGptFunctionCaller {
             function: {
               name: props.name,
               description: props.description,
-              parameters: parameters.data as Record<string, any>,
+              parameters: parameters.value as Record<string, any>,
               strict: true,
             },
           },

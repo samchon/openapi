@@ -67,7 +67,7 @@ const archive = async (props: {
           model,
           name: props.name,
           description: props.description,
-          parameters: result.data,
+          parameters: result.value,
           texts: props.texts,
         },
         null,
