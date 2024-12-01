@@ -47,7 +47,7 @@ export namespace ClaudeFunctionCaller {
         "Failed to convert the JSON schema to the Claude schema.",
       );
     else if (props.handleParameters)
-      await props.handleParameters(parameters.data);
+      await props.handleParameters(parameters.value);
 
     const client: Anthropic = new Anthropic({
       apiKey: TestGlobal.env.CLAUDE_API_KEY,
@@ -60,7 +60,7 @@ export namespace ClaudeFunctionCaller {
         {
           name: props.name,
           description: props.description,
-          input_schema: parameters.data as any,
+          input_schema: parameters.value as any,
         },
       ],
     });

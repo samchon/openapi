@@ -27,7 +27,7 @@ export namespace GeminiSchemaComposer {
     if (entity.success === false) return entity;
     return schema({
       ...props,
-      schema: entity.data,
+      schema: entity.value,
     }) as IResult<IGeminiSchema.IParameters, IOpenApiSchemaError>;
   };
 
@@ -74,7 +74,7 @@ export namespace GeminiSchemaComposer {
 
     // SPECIALIZATIONS
     LlmTypeCheckerV3.visit({
-      schema: result.data,
+      schema: result.value,
       closure: (v) => {
         if (v.title !== undefined) {
           if (v.description === undefined) v.description = v.title;

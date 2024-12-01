@@ -70,7 +70,7 @@ const validate_llm_schema_recursive_ref = <
       required: ["name", "children"],
     },
   })($defs as any);
-  TestValidator.equals("schema")(result.success ? result.data : {})({
+  TestValidator.equals("schema")(result.success ? result.value : {})({
     $ref: "#/$defs/Department",
   });
 };

@@ -105,7 +105,7 @@ export namespace HttpLlmComposer {
         );
         return null;
       }
-      return result.data as ILlmSchema.ModelSchema[Model];
+      return result.value as ILlmSchema.ModelSchema[Model];
     };
 
     const endpoint: string = `$input.paths[${JSON.stringify(props.route.path)}][${JSON.stringify(props.route.method)}]`;

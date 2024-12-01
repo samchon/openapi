@@ -31,13 +31,13 @@ export namespace LlmSchemaV3Composer {
 
     const result: IResult<ILlmSchemaV3, IOpenApiSchemaError> = schema({
       ...props,
-      schema: entity.data,
+      schema: entity.value,
     });
     if (result.success === false) return result;
     return {
       success: true,
-      data: {
-        ...(result.data as ILlmSchemaV3.IObject),
+      value: {
+        ...(result.value as ILlmSchemaV3.IObject),
         additionalProperties: false,
       } satisfies ILlmSchemaV3.IParameters,
     };
@@ -117,7 +117,7 @@ export namespace LlmSchemaV3Composer {
         schemas: {},
       },
       downgraded: {},
-    })(escaped.data) as ILlmSchemaV3;
+    })(escaped.value) as ILlmSchemaV3;
     LlmTypeCheckerV3.visit({
       closure: (next) => {
         if (
@@ -153,7 +153,7 @@ export namespace LlmSchemaV3Composer {
     });
     return {
       success: true,
-      data: downgraded,
+      value: downgraded,
     };
   };
 

@@ -27,11 +27,11 @@ export namespace ChatGptSchemaComposer {
         validate,
       });
     if (result.success === false) return result;
-    for (const key of Object.keys(result.data.$defs))
-      result.data.$defs[key] = transform(result.data.$defs[key]);
+    for (const key of Object.keys(result.value.$defs))
+      result.value.$defs[key] = transform(result.value.$defs[key]);
     return {
       success: true,
-      data: transform(result.data) as IChatGptSchema.IParameters,
+      value: transform(result.value) as IChatGptSchema.IParameters,
     };
   };
 
@@ -59,7 +59,7 @@ export namespace ChatGptSchemaComposer {
         props.$defs[key] = transform(props.$defs[key]);
     return {
       success: true,
-      data: transform(result.data),
+      value: transform(result.value),
     };
   };
 

@@ -105,5 +105,5 @@ const schema =
       console.log(result.error);
       throw new Error("Invalid schema");
     }
-    return result.data;
+    return result.value;
   };

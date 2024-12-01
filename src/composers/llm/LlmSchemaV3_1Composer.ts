@@ -34,13 +34,13 @@ export namespace LlmSchemaV3_1Composer {
     const result: IResult<ILlmSchemaV3_1, IOpenApiSchemaError> = schema({
       ...props,
       $defs,
-      schema: entity.data,
+      schema: entity.value,
     });
     if (result.success === false) return result;
     return {
       success: true,
-      data: {
-        ...(result.data as ILlmSchemaV3_1.IObject),
+      value: {
+        ...(result.value as ILlmSchemaV3_1.IObject),
         additionalProperties: false,
         $defs,
       } satisfies ILlmSchemaV3_1.IParameters,
@@ -149,7 +149,7 @@ export namespace LlmSchemaV3_1Composer {
               accessor: `${props.refAccessor ?? "$def"}[${JSON.stringify(key)}]`,
             });
           if (converted.success === false) return union.push(null); // UNREACHABLE
-          props.$defs[key] = converted.data;
+          props.$defs[key] = converted.value;
           return out();
         } else {
           // DISCARD THE REFERENCE TYPE
@@ -190,7 +190,7 @@ export namespace LlmSchemaV3_1Composer {
                   refAccessor: props.refAccessor,
                   accessor: `${accessor}.properties[${JSON.stringify(key)}]`,
                 });
-              acc[key] = converted.success ? converted.data : null;
+              acc[key] = converted.success ? converted.value : null;
               if (converted.success === false)
                 reasons.push(...converted.error.reasons);
               return acc;
@@ -221,7 +221,7 @@ export namespace LlmSchemaV3_1Composer {
               reasons.push(...converted.error.reasons);
               return null;
             }
-            return converted.data;
+            return converted.value;
           }
           return input.additionalProperties;
         })();
@@ -251,7 +251,7 @@ export namespace LlmSchemaV3_1Composer {
             : (x: ILlmSchemaV3_1.IArray) =>
                 OpenApiContraintShifter.shiftArray(x))({
             ...input,
-            items: items.data,
+            items: items.value,
           }),
         );
       } else if (OpenApiTypeChecker.isString(input))
@@ -293,7 +293,7 @@ export namespace LlmSchemaV3_1Composer {
     else if (union.length === 0)
       return {
         success: true,
-        data: {
+        value: {
           ...attribute,
           type: undefined,
         },
@@ -301,7 +301,7 @@ export namespace LlmSchemaV3_1Composer {
     else if (union.length === 1)
       return {
         success: true,
-        data: {
+        value: {
           ...attribute,
           ...union[0]!,
           description: LlmTypeCheckerV3_1.isReference(union[0]!)
@@ -311,7 +311,7 @@ export namespace LlmSchemaV3_1Composer {
       };
     return {
       success: true,
-      data: {
+      value: {
         ...attribute,
         oneOf: union.map((u) => ({
           ...u!,

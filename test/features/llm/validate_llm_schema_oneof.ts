@@ -41,7 +41,7 @@ const validate_llm_schema_oneof = <Model extends ILlmSchema.Model>(
   }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals("success")(result.success);
   TestValidator.equals(field)(["point", "line", "triangle", "rectangle"])(
-    (result as any)?.data?.[field]?.map((e: any) =>
+    (result as any)?.value?.[field]?.map((e: any) =>
       constant ? e.properties?.type?.const : e.properties?.type?.enum?.[0],
     ),
   );

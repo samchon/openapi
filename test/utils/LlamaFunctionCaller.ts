@@ -46,7 +46,7 @@ export namespace LlamaFunctionCaller {
         "Failed to convert the JSON schema to the Claude schema.",
       );
     else if (props.handleParameters)
-      await props.handleParameters(parameters.data);
+      await props.handleParameters(parameters.value);
 
     const client: OpenAI = new OpenAI({
       apiKey: TestGlobal.env.LLAMA_API_KEY,
@@ -62,7 +62,7 @@ export namespace LlamaFunctionCaller {
             function: {
               name: props.name,
               description: props.description,
-              parameters: parameters.data as any,
+              parameters: parameters.value as any,
             },
           },
         ],

@@ -56,7 +56,7 @@ const validate_llm_schema_enum_reference = <
     $defs: {},
   }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals("success")(result.success)(true);
-  TestValidator.equals("union")(result.success ? result.data : {})({
+  TestValidator.equals("union")(result.success ? result.value : {})({
     type: "number",
     enum: [3, 4, 5],
   });

@@ -33,7 +33,7 @@ const validate_llm_schema_enum = <Model extends "chatgpt" | "gemini" | "3.0">(
   TestValidator.equals("success")(result.success);
   TestValidator.equals("enum")(
     typia.assert<IGeminiSchema.IString>(
-      typia.assert<IGeminiSchema.IObject>(result.success ? result.data : {})
+      typia.assert<IGeminiSchema.IObject>(result.success ? result.value : {})
         .properties.format,
     ).enum,
   )(["html", "md", "txt"]);

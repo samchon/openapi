@@ -93,5 +93,5 @@ const composeSchema =
       } satisfies ILlmSchema.IConfig<Model> as any,
     }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
     if (result.success === false) throw new Error("Invalid schema");
-    return result.data;
+    return result.value;
   };

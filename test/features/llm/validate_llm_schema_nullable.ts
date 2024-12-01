@@ -37,7 +37,7 @@ const validate_llm_schema_nullable = <Model extends ILlmSchema.Model>(
     $defs: {},
   }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals("success")(result.success)(true);
-  TestValidator.equals("nullable")(result.success ? result.data : {})(
+  TestValidator.equals("nullable")(result.success ? result.value : {})(
     expected === "nullable"
       ? ({
           type: "number",
