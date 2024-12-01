@@ -1,5 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema } from "@samchon/openapi";
+import { ILlmSchema, IOpenApiSchemaError, IResult } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -27,15 +27,17 @@ const validate_llm_schema_nullable = <Model extends ILlmSchema.Model>(
 ): void => {
   const collection: IJsonSchemaCollection =
     typia.json.schemas<[number | null]>();
-  const schema: ILlmSchema.IParameters<Model> = LlmSchemaComposer.schema(model)(
-    {
-      config: LlmSchemaComposer.defaultConfig(model) as any,
-      components: collection.components,
-      schema: typia.assert(collection.schemas[0]),
-      $defs: {},
-    },
-  ) as ILlmSchema.IParameters<Model>;
-  TestValidator.equals("nullable")(schema)(
+  const result: IResult<
+    ILlmSchema<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.schema(model)({
+    config: LlmSchemaComposer.defaultConfig(model) as any,
+    components: collection.components,
+    schema: typia.assert(collection.schemas[0]),
+    $defs: {},
+  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("success")(result.success)(true);
+  TestValidator.equals("nullable")(result.success ? result.data : {})(
     expected === "nullable"
       ? ({
           type: "number",

@@ -68,6 +68,7 @@ export namespace ChatGptTypeChecker {
     refAccessor?: string;
   }): void => {
     const already: Set<string> = new Set();
+    const refAccessor: string = props.refAccessor ?? "$input.$defs";
     const next = (schema: IChatGptSchema, accessor: string): void => {
       props.closure(schema, accessor);
       if (ChatGptTypeChecker.isReference(schema)) {
@@ -75,8 +76,7 @@ export namespace ChatGptTypeChecker {
         if (already.has(key) === true) return;
         already.add(key);
         const found: IChatGptSchema | undefined = props.$defs?.[key];
-        if (found !== undefined)
-          next(found, `${props.refAccessor ?? "$defs"}[${key}]`);
+        if (found !== undefined) next(found, `${refAccessor}[${key}]`);
       } else if (ChatGptTypeChecker.isAnyOf(schema))
         schema.anyOf.forEach((s, i) => next(s, `${accessor}.anyOf[${i}]`));
       else if (ChatGptTypeChecker.isObject(schema))
@@ -85,7 +85,7 @@ export namespace ChatGptTypeChecker {
       else if (ChatGptTypeChecker.isArray(schema))
         next(schema.items, `${accessor}.items`);
     };
-    next(props.schema, props.accessor ?? "$input");
+    next(props.schema, props.accessor ?? "$input.schemas");
   };
 
   export const covers = (props: {

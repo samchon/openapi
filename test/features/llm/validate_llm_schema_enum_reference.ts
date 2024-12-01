@@ -1,5 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 
 export const test_chatgpt_schema_enum_reference = (): void =>
@@ -41,16 +46,17 @@ const validate_llm_schema_enum_reference = <
     ],
   };
 
-  const errors: string[] = [];
-  const llm: ILlmSchema<Model> | null = LlmSchemaComposer.schema(model)({
+  const result: IResult<
+    ILlmSchema<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.schema(model)({
     components,
     schema,
     config: LlmSchemaComposer.defaultConfig(model) as any,
     $defs: {},
-    errors,
-  }) as ILlmSchema<Model> | null;
-  if (errors.length) console.log(model, errors);
-  TestValidator.equals("union")(llm)({
+  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("success")(result.success)(true);
+  TestValidator.equals("union")(result.success ? result.data : {})({
     type: "number",
     enum: [3, 4, 5],
   });

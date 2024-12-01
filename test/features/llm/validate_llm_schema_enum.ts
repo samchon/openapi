@@ -1,5 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
-import { IGeminiSchema, ILlmSchema } from "@samchon/openapi";
+import {
+  IGeminiSchema,
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -16,15 +21,20 @@ const validate_llm_schema_enum = <Model extends "chatgpt" | "gemini" | "3.0">(
   model: Model,
 ): void => {
   const collection: IJsonSchemaCollection = typia.json.schemas<[IBbsArticle]>();
-  const schema: ILlmSchema<Model> | null = LlmSchemaComposer.schema(model)({
+  const result: IResult<
+    ILlmSchema<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.schema(model)({
     components: collection.components,
     schema: collection.schemas[0],
     config: LlmSchemaComposer.defaultConfig(model) as any,
     $defs: {},
-  }) as ILlmSchema<Model> | null;
+  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("success")(result.success);
   TestValidator.equals("enum")(
     typia.assert<IGeminiSchema.IString>(
-      typia.assert<IGeminiSchema.IObject>(schema).properties.format,
+      typia.assert<IGeminiSchema.IObject>(result.success ? result.data : {})
+        .properties.format,
     ).enum,
   )(["html", "md", "txt"]);
 };

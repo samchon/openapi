@@ -1,4 +1,6 @@
 import { OpenApi } from "../OpenApi";
+import { IOpenApiSchemaError } from "../structures/IOpenApiSchemaError";
+import { IResult } from "../typings/IResult";
 import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
 export namespace OpenApiTypeChecker {
@@ -82,25 +84,25 @@ export namespace OpenApiTypeChecker {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
-    errors?: string[];
     accessor?: string;
     refAccessor?: string;
-  }): OpenApi.IJsonSchema | null =>
+  }): IResult<OpenApi.IJsonSchema, IOpenApiSchemaError> =>
     OpenApiTypeCheckerBase.escape({
       ...props,
       prefix: "#/components/schemas/",
+      method: "OpenApiTypeChecker.method",
     });
 
   export const unreference = (props: {
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    mismatches?: Set<string>;
-  }): OpenApi.IJsonSchema | null =>
+    accessor?: string;
+    refAccessor?: string;
+  }): IResult<OpenApi.IJsonSchema, IOpenApiSchemaError> =>
     OpenApiTypeCheckerBase.unreference({
+      ...props,
       prefix: "#/components/schemas/",
-      components: props.components,
-      schema: props.schema,
-      mismatches: props.mismatches,
+      method: "OpenApiTypeChecker.unreference",
     });
 
   export const visit = (props: {

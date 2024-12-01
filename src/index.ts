@@ -23,6 +23,9 @@ export * from "./HttpMigration";
 //----
 // LLM
 //----
+export * from "./typings/IResult";
+export * from "./structures/IOpenApiSchemaError";
+
 export * from "./structures/IHttpLlmApplication";
 export * from "./structures/IHttpLlmFunction";
 export * from "./structures/ILlmApplication";

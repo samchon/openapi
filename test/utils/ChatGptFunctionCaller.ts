@@ -1,5 +1,10 @@
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { IChatGptSchema, OpenApi } from "@samchon/openapi";
+import {
+  IChatGptSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import OpenAI from "openai";
 import typia, { IJsonSchemaCollection } from "typia";
@@ -21,7 +26,7 @@ export namespace ChatGptFunctionCaller {
   }): Promise<void> => {
     if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
 
-    const parameters: IChatGptSchema.IParameters | null =
+    const parameters: IResult<IChatGptSchema.IParameters, IOpenApiSchemaError> =
       LlmSchemaComposer.parameters("chatgpt")({
         components: props.collection.components,
         schema: typia.assert<
@@ -32,11 +37,12 @@ export namespace ChatGptFunctionCaller {
           ...(props.config ?? {}),
         },
       });
-    if (parameters === null)
+    if (parameters.success === false)
       throw new Error(
         "Failed to convert the JSON schema to the ChatGPT schema.",
       );
-    else if (props.handleParameters) await props.handleParameters(parameters);
+    else if (props.handleParameters)
+      await props.handleParameters(parameters.data);
 
     const client: OpenAI = new OpenAI({
       apiKey: TestGlobal.env.CHATGPT_API_KEY,
@@ -51,7 +57,7 @@ export namespace ChatGptFunctionCaller {
             function: {
               name: props.name,
               description: props.description,
-              parameters: parameters as Record<string, any>,
+              parameters: parameters.data as Record<string, any>,
               strict: true,
             },
           },

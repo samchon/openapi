@@ -1,5 +1,10 @@
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import OpenAI from "openai";
 import typia, { IJsonSchemaCollection } from "typia";
@@ -23,23 +28,25 @@ export namespace LlamaFunctionCaller {
   }): Promise<void> => {
     if (TestGlobal.env.LLAMA_API_KEY === undefined) return;
 
-    const parameters: ILlmSchema.ModelParameters[Model] | null =
-      LlmSchemaComposer.parameters(props.model)({
-        components: props.collection.components,
-        schema: typia.assert<OpenApi.IJsonSchema.IObject>(
-          props.collection.schemas[0],
-        ),
-        config: {
-          ...LlmSchemaComposer.defaultConfig(props.model),
-          ...(props.config ?? {}),
-        } satisfies ILlmSchema.ModelConfig[Model] as any,
-      }) as ILlmSchema.ModelParameters[Model] | null;
-
-    if (parameters === null)
+    const parameters: IResult<
+      ILlmSchema.IParameters<Model>,
+      IOpenApiSchemaError
+    > = LlmSchemaComposer.parameters(props.model)({
+      components: props.collection.components,
+      schema: typia.assert<OpenApi.IJsonSchema.IObject>(
+        props.collection.schemas[0],
+      ),
+      config: {
+        ...LlmSchemaComposer.defaultConfig(props.model),
+        ...(props.config ?? {}),
+      } satisfies ILlmSchema.ModelConfig[Model] as any,
+    }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+    if (parameters.success === false)
       throw new Error(
         "Failed to convert the JSON schema to the Claude schema.",
       );
-    else if (props.handleParameters) await props.handleParameters(parameters);
+    else if (props.handleParameters)
+      await props.handleParameters(parameters.data);
 
     const client: OpenAI = new OpenAI({
       apiKey: TestGlobal.env.LLAMA_API_KEY,
@@ -55,7 +62,7 @@ export namespace LlamaFunctionCaller {
             function: {
               name: props.name,
               description: props.description,
-              parameters: parameters as any,
+              parameters: parameters.data as any,
             },
           },
         ],

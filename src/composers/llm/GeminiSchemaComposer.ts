@@ -4,9 +4,11 @@ import { OpenApiV3_1 } from "../../OpenApiV3_1";
 import { IGeminiSchema } from "../../structures/IGeminiSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
+import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
+import { IResult } from "../../typings/IResult";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
-import { LlmParametersFinder } from "../llm/LlmParametersFinder";
+import { LlmParametersFinder } from "./LlmParametersComposer";
 import { LlmSchemaV3Composer } from "./LlmSchemaV3Composer";
 
 export namespace GeminiSchemaComposer {
@@ -14,57 +16,65 @@ export namespace GeminiSchemaComposer {
     config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-    errors?: string[];
     accessor?: string;
-  }): IGeminiSchema.IParameters | null => {
-    const entity: OpenApi.IJsonSchema.IObject | null =
-      LlmParametersFinder.find(props);
-    if (entity === null) return null;
+    refAccessor?: string;
+  }): IResult<IGeminiSchema.IParameters, IOpenApiSchemaError> => {
+    const entity: IResult<OpenApi.IJsonSchema.IObject, IOpenApiSchemaError> =
+      LlmParametersFinder.parameters({
+        ...props,
+        method: "GeminiSchemaComposer.parameters",
+      });
+    if (entity.success === false) return entity;
     return schema({
       ...props,
-      schema: entity,
-    }) as IGeminiSchema.IParameters | null;
+      schema: entity.data,
+    }) as IResult<IGeminiSchema.IParameters, IOpenApiSchemaError>;
   };
 
   export const schema = (props: {
     config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    errors?: string[];
     accessor?: string;
-  }): IGeminiSchema | null => {
+    refAccessor?: string;
+  }): IResult<IGeminiSchema, IOpenApiSchemaError> => {
     // TRANSFORM TO LLM SCHEMA OF V3.0
-    const schema: ILlmSchemaV3 | null = LlmSchemaV3Composer.schema({
-      ...props,
-      config: {
-        recursive: props.config.recursive,
-        constraint: false,
-      },
-      validate: (next, accessor): boolean => {
-        if (OpenApiTypeChecker.isObject(next)) {
-          if (!!next.additionalProperties) {
-            if (props.errors)
-              props.errors.push(
-                `${accessor}.additionalProperties: Gemini does not allow additionalProperties, the dynamic key typed object.`,
-              );
-            return false;
-          }
-        } else if (
-          OpenApiTypeChecker.isOneOf(next) &&
-          isOneOf(props.components)(next)
-        ) {
-          if (props.errors)
-            props.errors.push(`${accessor}: Gemini does not allow union type.`);
-          return false;
-        }
-        return true;
-      },
-    });
-    if (schema === null) return null;
+    const result: IResult<ILlmSchemaV3, IOpenApiSchemaError> =
+      LlmSchemaV3Composer.schema({
+        ...props,
+        config: {
+          recursive: props.config.recursive,
+          constraint: false,
+        },
+        validate: (next, accessor): IOpenApiSchemaError.IReason[] => {
+          if (OpenApiTypeChecker.isObject(next)) {
+            if (!!next.additionalProperties)
+              return [
+                {
+                  schema: next,
+                  accessor: `${accessor}.additionalProperties`,
+                  message: "Gemini does not allow additionalProperties.",
+                },
+              ];
+          } else if (
+            OpenApiTypeChecker.isOneOf(next) &&
+            isOneOf(props.components)(next)
+          )
+            return [
+              {
+                schema: next,
+                accessor: accessor,
+                message: "Gemini does not allow union type.",
+              },
+            ];
+          return [];
+        },
+      });
+    if (result.success === false) return result;
 
     // SPECIALIZATIONS
     LlmTypeCheckerV3.visit({
-      schema,
+      schema: result.data,
       closure: (v) => {
         if (v.title !== undefined) {
           if (v.description === undefined) v.description = v.title;
@@ -85,11 +95,10 @@ export namespace GeminiSchemaComposer {
           delete (v as Partial<ILlmSchemaV3.IObject>).additionalProperties;
         }
       },
-      accessor: props.accessor,
     });
 
     // DO NOT ALLOW UNION TYPE
-    return schema as IGeminiSchema;
+    return result;
   };
 
   export const separateParameters = (props: {

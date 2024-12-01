@@ -1,5 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -24,7 +29,6 @@ export const test_llm_v31_parameters_tuple = (): void =>
 const validate_llm_parameters_tuple = <Model extends ILlmSchema.Model>(
   model: Model,
 ): void => {
-  const errors: string[] = [];
   const collection: IJsonSchemaCollection = typia.json.schemas<
     [
       {
@@ -39,20 +43,23 @@ const validate_llm_parameters_tuple = <Model extends ILlmSchema.Model>(
       },
     ]
   >();
-  const parameters: ILlmSchema.IParameters<Model> | null =
-    LlmSchemaComposer.parameters(model)({
-      errors,
-      accessor: "$input",
-      config: LlmSchemaComposer.defaultConfig(
-        model,
-      ) satisfies ILlmSchema.IConfig<Model> as any,
-      components: collection.components,
-      schema: typia.assert<
-        OpenApi.IJsonSchema.IReference | OpenApi.IJsonSchema.IObject
-      >(collection.schemas[0]),
-    }) as ILlmSchema.IParameters<Model> | null;
-  TestValidator.equals("parameters")(parameters)(null);
-  TestValidator.equals("errors")(errors.map((e) => e.split(":")[0]).sort())(
+  const result: IResult<
+    ILlmSchema.IParameters<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.parameters(model)({
+    accessor: "$input",
+    config: LlmSchemaComposer.defaultConfig(
+      model,
+    ) satisfies ILlmSchema.IConfig<Model> as any,
+    components: collection.components,
+    schema: typia.assert<
+      OpenApi.IJsonSchema.IReference | OpenApi.IJsonSchema.IObject
+    >(collection.schemas[0]),
+  }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("parameters")(result.success)(false);
+  TestValidator.equals("errors")(
+    result.success ? [] : result.error.reasons.map((r) => r.accessor).sort(),
+  )(
     [
       `$input.properties["first"]`,
       `$input.properties["second"].properties["input"].properties["schema"]`,
