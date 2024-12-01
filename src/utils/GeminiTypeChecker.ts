@@ -16,7 +16,7 @@ export namespace GeminiTypeChecker {
     schema: IGeminiSchema;
     accessor?: string;
   }): void => {
-    const accessor: string = props.accessor ?? "$input";
+    const accessor: string = props.accessor ?? "$input.schema";
     props.closure(props.schema, accessor);
     if (isObject(props.schema))
       Object.entries(props.schema.properties ?? {}).forEach(([key, value]) =>

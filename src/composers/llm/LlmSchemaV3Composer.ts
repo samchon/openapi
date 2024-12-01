@@ -2,83 +2,114 @@ import { OpenApi } from "../../OpenApi";
 import { OpenApiV3Downgrader } from "../../converters/OpenApiV3Downgrader";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
+import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
+import { IResult } from "../../typings/IResult";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiContraintShifter } from "../../utils/OpenApiContraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
-import { LlmParametersFinder } from "./LlmParametersFinder";
+import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3Composer {
   export const parameters = (props: {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-    errors?: string[];
+    /** @internal */
+    validate?: (
+      schema: OpenApi.IJsonSchema,
+      accessor: string,
+    ) => IOpenApiSchemaError.IReason[];
     accessor?: string;
-  }): ILlmSchemaV3.IParameters | null => {
-    const entity: OpenApi.IJsonSchema.IObject | null =
-      LlmParametersFinder.find(props);
-    if (entity === null) return null;
-    else if (!!entity.additionalProperties) {
-      if (props.errors)
-        props.errors.push(
-          `${props.accessor ?? "$input"}.additionalProperties: LLM does not allow additional properties on parameters.`,
-        );
-      return null;
-    }
-    const res = schema({
+    refAccessor?: string;
+  }): IResult<ILlmSchemaV3.IParameters, IOpenApiSchemaError> => {
+    const entity: IResult<OpenApi.IJsonSchema.IObject, IOpenApiSchemaError> =
+      LlmParametersFinder.parameters({
+        ...props,
+        method: "LlmSchemaV3Composer.parameters",
+      });
+    if (entity.success === false) return entity;
+
+    const result: IResult<ILlmSchemaV3, IOpenApiSchemaError> = schema({
       ...props,
-      schema: entity,
-    }) as ILlmSchemaV3.IParameters | null;
-    if (res !== null) res.additionalProperties = false;
-    return res;
+      schema: entity.data,
+    });
+    if (result.success === false) return result;
+    return {
+      success: true,
+      data: {
+        ...(result.data as ILlmSchemaV3.IObject),
+        additionalProperties: false,
+      } satisfies ILlmSchemaV3.IParameters,
+    };
   };
 
   export const schema = (props: {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    errors?: string[];
+    /** @internal */
+    validate?: (
+      schema: OpenApi.IJsonSchema,
+      accessor: string,
+    ) => IOpenApiSchemaError.IReason[];
     accessor?: string;
     refAccessor?: string;
-    validate?: (schema: OpenApi.IJsonSchema, accessor: string) => boolean;
-  }): ILlmSchemaV3 | null => {
+  }): IResult<ILlmSchemaV3, IOpenApiSchemaError> => {
     // CHECK TUPLE TYPE
-    let valid: boolean = true;
+    const reasons: IOpenApiSchemaError.IReason[] = [];
     OpenApiTypeChecker.visit({
       closure: (next, accessor) => {
-        if (props.validate && props.validate(next, accessor) === false)
-          valid &&= false;
-        if (OpenApiTypeChecker.isTuple(next)) {
-          if (props.errors)
-            props.errors.push(
-              `${accessor ?? "$input"}: LLM does not allow tuple type.`,
-            );
-          valid &&= false;
-        } else if (OpenApiTypeChecker.isReference(next)) {
+        if (props.validate) reasons.push(...props.validate(next, accessor));
+        if (OpenApiTypeChecker.isTuple(next))
+          reasons.push({
+            accessor: accessor,
+            schema: next,
+            message: "LLM does not allow tuple type.",
+          });
+        else if (OpenApiTypeChecker.isReference(next)) {
           // UNABLE TO FIND MATCHED REFERENCE
           const key = next.$ref.split("#/components/schemas/")[1];
           if (props.components.schemas?.[key] === undefined) {
-            if (props.errors !== undefined)
-              props.errors.push(
-                `${accessor}: unable to find reference type ${JSON.stringify(key)}.`,
-              );
-            valid &&= false;
+            reasons.push({
+              schema: next,
+              message: `${accessor}: unable to find reference type ${JSON.stringify(key)}.`,
+              accessor: accessor,
+            });
           }
         }
       },
       components: props.components,
       schema: props.schema,
-      accessor: props.accessor ?? "$input.schema",
-      refAccessor: props.refAccessor ?? "$input.components.schemas",
+      accessor: props.accessor,
+      refAccessor: props.refAccessor,
     });
-    if ((valid as boolean) === false) return null;
+    // if ((valid as boolean) === false) return null;
+    if (reasons.length > 0)
+      return {
+        success: false,
+        error: {
+          method: "LlmSchemaV3Composer.schema",
+          message: "Failed to compose LLM schema of v3",
+          reasons,
+        },
+      };
 
     // CHECK MISMATCHES
-    const schema: OpenApi.IJsonSchema | null = OpenApiTypeChecker.escape({
-      ...props,
-      recursive: props.config.recursive,
-    });
-    if (schema === null) return null; // UNREACHABLE
+    const escaped: IResult<OpenApi.IJsonSchema, IOpenApiSchemaError> =
+      OpenApiTypeChecker.escape({
+        ...props,
+        recursive: props.config.recursive,
+      });
+    if (escaped.success === false)
+      // UNREACHABLE
+      return {
+        success: false,
+        error: {
+          method: "LlmSchemaV3Composer.schema",
+          message: "Failed to compose LLM schema of v3",
+          reasons: escaped.error.reasons,
+        },
+      };
 
     // SPECIALIZATIONS
     const downgraded: ILlmSchemaV3 = OpenApiV3Downgrader.downgradeSchema({
@@ -86,7 +117,7 @@ export namespace LlmSchemaV3Composer {
         schemas: {},
       },
       downgraded: {},
-    })(schema) as ILlmSchemaV3;
+    })(escaped.data) as ILlmSchemaV3;
     LlmTypeCheckerV3.visit({
       closure: (next) => {
         if (
@@ -120,7 +151,10 @@ export namespace LlmSchemaV3Composer {
       },
       schema: downgraded,
     });
-    return downgraded;
+    return {
+      success: true,
+      data: downgraded,
+    };
   };
 
   export const separateParameters = (props: {

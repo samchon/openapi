@@ -1,5 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema } from "@samchon/openapi";
+import { ILlmSchema, IOpenApiSchemaError, IResult } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 
 export const test_chatgpt_schema_recursive_ref = (): void =>
@@ -20,7 +20,10 @@ const validate_llm_schema_recursive_ref = <
   model: Model,
 ): void => {
   const $defs: Record<string, ILlmSchema<Model>> = {};
-  const schema: ILlmSchema | null = LlmSchemaComposer.schema(model)({
+  const result: IResult<
+    ILlmSchema<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.schema(model)({
     $defs: $defs as any,
     components: {
       schemas: {
@@ -48,7 +51,8 @@ const validate_llm_schema_recursive_ref = <
       ...(LlmSchemaComposer.defaultConfig(model) as any),
       reference: false,
     },
-  });
+  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("success")(result.success)(true);
   TestValidator.equals("$defs")({
     Department: {
       type: "object",
@@ -66,7 +70,7 @@ const validate_llm_schema_recursive_ref = <
       required: ["name", "children"],
     },
   })($defs as any);
-  TestValidator.equals("schema")(schema)({
+  TestValidator.equals("schema")(result.success ? result.data : {})({
     $ref: "#/$defs/Department",
   });
 };

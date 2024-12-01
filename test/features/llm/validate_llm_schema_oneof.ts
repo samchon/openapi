@@ -1,5 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema } from "@samchon/openapi";
+import { ILlmSchema, IOpenApiSchemaError, IResult } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -27,7 +27,10 @@ const validate_llm_schema_oneof = <Model extends ILlmSchema.Model>(
     typia.json.schemas<[IPoint | ILine | ITriangle | IRectangle]>();
 
   const $defs: Record<string, ILlmSchema<Model>> = {};
-  const schema: ILlmSchema<Model> | null = LlmSchemaComposer.schema(model)({
+  const result: IResult<
+    ILlmSchema<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.schema(model)({
     $defs: $defs as any,
     components: collection.components,
     schema: collection.schemas[0],
@@ -35,9 +38,10 @@ const validate_llm_schema_oneof = <Model extends ILlmSchema.Model>(
       ...LlmSchemaComposer.defaultConfig(model),
       reference: false,
     } as any,
-  }) as ILlmSchema<Model> | null;
+  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("success")(result.success);
   TestValidator.equals(field)(["point", "line", "triangle", "rectangle"])(
-    (schema as any)?.[field]?.map((e: any) =>
+    (result as any)?.data?.[field]?.map((e: any) =>
       constant ? e.properties?.type?.const : e.properties?.type?.enum?.[0],
     ),
   );

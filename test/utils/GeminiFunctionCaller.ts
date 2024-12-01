@@ -6,7 +6,12 @@ import {
   GoogleGenerativeAI,
 } from "@google/generative-ai";
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { IGeminiSchema, OpenApi } from "@samchon/openapi";
+import {
+  IGeminiSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -25,7 +30,7 @@ export namespace GeminiFunctionCaller {
   }): Promise<void> => {
     if (TestGlobal.env.GEMINI_API_KEY === undefined) return;
 
-    const parameters: IGeminiSchema.IParameters | null =
+    const parameters: IResult<IGeminiSchema.IParameters, IOpenApiSchemaError> =
       LlmSchemaComposer.parameters("gemini")({
         components: props.collection.components,
         schema: typia.assert<OpenApi.IJsonSchema.IObject>(
@@ -35,11 +40,11 @@ export namespace GeminiFunctionCaller {
           recursive: props.config?.recursive ?? 3,
         },
       });
-    if (parameters === null)
+    if (parameters.success === false)
       throw new Error(
         "Failed to convert the JSON schema to the Gemini schema.",
       );
-    if (props.handleParameters) await props.handleParameters(parameters);
+    if (props.handleParameters) await props.handleParameters(parameters.data);
 
     const model: GenerativeModel = new GoogleGenerativeAI(
       TestGlobal.env.GEMINI_API_KEY,
@@ -61,7 +66,7 @@ export namespace GeminiFunctionCaller {
             {
               name: props.name,
               description: props.description,
-              parameters: parameters as any,
+              parameters: parameters.data as any,
             },
           ],
         },

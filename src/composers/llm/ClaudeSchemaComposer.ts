@@ -1,6 +1,8 @@
 import { OpenApi } from "../../OpenApi";
 import { IClaudeSchema } from "../../structures/IClaudeSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
+import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
+import { IResult } from "../../typings/IResult";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ClaudeSchemaComposer {
@@ -8,9 +10,9 @@ export namespace ClaudeSchemaComposer {
     config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-    errors?: string[];
     accessor?: string;
-  }): IClaudeSchema.IParameters | null =>
+    refAccessor?: string;
+  }): IResult<IClaudeSchema.IParameters, IOpenApiSchemaError> =>
     LlmSchemaV3_1Composer.parameters({
       ...props,
       config: {
@@ -24,10 +26,9 @@ export namespace ClaudeSchemaComposer {
     components: OpenApi.IComponents;
     $defs: Record<string, IClaudeSchema>;
     schema: OpenApi.IJsonSchema;
-    errors?: string[];
     accessor?: string;
     refAccessor?: string;
-  }): IClaudeSchema | null =>
+  }): IResult<IClaudeSchema, IOpenApiSchemaError> =>
     LlmSchemaV3_1Composer.schema({
       ...props,
       config: {

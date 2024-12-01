@@ -1,5 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -24,7 +29,6 @@ export const test_llm_v31_schema_mismatch = (): void =>
 const validate_llm_schema_mismatch = <Model extends ILlmSchema.Model>(
   model: Model,
 ): void => {
-  const errors: string[] = [];
   const collection: IJsonSchemaCollection = typia.json.schemas<
     [
       {
@@ -44,8 +48,10 @@ const validate_llm_schema_mismatch = <Model extends ILlmSchema.Model>(
   p.second.properties.input.$ref = "#/components/schemas/ICircle1";
   p.third.items.properties.nested.$ref = "#/components/schemas/IRectangle1";
 
-  const parameters: ILlmSchema<Model> | null = LlmSchemaComposer.schema(model)({
-    errors,
+  const result: IResult<
+    ILlmSchema<Model>,
+    IOpenApiSchemaError
+  > = LlmSchemaComposer.schema(model)({
     accessor: "$input",
     config: LlmSchemaComposer.defaultConfig(
       model,
@@ -55,9 +61,11 @@ const validate_llm_schema_mismatch = <Model extends ILlmSchema.Model>(
       OpenApi.IJsonSchema.IReference | OpenApi.IJsonSchema.IObject
     >(collection.schemas[0]),
     $defs: {},
-  }) as ILlmSchema<Model> | null;
-  TestValidator.equals("parameters")(parameters)(null);
-  TestValidator.equals("errors")(errors.map((e) => e.split(":")[0]).sort())(
+  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  TestValidator.equals("success")(result.success)(false);
+  TestValidator.equals("errors")(
+    result.success ? [] : result.error.reasons.map((r) => r.accessor).sort(),
+  )(
     [
       `$input.properties["first"]`,
       `$input.properties["second"].properties["input"]`,

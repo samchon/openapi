@@ -90,16 +90,23 @@ export namespace HttpLlmComposer {
     const cast = (
       s: OpenApi.IJsonSchema,
       accessor: string,
-    ): ILlmSchema.ModelSchema[Model] | null =>
-      LlmSchemaComposer.schema(props.model)({
+    ): ILlmSchema.ModelSchema[Model] | null => {
+      const result = LlmSchemaComposer.schema(props.model)({
         config: props.options as any,
         schema: s,
         components: props.components,
         $defs,
-        errors: props.errors,
         accessor,
         refAccessor: `$input.components.schemas`,
-      }) as ILlmSchema.ModelSchema[Model] | null;
+      });
+      if (result.success === false) {
+        props.errors.push(
+          ...result.error.reasons.map((r) => `${r.accessor}: ${r.message}`),
+        );
+        return null;
+      }
+      return result.data as ILlmSchema.ModelSchema[Model];
+    };
 
     const endpoint: string = `$input.paths[${JSON.stringify(props.route.path)}][${JSON.stringify(props.route.method)}]`;
     const output: ILlmSchema.ModelSchema[Model] | null | undefined = props.route

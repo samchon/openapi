@@ -22,15 +22,14 @@ export namespace LlmTypeCheckerV3 {
    * properties and additional properties. If the visitor meets an array type,
    * it will visit the item type.
    *
-   * @param schema Target schema to visit
-   * @param callback Callback function to apply
+   * @param props Target and callback function
    */
   export const visit = (props: {
     closure: (schema: ILlmSchemaV3, accessor: string) => void;
     schema: ILlmSchemaV3;
     accessor?: string;
   }): void => {
-    const accessor: string = props.accessor ?? "$input";
+    const accessor: string = props.accessor ?? "$input.schema";
     props.closure(props.schema, accessor);
     if (isOneOf(props.schema))
       props.schema.oneOf.forEach((s, i) =>

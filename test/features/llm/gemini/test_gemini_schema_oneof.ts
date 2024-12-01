@@ -1,5 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -37,18 +42,17 @@ const validate =
   (components: OpenApi.IComponents) =>
   (schema: OpenApi.IJsonSchema) =>
   (expected: string[]): void => {
-    const errors: string[] = [];
-    const converted: ILlmSchema<"gemini"> | null = LlmSchemaComposer.schema(
-      "gemini",
-    )({
+    const result: IResult<
+      ILlmSchema<"gemini">,
+      IOpenApiSchemaError
+    > = LlmSchemaComposer.schema("gemini")({
       config: LlmSchemaComposer.defaultConfig("gemini"),
       components,
       schema,
-      errors,
       accessor: "$input",
     });
-    TestValidator.equals("tuple")(converted)(null);
-    TestValidator.equals("errors")(errors.map((e) => e.split(":")[0]).sort())(
-      expected.sort(),
-    );
+    TestValidator.equals("success")(result.success)(false);
+    TestValidator.equals("errors")(
+      result.success ? [] : result.error.reasons.map((r) => r.accessor).sort(),
+    )(expected.sort());
   };

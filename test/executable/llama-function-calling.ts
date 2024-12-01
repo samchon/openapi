@@ -1,4 +1,9 @@
-import { ILlmApplication, ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import fs from "fs";
 import typia, { IJsonSchemaCollection, tags } from "typia";
@@ -44,15 +49,17 @@ const archive = async (props: {
   texts: ILlmTextPrompt[];
 }): Promise<void> => {
   for (const model of props.models) {
-    const parameters: ILlmApplication<ILlmSchema.Model> | null =
-      LlmSchemaComposer.parameters(model)({
-        config: LlmSchemaComposer.defaultConfig(model) as any,
-        components: props.collection.components,
-        schema: typia.assert<OpenApi.IJsonSchema.IObject>(
-          props.collection.schemas[0],
-        ),
-      }) as ILlmApplication<ILlmSchema.Model> | null;
-    if (parameters === null) continue;
+    const result: IResult<
+      ILlmSchema.IParameters<ILlmSchema.Model>,
+      IOpenApiSchemaError
+    > = LlmSchemaComposer.parameters(model)({
+      config: LlmSchemaComposer.defaultConfig(model) as any,
+      components: props.collection.components,
+      schema: typia.assert<OpenApi.IJsonSchema.IObject>(
+        props.collection.schemas[0],
+      ),
+    });
+    if (result.success === false) continue;
     await fs.promises.writeFile(
       `${TestGlobal.ROOT}/test-web-llm/assets/schemas/${props.file}.${model}.schema.json`,
       JSON.stringify(
@@ -60,7 +67,7 @@ const archive = async (props: {
           model,
           name: props.name,
           description: props.description,
-          parameters,
+          parameters: result.data,
           texts: props.texts,
         },
         null,

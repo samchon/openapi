@@ -2,6 +2,8 @@ import { OpenApi } from "../../OpenApi";
 import { IChatGptSchema } from "../../structures/IChatGptSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
+import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
+import { IResult } from "../../typings/IResult";
 import { ChatGptTypeChecker } from "../../utils/ChatGptTypeChecker";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
@@ -12,22 +14,25 @@ export namespace ChatGptSchemaComposer {
     config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-    errors?: string[];
     accessor?: string;
-  }): IChatGptSchema.IParameters | null => {
-    const params: ILlmSchemaV3_1.IParameters | null =
+    refAccessor?: string;
+  }): IResult<IChatGptSchema.IParameters, IOpenApiSchemaError> => {
+    const result: IResult<ILlmSchemaV3_1.IParameters, IOpenApiSchemaError> =
       LlmSchemaV3_1Composer.parameters({
         ...props,
         config: {
           reference: props.config.reference,
           constraint: false,
         },
-        validate: validate(props.errors),
+        validate,
       });
-    if (params === null) return null;
-    for (const key of Object.keys(params.$defs))
-      params.$defs[key] = transform(params.$defs[key]);
-    return transform(params) as IChatGptSchema.IParameters;
+    if (result.success === false) return result;
+    for (const key of Object.keys(result.data.$defs))
+      result.data.$defs[key] = transform(result.data.$defs[key]);
+    return {
+      success: true,
+      data: transform(result.data) as IChatGptSchema.IParameters,
+    };
   };
 
   export const schema = (props: {
@@ -35,41 +40,44 @@ export namespace ChatGptSchemaComposer {
     components: OpenApi.IComponents;
     $defs: Record<string, IChatGptSchema>;
     schema: OpenApi.IJsonSchema;
-    errors?: string[];
     accessor?: string;
     refAccessor?: string;
-  }): IChatGptSchema | null => {
+  }): IResult<IChatGptSchema, IOpenApiSchemaError> => {
     const oldbie: Set<string> = new Set(Object.keys(props.$defs));
-    const schema: ILlmSchemaV3_1 | null = LlmSchemaV3_1Composer.schema({
-      ...props,
-      config: {
-        reference: props.config.reference,
-        constraint: false,
-      },
-      validate: validate(props.errors),
-    });
-    if (schema === null) return null;
+    const result: IResult<ILlmSchemaV3_1, IOpenApiSchemaError> =
+      LlmSchemaV3_1Composer.schema({
+        ...props,
+        config: {
+          reference: props.config.reference,
+          constraint: false,
+        },
+        validate,
+      });
+    if (result.success === false) return result;
     for (const key of Object.keys(props.$defs))
       if (oldbie.has(key) === false)
         props.$defs[key] = transform(props.$defs[key]);
-    return transform(schema);
+    return {
+      success: true,
+      data: transform(result.data),
+    };
   };
 
-  const validate =
-    (errors: string[] | undefined) =>
-    (schema: OpenApi.IJsonSchema, accessor: string): boolean => {
-      if (
-        OpenApiTypeChecker.isObject(schema) &&
-        !!schema.additionalProperties
-      ) {
-        if (errors)
-          errors.push(
-            `${accessor}.additionalProperties: ChatGPT does not allow additionalProperties, the dynamic key typed object.`,
-          );
-        return false;
-      }
-      return true;
-    };
+  const validate = (
+    schema: OpenApi.IJsonSchema,
+    accessor: string,
+  ): IOpenApiSchemaError.IReason[] => {
+    if (OpenApiTypeChecker.isObject(schema) && !!schema.additionalProperties)
+      return [
+        {
+          schema: schema,
+          accessor: `${accessor}.additionalProperties`,
+          message:
+            "ChatGPT does not allow additionalProperties, the dynamic key typed object.",
+        },
+      ];
+    return [];
+  };
 
   const transform = (schema: ILlmSchemaV3_1): IChatGptSchema => {
     const union: Array<IChatGptSchema> = [];

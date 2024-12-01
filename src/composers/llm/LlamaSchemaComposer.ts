@@ -1,6 +1,8 @@
 import { OpenApi } from "../../OpenApi";
 import { ILlamaSchema } from "../../structures/ILlamaSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
+import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
+import { IResult } from "../../typings/IResult";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace LlamaSchemaComposer {
@@ -8,9 +10,7 @@ export namespace LlamaSchemaComposer {
     config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
-    errors?: string[];
-    accessor?: string;
-  }): ILlamaSchema.IParameters | null =>
+  }): IResult<ILlamaSchema.IParameters, IOpenApiSchemaError> =>
     LlmSchemaV3_1Composer.parameters({
       ...props,
       config: {
@@ -24,10 +24,7 @@ export namespace LlamaSchemaComposer {
     components: OpenApi.IComponents;
     $defs: Record<string, ILlamaSchema>;
     schema: OpenApi.IJsonSchema;
-    errors?: string[];
-    accessor?: string;
-    refAccessor?: string;
-  }): ILlamaSchema | null =>
+  }): IResult<ILlamaSchema, IOpenApiSchemaError> =>
     LlmSchemaV3_1Composer.schema({
       ...props,
       config: {

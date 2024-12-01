@@ -1,6 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ArrayUtil, TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
@@ -24,22 +29,25 @@ export namespace ClaudeFunctionCaller {
   }): Promise<void> => {
     if (TestGlobal.env.CLAUDE_API_KEY === undefined) return;
 
-    const parameters: ILlmSchema.ModelParameters[Model] | null =
-      LlmSchemaComposer.parameters(props.model)({
-        components: props.collection.components,
-        schema: typia.assert<OpenApi.IJsonSchema.IObject>(
-          props.collection.schemas[0],
-        ),
-        config: {
-          ...LlmSchemaComposer.defaultConfig(props.model),
-          ...(props.config ?? {}),
-        } satisfies ILlmSchema.ModelConfig[Model] as any,
-      }) as ILlmSchema.ModelParameters[Model] | null;
-    if (parameters === null)
+    const parameters: IResult<
+      ILlmSchema.ModelParameters[Model],
+      IOpenApiSchemaError
+    > = LlmSchemaComposer.parameters(props.model)({
+      components: props.collection.components,
+      schema: typia.assert<OpenApi.IJsonSchema.IObject>(
+        props.collection.schemas[0],
+      ),
+      config: {
+        ...LlmSchemaComposer.defaultConfig(props.model),
+        ...(props.config ?? {}),
+      } satisfies ILlmSchema.ModelConfig[Model] as any,
+    }) as IResult<ILlmSchema.ModelParameters[Model], IOpenApiSchemaError>;
+    if (parameters.success === false)
       throw new Error(
         "Failed to convert the JSON schema to the Claude schema.",
       );
-    else if (props.handleParameters) await props.handleParameters(parameters);
+    else if (props.handleParameters)
+      await props.handleParameters(parameters.data);
 
     const client: Anthropic = new Anthropic({
       apiKey: TestGlobal.env.CLAUDE_API_KEY,
@@ -52,7 +60,7 @@ export namespace ClaudeFunctionCaller {
         {
           name: props.name,
           description: props.description,
-          input_schema: parameters as any,
+          input_schema: parameters.data as any,
         },
       ],
     });

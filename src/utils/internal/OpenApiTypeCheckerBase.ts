@@ -1,4 +1,7 @@
 import { OpenApi } from "../../OpenApi";
+import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
+import { IResult } from "../../typings/IResult";
+import { AccessorUtil } from "../AccessorUtil";
 import { MapUtil } from "../MapUtil";
 import { JsonDescriptionUtil } from "./JsonDescriptionUtil";
 
@@ -101,40 +104,74 @@ export namespace OpenApiTypeCheckerBase {
   ----------------------------------------------------------- */
   export const unreference = (props: {
     prefix: string;
+    method: string;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
-    mismatches: Set<string> | undefined;
-  }): OpenApi.IJsonSchema | null => {
-    if (isReference(props.schema) === false) return props.schema;
-    const key: string = props.schema.$ref.split(props.prefix).pop()!;
-    const found: OpenApi.IJsonSchema | undefined =
-      props.components.schemas?.[key];
-    if (found === undefined && props.mismatches !== undefined)
-      props.mismatches.add(key);
-    return found ? unreference({ ...props, schema: found }) : null;
+    accessor?: string;
+    refAccessor?: string;
+  }): IResult<OpenApi.IJsonSchema, IOpenApiSchemaError> => {
+    const reasons: IOpenApiSchemaError.IReason[] = [];
+    const result: OpenApi.IJsonSchema | null = unreferenceSchema({
+      prefix: props.prefix,
+      refAccessor:
+        props.refAccessor ??
+        `$input.${props.prefix
+          .substring(2)
+          .split("/")
+          .filter((s) => !!s.length)
+          .join(".")}`,
+      accessor: props.accessor ?? "$input.schema",
+      components: props.components,
+      schema: props.schema,
+      reasons,
+    });
+    if (result === null)
+      return {
+        success: false,
+        error: {
+          method: props.method,
+          message: `failed to unreference due to unable to find.`,
+          reasons,
+        },
+      };
+    return {
+      success: true,
+      data: result,
+    };
   };
 
   export const escape = (props: {
     prefix: string;
+    method: string;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
-    errors?: string[];
     accessor?: string;
     refAccessor?: string;
-  }): OpenApi.IJsonSchema | null =>
-    escapeSchema({
-      ...props,
-      visited: new Map(),
-      accessor: props.accessor ?? "$input",
-      refAccessor:
-        props.refAccessor ??
-        props.prefix
-          .substring(2)
-          .split("/")
-          .filter((str) => !!str.length)
-          .join("."),
-    }) || null;
+  }): IResult<OpenApi.IJsonSchema, IOpenApiSchemaError> => {
+    const reasons: IOpenApiSchemaError.IReason[] = [];
+    const result: OpenApi.IJsonSchema | null =
+      escapeSchema({
+        ...props,
+        reasons,
+        visited: new Map(),
+        accessor: props.accessor ?? "$input.schema",
+        refAccessor: props.refAccessor ?? AccessorUtil.reference(props.prefix),
+      }) || null;
+    if (result === null)
+      return {
+        success: false,
+        error: {
+          method: props.method,
+          message: `failed to escape some reference type(s) due to unable to find${Number(props.recursive) === 0 ? " or recursive relationship" : ""}.`,
+          reasons,
+        },
+      };
+    return {
+      success: true,
+      data: result,
+    };
+  };
 
   export const visit = (props: {
     prefix: string;
@@ -145,6 +182,8 @@ export namespace OpenApiTypeCheckerBase {
     refAccessor?: string;
   }): void => {
     const already: Set<string> = new Set();
+    const refAccessor: string =
+      props.refAccessor ?? `$input.${AccessorUtil.reference(props.prefix)}`;
     const next = (schema: OpenApi.IJsonSchema, accessor: string): void => {
       props.closure(schema, accessor);
       if (isReference(schema)) {
@@ -154,10 +193,7 @@ export namespace OpenApiTypeCheckerBase {
         const found: OpenApi.IJsonSchema | undefined =
           props.components.schemas?.[key];
         if (found !== undefined)
-          next(
-            found,
-            `${props.refAccessor ?? props.prefix}[${JSON.stringify(key)}]`,
-          );
+          next(found, `${refAccessor}[${JSON.stringify(key)}]`);
       } else if (isOneOf(schema))
         schema.oneOf.forEach((s, i) => next(s, `${accessor}.oneOf[${i}]`));
       else if (isObject(schema)) {
@@ -180,7 +216,7 @@ export namespace OpenApiTypeCheckerBase {
           next(schema.additionalItems, `${accessor}.additionalItems`);
       }
     };
-    next(props.schema, props.accessor ?? "$input");
+    next(props.schema, props.accessor ?? "$input.schema");
   };
 
   export const covers = (props: {
@@ -197,13 +233,49 @@ export namespace OpenApiTypeCheckerBase {
       visited: new Map(),
     });
 
+  const unreferenceSchema = (props: {
+    prefix: string;
+    refAccessor: string;
+    accessor: string;
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema;
+    reasons: IOpenApiSchemaError.IReason[];
+    first?: string;
+  }): OpenApi.IJsonSchema | null => {
+    if (isReference(props.schema) === false) return props.schema;
+    const key: string = props.schema.$ref.split(props.prefix).pop()!;
+    const found: OpenApi.IJsonSchema | undefined =
+      props.components.schemas?.[key];
+    if (found === undefined) {
+      props.reasons.push({
+        schema: props.schema,
+        accessor: props.accessor,
+        message: `unable to find reference type ${JSON.stringify(key)}.`,
+      });
+      return null;
+    } else if (isReference(found) === false) return found;
+    else if (props.first === key) {
+      props.reasons.push({
+        schema: props.schema,
+        accessor: props.accessor,
+        message: `recursive reference type ${JSON.stringify(key)}.`,
+      });
+      return null;
+    }
+    return unreferenceSchema({
+      ...props,
+      accessor: `${props.refAccessor}[${JSON.stringify(key)}]`,
+      first: key,
+    });
+  };
+
   const escapeSchema = (props: {
     components: OpenApi.IComponents;
     prefix: string;
     schema: OpenApi.IJsonSchema;
     recursive: false | number;
     visited: Map<string, number>;
-    errors?: string[];
+    reasons: IOpenApiSchemaError.IReason[];
     accessor: string;
     refAccessor: string;
   }): OpenApi.IJsonSchema | null | undefined => {
@@ -213,15 +285,26 @@ export namespace OpenApiTypeCheckerBase {
       const target: OpenApi.IJsonSchema | undefined =
         props.components.schemas?.[key];
       if (target === undefined) {
-        if (props.errors !== undefined)
-          props.errors.push(
-            `${props.accessor}: unable to find reference type ${JSON.stringify(key)}.`,
-          );
+        props.reasons.push({
+          schema: props.schema,
+          accessor: props.accessor,
+          message: `unable to find reference type ${JSON.stringify(key)}.`,
+        });
         return null;
       } else if (props.visited.has(key) === true) {
         if (props.recursive === false) return null;
         const depth: number = props.visited.get(key)!;
-        if (depth > props.recursive) return undefined;
+        if (depth > props.recursive) {
+          if (props.recursive === 0) {
+            props.reasons.push({
+              schema: props.schema,
+              accessor: props.accessor,
+              message: `recursive reference type ${JSON.stringify(key)}.`,
+            });
+            return null;
+          }
+          return undefined;
+        }
         props.visited.set(key, depth + 1);
         const res: OpenApi.IJsonSchema | null | undefined = escapeSchema({
           ...props,

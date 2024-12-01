@@ -1,5 +1,10 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema, OpenApi } from "@samchon/openapi";
+import {
+  ILlmSchema,
+  IOpenApiSchemaError,
+  IResult,
+  OpenApi,
+} from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection, tags } from "typia";
 
@@ -82,18 +87,23 @@ interface ICombined extends IMember, IFileUpload {}
 const schema =
   <Model extends ILlmSchema.Model>(model: Model, constraint: boolean) =>
   (collection: IJsonSchemaCollection): ILlmSchema.IParameters<Model> => {
-    const schema: ILlmSchema.IParameters<Model> | null =
-      LlmSchemaComposer.parameters(model)({
-        components: collection.components,
-        schema: typia.assert<
-          OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
-        >(collection.schemas[0]),
-        config: {
-          ...LlmSchemaComposer.defaultConfig(model),
-          reference: false,
-          constraint,
-        } satisfies ILlmSchema.IConfig<Model> as any,
-      }) as ILlmSchema.IParameters<Model> | null;
-    if (schema === null) throw new Error("Invalid schema");
-    return schema;
+    const result: IResult<
+      ILlmSchema.IParameters<Model>,
+      IOpenApiSchemaError
+    > = LlmSchemaComposer.parameters(model)({
+      components: collection.components,
+      schema: typia.assert<
+        OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
+      >(collection.schemas[0]),
+      config: {
+        ...LlmSchemaComposer.defaultConfig(model),
+        reference: false,
+        constraint,
+      } satisfies ILlmSchema.IConfig<Model> as any,
+    }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+    if (result.success === false) {
+      console.log(result.error);
+      throw new Error("Invalid schema");
+    }
+    return result.data;
   };
