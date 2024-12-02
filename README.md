@@ -1,9 +1,3 @@
-> ## Next version is coming.
->
-> This is the `next` version README document.
->
-> If you wanna see the latest version, go to the [`v1.0` branch](https://github.com/samchon/openapi/tree/v1.0).
-
 # `@samchon/openapi`
 ```mermaid
 flowchart
@@ -18,12 +12,12 @@ flowchart
     lfc --"OpenAI"--> chatgpt("ChatGPT")
     lfc --"Anthropic"--> claude("Claude")
     lfc --"Google"--> gemini("Gemini")
-    lfc --"Meta (Facebook)"--> llama("Llama")
+    lfc --"Meta"--> llama("Llama")
   end
 ```
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/samchon/openapi/blob/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/@samchon/openapi/next.svg)](https://www.npmjs.com/package/@samchon/openapi/next.svg)
+[![npm version](https://img.shields.io/npm/v/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi.svg)
 [![Downloads](https://img.shields.io/npm/dm/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Build Status](https://github.com/samchon/openapi/workflows/build/badge.svg)](https://github.com/samchon/openapi/actions?query=workflow%3Abuild)
 
@@ -55,10 +49,10 @@ OpenAPI definitions, converters and LLM function calling application composer.
 
 ## Setup
 ```bash
-npm install @samchon/openapi --tag next
+npm install @samchon/openapi
 ```
 
-Just install by `npm i @samchon/openapi --tag next` command.
+Just install by `npm i @samchon/openapi` command.
 
 Here is an example code utilizing the `@samchon/openapi` for LLM function calling purpose. 
 
@@ -213,7 +207,7 @@ flowchart TD
     lfc --"OpenAI"--> chatgpt("ChatGPT")
     lfc --"Anthropic"--> claude("Claude")
     lfc --"Google"--> gemini("Gemini")
-    lfc --"Meta (Facebook)"--> llama("Llama")
+    lfc --"Meta"--> llama("Llama")
   end
 ```
 
@@ -231,9 +225,9 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
     - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
   - Schemas
     - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude (same with [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts))
+    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude
     - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts): Google Gemini
-    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta (Facebook) Llama (same with [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts))
+    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta Llama
     - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
   - Type Checkers
