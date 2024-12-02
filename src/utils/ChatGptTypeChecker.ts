@@ -5,11 +5,23 @@ export namespace ChatGptTypeChecker {
   /* -----------------------------------------------------------
     TYPE CHECKERS
   ----------------------------------------------------------- */
+  /**
+   * Test whether the schema is a nul type.
+   *
+   * @param schema Target schema
+   * @returns Whether null type or not
+   */
   export const isNull = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.INull =>
     (schema as IChatGptSchema.INull).type === "null";
 
+  /**
+   * Test whether the schema is an unknown type.
+   *
+   * @param schema Target schema
+   * @returns Whether unknown type or not
+   */
   export const isUnknown = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IUnknown =>
@@ -17,41 +29,89 @@ export namespace ChatGptTypeChecker {
     !isAnyOf(schema) &&
     !isReference(schema);
 
+  /**
+   * Test whether the schema is a boolean type.
+   *
+   * @param schema Target schema
+   * @returns Whether boolean type or not
+   */
   export const isBoolean = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IBoolean =>
     (schema as IChatGptSchema.IBoolean).type === "boolean";
 
+  /**
+   * Test whether the schema is an integer type.
+   *
+   * @param schema Target schema
+   * @returns Whether integer type or not
+   */
   export const isInteger = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IInteger =>
     (schema as IChatGptSchema.IInteger).type === "integer";
 
+  /**
+   * Test whether the schema is a number type.
+   *
+   * @param schema Target schema
+   * @returns Whether number type or not
+   */
   export const isNumber = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.INumber =>
     (schema as IChatGptSchema.INumber).type === "number";
 
+  /**
+   * Test whether the schema is a string type.
+   *
+   * @param schema Target schema
+   * @returns Whether string type or not
+   */
   export const isString = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IString =>
     (schema as IChatGptSchema.IString).type === "string";
 
+  /**
+   * Test whether the schema is an array type.
+   *
+   * @param schema Target schema
+   * @returns Whether array type or not
+   */
   export const isArray = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IArray =>
     (schema as IChatGptSchema.IArray).type === "array" &&
     (schema as IChatGptSchema.IArray).items !== undefined;
 
+  /**
+   * Test whether the schema is an object type.
+   *
+   * @param schema Target schema
+   * @returns Whether object type or not
+   */
   export const isObject = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IObject =>
     (schema as IChatGptSchema.IObject).type === "object";
 
+  /**
+   * Test whether the schema is a reference type.
+   *
+   * @param schema Target schema
+   * @returns Whether reference type or not
+   */
   export const isReference = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IReference => (schema as any).$ref !== undefined;
 
+  /**
+   * Test whether the schema is an union type.
+   *
+   * @param schema Target schema
+   * @returns Whether union type or not
+   */
   export const isAnyOf = (
     schema: IChatGptSchema,
   ): schema is IChatGptSchema.IAnyOf =>
@@ -60,6 +120,20 @@ export namespace ChatGptTypeChecker {
   /* -----------------------------------------------------------
     OPERATORS
   ----------------------------------------------------------- */
+  /**
+   * Visit every nested schemas.
+   *
+   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   *
+   * Here is the list of occuring nested visitings:
+   *
+   * - {@link IChatGptSchema.IAnyOf.anyOf}
+   * - {@link IChatGptSchema.IReference}
+   * - {@link IChatGptSchema.IObject.properties}
+   * - {@link IChatGptSchema.IArray.items}
+   *
+   * @param props Properties for visiting
+   */
   export const visit = (props: {
     closure: (schema: IChatGptSchema, accessor: string) => void;
     $defs?: Record<string, IChatGptSchema> | undefined;
@@ -88,6 +162,12 @@ export namespace ChatGptTypeChecker {
     next(props.schema, props.accessor ?? "$input.schemas");
   };
 
+  /**
+   * Test whether the `x` schema covers the `y` schema.
+   *
+   * @param props Properties for testing
+   * @returns Whether the `x` schema covers the `y` schema
+   */
   export const covers = (props: {
     $defs?: Record<string, IChatGptSchema> | undefined;
     x: IChatGptSchema;

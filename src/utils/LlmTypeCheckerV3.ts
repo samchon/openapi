@@ -14,15 +14,15 @@ export namespace LlmTypeCheckerV3 {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the callback function
-   * to them.
+   * Visit every nested schemas of the target, and apply the `props.closure` function.
    *
-   * If the visitor meets an union type, it will visit every individual schemas
-   * in the union type. Otherwise meets an object type, it will visit every
-   * properties and additional properties. If the visitor meets an array type,
-   * it will visit the item type.
+   * Here is the list of occuring nested visitings:
    *
-   * @param props Target and callback function
+   * - {@link ILlmSchemaV3.IOneOf.oneOf}
+   * - {@link ILlmSchemaV3.IObject.additionalProperties}
+   * - {@link ILlmSchemaV3.IArray.items}
+   *
+   * @param props Properties for visiting
    */
   export const visit = (props: {
     closure: (schema: ILlmSchemaV3, accessor: string) => void;
