@@ -16,10 +16,20 @@
   "keywords": [
     "swagger",
     "openapi",
+    "openapi-generator",
+    "openapi-validator",
     "converter",
     "migrate",
     "typia",
-    "nestia"
+    "nestia",
+    "llm",
+    "llm-function-calling",
+    "structured-output",
+    "openai",
+    "chatgpt",
+    "claude",
+    "gemini",
+    "llama"
   ],
   "repository": {
     "type": "git",
