@@ -9,7 +9,9 @@ export const test_json_schema_convert_v20_example = (): void => {
     example: 4,
     title: "Sequence number",
   };
-  const output: OpenApi.IJsonSchema = SwaggerV2Upgrader.convertSchema(input);
+  const output: OpenApi.IJsonSchema = SwaggerV2Upgrader.convertSchema({})(
+    input,
+  );
   TestValidator.equals("example")(output)({
     oneOf: [
       {

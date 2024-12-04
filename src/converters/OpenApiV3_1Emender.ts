@@ -381,7 +381,8 @@ export namespace OpenApiV3_1Emender {
         else if (TypeChecker.isOneOf(schema)) schema.oneOf.forEach(visit);
         else if (TypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
         else if (TypeChecker.isAllOf(schema))
-          union.push(convertAllOfSchema(components)(schema));
+          if (schema.allOf.length === 1) visit(schema.allOf[0]);
+          else union.push(convertAllOfSchema(components)(schema));
         // ATOMIC TYPE CASE (CONSIDER ENUM VALUES)
         else if (TypeChecker.isBoolean(schema))
           if (

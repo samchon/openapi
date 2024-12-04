@@ -82,7 +82,7 @@ export namespace SwaggerV2Upgrader {
                     (p as SwaggerV2.IOperation.IBodyParameter).schema ===
                       undefined,
                 ) as SwaggerV2.IOperation.IGeneralParameter[]
-            ).map(convertParameter)
+            ).map(convertParameter(doc.definitions ?? {}))
           : undefined,
       requestBody: (() => {
         const found: SwaggerV2.IOperation.IBodyParameter | undefined =
@@ -93,7 +93,9 @@ export namespace SwaggerV2Upgrader {
               (p as SwaggerV2.IOperation.IBodyParameter)?.schema !== undefined
             );
           }) as SwaggerV2.IOperation.IBodyParameter | undefined;
-        return found ? convertRequestBody(found) : undefined;
+        return found
+          ? convertRequestBody(doc.definitions ?? {})(found)
+          : undefined;
       })(),
       responses: input.responses
         ? Object.fromEntries(
@@ -107,25 +109,29 @@ export namespace SwaggerV2Upgrader {
         : undefined,
     });
 
-  const convertParameter = (
-    input: SwaggerV2.IOperation.IGeneralParameter,
-  ): OpenApi.IOperation.IParameter => ({
-    name: input.name,
-    in: input.in as any,
-    description: input.description,
-    schema: convertSchema(input),
-    required: true,
-  });
-  const convertRequestBody = (
-    input: SwaggerV2.IOperation.IBodyParameter,
-  ): OpenApi.IOperation.IRequestBody => ({
-    description: input.description,
-    content: {
-      "application/json": {
-        schema: convertSchema(input.schema),
+  const convertParameter =
+    (definitions: Record<string, SwaggerV2.IJsonSchema>) =>
+    (
+      input: SwaggerV2.IOperation.IGeneralParameter,
+    ): OpenApi.IOperation.IParameter => ({
+      name: input.name,
+      in: input.in as any,
+      description: input.description,
+      schema: convertSchema(definitions)(input),
+      required: true,
+    });
+  const convertRequestBody =
+    (definitions: Record<string, SwaggerV2.IJsonSchema>) =>
+    (
+      input: SwaggerV2.IOperation.IBodyParameter,
+    ): OpenApi.IOperation.IRequestBody => ({
+      description: input.description,
+      content: {
+        "application/json": {
+          schema: convertSchema(definitions)(input.schema),
+        },
       },
-    },
-  });
+    });
 
   const convertResponse =
     (doc: SwaggerV2.IDocument) =>
@@ -145,7 +151,7 @@ export namespace SwaggerV2Upgrader {
         content: input.schema
           ? {
               "application/json": {
-                schema: convertSchema(input.schema),
+                schema: convertSchema(doc.definitions ?? {})(input.schema),
                 example: input.example,
               },
             }
@@ -159,7 +165,7 @@ export namespace SwaggerV2Upgrader {
                     [
                       key,
                       {
-                        schema: convertSchema(value),
+                        schema: convertSchema(doc.definitions ?? {})(value),
                         in: "header",
                       },
                     ] as const,
@@ -178,7 +184,10 @@ export namespace SwaggerV2Upgrader {
     schemas: Object.fromEntries(
       Object.entries(input.definitions ?? {})
         .filter(([_, v]) => v !== undefined)
-        .map(([key, value]) => [key, convertSchema(value)]),
+        .map(([key, value]) => [
+          key,
+          convertSchema(input.definitions ?? {})(value),
+        ]),
     ),
     securitySchemes: input.securityDefinitions
       ? Object.fromEntries(
@@ -250,166 +259,233 @@ export namespace SwaggerV2Upgrader {
     return undefined!;
   };
 
-  export const convertSchema = (
-    input: SwaggerV2.IJsonSchema,
-  ): OpenApi.IJsonSchema => {
-    const nullable: { value: boolean; default?: null } = {
-      value: false,
-      default: undefined,
-    };
-    const union: OpenApi.IJsonSchema[] = [];
-    const attribute: OpenApi.IJsonSchema.__IAttribute = {
-      title: input.title,
-      description: input.description,
-      ...Object.fromEntries(
-        Object.entries(input).filter(
-          ([key, value]) => key.startsWith("x-") && value !== undefined,
+  export const convertSchema =
+    (definitions: Record<string, SwaggerV2.IJsonSchema>) =>
+    (input: SwaggerV2.IJsonSchema): OpenApi.IJsonSchema => {
+      const nullable: { value: boolean; default?: null } = {
+        value: false,
+        default: undefined,
+      };
+      const union: OpenApi.IJsonSchema[] = [];
+      const attribute: OpenApi.IJsonSchema.__IAttribute = {
+        title: input.title,
+        description: input.description,
+        ...Object.fromEntries(
+          Object.entries(input).filter(
+            ([key, value]) => key.startsWith("x-") && value !== undefined,
+          ),
         ),
-      ),
-      example: input.example,
-      examples: input.examples
-        ? Object.fromEntries(input.examples.map((v, i) => [i.toString(), v]))
-        : undefined,
-    };
-    const visit = (schema: SwaggerV2.IJsonSchema): void => {
-      // NULLABLE PROPERTY
-      if (
-        (schema as SwaggerV2.IJsonSchema.__ISignificant<any>)["x-nullable"] ===
-        true
-      ) {
-        nullable.value ||= true;
-        if ((schema as SwaggerV2.IJsonSchema.INumber).default === null)
-          nullable.default = null;
-      }
-      if (
-        Array.isArray((schema as SwaggerV2.IJsonSchema.INumber).enum) &&
-        (schema as SwaggerV2.IJsonSchema.INumber).enum?.length &&
-        (schema as SwaggerV2.IJsonSchema.INumber).enum?.some((e) => e === null)
-      )
-        nullable.value ||= true;
-      // UNION TYPE CASE
-      if (TypeChecker.isAnyOf(schema)) schema["x-anyOf"].forEach(visit);
-      else if (TypeChecker.isOneOf(schema)) schema["x-oneOf"].forEach(visit);
-      // ATOMIC TYPE CASE (CONSIDER ENUM VALUES)
-      else if (
-        TypeChecker.isBoolean(schema) ||
-        TypeChecker.isInteger(schema) ||
-        TypeChecker.isNumber(schema) ||
-        TypeChecker.isString(schema)
-      )
-        if (schema.enum?.length && schema.enum.filter((e) => e !== null).length)
-          union.push(
-            ...schema.enum
-              .filter((v) => v !== null)
-              .map((value) => ({ const: value })),
-          );
-        else
+        example: input.example,
+        examples: input.examples
+          ? Object.fromEntries(input.examples.map((v, i) => [i.toString(), v]))
+          : undefined,
+      };
+      const visit = (schema: SwaggerV2.IJsonSchema): void => {
+        // NULLABLE PROPERTY
+        if (
+          (schema as SwaggerV2.IJsonSchema.__ISignificant<any>)[
+            "x-nullable"
+          ] === true
+        ) {
+          nullable.value ||= true;
+          if ((schema as SwaggerV2.IJsonSchema.INumber).default === null)
+            nullable.default = null;
+        }
+        if (
+          Array.isArray((schema as SwaggerV2.IJsonSchema.INumber).enum) &&
+          (schema as SwaggerV2.IJsonSchema.INumber).enum?.length &&
+          (schema as SwaggerV2.IJsonSchema.INumber).enum?.some(
+            (e) => e === null,
+          )
+        )
+          nullable.value ||= true;
+        // UNION TYPE CASE
+        if (TypeChecker.isAnyOf(schema)) schema["x-anyOf"].forEach(visit);
+        else if (TypeChecker.isOneOf(schema)) schema["x-oneOf"].forEach(visit);
+        else if (TypeChecker.isAllOf(schema))
+          if (schema.allOf.length === 1) visit(schema.allOf[0]);
+          else union.push(convertAllOfSchema(definitions)(schema));
+        // ATOMIC TYPE CASE (CONSIDER ENUM VALUES)
+        else if (
+          TypeChecker.isBoolean(schema) ||
+          TypeChecker.isInteger(schema) ||
+          TypeChecker.isNumber(schema) ||
+          TypeChecker.isString(schema)
+        )
+          if (
+            schema.enum?.length &&
+            schema.enum.filter((e) => e !== null).length
+          )
+            union.push(
+              ...schema.enum
+                .filter((v) => v !== null)
+                .map((value) => ({ const: value })),
+            );
+          else
+            union.push({
+              ...schema,
+              default: (schema.default ?? undefined) satisfies
+                | boolean
+                | number
+                | string
+                | undefined as any,
+              examples: schema.examples
+                ? Object.fromEntries(
+                    schema.examples.map((v, i) => [i.toString(), v]),
+                  )
+                : undefined,
+              ...{ enum: undefined },
+            });
+        // INSTANCE TYPE CASE
+        else if (TypeChecker.isArray(schema))
           union.push({
             ...schema,
-            default: (schema.default ?? undefined) satisfies
-              | boolean
-              | number
-              | string
-              | undefined as any,
+            items: convertSchema(definitions)(schema.items),
             examples: schema.examples
               ? Object.fromEntries(
                   schema.examples.map((v, i) => [i.toString(), v]),
                 )
               : undefined,
-            ...{ enum: undefined },
           });
-      // INSTANCE TYPE CASE
-      else if (TypeChecker.isArray(schema))
-        union.push({
-          ...schema,
-          items: convertSchema(schema.items),
-          examples: schema.examples
-            ? Object.fromEntries(
-                schema.examples.map((v, i) => [i.toString(), v]),
-              )
-            : undefined,
-        });
-      else if (TypeChecker.isObject(schema))
-        union.push({
-          ...schema,
-          ...{
-            properties: schema.properties
+        else if (TypeChecker.isObject(schema))
+          union.push({
+            ...schema,
+            ...{
+              properties: schema.properties
+                ? Object.fromEntries(
+                    Object.entries(schema.properties)
+                      .filter(([_, v]) => v !== undefined)
+                      .map(([key, value]) => [
+                        key,
+                        convertSchema(definitions)(value),
+                      ]),
+                  )
+                : {},
+              additionalProperties: schema.additionalProperties
+                ? typeof schema.additionalProperties === "object" &&
+                  schema.additionalProperties !== null
+                  ? convertSchema(definitions)(schema.additionalProperties)
+                  : schema.additionalProperties
+                : undefined,
+            },
+            examples: schema.examples
               ? Object.fromEntries(
-                  Object.entries(schema.properties)
-                    .filter(([_, v]) => v !== undefined)
-                    .map(([key, value]) => [key, convertSchema(value)]),
+                  schema.examples.map((v, i) => [i.toString(), v]),
                 )
-              : {},
-            additionalProperties: schema.additionalProperties
-              ? typeof schema.additionalProperties === "object" &&
-                schema.additionalProperties !== null
-                ? convertSchema(schema.additionalProperties)
-                : schema.additionalProperties
               : undefined,
-          },
-          examples: schema.examples
-            ? Object.fromEntries(
-                schema.examples.map((v, i) => [i.toString(), v]),
-              )
-            : undefined,
-          required: schema.required ?? [],
-        });
-      else if (TypeChecker.isReference(schema))
+            required: schema.required ?? [],
+          });
+        else if (TypeChecker.isReference(schema))
+          union.push({
+            ...schema,
+            $ref: schema.$ref.replace(
+              "#/definitions/",
+              "#/components/schemas/",
+            ),
+            examples: schema.examples
+              ? Object.fromEntries(
+                  schema.examples.map((v, i) => [i.toString(), v]),
+                )
+              : undefined,
+          });
+        else
+          union.push({
+            ...schema,
+            examples: schema.examples
+              ? Object.fromEntries(
+                  schema.examples.map((v, i) => [i.toString(), v]),
+                )
+              : undefined,
+          });
+      };
+
+      visit(input);
+      if (
+        nullable.value === true &&
+        !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
+      )
         union.push({
-          ...schema,
-          $ref: schema.$ref.replace("#/definitions/", "#/components/schemas/"),
-          examples: schema.examples
-            ? Object.fromEntries(
-                schema.examples.map((v, i) => [i.toString(), v]),
-              )
-            : undefined,
+          type: "null",
+          default: nullable.default,
         });
-      else
-        union.push({
-          ...schema,
-          examples: schema.examples
-            ? Object.fromEntries(
-                schema.examples.map((v, i) => [i.toString(), v]),
-              )
-            : undefined,
-        });
+      if (
+        union.length === 2 &&
+        union.filter((x) => OpenApiTypeChecker.isNull(x)).length === 1
+      ) {
+        const type: OpenApi.IJsonSchema = union.filter(
+          (x) => OpenApiTypeChecker.isNull(x) === false,
+        )[0];
+        for (const key of [
+          "title",
+          "description",
+          "deprecated",
+          "example",
+          "examples",
+        ] as const)
+          if (type[key] !== undefined) delete type[key];
+      }
+      return {
+        ...(union.length === 0
+          ? { type: undefined }
+          : union.length === 1
+            ? { ...union[0] }
+            : { oneOf: union.map((u) => ({ ...u, "x-nullable": undefined })) }),
+        ...attribute,
+        ...{ "x-nullable": undefined },
+      };
     };
 
-    visit(input);
-    if (
-      nullable.value === true &&
-      !union.some((e) => (e as OpenApi.IJsonSchema.INull).type === "null")
-    )
-      union.push({
-        type: "null",
-        default: nullable.default,
-      });
-    if (
-      union.length === 2 &&
-      union.filter((x) => OpenApiTypeChecker.isNull(x)).length === 1
-    ) {
-      const type: OpenApi.IJsonSchema = union.filter(
-        (x) => OpenApiTypeChecker.isNull(x) === false,
-      )[0];
-      for (const key of [
-        "title",
-        "description",
-        "deprecated",
-        "example",
-        "examples",
-      ] as const)
-        if (type[key] !== undefined) delete type[key];
-    }
-    return {
-      ...(union.length === 0
-        ? { type: undefined }
-        : union.length === 1
-          ? { ...union[0] }
-          : { oneOf: union.map((u) => ({ ...u, "x-nullable": undefined })) }),
-      ...attribute,
-      ...{ "x-nullable": undefined },
+  const convertAllOfSchema =
+    (definitions: Record<string, SwaggerV2.IJsonSchema>) =>
+    (input: SwaggerV2.IJsonSchema.IAllOf): OpenApi.IJsonSchema => {
+      const objects: Array<SwaggerV2.IJsonSchema.IObject | null> =
+        input.allOf.map((schema) => retrieveObject(definitions)(schema));
+      if (objects.some((obj) => obj === null))
+        return {
+          type: undefined,
+          ...{
+            allOf: undefined,
+          },
+        };
+      return {
+        ...input,
+        type: "object",
+        properties: Object.fromEntries(
+          objects
+            .map((o) => Object.entries(o?.properties ?? {}))
+            .flat()
+            .map(
+              ([key, value]) =>
+                [key, convertSchema(definitions)(value)] as const,
+            ),
+        ),
+        ...{
+          allOf: undefined,
+          required: [...new Set(objects.map((o) => o?.required ?? []).flat())],
+        },
+      };
     };
-  };
+
+  const retrieveObject =
+    (definitions: Record<string, SwaggerV2.IJsonSchema>) =>
+    (
+      input: SwaggerV2.IJsonSchema,
+      visited: Set<SwaggerV2.IJsonSchema> = new Set(),
+    ): SwaggerV2.IJsonSchema.IObject | null => {
+      if (TypeChecker.isObject(input))
+        return input.properties !== undefined && !input.additionalProperties
+          ? input
+          : null;
+      else if (visited.has(input)) return null;
+      else visited.add(input);
+
+      if (TypeChecker.isReference(input))
+        return retrieveObject(definitions)(
+          definitions?.[input.$ref.split("/").pop() ?? ""] ?? {},
+          visited,
+        );
+      return null;
+    };
 
   namespace TypeChecker {
     export const isBoolean = (
@@ -440,6 +516,10 @@ export namespace SwaggerV2Upgrader {
       schema: SwaggerV2.IJsonSchema,
     ): schema is SwaggerV2.IJsonSchema.IReference =>
       (schema as SwaggerV2.IJsonSchema.IReference).$ref !== undefined;
+    export const isAllOf = (
+      schema: SwaggerV2.IJsonSchema,
+    ): schema is SwaggerV2.IJsonSchema.IAllOf =>
+      (schema as SwaggerV2.IJsonSchema.IAllOf).allOf !== undefined;
     export const isOneOf = (
       schema: SwaggerV2.IJsonSchema,
     ): schema is SwaggerV2.IJsonSchema.IOneOf =>
