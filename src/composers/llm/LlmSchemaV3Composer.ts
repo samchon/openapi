@@ -219,18 +219,15 @@ export namespace LlmSchemaV3Composer {
     predicate: (schema: ILlmSchemaV3) => boolean;
     schema: ILlmSchemaV3.IObject;
   }): [ILlmSchemaV3.IObject | null, ILlmSchemaV3.IObject | null] => {
-    if (
-      !!props.schema.additionalProperties ||
-      Object.keys(props.schema.properties ?? {}).length === 0
-    )
-      return [props.schema, null];
     const llm = {
       ...props.schema,
       properties: {} as Record<string, ILlmSchemaV3>,
+      additionalProperties: props.schema.additionalProperties,
     } satisfies ILlmSchemaV3.IObject;
     const human = {
       ...props.schema,
       properties: {} as Record<string, ILlmSchemaV3>,
+      additionalProperties: props.schema.additionalProperties,
     } satisfies ILlmSchemaV3.IObject;
     for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
       const [x, y] = separateStation({
@@ -252,8 +249,12 @@ export namespace LlmSchemaV3Composer {
       human.additionalProperties = dy ?? false;
     }
     return [
-      Object.keys(llm.properties).length === 0 ? null : shrinkRequired(llm),
-      Object.keys(human.properties).length === 0 ? null : shrinkRequired(human),
+      !!Object.keys(llm.properties).length || !!llm.additionalProperties
+        ? shrinkRequired(llm)
+        : null,
+      !!Object.keys(human.properties).length || !!human.additionalProperties
+        ? shrinkRequired(human)
+        : null,
     ];
   };
 

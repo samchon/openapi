@@ -427,6 +427,7 @@ export namespace LlmSchemaV3_1Composer {
     const llm = {
       ...props.schema,
       properties: {} as Record<string, ILlmSchemaV3_1>,
+      additionalProperties: props.schema.additionalProperties,
     } satisfies ILlmSchemaV3_1.IObject;
     const human = {
       ...props.schema,
@@ -454,8 +455,12 @@ export namespace LlmSchemaV3_1Composer {
       human.additionalProperties = dy ?? false;
     }
     return [
-      Object.keys(llm.properties).length === 0 ? null : shrinkRequired(llm),
-      Object.keys(human.properties).length === 0 ? null : shrinkRequired(human),
+      !!Object.keys(llm.properties).length || !!llm.additionalProperties
+        ? shrinkRequired(llm)
+        : null,
+      !!Object.keys(human.properties).length || human.additionalProperties
+        ? shrinkRequired(human)
+        : null,
     ];
   };
 
