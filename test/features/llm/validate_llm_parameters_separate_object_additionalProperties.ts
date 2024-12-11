@@ -59,44 +59,68 @@ const validate_llm_parameters_separate_object_additionalProperties = <
           : s.description?.includes("@contentMediaType") === true),
       parameters: schema as any,
     });
-  const member: ILlmSchema.IParameters<Model> = schema(
+  const params: ILlmSchema.IParameters<Model> = schema(
     model,
     constraint,
-  )(typia.json.schemas<[IWrapper<IMember>]>());
-  const upload: ILlmSchema.IParameters<Model> = schema(
-    model,
-    constraint,
-  )(typia.json.schemas<[IWrapper<IFileUpload>]>());
-  const combined: ILlmSchema.IParameters<Model> = schema(
-    model,
-    constraint,
-  )(typia.json.schemas<[IWrapper<ICombined>]>());
-
-  TestValidator.equals("member")(separator(member))({
-    llm: member,
-    human: null,
-  });
-  TestValidator.equals("upload")(separator(upload))({
-    llm: null,
-    human: upload,
-  });
-  TestValidator.equals("combined")(separator(combined))({
-    llm: member,
-    human: upload,
+  )(typia.json.schemas<[IParameters]>());
+  TestValidator.equals(model)(separator(params))({
+    llm: schema(
+      model,
+      constraint,
+    )(
+      typia.json.schemas<
+        [
+          {
+            input: {
+              email: string;
+              hobbies: Record<
+                string,
+                {
+                  id: string;
+                  name: string;
+                }
+              >;
+            };
+          },
+        ]
+      >(),
+    ),
+    human: schema(
+      model,
+      constraint,
+    )(
+      typia.json.schemas<
+        [
+          {
+            input: {
+              hobbies: Record<
+                string,
+                {
+                  thumbnail: string &
+                    tags.Format<"uri"> &
+                    tags.ContentMediaType<"image/*">;
+                }
+              >;
+            };
+          },
+        ]
+      >(),
+    ),
   });
 };
 
-interface IWrapper<T> {
-  data: T;
+interface IParameters {
+  input: IMember;
 }
 interface IMember {
-  id: number;
+  email: string;
+  hobbies: Record<string, IHobby>;
+}
+interface IHobby {
+  id: string;
   name: string;
+  thumbnail: string & tags.Format<"uri"> & tags.ContentMediaType<"image/*">;
 }
-interface IFileUpload {
-  file: string & tags.Format<"uri"> & tags.ContentMediaType<"image/png">;
-}
-interface ICombined extends IMember, IFileUpload {}
 
 const schema =
   <Model extends ILlmSchema.Model>(model: Model, constraint: boolean) =>
