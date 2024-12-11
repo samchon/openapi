@@ -441,6 +441,16 @@ export namespace OpenApi {
      * Flag for indicating this operation is deprecated.
      */
     deprecated?: boolean;
+
+    /**
+     * Flag for indicating this operation is human-only.
+     *
+     * If this property value is `true`, {@link HttpLlm.application}
+     * function will not convert this operation schema into the LLM function
+     * calling schema that is represented by the {@link IHttpLlmFunction}
+     * interface.
+     */
+    "x-samchon-human"?: boolean;
   }
   export namespace IOperation {
     /**
