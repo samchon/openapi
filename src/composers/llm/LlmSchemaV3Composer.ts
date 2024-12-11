@@ -240,6 +240,17 @@ export namespace LlmSchemaV3Composer {
       if (x !== null) llm.properties[key] = x;
       if (y !== null) human.properties[key] = y;
     }
+    if (
+      typeof props.schema.additionalProperties === "object" &&
+      props.schema.additionalProperties !== null
+    ) {
+      const [dx, dy] = separateStation({
+        predicate: props.predicate,
+        schema: props.schema.additionalProperties,
+      });
+      llm.additionalProperties = dx ?? false;
+      human.additionalProperties = dy ?? false;
+    }
     return [
       Object.keys(llm.properties).length === 0 ? null : shrinkRequired(llm),
       Object.keys(human.properties).length === 0 ? null : shrinkRequired(human),

@@ -15,16 +15,17 @@ export namespace HttpLlmComposer {
     options: IHttpLlmApplication.IOptions<Model>;
   }): IHttpLlmApplication<Model> => {
     // COMPOSE FUNCTIONS
-    const errors: IHttpLlmApplication.IError[] = props.migrate.errors.map(
-      (e) => ({
+    const errors: IHttpLlmApplication.IError[] = props.migrate.errors
+      .filter((e) => e.operation()["x-samchon-human"] !== true)
+      .map((e) => ({
         method: e.method,
         path: e.path,
         messages: e.messages,
         operation: () => e.operation(),
         route: () => undefined,
-      }),
-    );
+      }));
     const functions: IHttpLlmFunction<Model>[] = props.migrate.routes
+      .filter((e) => e.operation()["x-samchon-human"] !== true)
       .map((route, i) => {
         if (route.method === "head") {
           errors.push({
