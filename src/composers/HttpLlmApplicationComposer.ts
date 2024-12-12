@@ -190,7 +190,6 @@ export namespace HttpLlmComposer {
       method: props.route.method as "get",
       path: props.route.path,
       name: props.route.accessor.join("_"),
-      strict: true,
       parameters,
       separated: props.options.separate
         ? (LlmSchemaComposer.separateParameters(props.model)({

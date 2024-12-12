@@ -347,7 +347,6 @@ const main = async (): Promise<void> => {
             name: func.name,
             description: func.description,
             parameters: func.parameters as Record<string, any>,
-            strict: true,
           },
         },
       ],
