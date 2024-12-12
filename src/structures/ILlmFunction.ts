@@ -47,15 +47,6 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
   output?: ILlmSchema.ModelSchema[Model];
 
   /**
-   * Whether the function schema types are strict or not.
-   *
-   * Newly added specification to "OpenAI" at 2024-08-07.
-   *
-   * @reference https://openai.com/index/introducing-structured-outputs-in-the-api/
-   */
-  strict: true;
-
-  /**
    * Description of the function.
    *
    * For reference, the `description` is very important property to teach

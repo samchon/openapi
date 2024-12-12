@@ -5,7 +5,6 @@ export const test_llm_merge_parameters = (): void => {
   TestValidator.equals("atomics")(
     HttpLlm.mergeParameters({
       function: {
-        strict: true,
         name: "test",
         parameters: {
           type: "object",
