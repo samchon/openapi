@@ -58,10 +58,11 @@ export namespace ChatGptFunctionCaller {
               name: props.name,
               description: props.description,
               parameters: parameters.value as Record<string, any>,
-              strict: true,
             },
           },
         ],
+        tool_choice: "required",
+        parallel_tool_calls: false,
       });
 
     const toolCalls: OpenAI.ChatCompletionMessageToolCall[] =

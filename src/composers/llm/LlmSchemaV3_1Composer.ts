@@ -424,6 +424,13 @@ export namespace LlmSchemaV3_1Composer {
     predicate: (schema: ILlmSchemaV3_1) => boolean;
     schema: ILlmSchemaV3_1.IObject;
   }): [ILlmSchemaV3_1.IObject | null, ILlmSchemaV3_1.IObject | null] => {
+    // EMPTY OBJECT
+    if (
+      Object.keys(props.schema.properties ?? {}).length === 0 &&
+      !!props.schema.additionalProperties === false
+    )
+      return [props.schema, null];
+
     const llm = {
       ...props.schema,
       properties: {} as Record<string, ILlmSchemaV3_1>,
@@ -433,6 +440,7 @@ export namespace LlmSchemaV3_1Composer {
       ...props.schema,
       properties: {} as Record<string, ILlmSchemaV3_1>,
     } satisfies ILlmSchemaV3_1.IObject;
+
     for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
       const [x, y] = separateStation({
         $defs: props.$defs,

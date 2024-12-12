@@ -260,6 +260,13 @@ export namespace ChatGptSchemaComposer {
     predicate: (schema: IChatGptSchema) => boolean;
     schema: IChatGptSchema.IObject;
   }): [IChatGptSchema.IObject | null, IChatGptSchema.IObject | null] => {
+    // EMPTY OBJECT
+    if (
+      Object.keys(props.schema.properties ?? {}).length === 0 &&
+      !!props.schema.additionalProperties === false
+    )
+      return [props.schema, null];
+
     const llm = {
       ...props.schema,
       properties: {} as Record<string, IChatGptSchema>,
@@ -268,6 +275,7 @@ export namespace ChatGptSchemaComposer {
       ...props.schema,
       properties: {} as Record<string, IChatGptSchema>,
     } satisfies IChatGptSchema.IObject;
+
     for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
       const [x, y] = separateStation({
         $defs: props.$defs,
