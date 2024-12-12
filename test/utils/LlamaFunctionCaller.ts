@@ -66,6 +66,8 @@ export namespace LlamaFunctionCaller {
             },
           },
         ],
+        tool_choice: "required",
+        parallel_tool_calls: false,
       });
 
     const toolCalls: OpenAI.ChatCompletionMessageToolCall[] = [
