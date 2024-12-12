@@ -100,15 +100,6 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
   name: string;
 
   /**
-   * Whether the function schema types are strict or not.
-   *
-   * Newly added specification to "OpenAI" at 2024-08-07.
-   *
-   * @reference https://openai.com/index/introducing-structured-outputs-in-the-api/
-   */
-  strict: true;
-
-  /**
    * List of parameter types.
    *
    * If you've configured {@link IHttpLlmApplication.IOptions.keyword} as `true`,
