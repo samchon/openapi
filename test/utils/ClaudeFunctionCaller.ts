@@ -63,6 +63,10 @@ export namespace ClaudeFunctionCaller {
           input_schema: parameters.value as any,
         },
       ],
+      tool_choice: {
+        type: "any",
+        disable_parallel_tool_use: true,
+      },
     });
 
     const toolCalls: Anthropic.ToolUseBlock[] = completion.content.filter(
