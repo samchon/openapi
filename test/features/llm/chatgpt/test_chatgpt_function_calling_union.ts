@@ -12,6 +12,7 @@ export const test_chatgpt_function_calling_union = (): Promise<void> =>
     name: "draw",
     description: "Draw a shape with following geometry.",
     collection: typia.json.schemas<[{ input: Shape }]>(),
+    validate: typia.createValidate<[{ input: Shape }]>(),
     texts: [
       {
         role: "assistant",

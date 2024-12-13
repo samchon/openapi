@@ -31,23 +31,16 @@
       "code": "samchon",
       "category_codes": [
         "electronics",
-        "2in1_laptops",
-        "windows_tablets"
+        "laptops",
+        "2in1_laptops"
       ]
     }
-  ],
-  "tags": [
-    "Surface Pro",
-    "2-in-1",
-    "Windows",
-    "Laptop",
-    "Tablet"
   ],
   "units": [
     {
       "name": "Surface Pro 9 Entity",
-      "required": true,
       "primary": true,
+      "required": true,
       "options": [
         {
           "type": "select",
@@ -100,7 +93,7 @@
       ],
       "stocks": [
         {
-          "name": "Surface Pro 9 - i3/8GB/128GB",
+          "name": "Surface Pro 9 (i3/8GB/128GB)",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -122,7 +115,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i3/16GB/256GB",
+          "name": "Surface Pro 9 (i3/16GB/256GB)",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -144,7 +137,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i3/16GB/512GB",
+          "name": "Surface Pro 9 (i3/16GB/512GB)",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -166,7 +159,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i5/16GB/256GB",
+          "name": "Surface Pro 9 (i5/16GB/256GB)",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -188,7 +181,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i5/32GB/512GB",
+          "name": "Surface Pro 9 (i5/32GB/512GB)",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -210,7 +203,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i7/16GB/512GB",
+          "name": "Surface Pro 9 (i7/16GB/512GB)",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -232,7 +225,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i7/32GB/512GB",
+          "name": "Surface Pro 9 (i7/32GB/512GB)",
           "price": {
             "nominal": 2000000,
             "real": 1899000
@@ -257,12 +250,12 @@
     },
     {
       "name": "Warranty Program",
-      "required": false,
       "primary": false,
+      "required": false,
       "options": [],
       "stocks": [
         {
-          "name": "Surface Pro 9 Warranty Program",
+          "name": "Warranty Program",
           "price": {
             "nominal": 100000,
             "real": 89000
@@ -274,12 +267,12 @@
     },
     {
       "name": "Magnetic Keyboard",
-      "required": false,
       "primary": false,
+      "required": false,
       "options": [],
       "stocks": [
         {
-          "name": "Surface Pro 9 Magnetic Keyboard",
+          "name": "Magnetic Keyboard",
           "price": {
             "nominal": 200000,
             "real": 169000
@@ -289,5 +282,15 @@
         }
       ]
     }
+  ],
+  "tags": [
+    "Surface",
+    "Pro",
+    "9",
+    "Microsoft",
+    "2-in-1",
+    "Tablet",
+    "Laptop",
+    "Windows"
   ]
 }
