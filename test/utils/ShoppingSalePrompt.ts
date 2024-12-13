@@ -20,6 +20,7 @@ export namespace ShoppingSalePrompt {
     description: "Create a sale and returns the detailed information.",
     collection:
       typia.json.schemas<[{ input: IShoppingSale.ICreate }, IShoppingSale]>(),
+    validate: typia.createValidate<IShoppingSale.ICreate>(),
   });
 
   export const texts = async (

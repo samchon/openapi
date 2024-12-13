@@ -12,6 +12,7 @@ export const test_gemini_function_calling_example = (): Promise<void> =>
     name: "enrollPerson",
     description: "Enroll a person to the restaurant reservation list.",
     collection: typia.json.schemas<[{ input: IPerson }]>(),
+    validate: typia.createValidate<[{ input: IPerson }]>(),
     texts: [
       {
         role: "assistant",

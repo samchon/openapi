@@ -5,7 +5,7 @@ import {
   GenerativeModel,
   GoogleGenerativeAI,
 } from "@google/generative-ai";
-import { ArrayUtil, TestValidator } from "@nestia/e2e";
+import { TestValidator } from "@nestia/e2e";
 import {
   IGeminiSchema,
   IOpenApiSchemaError,
@@ -13,23 +13,39 @@ import {
   OpenApi,
 } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
-import typia, { IJsonSchemaCollection } from "typia";
+import typia, { IJsonSchemaCollection, IValidation } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
 import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
 
 export namespace GeminiFunctionCaller {
-  export const test = async (props: {
+  export interface IProps {
     name: string;
     description: string;
     collection: IJsonSchemaCollection;
     texts: ILlmTextPrompt[];
+    validate: (input: any) => IValidation<any>;
     handleCompletion: (input: any) => Promise<void>;
     handleParameters?: (parameters: IGeminiSchema.IParameters) => Promise<void>;
     config?: Partial<IGeminiSchema.IConfig>;
-  }): Promise<void> => {
+  }
+
+  export const test = async (props: IProps): Promise<void> => {
     if (TestGlobal.env.GEMINI_API_KEY === undefined) return;
 
+    let result: IValidation<any> | undefined = undefined;
+    for (let i: number = 0; i < 3; ++i) {
+      if (result && result.success === true) break;
+      result = await step(props, TestGlobal.env.GEMINI_API_KEY, result);
+    }
+    await props.handleCompletion(result?.data);
+  };
+
+  const step = async (
+    props: IProps,
+    apiKey: string,
+    previous?: IValidation.IFailure,
+  ): Promise<IValidation<any>> => {
     const parameters: IResult<IGeminiSchema.IParameters, IOpenApiSchemaError> =
       LlmSchemaComposer.parameters("gemini")({
         components: props.collection.components,
@@ -47,12 +63,15 @@ export namespace GeminiFunctionCaller {
     if (props.handleParameters) await props.handleParameters(parameters.value);
 
     const model: GenerativeModel = new GoogleGenerativeAI(
-      TestGlobal.env.GEMINI_API_KEY,
+      apiKey,
     ).getGenerativeModel({
       model: "gemini-1.5-pro",
     });
-    const result: GenerateContentResult = await model.generateContent({
-      contents: props.texts.map((p) => ({
+    const completion: GenerateContentResult = await model.generateContent({
+      contents: (previous
+        ? [...props.texts.slice(0, -1), ...props.texts.slice(-1)]
+        : props.texts
+      ).map((p) => ({
         role: p.role === "assistant" ? "model" : p.role,
         parts: [
           {
@@ -79,13 +98,15 @@ export namespace GeminiFunctionCaller {
       },
     });
 
-    const toolCalls: FunctionCall[] = result.response.functionCalls() ?? [];
+    const toolCalls: FunctionCall[] = completion.response.functionCalls() ?? [];
     if (toolCalls.length === 0)
       throw new Error("Gemini has not called any function.");
-    await ArrayUtil.asyncForEach(toolCalls)(async (call) => {
+
+    const results: IValidation<any>[] = toolCalls.map((call) => {
       TestValidator.equals("name")(call.name)(props.name);
       const { input } = typia.assert<{ input: any }>(call.args);
-      await props.handleCompletion(input);
+      return props.validate(input);
     });
+    return results.find((r) => r.success === true) ?? results[0];
   };
 }

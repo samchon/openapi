@@ -6,6 +6,7 @@ import {
   TypedRoute,
 } from "@nestia/core";
 import { Controller, Query } from "@nestjs/common";
+import Multer from "multer";
 import { tags } from "typia";
 
 @Controller()
@@ -76,7 +77,7 @@ export class AppController {
     @TypedParam("level") level: number,
     @TypedParam("optimal") optimal: boolean,
     @TypedQuery() query: IQuery,
-    @TypedFormData.Body()
+    @TypedFormData.Body(() => Multer())
     body: IMultipart,
   ) {
     return {

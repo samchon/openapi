@@ -13,6 +13,7 @@ export const test_claude_function_calling_recursive = () =>
     name: "composeCategories",
     description: "Compose categories from the input.",
     collection: typia.json.schemas<[{ input: IShoppingCategory[] }]>(),
+    validate: typia.createValidate<[{ input: IShoppingCategory[] }]>(),
     texts: [
       {
         role: "assistant",

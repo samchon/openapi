@@ -12,6 +12,7 @@ export const test_chatgpt_function_calling_example = () =>
     name: "enrollPerson",
     description: "Enroll a person to the restaurant reservation list.",
     collection: typia.json.schemas<[{ input: IPerson }]>(),
+    validate: typia.createValidate<[{ input: IPerson }]>(),
     texts: [
       {
         role: "assistant",

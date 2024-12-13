@@ -1,4 +1,4 @@
-import { ArrayUtil, TestValidator } from "@nestia/e2e";
+import { TestValidator } from "@nestia/e2e";
 import {
   IChatGptSchema,
   IOpenApiSchemaError,
@@ -7,25 +7,41 @@ import {
 } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import OpenAI from "openai";
-import typia, { IJsonSchemaCollection } from "typia";
+import typia, { IJsonSchemaCollection, IValidation } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
 import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
 
 export namespace ChatGptFunctionCaller {
-  export const test = async (props: {
+  export interface IProps {
     name: string;
     description: string;
     collection: IJsonSchemaCollection;
+    validate: (input: any) => IValidation<any>;
     texts: ILlmTextPrompt[];
     handleCompletion: (input: any) => Promise<void>;
     handleParameters?: (
       parameters: IChatGptSchema.IParameters,
     ) => Promise<void>;
     config?: Partial<IChatGptSchema.IConfig>;
-  }): Promise<void> => {
+  }
+
+  export const test = async (props: IProps): Promise<void> => {
     if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
 
+    let result: IValidation<any> | undefined = undefined;
+    for (let i: number = 0; i < 3; ++i) {
+      if (result && result.success === true) break;
+      result = await step(props, TestGlobal.env.CHATGPT_API_KEY, result);
+    }
+    await props.handleCompletion(result?.data);
+  };
+
+  const step = async (
+    props: IProps,
+    apiKey: string,
+    previous?: IValidation.IFailure,
+  ): Promise<IValidation<any>> => {
     const parameters: IResult<IChatGptSchema.IParameters, IOpenApiSchemaError> =
       LlmSchemaComposer.parameters("chatgpt")({
         components: props.collection.components,
@@ -45,12 +61,30 @@ export namespace ChatGptFunctionCaller {
       await props.handleParameters(parameters.value);
 
     const client: OpenAI = new OpenAI({
-      apiKey: TestGlobal.env.CHATGPT_API_KEY,
+      apiKey,
     });
     const completion: OpenAI.ChatCompletion =
       await client.chat.completions.create({
         model: "gpt-4o",
-        messages: props.texts,
+        messages: previous
+          ? [
+              ...props.texts.slice(0, -1),
+
+              {
+                role: "assistant",
+                content: [
+                  "You A.I. assistant has composed wrong typed arguments.",
+                  "",
+                  "Here is the detailed list of type errors. Review and correct them at the next function calling.",
+                  "",
+                  "```json",
+                  JSON.stringify(previous.errors, null, 2),
+                  "```",
+                ].join("\n"),
+              } satisfies OpenAI.ChatCompletionMessageParam,
+              ...props.texts.slice(-1),
+            ]
+          : props.texts,
         tools: [
           {
             type: "function",
@@ -69,12 +103,14 @@ export namespace ChatGptFunctionCaller {
       completion.choices[0].message.tool_calls ?? [];
     if (toolCalls.length === 0)
       throw new Error("ChatGPT has not called any function.");
-    await ArrayUtil.asyncForEach(toolCalls)(async (call) => {
+
+    const results: IValidation<any>[] = toolCalls.map((call) => {
       TestValidator.equals("name")(call.function.name)(props.name);
       const { input } = typia.assert<{ input: any }>(
         JSON.parse(call.function.arguments),
       );
-      await props.handleCompletion(input);
+      return props.validate(input);
     });
+    return results.find((r) => r.success === true) ?? results[0];
   };
 }
