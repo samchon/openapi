@@ -8,13 +8,13 @@ import {
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
-export const test_chatgpt_parameters_additionalProperties = (): void =>
-  validate_llm_parameters_additionalProperties("chatgpt");
+export const test_chatgpt_schema_additionalProperties = (): void =>
+  validate_llm_schema_additionalProperties("chatgpt");
 
-export const test_gemini_parameters_additionalProperties = (): void =>
-  validate_llm_parameters_additionalProperties("gemini");
+export const test_gemini_schema_additionalProperties = (): void =>
+  validate_llm_schema_additionalProperties("gemini");
 
-const validate_llm_parameters_additionalProperties = <
+const validate_llm_schema_additionalProperties = <
   Model extends "chatgpt" | "gemini",
 >(
   model: Model,
@@ -33,9 +33,10 @@ const validate_llm_parameters_additionalProperties = <
     IOpenApiSchemaError
   > = LlmSchemaComposer.parameters(model)({
     accessor: "$input",
-    config: LlmSchemaComposer.defaultConfig(
-      model,
-    ) satisfies ILlmSchema.IConfig<Model> as any,
+    config: {
+      ...LlmSchemaComposer.defaultConfig(model),
+      strict: true,
+    } satisfies ILlmSchema.IConfig<Model> as any,
     components: collection.components,
     schema: typia.assert<
       OpenApi.IJsonSchema.IReference | OpenApi.IJsonSchema.IObject

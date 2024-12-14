@@ -66,6 +66,7 @@ const SEPARATE_PARAMETERS = {
 const DEFAULT_CONFIGS = {
   chatgpt: {
     reference: false,
+    strict: false,
   } satisfies IChatGptSchema.IConfig,
   claude: {
     reference: false,

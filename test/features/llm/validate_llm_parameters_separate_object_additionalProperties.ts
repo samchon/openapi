@@ -8,13 +8,18 @@ import {
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection, tags } from "typia";
 
+export const test_chatgpt_parameters_separate_object_additionalProperties =
+  (): void =>
+    validate_llm_parameters_separate_object_additionalProperties(
+      "chatgpt",
+      false,
+    );
+
 export const test_claude_parameters_separate_object_additionalProperties =
   (): void =>
-    TestValidator.error("ChatGPT does not support additionalProperties")(() =>
-      validate_llm_parameters_separate_object_additionalProperties(
-        "claude",
-        true,
-      ),
+    validate_llm_parameters_separate_object_additionalProperties(
+      "claude",
+      true,
     );
 
 export const test_gemini_parameters_separate_object_additionalProperties =

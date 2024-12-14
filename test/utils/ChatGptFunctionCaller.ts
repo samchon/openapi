@@ -99,8 +99,9 @@ export namespace ChatGptFunctionCaller {
         parallel_tool_calls: false,
       });
 
-    const toolCalls: OpenAI.ChatCompletionMessageToolCall[] =
-      completion.choices[0].message.tool_calls ?? [];
+    const toolCalls: OpenAI.ChatCompletionMessageToolCall[] = completion.choices
+      .map((c) => c.message.tool_calls ?? [])
+      .flat();
     if (toolCalls.length === 0)
       throw new Error("ChatGPT has not called any function.");
 
