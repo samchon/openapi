@@ -106,24 +106,9 @@ export namespace LlamaFunctionCaller {
         parallel_tool_calls: false,
       });
 
-    const toolCalls: OpenAI.ChatCompletionMessageToolCall[] = [
-      ...(completion.choices[0].message.tool_calls ?? []),
-      // ...completion.choices
-      //   .map((c) => c.message.content)
-      //   .filter((str) => str !== null)
-      //   .filter((str) => str.startsWith(`<function=${props.name}>`))
-      //   .map(
-      //     (str) =>
-      //       ({
-      //         id: v4(),
-      //         type: "function",
-      //         function: {
-      //           name: props.name,
-      //           arguments: str.substring(`<function="${props.name}>`.length),
-      //         },
-      //       }) satisfies OpenAI.ChatCompletionMessageToolCall,
-      //   ),
-    ];
+    const toolCalls: OpenAI.ChatCompletionMessageToolCall[] = completion.choices
+      .map((c) => c.message.tool_calls ?? [])
+      .flat();
     if (toolCalls.length === 0)
       throw new Error("Llama has not called any function.");
 

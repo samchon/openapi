@@ -17,6 +17,10 @@ export namespace ChatGptSchemaComposer {
     accessor?: string;
     refAccessor?: string;
   }): IResult<IChatGptSchema.IParameters, IOpenApiSchemaError> => {
+    // polyfill
+    props.config.strict ??= false;
+
+    // validate
     const result: IResult<ILlmSchemaV3_1.IParameters, IOpenApiSchemaError> =
       LlmSchemaV3_1Composer.parameters({
         ...props,
@@ -24,9 +28,11 @@ export namespace ChatGptSchemaComposer {
           reference: props.config.reference,
           constraint: false,
         },
-        validate,
+        validate: props.config.strict === true ? validateStrict : undefined,
       });
     if (result.success === false) return result;
+
+    // returns with transformation
     for (const key of Object.keys(result.value.$defs))
       result.value.$defs[key] = transform(result.value.$defs[key]);
     return {
@@ -43,6 +49,10 @@ export namespace ChatGptSchemaComposer {
     accessor?: string;
     refAccessor?: string;
   }): IResult<IChatGptSchema, IOpenApiSchemaError> => {
+    // polyfill
+    props.config.strict ??= false;
+
+    // validate
     const oldbie: Set<string> = new Set(Object.keys(props.$defs));
     const result: IResult<ILlmSchemaV3_1, IOpenApiSchemaError> =
       LlmSchemaV3_1Composer.schema({
@@ -51,9 +61,11 @@ export namespace ChatGptSchemaComposer {
           reference: props.config.reference,
           constraint: false,
         },
-        validate,
+        validate: props.config.strict === true ? validateStrict : undefined,
       });
     if (result.success === false) return result;
+
+    // returns with transformation
     for (const key of Object.keys(props.$defs))
       if (oldbie.has(key) === false)
         props.$defs[key] = transform(props.$defs[key]);
@@ -63,20 +75,29 @@ export namespace ChatGptSchemaComposer {
     };
   };
 
-  const validate = (
+  const validateStrict = (
     schema: OpenApi.IJsonSchema,
     accessor: string,
   ): IOpenApiSchemaError.IReason[] => {
-    if (OpenApiTypeChecker.isObject(schema) && !!schema.additionalProperties)
-      return [
-        {
+    const reasons: IOpenApiSchemaError.IReason[] = [];
+    if (OpenApiTypeChecker.isObject(schema)) {
+      if (!!schema.additionalProperties)
+        reasons.push({
           schema: schema,
           accessor: `${accessor}.additionalProperties`,
           message:
-            "ChatGPT does not allow additionalProperties, the dynamic key typed object.",
-        },
-      ];
-    return [];
+            "ChatGPT does not allow additionalProperties in strict mode, the dynamic key typed object.",
+        });
+      for (const key of Object.keys(schema.properties ?? {}))
+        if (schema.required?.includes(key) === false)
+          reasons.push({
+            schema: schema,
+            accessor: `${accessor}.properties.${key}`,
+            message:
+              "ChatGPT does not allow optional properties in strict mode.",
+          });
+    }
+    return reasons;
   };
 
   const transform = (schema: ILlmSchemaV3_1): IChatGptSchema => {
@@ -108,7 +129,11 @@ export namespace ChatGptSchemaComposer {
               transform(value),
             ]),
           ),
-          additionalProperties: false,
+          additionalProperties:
+            typeof input.additionalProperties === "object" &&
+            input.additionalProperties !== null
+              ? transform(input.additionalProperties)
+              : input.additionalProperties,
         });
       else if (LlmTypeCheckerV3_1.isConstant(input) === false)
         union.push(input);
@@ -181,6 +206,7 @@ export namespace ChatGptSchemaComposer {
             key.endsWith(".Llm"),
           ),
         ),
+        additionalProperties: false,
       },
       human: {
         ...human,
@@ -189,6 +215,7 @@ export namespace ChatGptSchemaComposer {
             key.endsWith(".Human"),
           ),
         ),
+        additionalProperties: false,
       },
     };
     for (const key of Object.keys(props.parameters.$defs))
@@ -270,6 +297,7 @@ export namespace ChatGptSchemaComposer {
     const llm = {
       ...props.schema,
       properties: {} as Record<string, IChatGptSchema>,
+      additionalProperties: props.schema.additionalProperties,
     } satisfies IChatGptSchema.IObject;
     const human = {
       ...props.schema,
@@ -285,9 +313,25 @@ export namespace ChatGptSchemaComposer {
       if (x !== null) llm.properties[key] = x;
       if (y !== null) human.properties[key] = y;
     }
+    if (
+      typeof props.schema.additionalProperties === "object" &&
+      props.schema.additionalProperties !== null
+    ) {
+      const [dx, dy] = separateStation({
+        $defs: props.$defs,
+        predicate: props.predicate,
+        schema: props.schema.additionalProperties,
+      });
+      llm.additionalProperties = dx ?? false;
+      human.additionalProperties = dy ?? false;
+    }
     return [
-      Object.keys(llm.properties).length === 0 ? null : shrinkRequired(llm),
-      Object.keys(human.properties).length === 0 ? null : shrinkRequired(human),
+      !!Object.keys(llm.properties).length || !!llm.additionalProperties
+        ? shrinkRequired(llm)
+        : null,
+      !!Object.keys(human.properties).length || human.additionalProperties
+        ? shrinkRequired(human)
+        : null,
     ];
   };
 

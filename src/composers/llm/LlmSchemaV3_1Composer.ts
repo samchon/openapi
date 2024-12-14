@@ -230,7 +230,7 @@ export namespace LlmSchemaV3_1Composer {
           ...input,
           properties: properties as Record<string, ILlmSchemaV3_1>,
           additionalProperties,
-          required: Object.keys(properties),
+          required: input.required ?? [],
         });
       } else if (OpenApiTypeChecker.isArray(input)) {
         const items: IResult<ILlmSchemaV3_1, IOpenApiSchemaError> = schema({
@@ -345,6 +345,7 @@ export namespace LlmSchemaV3_1Composer {
             key.endsWith(".Llm"),
           ),
         ),
+        additionalProperties: false,
       },
       human: {
         ...human,
@@ -353,6 +354,7 @@ export namespace LlmSchemaV3_1Composer {
             key.endsWith(".Human"),
           ),
         ),
+        additionalProperties: false,
       },
     };
     for (const key of Object.keys(props.parameters.$defs))

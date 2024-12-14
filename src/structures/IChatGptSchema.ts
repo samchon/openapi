@@ -17,7 +17,9 @@
  * - Merge {@link OpenApiV3_1.IJsonSchema.IOneOf} to {@link IChatGptSchema.IAnOf}
  * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link IChatGptSchema.IObject}
  * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to {@link IChatGptSchema.IReference}
- * - Forcibly transform every object properties to be required
+ * - When {@link IChatGptSchema.IConfig.strict} mode
+ *   - Every object properties must be required
+ *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
  * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema specification,
  *
@@ -26,7 +28,9 @@
  * - {@link IChatGptSchema.IString.enum} instead of the {@link OpenApi.IJsonSchema.IConstant}
  * - {@link IChatGptSchema.additionalProperties} is fixed to `false`
  * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
- * - Forcibly transform every object properties to be required
+ * - When {@link IChatGptSchema.IConfig.strict} mode
+ *   - Every object properties must be required
+ *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
  * For reference, if you've composed the `IChatGptSchema` type with the
  * {@link IChatGptSchema.IConfig.reference} `false` option (default is `false`),
@@ -82,11 +86,21 @@ export namespace IChatGptSchema {
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
-  export interface IParameters extends IObject {
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
     /**
      * Collection of the named types.
      */
     $defs: Record<string, IChatGptSchema>;
+
+    /**
+     * Additional properties' info.
+     *
+     * The `additionalProperties` means the type schema info of the additional
+     * properties that are not listed in the {@link properties}.
+     *
+     * By the way, it is not allowed in the parameters level.
+     */
+    additionalProperties: false;
   }
 
   /**
@@ -161,11 +175,11 @@ export namespace IChatGptSchema {
      * The `additionalProperties` means the type schema info of the additional
      * properties that are not listed in the {@link properties}.
      *
-     * By the way, as ChatGPT function calling does not support such
-     * dynamic key typed properties, the `additionalProperties` becomes
-     * always `false`.
+     * By the way, if you've configured {@link IChatGptSchema.IConfig.strict} as `true`,
+     * ChatGPT function calling does not support such dynamic key typed properties, so
+     * the `additionalProperties` becomes always `false`.
      */
-    additionalProperties: false;
+    additionalProperties?: boolean | IChatGptSchema;
 
     /**
      * List of key values of the required properties.
@@ -315,5 +329,23 @@ export namespace IChatGptSchema {
      * @default false
      */
     reference: boolean;
+
+    /**
+     * Whether to apply the strict mode.
+     *
+     * If you configure this property to `true`, the ChatGPT function calling
+     * does not allow optional properties and dynamic key typed properties in the
+     * {@link IChatGptSchema.IObject} type. Instead, it increases the success
+     * rate of the function calling.
+     *
+     * By the way, if you utilize the {@link typia.validate} function and give
+     * its validation feedback to the ChatGPT, its performance is much better
+     * than the strict mode. Therefore, I recommend you to just turn off the
+     * strict mode and utilize the {@link typia.validate} function instead.
+     *
+     * @todo Would be required in the future
+     * @default false
+     */
+    strict?: boolean;
   }
 }

@@ -78,11 +78,21 @@ export namespace ILlmSchemaV3_1 {
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
-  export interface IParameters extends IObject {
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
     /**
      * Collection of the named types.
      */
     $defs: Record<string, ILlmSchemaV3_1>;
+
+    /**
+     * Additional properties' info.
+     *
+     * The `additionalProperties` means the type schema info of the additional
+     * properties that are not listed in the {@link properties}.
+     *
+     * By the way, it is not allowed in the parameters level.
+     */
+    additionalProperties: false;
   }
 
   /**
