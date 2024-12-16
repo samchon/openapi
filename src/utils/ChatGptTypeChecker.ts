@@ -153,10 +153,15 @@ export namespace ChatGptTypeChecker {
         if (found !== undefined) next(found, `${refAccessor}[${key}]`);
       } else if (ChatGptTypeChecker.isAnyOf(schema))
         schema.anyOf.forEach((s, i) => next(s, `${accessor}.anyOf[${i}]`));
-      else if (ChatGptTypeChecker.isObject(schema))
+      else if (ChatGptTypeChecker.isObject(schema)) {
         for (const [key, value] of Object.entries(schema.properties))
           next(value, `${accessor}.properties[${JSON.stringify(key)}]`);
-      else if (ChatGptTypeChecker.isArray(schema))
+        if (
+          typeof schema.additionalProperties === "object" &&
+          schema.additionalProperties !== null
+        )
+          next(schema.additionalProperties, `${accessor}.additionalProperties`);
+      } else if (ChatGptTypeChecker.isArray(schema))
         next(schema.items, `${accessor}.items`);
     };
     next(props.schema, props.accessor ?? "$input.schemas");
@@ -288,8 +293,24 @@ export namespace ChatGptTypeChecker {
     visited: Map<IChatGptSchema, Map<IChatGptSchema, boolean>>;
     x: IChatGptSchema.IObject;
     y: IChatGptSchema.IObject;
-  }): boolean =>
-    Object.entries(p.y.properties ?? {}).every(([key, b]) => {
+  }): boolean => {
+    if (!p.x.additionalProperties && !!p.y.additionalProperties) return false;
+    else if (
+      !!p.x.additionalProperties &&
+      !!p.y.additionalProperties &&
+      ((typeof p.x.additionalProperties === "object" &&
+        p.y.additionalProperties === true) ||
+        (typeof p.x.additionalProperties === "object" &&
+          typeof p.y.additionalProperties === "object" &&
+          !coverStation({
+            $defs: p.$defs,
+            visited: p.visited,
+            x: p.x.additionalProperties,
+            y: p.y.additionalProperties,
+          })))
+    )
+      return false;
+    return Object.entries(p.y.properties ?? {}).every(([key, b]) => {
       const a: IChatGptSchema | undefined = p.x.properties?.[key];
       if (a === undefined) return false;
       else if (
@@ -304,6 +325,7 @@ export namespace ChatGptTypeChecker {
         y: b,
       });
     });
+  };
 
   const coverBoolean = (
     x: IChatGptSchema.IBoolean,
