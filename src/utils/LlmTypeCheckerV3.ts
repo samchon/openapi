@@ -63,6 +63,174 @@ export namespace LlmTypeCheckerV3 {
       });
   };
 
+  export const covers = (x: ILlmSchemaV3, y: ILlmSchemaV3): boolean => {
+    const alpha: ILlmSchemaV3[] = flatSchema(x);
+    const beta: ILlmSchemaV3[] = flatSchema(y);
+    if (alpha.some((x) => isUnknown(x))) return true;
+    else if (beta.some((x) => isUnknown(x))) return false;
+    return beta.every((b) =>
+      alpha.some((a) => {
+        // CHECK EQUALITY
+        if (a === b) return true;
+        else if (isUnknown(a)) return true;
+        else if (isUnknown(b)) return false;
+        else if (isNullOnly(a)) return isNullOnly(b);
+        else if (isNullOnly(b)) return isNullable(a);
+        else if (isNullable(a) && !isNullable(b)) return false;
+        // ATOMIC CASE
+        else if (isBoolean(a)) return isBoolean(b) && coverBoolean(a, b);
+        else if (isInteger(a)) return isInteger(b) && coverInteger(a, b);
+        else if (isNumber(a))
+          return (isNumber(b) || isInteger(b)) && coverNumber(a, b);
+        else if (isString(a)) return isString(b) && covertString(a, b);
+        // INSTANCE CASE
+        else if (isArray(a)) return isArray(b) && coverArray(a, b);
+        else if (isObject(a)) return isObject(b) && coverObject(a, b);
+        else if (isOneOf(a)) return false;
+      }),
+    );
+  };
+
+  /**
+   * @internal
+   */
+  const coverBoolean = (
+    x: ILlmSchemaV3.IBoolean,
+    y: ILlmSchemaV3.IBoolean,
+  ): boolean =>
+    x.enum === undefined ||
+    (y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v)));
+
+  /**
+   * @internal
+   */
+  const coverInteger = (
+    x: ILlmSchemaV3.IInteger,
+    y: ILlmSchemaV3.IInteger,
+  ): boolean => {
+    if (x.enum !== undefined)
+      return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
+    return [
+      x.type === y.type,
+      x.minimum === undefined ||
+        (y.minimum !== undefined && x.minimum <= y.minimum),
+      x.maximum === undefined ||
+        (y.maximum !== undefined && x.maximum >= y.maximum),
+      x.exclusiveMinimum !== true ||
+        x.minimum === undefined ||
+        (y.minimum !== undefined &&
+          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
+      x.exclusiveMaximum !== true ||
+        x.maximum === undefined ||
+        (y.maximum !== undefined &&
+          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
+      x.multipleOf === undefined ||
+        (y.multipleOf !== undefined &&
+          y.multipleOf / x.multipleOf ===
+            Math.floor(y.multipleOf / x.multipleOf)),
+    ].every((v) => v);
+  };
+
+  /**
+   * @internal
+   */
+  const coverNumber = (
+    x: ILlmSchemaV3.INumber,
+    y: ILlmSchemaV3.INumber | ILlmSchemaV3.IInteger,
+  ): boolean => {
+    if (x.enum !== undefined)
+      return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
+    return [
+      x.type === y.type || (x.type === "number" && y.type === "integer"),
+      x.minimum === undefined ||
+        (y.minimum !== undefined && x.minimum <= y.minimum),
+      x.maximum === undefined ||
+        (y.maximum !== undefined && x.maximum >= y.maximum),
+      x.exclusiveMinimum !== true ||
+        x.minimum === undefined ||
+        (y.minimum !== undefined &&
+          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
+      x.exclusiveMaximum !== true ||
+        x.maximum === undefined ||
+        (y.maximum !== undefined &&
+          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
+      x.multipleOf === undefined ||
+        (y.multipleOf !== undefined &&
+          y.multipleOf / x.multipleOf ===
+            Math.floor(y.multipleOf / x.multipleOf)),
+    ].every((v) => v);
+  };
+
+  /**
+   * @internal
+   */
+  const covertString = (
+    x: ILlmSchemaV3.IString,
+    y: ILlmSchemaV3.IString,
+  ): boolean => {
+    if (x.enum !== undefined)
+      return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
+    return [
+      x.type === y.type,
+      x.format === undefined ||
+        (y.format !== undefined && coverFormat(x.format, y.format)),
+      x.pattern === undefined || x.pattern === y.pattern,
+      x.minLength === undefined ||
+        (y.minLength !== undefined && x.minLength <= y.minLength),
+      x.maxLength === undefined ||
+        (y.maxLength !== undefined && x.maxLength >= y.maxLength),
+    ].every((v) => v);
+  };
+
+  const coverFormat = (
+    x: Required<ILlmSchemaV3.IString>["format"],
+    y: Required<ILlmSchemaV3.IString>["format"],
+  ): boolean =>
+    x === y ||
+    (x === "idn-email" && y === "email") ||
+    (x === "idn-hostname" && y === "hostname") ||
+    (["uri", "iri"].includes(x) && y === "url") ||
+    (x === "iri" && y === "uri") ||
+    (x === "iri-reference" && y === "uri-reference");
+
+  /**
+   * @internal
+   */
+  const coverArray = (
+    x: ILlmSchemaV3.IArray,
+    y: ILlmSchemaV3.IArray,
+  ): boolean => covers(x.items, y.items);
+
+  const coverObject = (
+    x: ILlmSchemaV3.IObject,
+    y: ILlmSchemaV3.IObject,
+  ): boolean => {
+    if (!x.additionalProperties && !!y.additionalProperties) return false;
+    else if (
+      (!!x.additionalProperties &&
+        !!y.additionalProperties &&
+        typeof x.additionalProperties === "object" &&
+        y.additionalProperties === true) ||
+      (typeof x.additionalProperties === "object" &&
+        typeof y.additionalProperties === "object" &&
+        !covers(x.additionalProperties, y.additionalProperties))
+    )
+      return false;
+    return Object.entries(y.properties ?? {}).every(([key, b]) => {
+      const a: ILlmSchemaV3 | undefined = x.properties?.[key];
+      if (a === undefined) return false;
+      else if (
+        (x.required?.includes(key) ?? false) === true &&
+        (y.required?.includes(key) ?? false) === false
+      )
+        return false;
+      return covers(a, b);
+    });
+  };
+
+  const flatSchema = (schema: ILlmSchemaV3): ILlmSchemaV3[] =>
+    isOneOf(schema) ? schema.oneOf.flatMap(flatSchema) : [schema];
+
   /* -----------------------------------------------------------
     TYPE CHECKERS
   ----------------------------------------------------------- */
