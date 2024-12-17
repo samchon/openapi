@@ -1,18 +1,11 @@
 name: build
-on: 
-  push:
-    paths:
-      - 'examples/**'
-      - 'src/**'
-      - 'test/**'
-      - 'package.json'
+on:
   pull_request:
     paths:
       - 'examples/**'
       - 'src/**'
       - 'test/**'
       - 'package.json'
-
 jobs:
   Ubuntu:
     runs-on: ubuntu-latest
