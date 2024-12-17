@@ -72,7 +72,7 @@ export namespace LlamaFunctionCaller {
     });
     const completion: OpenAI.ChatCompletion =
       await client.chat.completions.create({
-        model: "llama3.2-90b-vision",
+        model: "llama3.3-70b",
         messages: previous
           ? [
               ...props.texts.slice(0, -1),
