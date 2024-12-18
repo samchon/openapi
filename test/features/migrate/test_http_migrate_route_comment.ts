@@ -39,10 +39,8 @@ The 2nd purpose is for the A/B tests. {@link IShoppingSeller Seller} needs
 to demonstrate operating performance by chaning price, content, and
 composition of the product. This snapshot concept would be helpful for it.
 
-@param id Target sale's ID to update.
-          Note that, you have to specify only the sale ID of your own.
-@param body New information of the sale.
-            Note that, your input data would entirely modify the sale, so that have to be careful if you only want the partial updating.
+@param id Target sale's {@link IShoppingSale.id }
+@param body New information of the sale\n@security bearer
 @tag Sale`
   .split("\r\n")
   .join("\n");

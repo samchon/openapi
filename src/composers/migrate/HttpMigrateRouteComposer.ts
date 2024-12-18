@@ -1,10 +1,10 @@
-import { OpenApi } from "../OpenApi";
-import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
-import { EndpointUtil } from "../utils/EndpointUtil";
-import { Escaper } from "../utils/Escaper";
-import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
+import { OpenApi } from "../../OpenApi";
+import { IHttpMigrateRoute } from "../../structures/IHttpMigrateRoute";
+import { EndpointUtil } from "../../utils/EndpointUtil";
+import { Escaper } from "../../utils/Escaper";
+import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 
-export namespace HttpMigrateApplicationComposer {
+export namespace HttpMigrateRouteComposer {
   export interface IProps {
     document: OpenApi.IDocument;
     method: "head" | "get" | "post" | "put" | "patch" | "delete";
@@ -12,7 +12,7 @@ export namespace HttpMigrateApplicationComposer {
     emendedPath: string;
     operation: OpenApi.IOperation;
   }
-  export const application = (props: IProps): IHttpMigrateRoute | string[] => {
+  export const compose = (props: IProps): IHttpMigrateRoute | string[] => {
     //----
     // REQUEST AND RESPONSE BODY
     //----

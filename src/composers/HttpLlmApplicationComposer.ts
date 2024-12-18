@@ -109,6 +109,7 @@ export namespace HttpLlmComposer {
       return result.value as ILlmSchema.ModelSchema[Model];
     };
 
+    // METADATA
     const endpoint: string = `$input.paths[${JSON.stringify(props.route.path)}][${JSON.stringify(props.route.method)}]`;
     const output: ILlmSchema.ModelSchema[Model] | null | undefined = props.route
       .success
@@ -169,7 +170,21 @@ export namespace HttpLlmComposer {
           ]
         : []),
     ];
-    if (output === null || properties.some(([_k, v]) => v === null))
+
+    // FUNTION NAME
+    const name: string = props.route.accessor.join("_");
+    const isNameVariable: boolean = /^[a-zA-Z0-9_-]+$/.test(name);
+    const isNameStartsWithNumber: boolean = /^[0-9]/.test(name[0] ?? "");
+    if (isNameVariable === false)
+      props.errors.push(
+        `Elements of path (separated by '/') must be composed with alphabets, numbers, underscores, and hyphens`,
+      );
+    if (
+      output === null ||
+      properties.some(([_k, v]) => v === null) ||
+      isNameVariable === false ||
+      isNameStartsWithNumber === true
+    )
       return null;
 
     // COMPOSE PARAMETERS
@@ -189,7 +204,7 @@ export namespace HttpLlmComposer {
     return {
       method: props.route.method as "get",
       path: props.route.path,
-      name: props.route.accessor.join("_"),
+      name,
       parameters,
       separated: props.options.separate
         ? (LlmSchemaComposer.separateParameters(props.model)({
