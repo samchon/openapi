@@ -451,6 +451,37 @@ export namespace OpenApi {
      * interface.
      */
     "x-samchon-human"?: boolean;
+
+    /**
+     * Accessor of the operation.
+     *
+     * If you configure this property, the assigned value would be used as
+     * {@link IHttpMigrateRoute.accessor}. Also, it also can be used as the
+     * {@link IHttpLlmFunction.name} by joininig with `.` character in the
+     * LLM function calling application.
+     *
+     * Note that, the `x-samchon-accessor` value must be unique in the entire
+     * OpenAPI document operations. If there're duplicated `x-samchon-accessor`
+     * values, {@link IHttpMigrateRoute.accessor} will ignore every duplicated
+     * `x-samchon-accessor` values and generate the
+     * {@link IHttpMigrateRoute.accessor} by itself.
+     */
+    "x-samchon-accessor"?: string[];
+
+    /**
+     * Controller of the operation.
+     *
+     * If you configure this property, the assigned value would be utilized
+     * as the controller name in the OpenAPI generator library like
+     * [`@nestia/editor`](https://nestia.io/docs/editor/) and
+     * [`@nestia/migrate`](https://nestia.io/docs/migrate/).
+     *
+     * Also, if {@link x-samchon-accessor} has been configured, its last
+     * element would be used as the controller method (function) name.
+     * Of course, the OpenAPI document generator `@nestia/sdk` fills both of
+     * them.
+     */
+    "x-samchon-controller"?: string;
   }
   export namespace IOperation {
     /**

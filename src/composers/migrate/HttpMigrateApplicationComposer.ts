@@ -2,11 +2,11 @@ import { OpenApi } from "../../OpenApi";
 import { IHttpMigrateApplication } from "../../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../../structures/IHttpMigrateRoute";
 import { EndpointUtil } from "../../utils/EndpointUtil";
-import { HttpMigrateApplicationComposer } from "../HttpMigrateApplicationComposer";
-import { MigrateRouteAccessor } from "./MigrateRouteAccessor";
+import { HttpMigrateRouteAccessor } from "./HttpMigrateRouteAccessor";
+import { HttpMigrateRouteComposer } from "./HttpMigrateRouteComposer";
 
-export namespace MigrateConverter {
-  export const convert = (
+export namespace HttpMigrateApplicationComposer {
+  export const compose = (
     document: OpenApi.IDocument,
   ): IHttpMigrateApplication => {
     const errors: IHttpMigrateApplication.IError[] = [];
@@ -20,7 +20,7 @@ export namespace MigrateConverter {
           .map((method) => {
             const operation: OpenApi.IOperation = collection[method]!;
             const migrated: IHttpMigrateRoute | string[] =
-              HttpMigrateApplicationComposer.application({
+              HttpMigrateRouteComposer.compose({
                 document,
                 method,
                 path,
@@ -43,7 +43,7 @@ export namespace MigrateConverter {
     const operations: IHttpMigrateRoute[] = entire.filter(
       (o): o is IHttpMigrateRoute => !!o,
     );
-    MigrateRouteAccessor.overwrite(operations);
+    HttpMigrateRouteAccessor.overwrite(operations);
     return {
       document: () => document,
       routes: operations,

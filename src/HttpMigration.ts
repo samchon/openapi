@@ -1,5 +1,5 @@
 import { OpenApi } from "./OpenApi";
-import { MigrateConverter } from "./composers/migrate/MigrateConverter";
+import { HttpMigrateApplicationComposer } from "./composers/migrate/HttpMigrateApplicationComposer";
 import { HttpMigrateRouteFetcher } from "./http/HttpMigrateRouteFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
@@ -74,7 +74,8 @@ export namespace HttpMigration {
    */
   export const application = (
     document: OpenApi.IDocument,
-  ): IHttpMigrateApplication => MigrateConverter.convert(document);
+  ): IHttpMigrateApplication =>
+    HttpMigrateApplicationComposer.compose(document);
 
   /**
    * Properties for the request to the HTTP server.

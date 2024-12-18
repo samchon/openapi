@@ -3,8 +3,9 @@ import { EndpointUtil } from "../../utils/EndpointUtil";
 import { Escaper } from "../../utils/Escaper";
 import { MapUtil } from "../../utils/MapUtil";
 
-export namespace MigrateRouteAccessor {
+export namespace HttpMigrateRouteAccessor {
   export const overwrite = (routes: IHttpMigrateRoute[]): void => {
+    const predefined: Map<string, number> = getPredefinedAccessors(routes);
     const dict: Map<string, IElement> = collect((op) =>
       op.emendedPath
         .split("/")
@@ -12,6 +13,7 @@ export namespace MigrateRouteAccessor {
         .map(EndpointUtil.normalize)
         .map((str) => (Escaper.variable(str) ? str : `_${str}`)),
     )(routes) as Map<string, IElement>;
+
     for (const props of dict.values())
       props.entries.forEach((entry, i) => {
         entry.alias = EndpointUtil.escapeDuplicate(
@@ -20,7 +22,6 @@ export namespace MigrateRouteAccessor {
             ...props.entries.filter((_, j) => i !== j).map((e) => e.alias),
           ].map(EndpointUtil.normalize),
         )(EndpointUtil.normalize(entry.alias));
-        entry.route.accessor = [...props.namespace, entry.alias];
 
         const parameters: { name: string; key: string }[] = [
           ...entry.route.parameters,
@@ -36,6 +37,12 @@ export namespace MigrateRouteAccessor {
               ...parameters.filter((_, j) => i !== j).map((y) => y.key),
             ])(p.key)),
         );
+
+        const accessor: string[] | undefined =
+          entry.route.operation()["x-samchon-accessor"];
+        if (accessor !== undefined && predefined.get(accessor.join(".")) === 1)
+          entry.route.accessor = accessor;
+        else entry.route.accessor = [...props.namespace, entry.alias];
       });
   };
 
@@ -83,6 +90,19 @@ export namespace MigrateRouteAccessor {
       "By" +
       op.parameters.map((p) => EndpointUtil.capitalize(p.key)).join("And")
     );
+  };
+
+  const getPredefinedAccessors = (
+    routes: IHttpMigrateRoute[],
+  ): Map<string, number> => {
+    const dict: Map<string, number> = new Map();
+    for (const r of routes) {
+      const accessor = r.operation()["x-samchon-accessor"]?.join(".");
+      if (accessor === undefined) continue;
+      else if (dict.has(accessor)) dict.set(accessor, dict.get(accessor)! + 1);
+      else dict.set(accessor, 1);
+    }
+    return dict;
   };
 
   interface IElement {
