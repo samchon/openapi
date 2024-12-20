@@ -172,7 +172,7 @@ export namespace HttpLlmComposer {
     ];
 
     // FUNTION NAME
-    const name: string = props.route.accessor.join("_");
+    const name: string = emend(props.route.accessor.join("_"));
     const isNameVariable: boolean = /^[a-zA-Z0-9_-]+$/.test(name);
     const isNameStartsWithNumber: boolean = /^[0-9]/.test(name[0] ?? "");
     if (isNameVariable === false)
@@ -231,3 +231,9 @@ export namespace HttpLlmComposer {
     };
   };
 }
+
+const emend = (str: string): string => {
+  for (const ch of FORBIDDEN) str = str.split(ch).join("_");
+  return str;
+};
+const FORBIDDEN = ["$", "%", "."];
