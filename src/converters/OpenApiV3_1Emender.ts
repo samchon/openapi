@@ -348,7 +348,7 @@ export namespace OpenApiV3_1Emender {
               },
             });
           for (const type of schema.type)
-            if (type === "boolean" || type === "number" || type === "string")
+            if (type === "boolean")
               visit({
                 ...schema,
                 ...{
@@ -374,6 +374,41 @@ export namespace OpenApiV3_1Emender {
                       : undefined,
                 },
                 type: type as any,
+                format:
+                  schema.format && INTEGER_FORMATS.includes(schema.format)
+                    ? schema.format
+                    : undefined,
+              });
+            else if (type === "number")
+              visit({
+                ...schema,
+                ...{
+                  enum:
+                    schema.enum?.length && schema.enum.filter((e) => e !== null)
+                      ? schema.enum.filter((x) => typeof x === type)
+                      : undefined,
+                },
+                type: type as any,
+                format:
+                  schema.format && NUMBER_FORMATS.includes(schema.format)
+                    ? schema.format
+                    : undefined,
+              });
+            else if (type === "string")
+              visit({
+                ...schema,
+                ...{
+                  enum:
+                    schema.enum?.length && schema.enum.filter((e) => e !== null)
+                      ? schema.enum.filter((x) => typeof x === type)
+                      : undefined,
+                },
+                type: type as any,
+                format:
+                  schema.format &&
+                  NUMBER_FORMATS.includes(schema.format) === false
+                    ? schema.format
+                    : undefined,
               });
             else visit({ ...schema, type: type as any });
         }
@@ -422,6 +457,7 @@ export namespace OpenApiV3_1Emender {
                   exclusiveMinimum: undefined,
                   exclusiveMaximum: undefined,
                   multipleOf: undefined,
+                  format: undefined,
                 } satisfies OpenApiV3_1.IJsonSchema.IInteger as any),
               } satisfies OpenApi.IJsonSchema.IConstant);
           else
@@ -691,3 +727,6 @@ export namespace OpenApiV3_1Emender {
       Array.isArray((schema as OpenApiV3_1.IJsonSchema.IMixed).type);
   }
 }
+
+const INTEGER_FORMATS = ["int32", "int64", "uint32", "uint64"];
+const NUMBER_FORMATS = [...INTEGER_FORMATS, "float", "double"];

@@ -191,8 +191,8 @@ export namespace OpenApiV3_1 {
     export interface IMixed
       extends IConstant,
         Omit<IBoolean, "type" | "default" | "enum">,
-        Omit<INumber, "type" | "default" | "enum">,
-        Omit<IString, "type" | "default" | "enum">,
+        Omit<INumber, "type" | "default" | "enum" | "format">,
+        Omit<IString, "type" | "default" | "enum" | "format">,
         Omit<IArray, "type">,
         Omit<IObject, "type">,
         IOneOf,
@@ -210,6 +210,37 @@ export namespace OpenApiV3_1 {
       >;
       default?: any[] | null;
       enum?: any[];
+      format?:
+        | "binary"
+        | "byte"
+        | "password"
+        | "regex"
+        | "uuid"
+        | "email"
+        | "hostname"
+        | "idn-email"
+        | "idn-hostname"
+        | "iri"
+        | "iri-reference"
+        | "ipv4"
+        | "ipv6"
+        | "uri"
+        | "uri-reference"
+        | "uri-template"
+        | "url"
+        | "date-time"
+        | "date"
+        | "time"
+        | "duration"
+        | "json-pointer"
+        | "relative-json-pointer"
+        | "int32"
+        | "uint32"
+        | "int64"
+        | "uint64"
+        | "float"
+        | "double"
+        | (string & {});
     }
 
     export interface IConstant extends __IAttribute {
@@ -231,6 +262,7 @@ export namespace OpenApiV3_1 {
        * @exclusiveMinimum 0
        */
       multipleOf?: number;
+      format?: "int32" | "uint32" | "int64" | "uint64" | (string & {});
     }
     export interface INumber extends __ISignificant<"number"> {
       default?: number | null;
@@ -240,6 +272,14 @@ export namespace OpenApiV3_1 {
       exclusiveMinimum?: number | boolean;
       exclusiveMaximum?: number | boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
+      format?:
+        | "int32"
+        | "uint32"
+        | "int64"
+        | "uint64"
+        | "float"
+        | "double"
+        | (string & {});
     }
     export interface IString extends __ISignificant<"string"> {
       contentMediaType?: string;

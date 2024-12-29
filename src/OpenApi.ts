@@ -697,6 +697,11 @@ export namespace OpenApi {
       default?: number;
 
       /**
+       * Format restriction.
+       */
+      format?: "int32" | "uint32" | "int64" | "uint64" | (string & {});
+
+      /**
        * Minimum value restriction.
        *
        * @type int64
@@ -747,6 +752,18 @@ export namespace OpenApi {
        * Default value.
        */
       default?: number;
+
+      /**
+       * Format restriction.
+       */
+      format?:
+        | "int32"
+        | "uint32"
+        | "int64"
+        | "uint64"
+        | "float"
+        | "double"
+        | (string & {});
 
       /**
        * Minimum value restriction.

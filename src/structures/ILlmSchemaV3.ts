@@ -106,6 +106,11 @@ export namespace ILlmSchemaV3 {
     enum?: Array<number | null>;
 
     /**
+     * Format restriction.
+     */
+    format?: "int32" | "uint32" | "int64" | "uint64" | (string & {});
+
+    /**
      * Minimum value restriction.
      *
      * @type int64
@@ -161,6 +166,18 @@ export namespace ILlmSchemaV3 {
      * Enumeration values.
      */
     enum?: Array<number | null>;
+
+    /**
+     * Format restriction.
+     */
+    format?:
+      | "int32"
+      | "uint32"
+      | "int64"
+      | "uint64"
+      | "float"
+      | "double"
+      | (string & {});
 
     /**
      * Minimum value restriction.

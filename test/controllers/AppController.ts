@@ -87,7 +87,7 @@ export class AppController {
       query,
       body: {
         ...body,
-        file: `http://localhost:3000/files/${Date.now()}.raw`,
+        file: `http://localhost:3001/files/${Date.now()}.raw`,
       },
     };
   }

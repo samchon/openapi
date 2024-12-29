@@ -13,7 +13,7 @@ const main = async (): Promise<void> => {
   // PREPARE SERVER
   const app = await NestFactory.create(AppModule, { logger: false });
   app.useGlobalFilters(new AppFilter(app.getHttpAdapter()));
-  await app.listen(3_000);
+  await app.listen(3_001);
 
   // DO TEST
   const include: string[] = TestGlobal.getArguments("include");
@@ -24,7 +24,7 @@ const main = async (): Promise<void> => {
     extension: __filename.substring(__filename.length - 2),
     parameters: () => [
       {
-        host: `http://localhost:3000`,
+        host: `http://localhost:3001`,
       },
     ],
     onComplete: (exec) => {

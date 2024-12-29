@@ -146,6 +146,7 @@ export namespace SwaggerV2 {
        * @exclusiveMinimum 0
        */
       multipleOf?: number;
+      format?: "int32" | "uint32" | "int64" | "uint64" | (string & {});
     }
     export interface INumber extends __ISignificant<"number"> {
       default?: number | null;
@@ -155,6 +156,14 @@ export namespace SwaggerV2 {
       exclusiveMinimum?: boolean;
       exclusiveMaximum?: boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
+      format?:
+        | "int32"
+        | "uint32"
+        | "int64"
+        | "uint64"
+        | "float"
+        | "double"
+        | (string & {});
     }
     export interface IString extends __ISignificant<"string"> {
       default?: string | null;

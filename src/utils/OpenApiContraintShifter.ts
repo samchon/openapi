@@ -39,6 +39,7 @@ export namespace OpenApiContraintShifter {
       | "exclusiveMaximum"
       | "multipleOf"
       | "default"
+      | "format"
     >,
   >(
     v: Schema,
@@ -50,6 +51,7 @@ export namespace OpenApiContraintShifter {
     | "exclusiveMaximum"
     | "multipleOf"
     | "default"
+    | "format"
   > => {
     const tags: string[] = [];
     if (v.minimum !== undefined) {
@@ -75,6 +77,10 @@ export namespace OpenApiContraintShifter {
     if (v.default !== undefined) {
       tags.push(`@default ${v.default}`);
       delete v.default;
+    }
+    if (v.format !== undefined) {
+      tags.push(`@format ${v.format}`);
+      delete v.format;
     }
     v.description = writeTagWithDescription({
       description: v.description,
