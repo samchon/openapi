@@ -235,9 +235,7 @@ export namespace OpenApiV3_1 {
         | "json-pointer"
         | "relative-json-pointer"
         | "int32"
-        | "uint32"
         | "int64"
-        | "uint64"
         | "float"
         | "double"
         | (string & {});
@@ -262,7 +260,7 @@ export namespace OpenApiV3_1 {
        * @exclusiveMinimum 0
        */
       multipleOf?: number;
-      format?: "int32" | "uint32" | "int64" | "uint64" | (string & {});
+      format?: "int32" | "int64" | (string & {});
     }
     export interface INumber extends __ISignificant<"number"> {
       default?: number | null;
@@ -272,14 +270,7 @@ export namespace OpenApiV3_1 {
       exclusiveMinimum?: number | boolean;
       exclusiveMaximum?: number | boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
-      format?:
-        | "int32"
-        | "uint32"
-        | "int64"
-        | "uint64"
-        | "float"
-        | "double"
-        | (string & {});
+      format?: "int32" | "int64" | "float" | "double" | (string & {});
     }
     export interface IString extends __ISignificant<"string"> {
       contentMediaType?: string;

@@ -699,7 +699,7 @@ export namespace OpenApi {
       /**
        * Format restriction.
        */
-      format?: "int32" | "uint32" | "int64" | "uint64" | (string & {});
+      format?: "int32" | "int64" | (string & {});
 
       /**
        * Minimum value restriction.
@@ -756,14 +756,7 @@ export namespace OpenApi {
       /**
        * Format restriction.
        */
-      format?:
-        | "int32"
-        | "uint32"
-        | "int64"
-        | "uint64"
-        | "float"
-        | "double"
-        | (string & {});
+      format?: "int32" | "int64" | "float" | "double" | (string & {});
 
       /**
        * Minimum value restriction.
