@@ -10,6 +10,11 @@ import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3_1Composer {
+  /**
+   * @internal
+   */
+  export const IS_DEFS = true;
+
   export const parameters = (props: {
     config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;

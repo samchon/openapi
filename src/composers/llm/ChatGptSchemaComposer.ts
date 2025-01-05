@@ -10,6 +10,11 @@ import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ChatGptSchemaComposer {
+  /**
+   * @internal
+   */
+  export const IS_DEFS = true;
+
   export const parameters = (props: {
     config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;

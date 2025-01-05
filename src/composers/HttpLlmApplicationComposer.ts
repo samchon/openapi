@@ -196,7 +196,7 @@ export namespace HttpLlmComposer {
       additionalProperties: false,
       required: properties.map(([k]) => k),
     } as any as ILlmSchema.ModelParameters[Model];
-    if (Object.keys($defs).length)
+    if (LlmSchemaComposer.isDefs(props.model))
       (parameters as any as IChatGptSchema.IParameters).$defs = $defs;
     const operation: OpenApi.IOperation = props.route.operation();
 
