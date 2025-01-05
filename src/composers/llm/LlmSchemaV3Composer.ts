@@ -10,6 +10,11 @@ import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3Composer {
+  /**
+   * @internal
+   */
+  export const IS_DEFS = false;
+
   export const parameters = (props: {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;

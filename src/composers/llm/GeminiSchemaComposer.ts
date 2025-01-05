@@ -12,6 +12,11 @@ import { LlmParametersFinder } from "./LlmParametersComposer";
 import { LlmSchemaV3Composer } from "./LlmSchemaV3Composer";
 
 export namespace GeminiSchemaComposer {
+  /**
+   * @internal
+   */
+  export const IS_DEFS = false;
+
   export const parameters = (props: {
     config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;

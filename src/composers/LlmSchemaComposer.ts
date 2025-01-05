@@ -34,6 +34,13 @@ export namespace LlmSchemaComposer {
   export const separateParameters = <Model extends ILlmSchema.Model>(
     model: Model,
   ) => SEPARATE_PARAMETERS[model];
+
+  /**
+   * @internal
+   */
+  export const isDefs = <Model extends ILlmSchema.Model>(
+    model: Model,
+  ): boolean => IS_DEFS[model]();
 }
 
 const PARAMETERS_CASTERS = {
@@ -94,4 +101,16 @@ const TYPE_CHECKERS = {
   llama: LlamaTypeChecker,
   "3.0": LlmTypeCheckerV3,
   "3.1": LlmTypeCheckerV3_1,
+};
+
+/**
+ * @internal
+ */
+const IS_DEFS = {
+  chatgpt: () => ChatGptSchemaComposer.IS_DEFS,
+  claude: () => ClaudeSchemaComposer.IS_DEFS,
+  gemini: () => GeminiSchemaComposer.IS_DEFS,
+  llama: () => LlamaSchemaComposer.IS_DEFS,
+  "3.0": () => LlmSchemaV3Composer.IS_DEFS,
+  "3.1": () => LlmSchemaV3_1Composer.IS_DEFS,
 };

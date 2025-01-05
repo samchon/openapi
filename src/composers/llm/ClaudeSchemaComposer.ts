@@ -6,6 +6,11 @@ import { IResult } from "../../typings/IResult";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ClaudeSchemaComposer {
+  /**
+   * @internal
+   */
+  export const IS_DEFS = true;
+
   export const parameters = (props: {
     config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;
