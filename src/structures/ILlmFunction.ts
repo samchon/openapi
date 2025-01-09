@@ -25,6 +25,8 @@ import { ILlmSchema } from "./ILlmSchema";
 export interface ILlmFunction<Model extends ILlmSchema.Model> {
   /**
    * Representative name of the function.
+   *
+   * @maxLength 64
    */
   name: string;
 

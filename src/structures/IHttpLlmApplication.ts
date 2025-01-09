@@ -95,7 +95,23 @@ export interface IHttpLlmApplication<Model extends ILlmSchema.Model> {
   options: IHttpLlmApplication.IOptions<Model>;
 }
 export namespace IHttpLlmApplication {
-  export import IOptions = ILlmApplication.IOptions;
+  /**
+   * Options for the HTTP LLM application schema composition.
+   */
+  export type IOptions<Model extends ILlmSchema.Model> =
+    ILlmApplication.IOptions<Model> & {
+      /**
+       * Maximum length of function name.
+       *
+       * When a function name is longer than this value, it will be truncated.
+       *
+       * If not possible to truncate due to the duplication, the function name
+       * would be modified to randomly generated (UUID v4).
+       *
+       * @default 64
+       */
+      maxLength?: number;
+    };
 
   /**
    * Error occurred in the composition.
