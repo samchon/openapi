@@ -98,7 +98,8 @@ export namespace HttpLlm {
       options: {
         ...LlmSchemaComposer.defaultConfig(props.model),
         separate: props.options?.separate ?? null,
-      },
+        maxLength: props.options?.maxLength ?? null,
+      } as any as IHttpLlmApplication.IOptions<Model>,
     });
   };
 

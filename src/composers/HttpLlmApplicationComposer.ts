@@ -71,12 +71,15 @@ export namespace HttpLlmComposer {
         return func;
       })
       .filter((v): v is IHttpLlmFunction<Model> => v !== null);
-    return {
+
+    const app: IHttpLlmApplication<Model> = {
       model: props.model,
       options: props.options,
       functions,
       errors,
     };
+    shorten(app, props.options?.maxLength ?? 64);
+    return app;
   };
 
   const composeFunction = <Model extends ILlmSchema.Model>(props: {
@@ -230,10 +233,57 @@ export namespace HttpLlmComposer {
       operation: () => props.route.operation(),
     };
   };
+
+  export const shorten = <Model extends ILlmSchema.Model>(
+    app: IHttpLlmApplication<Model>,
+    limit: number = 64,
+  ): void => {
+    const dictionary: Set<string> = new Set();
+    const longFunctions: IHttpLlmFunction<Model>[] = [];
+    for (const func of app.functions) {
+      dictionary.add(func.name);
+      if (func.name.length > limit) {
+        longFunctions.push(func);
+      }
+    }
+    if (longFunctions.length === 0) return;
+
+    let index: number = 0;
+    for (const func of longFunctions) {
+      let success: boolean = false;
+      let rename = (str: string) => {
+        dictionary.delete(func.name);
+        dictionary.add(str);
+        func.name = str;
+        success = true;
+      };
+      for (let i: number = 1; i < func.route().accessor.length; ++i) {
+        const shortName: string = func.route().accessor.slice(i).join("_");
+        if (shortName.length > limit - 8) continue;
+        else if (dictionary.has(shortName) === false) rename(shortName);
+        else {
+          const newName: string = `_${index}_${shortName}`;
+          if (dictionary.has(newName) === true) continue;
+          rename(newName);
+          ++index;
+        }
+        break;
+      }
+      if (success === false) rename(randomFormatUuid());
+    }
+  };
 }
+
+const randomFormatUuid = (): string =>
+  "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 
 const emend = (str: string): string => {
   for (const ch of FORBIDDEN) str = str.split(ch).join("_");
   return str;
 };
+
 const FORBIDDEN = ["$", "%", "."];

@@ -96,6 +96,8 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    * > - Example 2
    * >   - endpoint: `GET /shoppings/sellers/sales/:saleId/reviews/:reviewId/comments/:id
    * >   - accessor: `shoppings.sellers.sales.reviews.getBySaleIdAndReviewIdAndCommentId`
+   *
+   * @maxLength 64
    */
   name: string;
 
