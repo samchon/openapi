@@ -23,6 +23,18 @@ export const test_issue_104_upgrade_v20_allOf = async (): Promise<void> => {
   TestValidator.predicate("allOf")(
     () => JSON.stringify(document).indexOf("#/definitions") === -1,
   );
+  for (const collection of Object.values(document.paths ?? {}))
+    for (const operation of Object.values(collection))
+      if (typia.is<OpenApi.IOperation>(operation)) {
+        const length: number =
+          (operation.summary?.length ? operation.summary.length + 3 : 0) +
+          (operation.description?.length ?? 0);
+        if (length <= 1_024 || operation.description === undefined) continue;
+        operation.description = operation.description.slice(
+          0,
+          operation.description.length - (length - 1_024),
+        );
+      }
 
   const app: IHttpLlmApplication<"claude"> = HttpLlm.application({
     model: "claude",

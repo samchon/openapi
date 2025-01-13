@@ -13,7 +13,7 @@ export const test_llama_function_calling_nullable = (): Promise<void> =>
     name: "drawPolygon",
     description: "Draw a polygon with given geometry.",
     collection: typia.json.schemas<[{ input: IPolygon }]>(),
-    validate: typia.createValidate<[{ input: IPolygon }]>(),
+    validate: typia.createValidate<{ input: IPolygon }>(),
     texts: [
       {
         role: "assistant",
