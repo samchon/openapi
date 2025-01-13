@@ -200,7 +200,13 @@ export namespace ChatGptSchemaComposer {
     });
     if (llm === null || human === null)
       return {
-        llm: llm as IChatGptSchema.IParameters | null,
+        llm: (llm as IChatGptSchema.IParameters | null) ?? {
+          type: "object",
+          properties: {} as Record<string, IChatGptSchema>,
+          required: [],
+          additionalProperties: false,
+          $defs: {},
+        },
         human: human as IChatGptSchema.IParameters | null,
       };
     const output: ILlmFunction.ISeparated<"chatgpt"> = {

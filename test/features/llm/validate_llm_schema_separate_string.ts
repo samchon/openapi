@@ -74,7 +74,13 @@ const validate_llm_schema_separate_string = <Model extends ILlmSchema.Model>(
     human: null,
   });
   TestValidator.equals("upload")(separator(upload))({
-    llm: null,
+    llm: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+      required: [],
+      $defs: {},
+    },
     human: upload,
   });
 };
