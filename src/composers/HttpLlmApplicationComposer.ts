@@ -174,6 +174,28 @@ export namespace HttpLlmComposer {
         : []),
     ];
 
+    // DESCRIPTION
+    const operation: OpenApi.IOperation = props.route.operation();
+    const description: [string | undefined, number] = (() => {
+      if (!operation.summary?.length || !operation.description?.length)
+        return [
+          operation.summary || operation.description,
+          operation.summary?.length ?? operation.description?.length ?? 0,
+        ];
+      const summary: string = operation.summary.endsWith(".")
+        ? operation.summary.slice(0, -1)
+        : operation.summary;
+      const final: string = operation.description.startsWith(summary)
+        ? operation.description
+        : summary + ".\n\n" + operation.description;
+      return [final, final.length];
+    })();
+    if (description[1] > 1_024) {
+      props.errors.push(
+        `The description of the function is too long (must be equal or less than 1,024 characters, but ${description[1].toLocaleString()} length).`,
+      );
+    }
+
     // FUNTION NAME
     const name: string = emend(props.route.accessor.join("_"));
     const isNameVariable: boolean = /^[a-zA-Z0-9_-]+$/.test(name);
@@ -186,7 +208,8 @@ export namespace HttpLlmComposer {
       output === null ||
       properties.some(([_k, v]) => v === null) ||
       isNameVariable === false ||
-      isNameStartsWithNumber === true
+      isNameStartsWithNumber === true ||
+      description[1] > 1_024
     )
       return null;
 
@@ -201,7 +224,6 @@ export namespace HttpLlmComposer {
     } as any as ILlmSchema.ModelParameters[Model];
     if (LlmSchemaComposer.isDefs(props.model))
       (parameters as any as IChatGptSchema.IParameters).$defs = $defs;
-    const operation: OpenApi.IOperation = props.route.operation();
 
     // FINALIZATION
     return {
@@ -217,16 +239,7 @@ export namespace HttpLlmComposer {
           }) as ILlmFunction.ISeparated<Model>)
         : undefined,
       output: output as any,
-      description: (() => {
-        if (!operation.summary?.length || !operation.description?.length)
-          return operation.summary || operation.description;
-        const summary: string = operation.summary.endsWith(".")
-          ? operation.summary.slice(0, -1)
-          : operation.summary;
-        return operation.description.startsWith(summary)
-          ? operation.description
-          : summary + ".\n\n" + operation.description;
-      })(),
+      description: description[0],
       deprecated: operation.deprecated,
       tags: operation.tags,
       route: () => props.route as any,

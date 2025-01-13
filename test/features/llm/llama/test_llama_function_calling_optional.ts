@@ -13,7 +13,7 @@ export const test_llama_function_calling_optional = () =>
     name: "registerMember",
     description: "Register a membership.",
     collection: typia.json.schemas<[{ input: IMember; note?: string }]>(),
-    validate: typia.createValidate<[{ input: IMember; note?: string }]>(),
+    validate: typia.createValidate<{ input: IMember; note?: string }>(),
     texts: [
       {
         role: "assistant",

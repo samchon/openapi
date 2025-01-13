@@ -13,7 +13,7 @@ export const test_claude_function_calling_tags = (): Promise<void> =>
     name: "reserve",
     description: "Reserve some opening time.",
     collection: typia.json.schemas<[{ input: OpeningTime }]>(),
-    validate: typia.createValidate<[{ input: OpeningTime }]>(),
+    validate: typia.createValidate<{ input: OpeningTime }>(),
     texts: [
       {
         role: "assistant",
