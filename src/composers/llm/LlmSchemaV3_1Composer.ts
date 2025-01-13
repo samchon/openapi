@@ -339,7 +339,13 @@ export namespace LlmSchemaV3_1Composer {
     });
     if (llm === null || human === null)
       return {
-        llm: llm as ILlmSchemaV3_1.IParameters | null,
+        llm: (llm as ILlmSchemaV3_1.IParameters | null) ?? {
+          type: "object",
+          properties: {},
+          additionalProperties: false,
+          required: [],
+          $defs: {},
+        },
         human: human as ILlmSchemaV3_1.IParameters | null,
       };
     const output: ILlmFunction.ISeparated<"3.1"> = {

@@ -216,8 +216,11 @@ export namespace IHttpLlmFunction {
   export interface ISeparated<Model extends ILlmSchema.Model> {
     /**
      * Parameters that would be composed by the LLM.
+     *
+     * Even though no property exists in the LLM side, the `llm` property
+     * would have at least empty object type.
      */
-    llm: ILlmSchema.ModelParameters[Model] | null;
+    llm: ILlmSchema.ModelParameters[Model];
 
     /**
      * Parameters that would be composed by the human.

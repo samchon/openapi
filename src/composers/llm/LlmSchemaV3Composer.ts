@@ -170,7 +170,15 @@ export namespace LlmSchemaV3Composer {
       predicate: props.predicate,
       schema: props.parameters,
     });
-    return { llm, human } as ILlmFunction.ISeparated<"3.0">;
+    return {
+      llm: (llm as ILlmSchemaV3.IParameters | null) ?? {
+        type: "object",
+        properties: {},
+        additionalProperties: false,
+        required: [],
+      },
+      human: human as ILlmSchemaV3.IParameters | null,
+    };
   };
 
   const separateStation = (props: {

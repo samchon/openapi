@@ -58,7 +58,13 @@ const validate_llm_parameters_separate_ref = <
     human: null,
   });
   TestValidator.equals("upload")(separator(upload))({
-    llm: null,
+    llm: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+      required: [],
+      $defs: {},
+    },
     human: upload,
   });
   TestValidator.equals("combined")({
