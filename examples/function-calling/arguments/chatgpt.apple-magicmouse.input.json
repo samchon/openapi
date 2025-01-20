@@ -1,0 +1,92 @@
+{
+  "section_code": "general",
+  "opened_at": null,
+  "closed_at": null,
+  "content": {
+    "title": "Apple Magic Mouse",
+    "format": "txt",
+    "body": "The Apple Magic Mouse is Apple's multi-touch, wireless mouse with a sleek and innovative design. It supports a range of gestures for easy navigation and connectivity via Bluetooth.",
+    "files": [
+      {
+        "name": "apple_magic_mouse",
+        "extension": "jpg",
+        "url": "https://example.com/apple_magic_mouse.jpg"
+      }
+    ],
+    "thumbnails": [
+      {
+        "name": "magic_mouse_thumbnail",
+        "extension": "jpg",
+        "url": "https://example.com/magic_mouse_thumbnail.jpg"
+      }
+    ]
+  },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "electronics",
+        "accessories"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "options": [
+        {
+          "type": "select",
+          "name": "Color",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "Silver"
+            },
+            {
+              "name": "Space Gray"
+            }
+          ]
+        }
+      ],
+      "stocks": [
+        {
+          "name": "Apple Magic Mouse - Silver",
+          "price": {
+            "nominal": 99,
+            "real": 79
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "Apple Magic Mouse - Space Gray",
+          "price": {
+            "nominal": 99,
+            "real": 79
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            }
+          ]
+        }
+      ],
+      "name": "Apple Magic Mouse",
+      "required": true,
+      "primary": true
+    }
+  ],
+  "tags": [
+    "Apple",
+    "Mouse",
+    "Wireless",
+    "Bluetooth",
+    "Magic Mouse"
+  ]
+}
