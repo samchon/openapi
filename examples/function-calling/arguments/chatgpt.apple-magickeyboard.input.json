@@ -1,0 +1,110 @@
+{
+  "section_code": "general",
+  "opened_at": null,
+  "closed_at": null,
+  "content": {
+    "title": "Apple Magic Keyboard",
+    "format": "md",
+    "body": "The Apple Magic Keyboard provides a remarkably comfortable and precise typing experience. Its sleek and lightweight design is perfect for any Mac setup. With a built-in rechargeable battery, it lasts up to a month or more between charges. Effortlessly connect it to your Mac via Bluetooth and experience seamless typing.",
+    "files": [
+      {
+        "name": "apple_magic_keyboard_image",
+        "extension": "jpg",
+        "url": "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MK2A3?wid=532&hei=582&fmt=jpg&qlt=95&.v=1632950236000"
+      }
+    ],
+    "thumbnails": [
+      {
+        "name": "apple_magic_keyboard_thumbnail",
+        "extension": "jpg",
+        "url": "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MK2A3?wid=266&hei=291&fmt=jpg&qlt=95&.v=1632950236000"
+      }
+    ]
+  },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "electronics",
+        "accessories",
+        "others"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "options": [
+        {
+          "type": "select",
+          "name": "Language",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "US English"
+            },
+            {
+              "name": "British English"
+            },
+            {
+              "name": "French"
+            }
+          ]
+        }
+      ],
+      "stocks": [
+        {
+          "name": "US English",
+          "price": {
+            "nominal": 99,
+            "real": 89
+          },
+          "quantity": 50,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "British English",
+          "price": {
+            "nominal": 99,
+            "real": 89
+          },
+          "quantity": 30,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "French",
+          "price": {
+            "nominal": 99,
+            "real": 89
+          },
+          "quantity": 20,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 2
+            }
+          ]
+        }
+      ],
+      "name": "Apple Magic Keyboard Unit",
+      "required": true,
+      "primary": true
+    }
+  ],
+  "tags": [
+    "Apple",
+    "Keyboard",
+    "Magic Keyboard",
+    "Wireless",
+    "Bluetooth"
+  ]
+}

@@ -25,7 +25,8 @@
     {
       "code": "samchon",
       "category_codes": [
-        "cameras"
+        "cameras",
+        "electronics"
       ]
     }
   ],
@@ -77,8 +78,8 @@
         }
       ],
       "name": "Leica M6 Body (2022 Reissue)",
-      "primary": true,
-      "required": true
+      "required": true,
+      "primary": true
     },
     {
       "options": [],
@@ -94,18 +95,15 @@
         }
       ],
       "name": "50mm Summilux Lens",
-      "primary": false,
-      "required": false
+      "required": false,
+      "primary": false
     }
   ],
   "tags": [
     "Leica",
-    "Camera",
     "M6",
-    "2022",
-    "Film",
+    "Camera",
     "Photography",
-    "Lens",
-    "Summilux"
+    "Film"
   ]
 }

@@ -1,6 +1,5 @@
 {
   "section_code": "general",
-  "status": null,
   "opened_at": null,
   "closed_at": null,
   "content": {
@@ -30,7 +29,8 @@
     {
       "code": "samchon",
       "category_codes": [
-        "2in1_laptops"
+        "tablets",
+        "windows_tablets"
       ]
     }
   ],
@@ -88,7 +88,7 @@
       ],
       "stocks": [
         {
-          "name": "Surface Pro 9 - i3 8/128",
+          "name": "i3, 8 GB, 128 GB",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -110,7 +110,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i3 16/256",
+          "name": "i3, 16 GB, 256 GB",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -132,7 +132,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i3 16/512",
+          "name": "i3, 16 GB, 512 GB",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -154,7 +154,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i5 16/256",
+          "name": "i5, 16 GB, 256 GB",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -176,7 +176,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i5 32/512",
+          "name": "i5, 32 GB, 512 GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -198,7 +198,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i7 16/512",
+          "name": "i7, 16 GB, 512 GB",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -220,7 +220,7 @@
           ]
         },
         {
-          "name": "Surface Pro 9 - i7 32/512",
+          "name": "i7, 32 GB, 512 GB",
           "price": {
             "nominal": 2000000,
             "real": 1899000
@@ -243,8 +243,8 @@
         }
       ],
       "name": "Surface Pro 9 Entity",
-      "primary": true,
-      "required": true
+      "required": true,
+      "primary": true
     },
     {
       "options": [],
@@ -260,8 +260,8 @@
         }
       ],
       "name": "Warranty Program",
-      "primary": false,
-      "required": false
+      "required": false,
+      "primary": false
     },
     {
       "options": [],
@@ -277,15 +277,9 @@
         }
       ],
       "name": "Magnetic Keyboard",
-      "primary": false,
-      "required": false
+      "required": false,
+      "primary": false
     }
   ],
-  "tags": [
-    "Surface",
-    "Pro 9",
-    "2-in-1",
-    "Laptop",
-    "Tablet"
-  ]
+  "tags": []
 }

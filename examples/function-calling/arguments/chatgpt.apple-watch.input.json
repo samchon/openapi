@@ -1,0 +1,507 @@
+{
+  "section_code": "general",
+  "opened_at": null,
+  "closed_at": null,
+  "content": {
+    "title": "Apple Watch",
+    "format": "md",
+    "body": "Apple Watch is a line of smartwatches produced by Apple Inc. It incorporates fitness tracking, health-oriented capabilities, and wireless telecommunication. The device is offered in a variety of sizes, cases, and interchangeable bands.",
+    "files": [],
+    "thumbnails": []
+  },
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "smart_watches"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "options": [
+        {
+          "type": "select",
+          "name": "Size",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "40mm"
+            },
+            {
+              "name": "44mm"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "name": "Material",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "Aluminum"
+            },
+            {
+              "name": "Stainless Steel"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "name": "Band",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "Sport Band"
+            },
+            {
+              "name": "Leather Band"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "name": "Connectivity",
+          "variable": true,
+          "candidates": [
+            {
+              "name": "GPS"
+            },
+            {
+              "name": "GPS + Cellular"
+            }
+          ]
+        }
+      ],
+      "stocks": [
+        {
+          "name": "40mm Aluminum Sport Band GPS",
+          "price": {
+            "nominal": 399,
+            "real": 399
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "40mm Aluminum Leather Band GPS",
+          "price": {
+            "nominal": 449,
+            "real": 449
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "40mm Aluminum Sport Band GPS + Cellular",
+          "price": {
+            "nominal": 499,
+            "real": 499
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "40mm Aluminum Leather Band GPS + Cellular",
+          "price": {
+            "nominal": 549,
+            "real": 549
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "40mm Stainless Steel Sport Band GPS",
+          "price": {
+            "nominal": 699,
+            "real": 699
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "40mm Stainless Steel Leather Band GPS",
+          "price": {
+            "nominal": 749,
+            "real": 749
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "40mm Stainless Steel Sport Band GPS + Cellular",
+          "price": {
+            "nominal": 799,
+            "real": 799
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "40mm Stainless Steel Leather Band GPS + Cellular",
+          "price": {
+            "nominal": 849,
+            "real": 849
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "44mm Aluminum Sport Band GPS",
+          "price": {
+            "nominal": 429,
+            "real": 429
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "44mm Aluminum Leather Band GPS",
+          "price": {
+            "nominal": 479,
+            "real": 479
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "44mm Aluminum Sport Band GPS + Cellular",
+          "price": {
+            "nominal": 529,
+            "real": 529
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "44mm Aluminum Leather Band GPS + Cellular",
+          "price": {
+            "nominal": 579,
+            "real": 579
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "44mm Stainless Steel Sport Band GPS",
+          "price": {
+            "nominal": 729,
+            "real": 729
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "44mm Stainless Steel Leather Band GPS",
+          "price": {
+            "nominal": 779,
+            "real": 779
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "44mm Stainless Steel Sport Band GPS + Cellular",
+          "price": {
+            "nominal": 829,
+            "real": 829
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 0
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        },
+        {
+          "name": "44mm Stainless Steel Leather Band GPS + Cellular",
+          "price": {
+            "nominal": 879,
+            "real": 879
+          },
+          "quantity": 100,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 1,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 2,
+              "candidate_index": 1
+            },
+            {
+              "option_index": 3,
+              "candidate_index": 1
+            }
+          ]
+        }
+      ],
+      "name": "Apple Watch Series",
+      "required": true,
+      "primary": true
+    }
+  ],
+  "tags": [
+    "smartwatch",
+    "wearable",
+    "fitness",
+    "health",
+    "technology",
+    "apple"
+  ]
+}

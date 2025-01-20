@@ -3,20 +3,15 @@
   "opened_at": null,
   "closed_at": null,
   "content": {
-    "title": "iPhone 16: Redefining Innovation",
-    "format": "txt",
-    "body": "The iPhone 16 takes mobile technology to new heights with its cutting-edge design, enhanced performance, and revolutionary features. With a stunning ProMotion XDR display, an even more powerful A18 Bionic chip, and advanced camera capabilities, the iPhone 16 delivers unparalleled speed, clarity, and creativity. Whether you're capturing cinematic moments or experiencing seamless multitasking, the iPhone 16 ensures every interaction feels extraordinary.\n\nTagline:\n\niPhone 16: The Future in Your Hands.\n\nAbout the thumbnail images, please fill from the below image URL addresses.",
+    "title": "Apple AirPods",
+    "format": "md",
+    "body": "Apple AirPods are wireless Bluetooth earbuds designed by Apple, designed to work seamlessly with Apple devices like iPhones and iPads. Enjoy superior sound quality and convenience with automatic on and connection, easy setup for all your Apple devices, and quick access to Siri. They offer a rich and immersive audio experience with a built-in microphone to filter out background noise and focus on the sound of your voice. The AirPods come with a sleek charging case providing long battery life, making them the ultimate choice for on-the-go listening.",
     "files": [],
     "thumbnails": [
       {
-        "name": "iPhone 16 Redefining Innovation",
-        "extension": "jpeg",
-        "url": "https://serpapi.com/searches/673d45f1bbc18bba240d3d4a/images/dbe630a9b7aa7b2757c88476b16680958208286d1a50297b172d53ed4bec4bd7.jpeg"
-      },
-      {
-        "name": "iPhone 16 Redefining Innovation 2",
-        "extension": "jpeg",
-        "url": "https://serpapi.com/searches/673d45f1bbc18bba240d3d4a/images/dbe630a9b7aa7b27d67682ac72cf28e88e98dc5b91a205f6c97946f84d6162a9.jpeg"
+        "name": "apple_airpods",
+        "extension": "jpg",
+        "url": "https://example.com/photos/apple_airpods.jpg"
       }
     ]
   },
@@ -24,7 +19,10 @@
     {
       "code": "samchon",
       "category_codes": [
-        "smart_phones"
+        "electronics",
+        "smart_phones",
+        "accessories",
+        "clothing"
       ]
     }
   ],
@@ -37,47 +35,44 @@
           "variable": true,
           "candidates": [
             {
-              "name": "iPhone 16 Basic"
+              "name": "AirPods 2nd Generation"
             },
             {
-              "name": "iPhone 16 Plus"
+              "name": "AirPods 3rd Generation"
             },
             {
-              "name": "iPhone 16 Pro"
+              "name": "AirPods Pro"
             },
             {
-              "name": "iPhone 16 Pro Max"
+              "name": "AirPods Max"
             }
           ]
         },
         {
           "type": "select",
-          "name": "Storage",
+          "name": "Color",
           "variable": true,
           "candidates": [
             {
-              "name": "128 GB"
+              "name": "White"
             },
             {
-              "name": "256 GB"
+              "name": "Black"
             },
             {
-              "name": "512 GB"
-            },
-            {
-              "name": "1 TB"
+              "name": "Space Gray"
             }
           ]
         }
       ],
       "stocks": [
         {
-          "name": "iPhone 16 Basic - 128GB",
+          "name": "AirPods 2nd Generation - White",
           "price": {
-            "nominal": 1250000,
-            "real": 1250000
+            "nominal": 159,
+            "real": 159
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -90,12 +85,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Basic - 256GB",
+          "name": "AirPods 2nd Generation - Black",
           "price": {
-            "nominal": 1400000,
-            "real": 1400000
+            "nominal": 159,
+            "real": 159
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -108,12 +103,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Basic - 512GB",
+          "name": "AirPods 2nd Generation - Space Gray",
           "price": {
-            "nominal": 1700000,
-            "real": 1700000
+            "nominal": 159,
+            "real": 159
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -126,12 +121,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Plus - 128GB",
+          "name": "AirPods 3rd Generation - White",
           "price": {
-            "nominal": 1350000,
-            "real": 1350000
+            "nominal": 199,
+            "real": 199
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -144,12 +139,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Plus - 256GB",
+          "name": "AirPods 3rd Generation - Black",
           "price": {
-            "nominal": 1500000,
-            "real": 1500000
+            "nominal": 199,
+            "real": 199
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -162,12 +157,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Plus - 512GB",
+          "name": "AirPods 3rd Generation - Space Gray",
           "price": {
-            "nominal": 1800000,
-            "real": 1800000
+            "nominal": 199,
+            "real": 199
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -180,12 +175,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Pro - 128GB",
+          "name": "AirPods Pro - White",
           "price": {
-            "nominal": 1550000,
-            "real": 1550000
+            "nominal": 249,
+            "real": 249
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -198,12 +193,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Pro - 256GB",
+          "name": "AirPods Pro - Black",
           "price": {
-            "nominal": 1700000,
-            "real": 1700000
+            "nominal": 249,
+            "real": 249
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -216,12 +211,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Pro - 512GB",
+          "name": "AirPods Pro - Space Gray",
           "price": {
-            "nominal": 2000000,
-            "real": 2000000
+            "nominal": 249,
+            "real": 249
           },
-          "quantity": 1000,
+          "quantity": 100,
           "choices": [
             {
               "option_index": 0,
@@ -234,30 +229,12 @@
           ]
         },
         {
-          "name": "iPhone 16 Pro - 1TB",
+          "name": "AirPods Max - White",
           "price": {
-            "nominal": 2300000,
-            "real": 2300000
+            "nominal": 549,
+            "real": 549
           },
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 3
-            }
-          ]
-        },
-        {
-          "name": "iPhone 16 Pro Max - 256GB",
-          "price": {
-            "nominal": 1900000,
-            "real": 1900000
-          },
-          "quantity": 1000,
+          "quantity": 50,
           "choices": [
             {
               "option_index": 0,
@@ -265,17 +242,35 @@
             },
             {
               "option_index": 1,
+              "candidate_index": 0
+            }
+          ]
+        },
+        {
+          "name": "AirPods Max - Black",
+          "price": {
+            "nominal": 549,
+            "real": 549
+          },
+          "quantity": 50,
+          "choices": [
+            {
+              "option_index": 0,
+              "candidate_index": 3
+            },
+            {
+              "option_index": 1,
               "candidate_index": 1
             }
           ]
         },
         {
-          "name": "iPhone 16 Pro Max - 512GB",
+          "name": "AirPods Max - Space Gray",
           "price": {
-            "nominal": 2200000,
-            "real": 2200000
+            "nominal": 549,
+            "real": 549
           },
-          "quantity": 1000,
+          "quantity": 50,
           "choices": [
             {
               "option_index": 0,
@@ -284,37 +279,21 @@
             {
               "option_index": 1,
               "candidate_index": 2
-            }
-          ]
-        },
-        {
-          "name": "iPhone 16 Pro Max - 1TB",
-          "price": {
-            "nominal": 2500000,
-            "real": 2500000
-          },
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 3
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 3
             }
           ]
         }
       ],
-      "name": "iPhone Entity",
+      "name": "Apple AirPods",
       "required": true,
       "primary": true
     }
   ],
   "tags": [
-    "smartphone",
-    "iPhone",
+    "electronics",
+    "audio",
+    "wireless",
     "Apple",
-    "iPhone16"
+    "AirPods",
+    "Bluetooth"
   ]
 }
