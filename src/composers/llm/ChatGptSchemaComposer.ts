@@ -176,7 +176,7 @@ export namespace ChatGptSchemaComposer {
         ...union[0],
         description: ChatGptTypeChecker.isReference(union[0]!)
           ? undefined
-          : union[0].description,
+          : (union[0].description ?? attribute.description),
       };
     return {
       ...attribute,

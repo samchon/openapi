@@ -359,7 +359,7 @@ export namespace OpenApiTypeCheckerBase {
       ) as OpenApi.IJsonSchema[];
       if (filtered.length === 0) return undefined;
       return {
-        ...props,
+        ...props.schema,
         oneOf: filtered
           .map((v) =>
             flatSchema({
