@@ -45,7 +45,11 @@ OpenAPI definitions, converters and LLM function calling application composer.
     - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
 
-
+> https://github.com/user-attachments/assets/01604b53-aca4-41cb-91aa-3faf63549ea6
+>
+> - Shopping A.I. Chatbot Application: [https://nestia.io/chat/shopping](/chat/shopping)
+> - Shopping Backend Repository: https://github.com/samchon/shopping-backend
+> - Shopping Swagger Document (`@nestia/editor`): https://shopping-be.wrtn.ai/editor/
 
 
 ## Setup
