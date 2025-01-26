@@ -47,9 +47,13 @@ OpenAPI definitions, converters and LLM function calling application composer.
 
 > https://github.com/user-attachments/assets/01604b53-aca4-41cb-91aa-3faf63549ea6
 >
+> Demonstration video composing A.I. chatbot from OpenAPI document.
+>
 > - Shopping A.I. Chatbot Application: [https://nestia.io/chat/shopping](/chat/shopping)
 > - Shopping Backend Repository: https://github.com/samchon/shopping-backend
-> - Shopping Swagger Document (`@nestia/editor`): https://shopping-be.wrtn.ai/editor/
+> - Shopping Swagger Document (`@nestia/editor`): [https://nestia.io/editor/?url=...](https://nestia.io/editor/?simulate=true&e2e=true&url=https%3A%2F%2Fraw.githubusercontent.com%2Fsamchon%2Fshopping-backend%2Frefs%2Fheads%2Fmaster%2Fpackages%2Fapi%2Fswagger.json)
+
+
 
 
 ## Setup
