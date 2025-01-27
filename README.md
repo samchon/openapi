@@ -504,7 +504,7 @@ main().catch(console.error);
 
 
 ## Wrtn OS
-[![Wrtn Logo](/images/sponsors/wrtn-logo.png)](https://wrtnlabs.io)
+[![Wrtn Logo](https://nestia.io/images/sponsors/wrtn-logo.png)](https://wrtnlabs.io)
 
 > https://wrtnlabs.io
 
