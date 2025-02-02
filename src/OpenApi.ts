@@ -13,7 +13,7 @@ import { SwaggerV2Upgrader } from "./converters/SwaggerV2Upgrader";
  * `OpenApi` is a namespace containing functions and interfaces for emended
  * OpenAPI v3.1 specification. The keyword "emended" means that `OpenApi` is
  * not a direct OpenAPI v3.1 specification ({@link OpenApiV3_1}), but a little
- * bit shrinked to remove ambiguous and duplicated expressions of OpenAPI v3.1
+ * bit shrunk to remove ambiguous and duplicated expressions of OpenAPI v3.1
  * for the convenience of `typia` and `nestia`.
  *
  * For example, when representing nullable type, OpenAPI v3.1 supports three ways.
@@ -126,7 +126,7 @@ export namespace OpenApi {
    * `OpenApi.IDocument` represents an OpenAPI document of emended OpenAPI v3.1.
    *
    * In other words, `OpenApi.IDocument` is a structure of `swagger.json` file of
-   * OpenAPI v3.1 specification, but a little bit shrinked to remove ambiguous and
+   * OpenAPI v3.1 specification, but a little bit shrunk to remove ambiguous and
    * duplicated expressions of OpenAPI v3.1 for the convenience and clarity.
    */
   export interface IDocument {
@@ -640,7 +640,7 @@ export namespace OpenApi {
    * `OpenApi.IJsonSchema` is a type schema info of the OpenAPI.
    *
    * `OpenApi.IJsonSchema` basically follows the JSON schema definition of
-   * OpenAPI v3.1, but a little bit shrinked to remove ambiguous and duplicated
+   * OpenAPI v3.1, but a little bit shrunk to remove ambiguous and duplicated
    * expressions of OpenAPI v3.1 for the convenience and clarity.
    *
    * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
