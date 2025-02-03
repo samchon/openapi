@@ -12,4 +12,4 @@ typia = "typia"
 nestia = "nestia"
 
 [files]
-ignore-hidden = ["examples"]
+extend-exclude = ["examples"]
