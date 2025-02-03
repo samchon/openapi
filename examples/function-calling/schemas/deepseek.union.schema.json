@@ -1,0 +1,88 @@
+{
+  "type": "object",
+  "properties": {
+    "input": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "rectangle"
+            },
+            "p1": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ]
+            },
+            "p2": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "p1",
+            "p2"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "circle"
+            },
+            "radius": {
+              "type": "number"
+            },
+            "center": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "radius",
+            "center"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {}
+}
