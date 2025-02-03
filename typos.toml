@@ -4,11 +4,12 @@ extend-ignore-re = [
   "(?Rm)^.*(<!--|#|//)\\s*spellchecker:disable-line(-->|\n)?$",
   "(?s)(<!--|#|//)\\s*spellchecker:off\\s*(-->|\n).*?(<!--|#|//)\\s*spellchecker:on",
 ]
-include = ["README.md", "/src"]
-exclude = ["/examples"]
 
 [default.extend-words]
 Jeongho = "Jeongho"
 Nam = "Nam"
 typia = "typia"
 nestia = "nestia"
+
+[files]
+ignore-hidden = ["examples"]
