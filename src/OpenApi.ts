@@ -871,7 +871,7 @@ export namespace OpenApi {
       /**
        * Minimum items restriction.
        *
-       * Restriction of minumum number of items in the array.
+       * Restriction of minimum number of items in the array.
        *
        * @type uint64
        */
@@ -929,7 +929,7 @@ export namespace OpenApi {
       /**
        * Minimum items restriction.
        *
-       * Restriction of minumum number of items in the tuple.
+       * Restriction of minimum number of items in the tuple.
        *
        * @type uint64
        */
