@@ -18,7 +18,7 @@ import { ILlmSchema } from "./ILlmSchema";
  *
  * For reference, different between `IHttpLlmFunction` and its origin source
  * {@link OpenApi.IOperation} is, `IHttpLlmFunction` has converted every type schema
- * informations from {@link OpenApi.IJsonSchema} to {@link ILlmSchemaV3} to escape
+ * information from {@link OpenApi.IJsonSchema} to {@link ILlmSchemaV3} to escape
  * {@link OpenApi.IJsonSchema.IReference reference types}, and downgrade the version
  * of the JSON schema to OpenAPI 3.0. It's because LLM function call feature cannot
  * understand both reference types and OpenAPI 3.1 specification.

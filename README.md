@@ -31,7 +31,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
   3. [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
   4. [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
 
-`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts) module, you can perform the LLM funtion calling extremely easily just by delivering the OpenAPI (Swagger) document.
+`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts) module, you can perform the LLM function calling extremely easily just by delivering the OpenAPI (Swagger) document.
 
   - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
   - [`IHttpLlmApplication<Model>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
@@ -222,9 +222,9 @@ flowchart TD
 
 LLM function calling application from OpenAPI document.
 
-`@samchon/openapi` provides LLM (Large Language Model) funtion calling application from the "emended OpenAPI v3.1 document". Therefore, if you have any HTTP backend server and succeeded to build an OpenAPI document, you can easily make the A.I. chatbot application.
+`@samchon/openapi` provides LLM (Large Language Model) function calling application from the "emended OpenAPI v3.1 document". Therefore, if you have any HTTP backend server and succeeded to build an OpenAPI document, you can easily make the A.I. chatbot application.
 
-In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the `HttpLlm.execute()` funtion, it is the "LLM function call."
+In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the `HttpLlm.execute()` function, it is the "LLM function call."
 
 Let's enjoy the fantastic LLM function calling feature very easily with `@samchon/openapi`.
 
@@ -274,7 +274,7 @@ Actual function call execution is by yourself.
 
 LLM (Large Language Model) providers like OpenAI selects a proper function to call from the conversations with users, and fill arguments of it. However, function calling feature supported by LLM providers do not perform the function call execution. The actual execution responsibility is on you.
 
-In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.execute()` (or `HttpLlm.propagate()`) function. Here is an example code executing the LLM function calling through the `HttpLlm.execute()` function. As you can see, to execute the LLM function call, you have to deliver these informations:
+In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.execute()` (or `HttpLlm.propagate()`) function. Here is an example code executing the LLM function calling through the `HttpLlm.execute()` function. As you can see, to execute the LLM function call, you have to deliver these information:
 
   - Connection info to the HTTP server
   - Application of the LLM fuction calling

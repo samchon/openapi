@@ -20,7 +20,7 @@ import { ILlmSchema } from "./ILlmSchema";
  * For reference, when both LLM and Human filled parameter values to call, you can
  * merge them by calling the {@link HttpLlm.mergeParameters} function. In other words,
  * if you've configured the {@link ILlmApplication.IOptions.separate} property, you
- * have to merge the separated parameters before the funtion call execution.
+ * have to merge the separated parameters before the function call execution.
  *
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
