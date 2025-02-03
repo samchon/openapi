@@ -7,7 +7,7 @@ import { OpenApi } from "../OpenApi";
  * OpenAPI generator libraries, which composes an RPC (Remote Procedure Call) function
  * from the {@link OpenApi.IOperation OpenAPI operation}.
  *
- * As the `IHttpMigrateRoute` has a lot of speical stories, when you're developing
+ * As the `IHttpMigrateRoute` has a lot of special stories, when you're developing
  * OpenAPI generator library, please read its description carefully including
  * the description of its properties.
  *

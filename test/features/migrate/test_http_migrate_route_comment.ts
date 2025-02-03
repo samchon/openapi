@@ -36,7 +36,7 @@ must not affect to the {@link IShoppingOrder orders} that already had been
 applied to the sale.
 
 The 2nd purpose is for the A/B tests. {@link IShoppingSeller Seller} needs
-to demonstrate operating performance by chaning price, content, and
+to demonstrate operating performance by chaining price, content, and
 composition of the product. This snapshot concept would be helpful for it.
 
 @param id Target sale's {@link IShoppingSale.id }

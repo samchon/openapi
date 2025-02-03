@@ -277,7 +277,7 @@ LLM (Large Language Model) providers like OpenAI selects a proper function to ca
 In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.execute()` (or `HttpLlm.propagate()`) function. Here is an example code executing the LLM function calling through the `HttpLlm.execute()` function. As you can see, to execute the LLM function call, you have to deliver these information:
 
   - Connection info to the HTTP server
-  - Application of the LLM fuction calling
+  - Application of the LLM function calling
   - LLM function schema to call
   - Arguments for the function call (maybe composed by LLM)
 

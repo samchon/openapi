@@ -469,7 +469,7 @@ export namespace ILlmSchemaV3 {
     /**
      * Whether to allow contraint properties or not.
      *
-     * If you configure this property to `false`, the schemas do not containt
+     * If you configure this property to `false`, the schemas do not contain
      * the constraint properties of below. Instead, below properties would be
      * written to the {@link ILlmSchemaV3.__IAttribute.description} property
      * as a comment string like `"@format uuid"`.

@@ -4,7 +4,7 @@ import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
 import { IResult } from "../../typings/IResult";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
-import { OpenApiContraintShifter } from "../../utils/OpenApiContraintShifter";
+import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
 import { LlmParametersFinder } from "./LlmParametersComposer";
@@ -254,7 +254,7 @@ export namespace LlmSchemaV3_1Composer {
           (props.config.constraint
             ? (x: ILlmSchemaV3_1.IArray) => x
             : (x: ILlmSchemaV3_1.IArray) =>
-                OpenApiContraintShifter.shiftArray(x))({
+                OpenApiConstraintShifter.shiftArray(x))({
             ...input,
             items: items.value,
           }),
@@ -264,7 +264,7 @@ export namespace LlmSchemaV3_1Composer {
           (props.config.constraint
             ? (x: ILlmSchemaV3_1.IString) => x
             : (x: ILlmSchemaV3_1.IString) =>
-                OpenApiContraintShifter.shiftString(x))({
+                OpenApiConstraintShifter.shiftString(x))({
             ...input,
           }),
         );
@@ -276,7 +276,7 @@ export namespace LlmSchemaV3_1Composer {
           (props.config.constraint
             ? (x: ILlmSchemaV3_1.INumber | ILlmSchemaV3_1.IInteger) => x
             : (x: ILlmSchemaV3_1.INumber | ILlmSchemaV3_1.IInteger) =>
-                OpenApiContraintShifter.shiftNumeric(x))({
+                OpenApiConstraintShifter.shiftNumeric(x))({
             ...input,
           }),
         );

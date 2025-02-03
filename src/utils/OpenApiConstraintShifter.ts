@@ -1,6 +1,6 @@
 import { OpenApi } from "../OpenApi";
 
-export namespace OpenApiContraintShifter {
+export namespace OpenApiConstraintShifter {
   export const shiftArray = <
     Schema extends Pick<
       OpenApi.IJsonSchema.IArray,

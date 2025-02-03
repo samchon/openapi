@@ -126,7 +126,7 @@ export namespace LlmTypeCheckerV3_1 {
   /**
    * Test whether the schema is recursive reference type.
    *
-   * Test whether the target schema is a reference type, and test one thign more
+   * Test whether the target schema is a reference type, and test one thing more
    * that the reference is self-recursive or not.
    *
    * @param props Properties for recursive reference test
@@ -172,7 +172,7 @@ export namespace LlmTypeCheckerV3_1 {
    *
    * Visit every nested schemas of the target, and apply the `props.closure` function.
    *
-   * Here is the list of occuring nested visitings:
+   * Here is the list of occurring nested visitings:
    *
    * - {@link ILlmSchemaV3_1.IOneOf.oneOf}
    * - {@link ILlmSchemaV3_1.IReference}

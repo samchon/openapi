@@ -50,7 +50,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  *
  * By the way, there can be some parameters (or their nested properties) which must be
  * composed by Human, not by LLM. File uploading feature or some sensitive information
- * like secrety key (password) are the examples. In that case, you can separate the
+ * like secret key (password) are the examples. In that case, you can separate the
  * function parameters to both LLM and Human sides by configuring the
  * {@link IHttpLlmApplication.IOptions.separate} property. The separated parameters are
  * assigned to the {@link IHttpLlmFunction.separated} property.
@@ -128,7 +128,7 @@ export namespace IHttpLlmApplication {
     path: string;
 
     /**
-     * Error messsages.
+     * Error messages.
      */
     messages: string[];
 
@@ -145,7 +145,7 @@ export namespace IHttpLlmApplication {
      * Get the migration route metadata, of the source.
      *
      * If the property returns `undefined`, it means that the error has
-     * been occured in the migration level, not of LLM application composition.
+     * been occurred in the migration level, not of LLM application composition.
      *
      * @returns Migration route metadata.
      */
