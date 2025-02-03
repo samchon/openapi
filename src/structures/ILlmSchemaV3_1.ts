@@ -301,7 +301,7 @@ export namespace ILlmSchemaV3_1 {
     /**
      * Minimum items restriction.
      *
-     * Restriction of minumum number of items in the array.
+     * Restriction of minimum number of items in the array.
      *
      * @type uint64
      */
@@ -510,9 +510,9 @@ export namespace ILlmSchemaV3_1 {
    */
   export interface IConfig {
     /**
-     * Whether to allow contraint properties or not.
+     * Whether to allow constraint properties or not.
      *
-     * If you configure this property to `false`, the schemas do not containt
+     * If you configure this property to `false`, the schemas do not contain
      * the constraint properties of below. Instead, below properties would be
      * written to the {@link ILlmSchemaV3_1.__IAttribute.description} property
      * as a comment string like `"@format uuid"`.

@@ -5,7 +5,7 @@ import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
 import { IResult } from "../../typings/IResult";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
-import { OpenApiContraintShifter } from "../../utils/OpenApiContraintShifter";
+import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
@@ -139,17 +139,17 @@ export namespace LlmSchemaV3Composer {
             LlmTypeCheckerV3.isInteger(next) ||
             LlmTypeCheckerV3.isNumber(next)
           )
-            OpenApiContraintShifter.shiftNumeric(
+            OpenApiConstraintShifter.shiftNumeric(
               next as
                 | OpenApi.IJsonSchema.IInteger
                 | OpenApi.IJsonSchema.INumber,
             );
           else if (LlmTypeCheckerV3.isString(next))
-            OpenApiContraintShifter.shiftString(
+            OpenApiConstraintShifter.shiftString(
               next as OpenApi.IJsonSchema.IString,
             );
           else if (LlmTypeCheckerV3.isArray(next))
-            OpenApiContraintShifter.shiftArray(
+            OpenApiConstraintShifter.shiftArray(
               next as OpenApi.IJsonSchema.IArray,
             );
         }

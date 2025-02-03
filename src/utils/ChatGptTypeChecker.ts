@@ -125,7 +125,7 @@ export namespace ChatGptTypeChecker {
    *
    * Visit every nested schemas of the target, and apply the `props.closure` function.
    *
-   * Here is the list of occuring nested visitings:
+   * Here is the list of occurring nested visitings:
    *
    * - {@link IChatGptSchema.IAnyOf.anyOf}
    * - {@link IChatGptSchema.IReference}

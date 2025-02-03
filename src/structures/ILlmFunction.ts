@@ -57,7 +57,7 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
    *
    * Also, when the LLM conversates with the user, the `description` is
    * used to explain the function to the user. Therefore, the `description`
-   * property has the highest priroity, and you have to consider it.
+   * property has the highest priority, and you have to consider it.
    */
   description?: string | undefined;
 

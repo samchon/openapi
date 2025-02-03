@@ -196,7 +196,7 @@ export namespace HttpLlmComposer {
       );
     }
 
-    // FUNTION NAME
+    // FUNCTION NAME
     const name: string = emend(props.route.accessor.join("_"));
     const isNameVariable: boolean = /^[a-zA-Z0-9_-]+$/.test(name);
     const isNameStartsWithNumber: boolean = /^[0-9]/.test(name[0] ?? "");

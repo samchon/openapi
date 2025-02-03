@@ -149,7 +149,7 @@ export namespace OpenApiTypeChecker {
   /**
    * Test whether the schema is recursive reference type.
    *
-   * Test whether the target schema is a reference type, and test one thign more
+   * Test whether the target schema is a reference type, and test one thing more
    * that the reference is self-recursive or not.
    *
    * @param props Properties for recursive reference test
@@ -172,7 +172,7 @@ export namespace OpenApiTypeChecker {
    * Escape from the {@link OpenApi.IJsonSchema.IReference} type.
    *
    * Escape from the {@link OpenApi.IJsonSchema.IReference} type, replacing the
-   * every references to the actual schemas. If the escape is successfull, the returned
+   * every references to the actual schemas. If the escape is successful, the returned
    * schema never contains any {@link OpenApi.IJsonSchema.IReference} type in its
    * structure.
    *
@@ -231,7 +231,7 @@ export namespace OpenApiTypeChecker {
    *
    * Visit every nested schemas of the target, and apply the `props.closure` function.
    *
-   * Here is the list of occuring nested visitings:
+   * Here is the list of occurring nested visitings:
    *
    * - {@link OpenApi.IJsonSchema.IOneOf.oneOf}
    * - {@link OpenApi.IJsonSchema.IReference}

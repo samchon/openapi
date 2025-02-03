@@ -52,7 +52,7 @@ interface IPerson {
   age: number & tags.Type<"uint32">;
 
   /**
-   * Additional informations about the person.
+   * Additional information about the person.
    */
   etc: Record<string, string>;
 }

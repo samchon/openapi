@@ -240,7 +240,7 @@ export namespace OpenApi {
      * OpenAPI tag information.
      *
      * It is possible to skip composing this structure, even if some
-     * tag names are regsitered in the API routes ({@link OpenApi.IOperation.tags}).
+     * tag names are registered in the API routes ({@link OpenApi.IOperation.tags}).
      * In that case, the tag name would be displayed in Swagger-UI without
      * description.
      *
@@ -422,7 +422,7 @@ export namespace OpenApi {
      * List of securities and their scopes that are required for execution.
      *
      * When this property be configured, the Restful API operation requires
-     * the matched security value for exection. Its key means security key
+     * the matched security value for execution. Its key means security key
      * matched with {@link OpenApi.IDocument.security}.
      *
      * The value means scopes required for the security key when the security
@@ -871,7 +871,7 @@ export namespace OpenApi {
       /**
        * Minimum items restriction.
        *
-       * Restriction of minumum number of items in the array.
+       * Restriction of minimum number of items in the array.
        *
        * @type uint64
        */
@@ -929,7 +929,7 @@ export namespace OpenApi {
       /**
        * Minimum items restriction.
        *
-       * Restriction of minumum number of items in the tuple.
+       * Restriction of minimum number of items in the tuple.
        *
        * @type uint64
        */

@@ -4,7 +4,7 @@
  * `IResult` is an union type that represents the result of an operation
  * that can either succeed or fail.
  *
- * You can distinguise the result by checking the {@link IResult.success} value,
+ * You can distinguished the result by checking the {@link IResult.success} value,
  * and if it's `true`, the success value is stored in {@link IResult.value}.
  * Otherwise, if it's `false`, the error value is stored in {@link IResult.error}.
  *

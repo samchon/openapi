@@ -90,7 +90,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       },
     }),
   );
-  TestValidator.equals("(addtionalProperties := object) covers static")(true)(
+  TestValidator.equals("(additionalProperties := object) covers static")(true)(
     OpenApiTypeChecker.covers({
       components,
       x: {
@@ -110,7 +110,9 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       },
     }),
   );
-  TestValidator.equals("(addtionalProperties := true) covers everything")(true)(
+  TestValidator.equals("(additionalProperties := true) covers everything")(
+    true,
+  )(
     OpenApiTypeChecker.covers({
       components,
       x: {
@@ -133,7 +135,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       },
     }),
   );
-  TestValidator.equals("addtionalProperties covers relationship")(true)(
+  TestValidator.equals("additionalProperties covers relationship")(true)(
     OpenApiTypeChecker.covers({
       components,
       x: {
@@ -238,7 +240,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       },
     }),
   );
-  TestValidator.equals("nothing can cover (addtionalProperties := true)")(
+  TestValidator.equals("nothing can cover (additionalProperties := true)")(
     false,
   )(
     OpenApiTypeChecker.covers({
@@ -263,7 +265,7 @@ export const test_json_schema_type_checker_cover_object = (): void => {
       },
     }),
   );
-  TestValidator.equals("relationship can't cover addtionalProperties")(false)(
+  TestValidator.equals("relationship can't cover additionalProperties")(false)(
     OpenApiTypeChecker.covers({
       components,
       x: {

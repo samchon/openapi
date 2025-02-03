@@ -9,7 +9,7 @@ export const test_http_llm_function_multipart = (): void => {
     model: "3.0",
     document,
   });
-  TestValidator.equals("multipart not suppported")(
+  TestValidator.equals("multipart not supported")(
     !!application.errors.find(
       (e) =>
         e.method === "post" &&

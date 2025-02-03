@@ -16,7 +16,7 @@ export namespace GeminiTypeChecker {
    *
    * Visit every nested schemas of the target, and apply the `props.closure` function.
    *
-   * Here is the list of occuring nested visitings:
+   * Here is the list of occurring nested visitings:
    *
    * - {@link IGeminiSchema.IObject.properties}
    * - {@link IGeminiSchema.IArray.items}
