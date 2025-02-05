@@ -40,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/samchon/openapi/issues"
   },
-  "homepage": "https://github.com/samchon/openapi",
+  "homepage": "https://nestia.io/api/modules/_samchon_openapi.html",
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
     "@google/generative-ai": "^0.21.0",
