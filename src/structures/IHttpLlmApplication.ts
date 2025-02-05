@@ -23,29 +23,18 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  * type schemas are downgraded to {@link OpenApiV3.IJsonSchema} and converted to
  * {@link ILlmSchemaV3}.
  *
- * About the options, if you've configured {@link IHttpLlmApplication.options.keyword}
- * (as `true`), number of {@link IHttpLlmFunction.parameters} are always 1 and the first
- * parameter type is always {@link ILlmSchemaV3.IObject}. Otherwise, the parameters would
- * be multiple, and the sequence of the parameters are following below rules.
+ * For reference, the arguments type is composed by below rule.
  *
  * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}
  * - `query`: Query parameter of {@link IHttpMigrateRoute.query}
  * - `body`: Body parameter of {@link IHttpMigrateRoute.body}
  *
  * ```typescript
- * // KEYWORD TRUE
  * {
  *   ...pathParameters,
  *   query,
  *   body,
  * }
- *
- * // KEYWORD FALSE
- * [
- *   ...pathParameters,
- *   ...(query ? [query] : []),
- *   ...(body ? [body] : []),
- * ]
  * ```
  *
  * By the way, there can be some parameters (or their nested properties) which must be

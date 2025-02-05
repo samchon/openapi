@@ -66,7 +66,7 @@ const document = new Singleton(async (): Promise<OpenApi.IDocument> => {
     | SwaggerV2.IDocument
     | OpenApiV3.IDocument
     | OpenApiV3_1.IDocument = await fetch(
-    "https://wrtnio.github.io/connectors/swagger/swagger.json",
+    "https://wrtnlabs.github.io/connectors/swagger/swagger.json",
   ).then((r) => r.json());
   return OpenApi.convert(typia.assert(swagger));
 });

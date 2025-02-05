@@ -23,10 +23,7 @@ import { ILlmSchema } from "./ILlmSchema";
  * of the JSON schema to OpenAPI 3.0. It's because LLM function call feature cannot
  * understand both reference types and OpenAPI 3.1 specification.
  *
- * Additionally, if you've composed `IHttpLlmFunction` with
- * {@link IHttpLlmApplication.IOptions.keyword} configuration as `true`, number of
- * {@link IHttpLlmFunction.parameters} are always 1 and the first parameter's
- * type is always {@link ILlmSchemaV3.IObject}. The properties' rule is:
+ * Additionally, the properties' rule is:
  *
  * - `pathParameters`: Path parameters of {@link OpenApi.IOperation.parameters}
  * - `query`: Query parameter of {@link IHttpMigrateRoute.query}
@@ -38,17 +35,6 @@ import { ILlmSchema } from "./ILlmSchema";
  *   query,
  *   body,
  * }
- * ```
- *
- * Otherwise, the parameters would be multiple, and the sequence of the parameters
- * are following below rules:
- *
- * ```typescript
- * [
- *   ...pathParameters,
- *   ...(query ? [query] : []),
- *   ...(body ? [body] : []),
- * ]
  * ```
  *
  * @reference https://platform.openai.com/docs/guides/function-calling

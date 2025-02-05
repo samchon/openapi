@@ -20,6 +20,7 @@ flowchart
 [![npm version](https://img.shields.io/npm/v/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Downloads](https://img.shields.io/npm/dm/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Build Status](https://github.com/samchon/openapi/workflows/build/badge.svg)](https://github.com/samchon/openapi/actions?query=workflow%3Abuild)
+[![API Documents](https://img.shields.io/badge/API-Documents-forestgreen)](https://nestia.io/api/modules/_samchon_openapi.html)
 [![Discord Badge](https://img.shields.io/badge/discord-samchon-d91965?style=flat&labelColor=5866f2&logo=discord&logoColor=white&link=https://discord.gg/E94XhzrUCZ)](https://discord.gg/E94XhzrUCZ)
 
 OpenAPI definitions, converters and LLM function calling application composer.
@@ -31,19 +32,19 @@ OpenAPI definitions, converters and LLM function calling application composer.
   3. [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
   4. [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
 
-`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts) module, you can perform the LLM function calling extremely easily just by delivering the OpenAPI (Swagger) document.
+`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://nestia.io/api/modules/_samchon_openapi.HttpLlm.html) module, you can perform the LLM function calling extremely easily just by delivering the OpenAPI (Swagger) document.
 
-  - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
-  - [`IHttpLlmApplication<Model>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
-  - [`IHttpLlmFunction<Model>`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+  - [`HttpLlm.application()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.application.html)
+  - [`IHttpLlmApplication<Model>`](https://nestia.io/api/interfaces/_samchon_openapi.IHttpLlmApplication-1.html)
+  - [`IHttpLlmFunction<Model>`](https://nestia.io/api/interfaces/_samchon_openapi.IHttpLlmFunction-1.html)
   - Supported schemas
-    - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude
-    - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts): Google Gemini
-    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta Llama
+    - [`IChatGptSchema`](https://nestia.io/api/types/_samchon_openapi.IChatGptSchema-1.html): OpenAI ChatGPT
+    - [`IClaudeSchema`](https://nestia.io/api/types/_samchon_openapi.IClaudeSchema-1.html): Anthropic Claude
+    - [`IGeminiSchema`](https://nestia.io/api/types/_samchon_openapi.IGeminiSchema-1.html): Google Gemini
+    - [`ILlamaSchema`](https://nestia.io/api/types/_samchon_openapi.ILlamaSchema-1.html): Meta Llama
   - Midldle layer schemas
-    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
-    - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
+    - [`ILlmSchemaV3`](https://nestia.io/api/types/_samchon_openapi.ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
+    - [`ILlmSchemaV3_1`](https://nestia.io/api/types/_samchon_openapi.ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
 
 > https://github.com/user-attachments/assets/01604b53-aca4-41cb-91aa-3faf63549ea6
 >
@@ -224,21 +225,21 @@ LLM function calling application from OpenAPI document.
 
 `@samchon/openapi` provides LLM (Large Language Model) function calling application from the "emended OpenAPI v3.1 document". Therefore, if you have any HTTP backend server and succeeded to build an OpenAPI document, you can easily make the A.I. chatbot application.
 
-In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the `HttpLlm.execute()` function, it is the "LLM function call."
+In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the [`HttpLlm.execute()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.execute.html) function, it is the "LLM function call."
 
 Let's enjoy the fantastic LLM function calling feature very easily with `@samchon/openapi`.
 
   - Application
-    - [`HttpLlm.application()`](https://github.com/samchon/openapi/blob/master/src/HttpLlm.ts)
-    - [`IHttpLlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts)
-    - [`IHttpLlmFunction`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmFunction.ts)
+    - [`HttpLlm.application()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.application.html)
+    - [`IHttpLlmApplication`](https://nestia.io/api/interfaces/_samchon_openapi.IHttpLlmApplication-1.html)
+    - [`IHttpLlmFunction`](https://nestia.io/api/interfaces/_samchon_openapi.IHttpLlmFunction-1.html)
   - Schemas
-    - [`IChatGptSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IChatGptSchema.ts): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IClaudeSchema.ts): Anthropic Claude
-    - [`IGeminiSchema`](https://github.com/samchon/openapi/blob/master/src/structures/IGeminiSchema.ts): Google Gemini
-    - [`ILlamaSchema`](https://github.com/samchon/openapi/blob/master/src/structures/ILlamaSchema.ts): Meta Llama
-    - [`ILlmSchemaV3`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3.ts): middle layer based on OpenAPI v3.0 specification
-    - [`ILlmSchemaV3_1`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmSchemaV3_1.ts): middle layer based on OpenAPI v3.1 specification
+    - [`IChatGptSchema`](https://nestia.io/api/types/_samchon_openapi.IChatGptSchema-1.html): OpenAI ChatGPT
+    - [`IClaudeSchema`](https://nestia.io/api/types/_samchon_openapi.IClaudeSchema-1.html): Anthropic Claude
+    - [`IGeminiSchema`](https://nestia.io/api/types/_samchon_openapi.IGeminiSchema-1.html): Google Gemini
+    - [`ILlamaSchema`](https://nestia.io/api/types/_samchon_openapi.ILlamaSchema-1.html): Meta Llama
+    - [`ILlmSchemaV3`](https://nestia.io/api/types/_samchon_openapi.ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
+    - [`ILlmSchemaV3_1`](https://nestia.io/api/types/_samchon_openapi.ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
   - Type Checkers
     - [`ChatGptTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ChatGptTypeChecker.ts)
     - [`ClaudeTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ClaudeTypeChecker.ts)
@@ -249,7 +250,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 
 > [!NOTE]
 >
-> You also can compose [`ILlmApplication`](https://github.com/samchon/openapi/blob/master/src/structures/ILlmApplication.ts) from a class type with `typia`.
+> You also can compose [`ILlmApplication`](https://nestia.io/api/interfaces/_samchon_openapi.ILlmApplication-1.html) from a class type with `typia`.
 >
 > https://typia.io/docs/llm/application
 >
@@ -274,7 +275,7 @@ Actual function call execution is by yourself.
 
 LLM (Large Language Model) providers like OpenAI selects a proper function to call from the conversations with users, and fill arguments of it. However, function calling feature supported by LLM providers do not perform the function call execution. The actual execution responsibility is on you.
 
-In `@samchon/openapi`, you can execute the LLM function calling by `HttpLlm.execute()` (or `HttpLlm.propagate()`) function. Here is an example code executing the LLM function calling through the `HttpLlm.execute()` function. As you can see, to execute the LLM function call, you have to deliver these information:
+In `@samchon/openapi`, you can execute the LLM function calling by [`HttpLlm.execute()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.execute.html) (or [`HttpLlm.propagate()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.propagate.html)) function. Here is an example code executing the LLM function calling through the [`HttpLlm.execute()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.execute.html) function. As you can see, to execute the LLM function call, you have to deliver these information:
 
   - Connection info to the HTTP server
   - Application of the LLM function calling
@@ -381,7 +382,7 @@ Arguments from both Human and LLM sides.
 
 When composing parameter arguments through the LLM (Large Language Model) function calling, there can be a case that some parameters (or nested properties) must be composed not by LLM, but by Human. File uploading feature, or sensitive information like secret key (password) cases are the representative examples.
 
-In that case, you can configure the LLM function calling schemas to exclude such Human side parameters (or nested properties) by `IHttpLlmApplication.options.separate` property. Instead, you have to merge both Human and LLM composed parameters into one by calling the `HttpLlm.mergeParameters()` before the LLM function call execution of `HttpLlm.execute()` function.
+In that case, you can configure the LLM function calling schemas to exclude such Human side parameters (or nested properties) by `IHttpLlmApplication.options.separate` property. Instead, you have to merge both Human and LLM composed parameters into one by calling the [`HttpLlm.mergeParameters()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.mergeParameters.html) before the LLM function call execution of [`HttpLlm.execute()`](https://nestia.io/api/functions/_samchon_openapi.HttpLlm.execute.html) function.
 
 Here is the example code separating the file uploading feature from the LLM function calling schema, and combining both Human and LLM composed parameters into one before the LLM function call execution.
 

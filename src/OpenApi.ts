@@ -29,11 +29,11 @@ import { SwaggerV2Upgrader } from "./converters/SwaggerV2Upgrader";
  * - Operation
  *   - Merge {@link OpenApiV3_1.IPath.parameters} to {@link OpenApi.IOperation.parameters}
  *   - Resolve {@link OpenApi.IJsonSchema.IReference references} of {@link OpenApiV3_1.IOperation} members
- *   - Escape references of {@link OpenApiV3_1.IComponent.examples}
+ *   - Escape references of {@link OpenApiV3_1.IComponents.examples}
  * - JSON Schema
  *   - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  *   - Resolve nullable property: {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
- *   - Array type utilizes only single {@link OpenAPI.IJsonSchema.IArray.items}
+ *   - Array type utilizes only single {@link OpenApi.IJsonSchema.IArray.items}
  *   - Tuple type utilizes only {@link OpenApi.IJsonSchema.ITuple.prefixItems}
  *   - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link OpenApi.IJsonSchema.IObject}
  *   - Merge {@link OpenApiV3_1.IJsonSchema.IAnyOf} to {@link OpenApi.IJsonSchema.IOneOf}
