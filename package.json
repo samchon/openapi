@@ -11,7 +11,8 @@
     "build:main": "rimraf lib && tsc && rollup -c",
     "build:test": "rimraf bin && tsc -p test/tsconfig.json",
     "dev": "npm run build:test -- --watch",
-    "test": "node bin/test"
+    "test": "node bin/test",
+    "typedoc": "typedoc --plugin typedoc-github-theme --theme typedoc-github-theme"
   },
   "keywords": [
     "swagger",
@@ -40,7 +41,7 @@
   "bugs": {
     "url": "https://github.com/samchon/openapi/issues"
   },
-  "homepage": "https://nestia.io/api/modules/_samchon_openapi.html",
+  "homepage": "https://samchon.github.io/openapi/api",
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
     "@google/generative-ai": "^0.21.0",
@@ -73,6 +74,8 @@
     "ts-node": "^10.9.2",
     "ts-patch": "^3.3.0",
     "tstl": "^3.0.0",
+    "typedoc": "^0.27.6",
+    "typedoc-github-theme": "^0.2.1",
     "typescript": "~5.7.2",
     "typescript-transform-paths": "^3.5.2",
     "typia": "7.6.0",
