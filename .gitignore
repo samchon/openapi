@@ -1,0 +1,11 @@
+bin/
+examples/converted/
+lib/
+models/
+node_modules/
+website/public/api/
+
+package-lock.json
+pnpm-lock.yaml
+*.log
+.env
