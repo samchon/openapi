@@ -20,7 +20,7 @@ flowchart
 [![npm version](https://img.shields.io/npm/v/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Downloads](https://img.shields.io/npm/dm/@samchon/openapi.svg)](https://www.npmjs.com/package/@samchon/openapi)
 [![Build Status](https://github.com/samchon/openapi/workflows/build/badge.svg)](https://github.com/samchon/openapi/actions?query=workflow%3Abuild)
-[![API Documents](https://img.shields.io/badge/API-Documents-forestgreen)](https://samchon.github.io/api/)
+[![API Documents](https://img.shields.io/badge/API-Documents-forestgreen)](https://samchon.github.io/openapi/api/)
 [![Discord Badge](https://img.shields.io/badge/discord-samchon-d91965?style=flat&labelColor=5866f2&logo=discord&logoColor=white&link=https://discord.gg/E94XhzrUCZ)](https://discord.gg/E94XhzrUCZ)
 
 OpenAPI definitions, converters and LLM function calling application composer.
@@ -32,19 +32,19 @@ OpenAPI definitions, converters and LLM function calling application composer.
   3. [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
   4. [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
 
-`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://samchon.github.io/api/modules/HttpLlm.html) module, you can perform the LLM function calling extremely easily just by delivering the OpenAPI (Swagger) document.
+`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://samchon.github.io/openapi/api/modules/HttpLlm.html) module, you can perform the LLM function calling extremely easily just by delivering the OpenAPI (Swagger) document.
 
-  - [`HttpLlm.application()`](https://samchon.github.io/api/functions/HttpLlm.application.html)
-  - [`IHttpLlmApplication<Model>`](https://samchon.github.io/api/interfaces/IHttpLlmApplication-1.html)
-  - [`IHttpLlmFunction<Model>`](https://samchon.github.io/api/interfaces/IHttpLlmFunction-1.html)
+  - [`HttpLlm.application()`](https://samchon.github.io/openapi/api/functions/HttpLlm.application.html)
+  - [`IHttpLlmApplication<Model>`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmApplication-1.html)
+  - [`IHttpLlmFunction<Model>`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmFunction-1.html)
   - Supported schemas
-    - [`IChatGptSchema`](https://samchon.github.io/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://samchon.github.io/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IGeminiSchema`](https://samchon.github.io/api/types/IGeminiSchema-1.html): Google Gemini
-    - [`ILlamaSchema`](https://samchon.github.io/api/types/ILlamaSchema-1.html): Meta Llama
+    - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
+    - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
+    - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
+    - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
   - Midldle layer schemas
-    - [`ILlmSchemaV3`](https://samchon.github.io/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
-    - [`ILlmSchemaV3_1`](https://samchon.github.io/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
+    - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
+    - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
 
 > https://github.com/user-attachments/assets/01604b53-aca4-41cb-91aa-3faf63549ea6
 >
@@ -225,21 +225,21 @@ LLM function calling application from OpenAPI document.
 
 `@samchon/openapi` provides LLM (Large Language Model) function calling application from the "emended OpenAPI v3.1 document". Therefore, if you have any HTTP backend server and succeeded to build an OpenAPI document, you can easily make the A.I. chatbot application.
 
-In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the [`HttpLlm.execute()`](https://samchon.github.io/api/functions/HttpLlm.execute.html) function, it is the "LLM function call."
+In the A.I. chatbot, LLM will select proper function to remotely call from the conversations with user, and fill arguments of the function automatically. If you actually execute the function call through the [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) function, it is the "LLM function call."
 
 Let's enjoy the fantastic LLM function calling feature very easily with `@samchon/openapi`.
 
   - Application
-    - [`HttpLlm.application()`](https://samchon.github.io/api/functions/HttpLlm.application.html)
-    - [`IHttpLlmApplication`](https://samchon.github.io/api/interfaces/IHttpLlmApplication-1.html)
-    - [`IHttpLlmFunction`](https://samchon.github.io/api/interfaces/IHttpLlmFunction-1.html)
+    - [`HttpLlm.application()`](https://samchon.github.io/openapi/api/functions/HttpLlm.application.html)
+    - [`IHttpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmApplication-1.html)
+    - [`IHttpLlmFunction`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmFunction-1.html)
   - Schemas
-    - [`IChatGptSchema`](https://samchon.github.io/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://samchon.github.io/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IGeminiSchema`](https://samchon.github.io/api/types/IGeminiSchema-1.html): Google Gemini
-    - [`ILlamaSchema`](https://samchon.github.io/api/types/ILlamaSchema-1.html): Meta Llama
-    - [`ILlmSchemaV3`](https://samchon.github.io/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
-    - [`ILlmSchemaV3_1`](https://samchon.github.io/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
+    - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
+    - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
+    - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
+    - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
+    - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
+    - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
   - Type Checkers
     - [`ChatGptTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ChatGptTypeChecker.ts)
     - [`ClaudeTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ClaudeTypeChecker.ts)
@@ -250,7 +250,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 
 > [!NOTE]
 >
-> You also can compose [`ILlmApplication`](https://samchon.github.io/api/interfaces/ILlmApplication-1.html) from a class type with `typia`.
+> You also can compose [`ILlmApplication`](https://samchon.github.io/openapi/api/interfaces/ILlmApplication-1.html) from a class type with `typia`.
 >
 > https://typia.io/docs/llm/application
 >
@@ -275,7 +275,7 @@ Actual function call execution is by yourself.
 
 LLM (Large Language Model) providers like OpenAI selects a proper function to call from the conversations with users, and fill arguments of it. However, function calling feature supported by LLM providers do not perform the function call execution. The actual execution responsibility is on you.
 
-In `@samchon/openapi`, you can execute the LLM function calling by [`HttpLlm.execute()`](https://samchon.github.io/api/functions/HttpLlm.execute.html) (or [`HttpLlm.propagate()`](https://samchon.github.io/api/functions/HttpLlm.propagate.html)) function. Here is an example code executing the LLM function calling through the [`HttpLlm.execute()`](https://samchon.github.io/api/functions/HttpLlm.execute.html) function. As you can see, to execute the LLM function call, you have to deliver these information:
+In `@samchon/openapi`, you can execute the LLM function calling by [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) (or [`HttpLlm.propagate()`](https://samchon.github.io/openapi/api/functions/HttpLlm.propagate.html)) function. Here is an example code executing the LLM function calling through the [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) function. As you can see, to execute the LLM function call, you have to deliver these information:
 
   - Connection info to the HTTP server
   - Application of the LLM function calling
@@ -382,7 +382,7 @@ Arguments from both Human and LLM sides.
 
 When composing parameter arguments through the LLM (Large Language Model) function calling, there can be a case that some parameters (or nested properties) must be composed not by LLM, but by Human. File uploading feature, or sensitive information like secret key (password) cases are the representative examples.
 
-In that case, you can configure the LLM function calling schemas to exclude such Human side parameters (or nested properties) by `IHttpLlmApplication.options.separate` property. Instead, you have to merge both Human and LLM composed parameters into one by calling the [`HttpLlm.mergeParameters()`](https://samchon.github.io/api/functions/HttpLlm.mergeParameters.html) before the LLM function call execution of [`HttpLlm.execute()`](https://samchon.github.io/api/functions/HttpLlm.execute.html) function.
+In that case, you can configure the LLM function calling schemas to exclude such Human side parameters (or nested properties) by `IHttpLlmApplication.options.separate` property. Instead, you have to merge both Human and LLM composed parameters into one by calling the [`HttpLlm.mergeParameters()`](https://samchon.github.io/openapi/api/functions/HttpLlm.mergeParameters.html) before the LLM function call execution of [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) function.
 
 Here is the example code separating the file uploading feature from the LLM function calling schema, and combining both Human and LLM composed parameters into one before the LLM function call execution.
 
