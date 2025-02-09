@@ -1,5 +1,6 @@
 const typescript = require("@rollup/plugin-typescript");
 const terser = require("@rollup/plugin-terser");
+const autoExternal = require("rollup-plugin-auto-external");
 const { globSync } = require("tinyglobby");
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
     preserveModulesRoot: "src",
   },
   plugins: [
+    autoExternal(),
     typescript({
       tsconfig: "tsconfig.json",
       module: "ES2020",
