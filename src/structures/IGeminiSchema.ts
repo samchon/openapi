@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
+
 /**
  * Type schema info for the Gemini function calling.
  *
@@ -226,33 +228,7 @@ export namespace IGeminiSchema {
   /**
    * Common attributes that can be applied to all types.
    */
-  export interface __IAttribute {
-    /**
-     * Detailed description of the schema.
-     */
-    description?: string;
-
-    /**
-     * Whether the type is deprecated or not.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    deprecated?: boolean;
-
-    /**
-     * Example value.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    example?: any;
-
-    /**
-     * List of example values as key-value pairs.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    examples?: Record<string, any>;
-  }
+  export type __IAttribute = IJsonSchemaAttribute;
 
   /**
    * Configuration for the Gemini schema composition.

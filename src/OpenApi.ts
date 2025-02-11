@@ -6,6 +6,7 @@ import { OpenApiV3Upgrader } from "./converters/OpenApiV3Upgrader";
 import { OpenApiV3_1Emender } from "./converters/OpenApiV3_1Emender";
 import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
 import { SwaggerV2Upgrader } from "./converters/SwaggerV2Upgrader";
+import { IJsonSchemaAttribute } from "./structures/IJsonSchemaAttribute";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -1106,32 +1107,7 @@ export namespace OpenApi {
     /**
      * Common attributes that can be applied to all types.
      */
-    export interface __IAttribute {
-      /**
-       * Title of the schema.
-       */
-      title?: string;
-
-      /**
-       * Detailed description of the schema.
-       */
-      description?: string;
-
-      /**
-       * Whether the type is deprecated or not.
-       */
-      deprecated?: boolean;
-
-      /**
-       * Example value.
-       */
-      example?: any;
-
-      /**
-       * List of example values as key-value pairs.
-       */
-      examples?: Record<string, any>;
-    }
+    export type __IAttribute = IJsonSchemaAttribute;
   }
 
   /**

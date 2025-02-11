@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
+
 /**
  * Type schema based on OpenAPI v3.1 for LLM function calling.
  *
@@ -478,32 +480,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Common attributes that can be applied to all types.
    */
-  export interface __IAttribute {
-    /**
-     * Title of the schema.
-     */
-    title?: string;
-
-    /**
-     * Detailed description of the schema.
-     */
-    description?: string;
-
-    /**
-     * Whether the type is deprecated or not.
-     */
-    deprecated?: boolean;
-
-    /**
-     * Example value.
-     */
-    example?: any;
-
-    /**
-     * List of example values as key-value pairs.
-     */
-    examples?: Record<string, any>;
-  }
+  export type __IAttribute = IJsonSchemaAttribute;
 
   /**
    * Configuration for OpenAPI v3.1 based LLM schema composition.
