@@ -161,7 +161,7 @@ export namespace ChatGptSchemaComposer {
       };
       if (OpenApiTypeChecker.isConstant(input)) insert(input.const);
       else if (OpenApiTypeChecker.isOneOf(input))
-        input.oneOf.forEach(visitConstant);
+        input.oneOf.forEach((s) => visitConstant(s as ILlmSchemaV3_1));
     };
     visit(schema);
     visitConstant(schema);

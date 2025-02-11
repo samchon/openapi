@@ -53,6 +53,56 @@ export type ILlmSchemaV3 =
   | ILlmSchemaV3.IOneOf;
 export namespace ILlmSchemaV3 {
   /**
+   * Configuration for OpenAPI v3.0 based LLM schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow constraint properties or not.
+     *
+     * If you configure this property to `false`, the schemas do not contain
+     * the constraint properties of below. Instead, below properties would be
+     * written to the {@link ILlmSchemaV3.__IAttribute.description} property
+     * as a comment string like `"@format uuid"`.
+     *
+     * This is because some LLM schema model like {@link IGeminiSchema}
+     * has banned such constraint, because their LLM cannot understand the
+     * constraint properties and occur the hallucination.
+     *
+     * Therefore, considering your LLM model's performance, capability,
+     * and the complexity of your parameter types, determine which is better,
+     * to allow the constraint properties or not.
+     *
+     * - {@link ILlmSchemaV3.INumber.minimum}
+     * - {@link ILlmSchemaV3.INumber.maximum}
+     * - {@link ILlmSchemaV3.INumber.multipleOf}
+     * - {@link ILlmSchemaV3.IString.minLength}
+     * - {@link ILlmSchemaV3.IString.maxLength}
+     * - {@link ILlmSchemaV3.IString.format}
+     * - {@link ILlmSchemaV3.IString.pattern}
+     * - {@link ILlmSchemaV3.IString.contentMediaType}
+     * - {@link ILlmSchemaV3.IString.default}
+     * - {@link ILlmSchemaV3.IArray.minItems}
+     * - {@link ILlmSchemaV3.IArray.maxItems}
+     * - {@link ILlmSchemaV3.IArray.unique}
+     *
+     * @default true
+     */
+    constraint: boolean;
+
+    /**
+     * Whether to allow recursive types or not.
+     *
+     * If allow, then how many times to repeat the recursive types.
+     *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
+     * @default 3
+     */
+    recursive: false | number;
+  }
+
+  /**
    * Type of the function parameters.
    *
    * `ILlmSchemaV3.IParameters` is a type defining a function's parameters
@@ -77,7 +127,12 @@ export namespace ILlmSchemaV3 {
   /**
    * Boolean type schema info.
    */
-  export interface IBoolean extends __ISignificant<"boolean"> {
+  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Default value.
      */
@@ -92,7 +147,12 @@ export namespace ILlmSchemaV3 {
   /**
    * Integer type schema info.
    */
-  export interface IInteger extends __ISignificant<"integer"> {
+  export interface IInteger extends IJsonSchemaAttribute.IInteger {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Default value.
      *
@@ -153,7 +213,12 @@ export namespace ILlmSchemaV3 {
   /**
    * Number type schema info.
    */
-  export interface INumber extends __ISignificant<"number"> {
+  export interface INumber extends IJsonSchemaAttribute.INumber {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Default value.
      */
@@ -205,7 +270,12 @@ export namespace ILlmSchemaV3 {
   /**
    * String type schema info.
    */
-  export interface IString extends __ISignificant<"string"> {
+  export interface IString extends IJsonSchemaAttribute.IString {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Default value.
      */
@@ -273,7 +343,12 @@ export namespace ILlmSchemaV3 {
   /**
    * Array type schema info.
    */
-  export interface IArray extends __ISignificant<"array"> {
+  export interface IArray extends IJsonSchemaAttribute.IArray {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Items type schema info.
      *
@@ -311,7 +386,12 @@ export namespace ILlmSchemaV3 {
   /**
    * Object type schema info.
    */
-  export interface IObject extends __ISignificant<"object"> {
+  export interface IObject extends IJsonSchemaAttribute.IObject {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Properties of the object.
      *
@@ -377,33 +457,6 @@ export namespace ILlmSchemaV3 {
   }
 
   /**
-   * Unknown type schema info.
-   *
-   * It means the type of the value is `any`.
-   */
-  export interface IUnknown extends __IAttribute {
-    /**
-     * Type is never be defined.
-     */
-    type?: undefined;
-  }
-
-  /**
-   * Null only type schema info.
-   */
-  export interface INullOnly extends __IAttribute {
-    /**
-     * Type is always `null`.
-     */
-    type: "null";
-
-    /**
-     * Default value.
-     */
-    default?: null;
-  }
-
-  /**
    * One of type schema info.
    *
    * `IOneOf` represents an union type of the TypeScript (`A | B | C`).
@@ -412,7 +465,7 @@ export namespace ILlmSchemaV3 {
    * defined `anyOf` instead of the `oneOf`, it has been forcibly converted
    * to `oneOf` type by {@link OpenApi.convert OpenAPI conversion}.
    */
-  export interface IOneOf extends __IAttribute {
+  export interface IOneOf extends IJsonSchemaAttribute {
     /**
      * List of the union types.
      */
@@ -420,7 +473,27 @@ export namespace ILlmSchemaV3 {
   }
 
   /**
+   * Null only type schema info.
+   */
+  export interface INullOnly extends IJsonSchemaAttribute.INull {
+    /**
+     * Default value.
+     */
+    default?: null;
+  }
+
+  /**
+   * Unknown type schema info.
+   *
+   * It means the type of the value is `any`.
+   */
+  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
+
+  /**
    * Significant attributes that can be applied to the most types.
+   *
+   * @deprecated
+   * @hidden
    */
   export interface __ISignificant<Type extends string> extends __IAttribute {
     /**
@@ -436,56 +509,9 @@ export namespace ILlmSchemaV3 {
 
   /**
    * Common attributes that can be applied to all types.
+   *
+   * @deprecated
+   * @hidden
    */
   export type __IAttribute = IJsonSchemaAttribute;
-
-  /**
-   * Configuration for OpenAPI v3.0 based LLM schema composition.
-   */
-  export interface IConfig {
-    /**
-     * Whether to allow constraint properties or not.
-     *
-     * If you configure this property to `false`, the schemas do not contain
-     * the constraint properties of below. Instead, below properties would be
-     * written to the {@link ILlmSchemaV3.__IAttribute.description} property
-     * as a comment string like `"@format uuid"`.
-     *
-     * This is because some LLM schema model like {@link IGeminiSchema}
-     * has banned such constraint, because their LLM cannot understand the
-     * constraint properties and occur the hallucination.
-     *
-     * Therefore, considering your LLM model's performance, capability,
-     * and the complexity of your parameter types, determine which is better,
-     * to allow the constraint properties or not.
-     *
-     * - {@link ILlmSchemaV3.INumber.minimum}
-     * - {@link ILlmSchemaV3.INumber.maximum}
-     * - {@link ILlmSchemaV3.INumber.multipleOf}
-     * - {@link ILlmSchemaV3.IString.minLength}
-     * - {@link ILlmSchemaV3.IString.maxLength}
-     * - {@link ILlmSchemaV3.IString.format}
-     * - {@link ILlmSchemaV3.IString.pattern}
-     * - {@link ILlmSchemaV3.IString.contentMediaType}
-     * - {@link ILlmSchemaV3.IString.default}
-     * - {@link ILlmSchemaV3.IArray.minItems}
-     * - {@link ILlmSchemaV3.IArray.maxItems}
-     * - {@link ILlmSchemaV3.IArray.unique}
-     *
-     * @default true
-     */
-    constraint: boolean;
-
-    /**
-     * Whether to allow recursive types or not.
-     *
-     * If allow, then how many times to repeat the recursive types.
-     *
-     * By the way, if the model is "chatgpt", the recursive types are always
-     * allowed without any limitation, due to it supports the reference type.
-     *
-     * @default 3
-     */
-    recursive: false | number;
-  }
 }

@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./structures/IJsonSchemaAttribute";
+
 /**
  * OpenAPI v3.1 definition.
  *
@@ -182,11 +184,12 @@ export namespace OpenApiV3_1 {
     | IJsonSchema.IArray
     | IJsonSchema.IObject
     | IJsonSchema.IReference
-    | IJsonSchema.IUnknown
-    | IJsonSchema.INull
+    | IJsonSchema.IRecursiveReference
     | IJsonSchema.IAllOf
     | IJsonSchema.IAnyOf
-    | IJsonSchema.IOneOf;
+    | IJsonSchema.IOneOf
+    | IJsonSchema.INull
+    | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
     export interface IMixed
       extends IConstant,
@@ -212,14 +215,17 @@ export namespace OpenApiV3_1 {
       enum?: any[];
     }
 
-    export interface IConstant extends __IAttribute {
+    export interface IConstant extends IJsonSchemaAttribute {
       const: boolean | number | string;
+      nullable?: boolean;
     }
-    export interface IBoolean extends __ISignificant<"boolean"> {
+    export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
+      nullable?: boolean;
       default?: boolean | null;
       enum?: Array<boolean | null>;
     }
-    export interface IInteger extends __ISignificant<"integer"> {
+    export interface IInteger extends IJsonSchemaAttribute.IInteger {
+      nullable?: boolean;
       /** @type int64 */ default?: number | null;
       /** @type int64 */ enum?: Array<number | null>;
       /** @type int64 */ minimum?: number;
@@ -232,7 +238,8 @@ export namespace OpenApiV3_1 {
        */
       multipleOf?: number;
     }
-    export interface INumber extends __ISignificant<"number"> {
+    export interface INumber extends IJsonSchemaAttribute.INumber {
+      nullable?: boolean;
       default?: number | null;
       enum?: Array<number | null>;
       minimum?: number;
@@ -241,8 +248,8 @@ export namespace OpenApiV3_1 {
       exclusiveMaximum?: number | boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
     }
-    export interface IString extends __ISignificant<"string"> {
-      contentMediaType?: string;
+    export interface IString extends IJsonSchemaAttribute.IString {
+      nullable?: boolean;
       default?: string | null;
       enum?: Array<string | null>;
       format?:
@@ -271,23 +278,42 @@ export namespace OpenApiV3_1 {
         | "relative-json-pointer"
         | (string & {});
       pattern?: string;
+      contentMediaType?: string;
       /** @type uint64 */ minLength?: number;
       /** @type uint64 */ maxLength?: number;
     }
 
-    export interface IUnknown extends __IAttribute {
-      type?: undefined;
+    export interface IObject extends IJsonSchemaAttribute.IObject {
+      nullable?: boolean;
+      properties?: Record<string, IJsonSchema>;
+      required?: string[];
+      additionalProperties?: boolean | IJsonSchema;
+      maxProperties?: number;
+      minProperties?: number;
     }
-    export interface INull extends __ISignificant<"null"> {
-      default?: null;
+    export interface IArray extends IJsonSchemaAttribute.IArray {
+      nullable?: boolean;
+      items?: IJsonSchema | IJsonSchema[];
+      prefixItems?: IJsonSchema[];
+      uniqueItems?: boolean;
+      additionalItems?: boolean | IJsonSchema;
+      /** @type uint64 */ minItems?: number;
+      /** @type uint64 */ maxItems?: number;
     }
-    export interface IAllOf extends __IAttribute {
+    export interface IReference<Key = string> extends IJsonSchemaAttribute {
+      $ref: Key;
+    }
+    export interface IRecursiveReference extends IJsonSchemaAttribute {
+      $recursiveRef: string;
+    }
+
+    export interface IAllOf extends IJsonSchemaAttribute {
       allOf: IJsonSchema[];
     }
-    export interface IAnyOf extends __IAttribute {
+    export interface IAnyOf extends IJsonSchemaAttribute {
       anyOf: IJsonSchema[];
     }
-    export interface IOneOf extends __IAttribute {
+    export interface IOneOf extends IJsonSchemaAttribute {
       oneOf: IJsonSchema[];
       discriminator?: IOneOf.IDiscriminator;
     }
@@ -298,39 +324,28 @@ export namespace OpenApiV3_1 {
       }
     }
 
-    export interface IArray extends __ISignificant<"array"> {
-      items?: IJsonSchema | IJsonSchema[];
-      prefixItems?: IJsonSchema[];
-      uniqueItems?: boolean;
-      additionalItems?: boolean | IJsonSchema;
-      /** @type uint64 */ minItems?: number;
-      /** @type uint64 */ maxItems?: number;
+    export interface INull extends IJsonSchemaAttribute.INull {
+      default?: null;
     }
-    export interface IObject extends __ISignificant<"object"> {
-      properties?: Record<string, IJsonSchema>;
-      required?: string[];
-      additionalProperties?: boolean | IJsonSchema;
-      maxProperties?: number;
-      minProperties?: number;
-    }
-    export interface IReference<Key = string> extends __IAttribute {
-      $ref: Key;
-    }
-    export interface IRecursiveReference extends __IAttribute {
-      $recursiveRef: string;
+    export interface IUnknown extends IJsonSchemaAttribute.IUnknown {
+      type?: undefined;
+      default?: any;
     }
 
+    /**
+     * @deprecated
+     * @hidden
+     */
     export interface __ISignificant<Type extends string> extends __IAttribute {
       type: Type;
       nullable?: boolean;
     }
-    export interface __IAttribute {
-      title?: string;
-      description?: string;
-      deprecated?: boolean;
-      example?: any;
-      examples?: Record<string, any>;
-    }
+
+    /**
+     * @deprecated
+     * @hidden
+     */
+    export type __IAttribute = IJsonSchemaAttribute;
   }
 
   export type ISecurityScheme =

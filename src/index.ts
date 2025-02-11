@@ -6,7 +6,6 @@ export * from "./SwaggerV2";
 export * from "./OpenApiV3";
 export * from "./OpenApiV3_1";
 
-export * from "./structures/IJsonSchemaAttribute";
 export * from "./utils/OpenApiTypeChecker";
 
 //----
@@ -25,6 +24,7 @@ export * from "./HttpMigration";
 // LLM
 //----
 export * from "./typings/IResult";
+export * from "./structures/IJsonSchemaAttribute";
 export * from "./structures/IOpenApiSchemaError";
 
 export * from "./structures/IHttpLlmApplication";
