@@ -4,6 +4,7 @@ on:
     branches:
       - master
     paths:
+      - README.md
       - 'src/**'
       - 'website/**'
       - 'package.json'

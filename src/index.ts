@@ -6,6 +6,7 @@ export * from "./SwaggerV2";
 export * from "./OpenApiV3";
 export * from "./OpenApiV3_1";
 
+export * from "./structures/IJsonSchemaAttribute";
 export * from "./utils/OpenApiTypeChecker";
 
 //----
