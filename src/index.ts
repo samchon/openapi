@@ -25,6 +25,7 @@ export * from "./HttpMigration";
 // LLM
 //----
 export * from "./typings/IResult";
+export * from "./structures/IJsonSchemaAttribute";
 export * from "./structures/IOpenApiSchemaError";
 
 export * from "./structures/IHttpLlmApplication";
