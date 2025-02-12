@@ -16,16 +16,17 @@ export namespace EndpointUtil {
       .map((str) => normalize(str.trim()))
       .filter((str) => !!str.length);
 
-  export const reJoinWithDecimalParameters = (path: string) =>
-    path
+  export const reJoinWithDecimalParameters = (path: string) => {
+    path = path
       .split("/")
-      .filter((str) => !!str.length)
       .map((str) =>
         str[0] === "{" && str[str.length - 1] === "}"
           ? `:${str.substring(1, str.length - 1)}`
           : str,
       )
       .join("/");
+    return `${path.startsWith("/") ? "" : "/"}${path}`;
+  };
 
   export const normalize = (str: string): string => {
     str = str.split(".").join("_").split("-").join("_").trim();

@@ -86,7 +86,7 @@ const _Propagate = async (
     props.route.path[0] !== "/"
       ? `/${getPath(props)}`
       : getPath(props);
-  const url: URL = new URL(`${props.connection.host}/${path}`);
+  const url: URL = new URL(`${props.connection.host}${path}`);
 
   const response: Response = await (props.connection.fetch ?? fetch)(url, init);
   const status: number = response.status;
