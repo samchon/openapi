@@ -1,8 +1,10 @@
 const typescript = require("@rollup/plugin-typescript");
 const terser = require("@rollup/plugin-terser");
+const autoExternal = require("rollup-plugin-auto-external");
+const { globSync } = require("tinyglobby");
 
 module.exports = {
-  input: "./src/index.ts",
+  input: globSync("./src/**/*.ts"),
   output: {
     dir: "lib",
     format: "esm",
@@ -12,6 +14,7 @@ module.exports = {
     preserveModulesRoot: "src",
   },
   plugins: [
+    autoExternal(),
     typescript({
       tsconfig: "tsconfig.json",
       module: "ES2020",
