@@ -81,12 +81,12 @@ const _Propagate = async (
     ) as any;
 
   // DO REQUEST
-  const path: string =
-    props.connection.host[props.connection.host.length - 1] !== "/" &&
-    props.route.path[0] !== "/"
+  const resolvedPath: string =
+    props.connection.host.endsWith("/") === false &&
+    props.route.emendedPath.startsWith("/") === false
       ? `/${getPath(props)}`
       : getPath(props);
-  const url: URL = new URL(`${props.connection.host}${path}`);
+  const url: URL = new URL(`${props.connection.host}${resolvedPath}`);
 
   const response: Response = await (props.connection.fetch ?? fetch)(url, init);
   const status: number = response.status;
