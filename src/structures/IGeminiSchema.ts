@@ -47,7 +47,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link OpenApi.IJsonSchema.IString.default}
  * - {@link OpenApi.IJsonSchema.IArray.minItems}
  * - {@link OpenApi.IJsonSchema.IArray.maxItems}
- * - {@link OpenApi.IJsonSchema.IArray.unique}
+ * - {@link OpenApi.IJsonSchema.IArray.uniqueItems}
  *
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/function-calling
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
