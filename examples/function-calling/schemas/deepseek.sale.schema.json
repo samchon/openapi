@@ -13,22 +13,23 @@
         "status": {
           "title": "Initial status of the sale",
           "description": "Initial status of the sale.\n\n`null` or `undefined`: No restriction\n`paused`: Starts with {@link ITimestamps.paused_at paused} status\n`suspended`: Starts with {@link ITimestamps.suspended_at suspended} status",
-          "oneOf": [
+          "anyOf": [
             {
               "type": "null"
             },
             {
-              "const": "paused"
-            },
-            {
-              "const": "suspended"
+              "type": "string",
+              "enum": [
+                "paused",
+                "suspended"
+              ]
             }
           ]
         },
         "opened_at": {
           "title": "Opening time of the sale",
           "description": "Opening time of the sale.",
-          "oneOf": [
+          "anyOf": [
             {
               "type": "null"
             },
@@ -40,7 +41,7 @@
         "closed_at": {
           "title": "Closing time of the sale",
           "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever.",
-          "oneOf": [
+          "anyOf": [
             {
               "type": "null"
             },
@@ -59,16 +60,11 @@
             },
             "format": {
               "description": "Description of the current {@link IShoppingSaleContent} type:\n\n> Content information of sale snapshot.\n> \n> `IShoppingSaleContent` is an entity embodies the description contents\n> of {@link IShoppingSale}.",
-              "oneOf": [
-                {
-                  "const": "html"
-                },
-                {
-                  "const": "md"
-                },
-                {
-                  "const": "txt"
-                }
+              "type": "string",
+              "enum": [
+                "html",
+                "md",
+                "txt"
               ]
             },
             "body": {
@@ -82,29 +78,26 @@
                 "properties": {
                   "name": {
                     "title": "File name, except extension",
-                    "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
-                    "type": "string",
-                    "maxLength": 255
+                    "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
+                    "type": "string"
                   },
                   "extension": {
                     "title": "Extension",
                     "description": "Extension.\n\nPossible to omit like `README` case.",
-                    "oneOf": [
+                    "anyOf": [
                       {
                         "type": "null"
                       },
                       {
                         "type": "string",
-                        "minLength": 1,
-                        "maxLength": 8
+                        "description": "@minLength 1\n@maxLength 8"
                       }
                     ]
                   },
                   "url": {
                     "title": "URL path of the real file",
-                    "description": "URL path of the real file.",
-                    "type": "string",
-                    "format": "uri"
+                    "description": "URL path of the real file.\n\n\n@format uri",
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -122,29 +115,26 @@
                 "properties": {
                   "name": {
                     "title": "File name, except extension",
-                    "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
-                    "type": "string",
-                    "maxLength": 255
+                    "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
+                    "type": "string"
                   },
                   "extension": {
                     "title": "Extension",
                     "description": "Extension.\n\nPossible to omit like `README` case.",
-                    "oneOf": [
+                    "anyOf": [
                       {
                         "type": "null"
                       },
                       {
                         "type": "string",
-                        "minLength": 1,
-                        "maxLength": 8
+                        "description": "@minLength 1\n@maxLength 8"
                       }
                     ]
                   },
                   "url": {
                     "title": "URL path of the real file",
-                    "description": "URL path of the real file.",
-                    "type": "string",
-                    "format": "uri"
+                    "description": "URL path of the real file.\n\n\n@format uri",
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -165,7 +155,7 @@
         },
         "channels": {
           "title": "List of channels and categories",
-          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.",
+          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.\n\n\n@minItems 1",
           "type": "array",
           "items": {
             "description": "Creation information of the target channel (and categories) of sale to sell.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleChannel.ICreate} type:\n\n> Creation information of the target channel (and categories) of sale to sell.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleChannel} type:\n\n> Target channel (and categories) of sale to sell.\n> \n> `IShoppingSaleChannel` is an entity that expresses through which\n> {@link IShoppingChannel channel} a listing {@link IShoppingSale} is sold.\n> \n> Also, if {@link IShoppingChannelCategory categories} are specified, it also\n> means that the sale be sold. Otherwise, none of the categories of the channel\n> being specified, it means that every categories of the channel is listing the\n> target sale.",
@@ -189,12 +179,11 @@
               "code",
               "category_codes"
             ]
-          },
-          "minItems": 1
+          }
         },
         "units": {
           "title": "List of units",
-          "description": "List of units.\n\nRecords about individual product composition information that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.",
+          "description": "List of units.\n\nRecords about individual product composition information that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1",
           "type": "array",
           "items": {
             "description": "Creation information of sale unit.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnit.ICreate} type:\n\n> Creation information of sale unit.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnit} type:\n\n> Product composition information handled in the sale.\n> \n> `IShoppingSaleUnit` is an entity that embodies the \"individual product\"\n> information handled in the {@link IShoppingSale sale}.\n> \n> For reference, the reason why `IShoppingSaleUnit` is separated from\n> {@link IShoppingSaleSnapshot} by an algebraic relationship of 1: N is because\n> there are some cases where multiple products are sold in one listing. This is\n> the case with so-called \"bundled products\".\n> \n> - Bundle from regular product (Mackbook Set)\n>   - Main Body\n>   - Keyboard\n>   - Mouse\n>   - Apple Care (Free A/S Voucher)\n> \n> And again, `IShoppingSaleUnit` does not in itself refer to the\n> {@link IShoppingSaleUnitStock final stock} that the\n> {@link IShoppingCustomer customer} will {@link IShoppingOrder purchase}.\n> The final stock can be found only after selecting all given\n> {@link IShoppingSaleUnitOption options} and their\n> {@link IShoppingSaleUnitOptionCandidate candidate values}.\n> \n> For example, even if you buy a Macbook, the final stocks are determined only\n> after selecting all the options (CPU / RAM / SSD), etc.",
@@ -211,7 +200,10 @@
                     "type": {
                       "title": "Discriminant for the type of selectable option",
                       "description": "Discriminant for the type of selectable option.",
-                      "const": "select"
+                      "type": "string",
+                      "enum": [
+                        "select"
+                      ]
                     },
                     "name": {
                       "title": "Represents the name of the option",
@@ -225,7 +217,7 @@
                     },
                     "candidates": {
                       "title": "List of candidate values",
-                      "description": "List of candidate values.",
+                      "description": "List of candidate values.\n\n\n@minItems 1",
                       "type": "array",
                       "items": {
                         "description": "Creation information of the candidate value.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitOptionCandidate.ICreate} type:\n\n> Creation information of the candidate value.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitOptionCandidate} type:\n\n> Selectable candidate values within an option.\n> \n> `IShoppingSaleUnitOptionCandidate` is an entity that represents individual\n> candidate values that can be selected from\n> {@link IShoppingSaleUnitSelectableOption options of the \"select\" type}.\n> \n> - Example\n>   - RAM: 8GB, 16GB, 32GB\n>   - GPU: RTX 3060, RTX 4080, TESLA\n>   - License: Private, Commercial, Educatiion\n> \n> By the way, if belonged option is not \"select\" type, this entity never\n> being used.",
@@ -240,8 +232,7 @@
                         "required": [
                           "name"
                         ]
-                      },
-                      "minItems": 1
+                      }
                     }
                   },
                   "required": [
@@ -254,7 +245,7 @@
               },
               "stocks": {
                 "title": "List of final stocks",
-                "description": "List of final stocks.",
+                "description": "List of final stocks.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
                   "description": "Creation information of the stock.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitStock.ICreate} type:\n\n> Creation information of the stock.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStock} type:\n\n> Final component information on units for sale.\n> \n> `IShoppingSaleUnitStock` is a subsidiary entity of {@link IShoppingSaleUnit}\n> that represents a product catalog for sale, and is a kind of final stock that is\n> constructed by selecting all {@link IShoppingSaleUnitSelectableOption options}\n> (variable \"select\" type) and their\n> {@link IShoppingSaleUnitOptionCandidate candidate} values in the belonging unit.\n> It is the \"good\" itself that customers actually purchase.\n> \n> - Product Name) MacBook\n>   - Options\n>     - CPU: { i3, i5, i7, i9 }\n>     - RAM: { 8GB, 16GB, 32GB, 64GB, 96GB }\n>     - SSD: { 256GB, 512GB, 1TB }\n>   - Number of final stocks: 4 * 5 * 3 = 60\n> \n> For reference, the total number of `IShoppingSaleUnitStock` records in an\n> attribution unit can be obtained using Cartesian Product. In other words, the\n> value obtained by multiplying all the candidate values that each\n> (variable \"select\" type) option can have by the number of cases is the total\n> number of final stocks in the unit.\n> \n> Of course, without a single variable \"select\" type option, the final stocks\n> count in the unit is only 1.",
@@ -272,15 +263,13 @@
                       "properties": {
                         "nominal": {
                           "title": "Nominal price",
-                          "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.",
-                          "type": "number",
-                          "minimum": 0
+                          "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.\n\n\n@minimum 0",
+                          "type": "number"
                         },
                         "real": {
                           "title": "Real price to pay",
-                          "description": "Real price to pay.",
-                          "type": "number",
-                          "minimum": 0
+                          "description": "Real price to pay.\n\n\n@minimum 0",
+                          "type": "number"
                         }
                       },
                       "required": [
@@ -290,9 +279,8 @@
                     },
                     "quantity": {
                       "title": "Initial inventory quantity",
-                      "description": "Initial inventory quantity.",
-                      "type": "integer",
-                      "minimum": 1
+                      "description": "Initial inventory quantity.\n\n\n@minimum 1",
+                      "type": "integer"
                     },
                     "choices": {
                       "title": "List of choices",
@@ -324,8 +312,7 @@
                     "quantity",
                     "choices"
                   ]
-                },
-                "minItems": 1
+                }
               },
               "name": {
                 "title": "Representative name of the unit",
@@ -350,8 +337,7 @@
               "required",
               "primary"
             ]
-          },
-          "minItems": 1
+          }
         },
         "tags": {
           "title": "List of search tags",
