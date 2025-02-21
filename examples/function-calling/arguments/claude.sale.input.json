@@ -1,5 +1,15 @@
 {
   "section_code": "general",
+  "channels": [
+    {
+      "code": "samchon",
+      "category_codes": [
+        "2in1_laptops",
+        "tablets",
+        "windows_tablets"
+      ]
+    }
+  ],
   "opened_at": null,
   "closed_at": null,
   "content": {
@@ -25,22 +35,12 @@
     ],
     "files": []
   },
-  "channels": [
-    {
-      "code": "samchon",
-      "category_codes": [
-        "electronics",
-        "laptops",
-        "2in1_laptops"
-      ]
-    }
-  ],
   "tags": [
     "surface",
-    "laptop",
     "tablet",
     "2-in-1",
-    "microsoft"
+    "microsoft",
+    "windows"
   ],
   "units": [
     {
@@ -99,7 +99,7 @@
       ],
       "stocks": [
         {
-          "name": "i3/8GB/128GB",
+          "name": "Surface Pro 9 (i3/8GB/128GB)",
           "price": {
             "nominal": 1000000,
             "real": 899000
@@ -121,7 +121,7 @@
           ]
         },
         {
-          "name": "i3/16GB/256GB",
+          "name": "Surface Pro 9 (i3/16GB/256GB)",
           "price": {
             "nominal": 1200000,
             "real": 1099000
@@ -143,7 +143,7 @@
           ]
         },
         {
-          "name": "i3/16GB/512GB",
+          "name": "Surface Pro 9 (i3/16GB/512GB)",
           "price": {
             "nominal": 1400000,
             "real": 1299000
@@ -165,7 +165,7 @@
           ]
         },
         {
-          "name": "i5/16GB/256GB",
+          "name": "Surface Pro 9 (i5/16GB/256GB)",
           "price": {
             "nominal": 1500000,
             "real": 1399000
@@ -187,7 +187,7 @@
           ]
         },
         {
-          "name": "i5/32GB/512GB",
+          "name": "Surface Pro 9 (i5/32GB/512GB)",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -209,7 +209,7 @@
           ]
         },
         {
-          "name": "i7/16GB/512GB",
+          "name": "Surface Pro 9 (i7/16GB/512GB)",
           "price": {
             "nominal": 1800000,
             "real": 1699000
@@ -231,7 +231,7 @@
           ]
         },
         {
-          "name": "i7/32GB/512GB",
+          "name": "Surface Pro 9 (i7/32GB/512GB)",
           "price": {
             "nominal": 2000000,
             "real": 1899000
