@@ -50,4 +50,10 @@ export namespace ClaudeSchemaComposer {
       LlmSchemaV3_1Composer.separateParameters(props);
     return separated as any as ILlmFunction.ISeparated<"claude">;
   };
+
+  export const invert = (props: {
+    components: OpenApi.IComponents;
+    schema: IClaudeSchema;
+    $defs: Record<string, IClaudeSchema>;
+  }): OpenApi.IJsonSchema => LlmSchemaV3_1Composer.invert(props);
 }

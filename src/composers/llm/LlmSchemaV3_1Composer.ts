@@ -7,6 +7,7 @@ import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
 import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
+import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3_1Composer {
@@ -15,6 +16,9 @@ export namespace LlmSchemaV3_1Composer {
    */
   export const IS_DEFS = true;
 
+  /* -----------------------------------------------------------
+    CONVERTERS
+  ----------------------------------------------------------- */
   export const parameters = (props: {
     config: ILlmSchemaV3_1.IConfig;
     components: OpenApi.IComponents;
@@ -328,6 +332,9 @@ export namespace LlmSchemaV3_1Composer {
     };
   };
 
+  /* -----------------------------------------------------------
+    SEPARATORS
+  ----------------------------------------------------------- */
   export const separateParameters = (props: {
     predicate: (schema: ILlmSchemaV3_1) => boolean;
     parameters: ILlmSchemaV3_1.IParameters;
@@ -553,5 +560,69 @@ export namespace LlmSchemaV3_1Composer {
         (key) => s.properties?.[key] !== undefined,
       );
     return s;
+  };
+
+  /* -----------------------------------------------------------
+    INVERTERS
+  ----------------------------------------------------------- */
+  export const invert = (props: {
+    components: OpenApi.IComponents;
+    schema: ILlmSchemaV3_1;
+    $defs: Record<string, ILlmSchemaV3_1>;
+  }): OpenApi.IJsonSchema => {
+    const next = (schema: ILlmSchemaV3_1): OpenApi.IJsonSchema =>
+      invert({
+        components: props.components,
+        $defs: props.$defs,
+        schema,
+      });
+    if (LlmTypeCheckerV3_1.isArray(props.schema))
+      return {
+        ...LlmDescriptionInverter.array(props.schema.description ?? ""),
+        ...props.schema,
+        items: next(props.schema.items),
+      };
+    else if (LlmTypeCheckerV3_1.isObject(props.schema))
+      return {
+        ...props.schema,
+        properties: props.schema.properties
+          ? Object.fromEntries(
+              Object.entries(props.schema.properties).map(([key, value]) => [
+                key,
+                next(value),
+              ]),
+            )
+          : undefined,
+        additionalProperties:
+          typeof props.schema.additionalProperties === "object" &&
+          props.schema.additionalProperties !== null
+            ? next(props.schema.additionalProperties)
+            : props.schema.additionalProperties,
+      };
+    else if (LlmTypeCheckerV3_1.isReference(props.schema)) {
+      const key: string = props.schema.$ref.split("#/$defs/").at(-1) ?? "";
+      if (props.components.schemas?.[key] === undefined) {
+        props.components.schemas ??= {};
+        props.components.schemas[key] = {};
+        props.components.schemas[key] = next(props.$defs[key] ?? {});
+      }
+      return {
+        ...props.schema,
+        $ref: `#/components/schemas/${key}`,
+      };
+    } else if (
+      LlmTypeCheckerV3_1.isInteger(props.schema) ||
+      LlmTypeCheckerV3_1.isNumber(props.schema)
+    )
+      return {
+        ...LlmDescriptionInverter.numeric(props.schema.description ?? ""),
+        ...props.schema,
+      };
+    else if (LlmTypeCheckerV3_1.isString(props.schema))
+      return {
+        ...LlmDescriptionInverter.string(props.schema.description ?? ""),
+        ...props.schema,
+      };
+    return props.schema;
   };
 }

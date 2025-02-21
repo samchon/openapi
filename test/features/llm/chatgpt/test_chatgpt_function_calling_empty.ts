@@ -3,8 +3,8 @@ import OpenAI from "openai";
 
 import { TestGlobal } from "../../../TestGlobal";
 
-export const test_chatgpt_function_calling_empty = async (): Promise<void> => {
-  if (TestGlobal.env.CHATGPT_API_KEY === undefined) return;
+export const test_chatgpt_function_calling_empty = async () => {
+  if (TestGlobal.env.CHATGPT_API_KEY === undefined) return false;
 
   const client: OpenAI = new OpenAI({ apiKey: TestGlobal.env.CHATGPT_API_KEY });
   const completion: OpenAI.ChatCompletion =

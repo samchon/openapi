@@ -45,4 +45,10 @@ export namespace LlamaSchemaComposer {
     LlmSchemaV3_1Composer.separateParameters(
       props,
     ) as any as ILlmFunction.ISeparated<"llama">;
+
+  export const invert = (props: {
+    components: OpenApi.IComponents;
+    schema: ILlamaSchema;
+    $defs: Record<string, ILlamaSchema>;
+  }): OpenApi.IJsonSchema => LlmSchemaV3_1Composer.invert(props);
 }

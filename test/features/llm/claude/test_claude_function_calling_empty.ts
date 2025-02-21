@@ -3,8 +3,8 @@ import { TestValidator } from "@nestia/e2e";
 
 import { TestGlobal } from "../../../TestGlobal";
 
-export const test_claude_function_calling_empty = async (): Promise<void> => {
-  if (TestGlobal.env.CLAUDE_API_KEY === undefined) return;
+export const test_claude_function_calling_empty = async () => {
+  if (TestGlobal.env.CLAUDE_API_KEY === undefined) return false;
 
   const client: Anthropic = new Anthropic({
     apiKey: TestGlobal.env.CLAUDE_API_KEY,

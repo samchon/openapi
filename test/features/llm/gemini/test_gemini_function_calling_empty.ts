@@ -8,8 +8,8 @@ import { TestValidator } from "@nestia/e2e";
 
 import { TestGlobal } from "../../../TestGlobal";
 
-export const test_gemini_function_calling_empty = async (): Promise<void> => {
-  if (TestGlobal.env.GEMINI_API_KEY === undefined) return;
+export const test_gemini_function_calling_empty = async () => {
+  if (TestGlobal.env.GEMINI_API_KEY === undefined) return false;
 
   const model: GenerativeModel = new GoogleGenerativeAI(
     TestGlobal.env.GEMINI_API_KEY,

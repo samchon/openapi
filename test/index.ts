@@ -30,7 +30,8 @@ const main = async (): Promise<void> => {
     onComplete: (exec) => {
       const trace = (str: string) =>
         console.log(`  - ${chalk.green(exec.name)}: ${str}`);
-      if (exec.error === null) {
+      if (exec.value === false) trace(chalk.gray("Pass"));
+      else if (exec.error === null) {
         const elapsed: number =
           new Date(exec.completed_at).getTime() -
           new Date(exec.started_at).getTime();

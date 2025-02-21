@@ -7,6 +7,7 @@ import { IResult } from "../../typings/IResult";
 import { ChatGptTypeChecker } from "../../utils/ChatGptTypeChecker";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ChatGptSchemaComposer {
@@ -15,6 +16,9 @@ export namespace ChatGptSchemaComposer {
    */
   export const IS_DEFS = true;
 
+  /* -----------------------------------------------------------
+    CONVERTERS
+  ----------------------------------------------------------- */
   export const parameters = (props: {
     config: IChatGptSchema.IConfig;
     components: OpenApi.IComponents;
@@ -189,6 +193,9 @@ export namespace ChatGptSchemaComposer {
     };
   };
 
+  /* -----------------------------------------------------------
+    SEPARATORS
+  ----------------------------------------------------------- */
   export const separateParameters = (props: {
     predicate: (schema: IChatGptSchema) => boolean;
     parameters: IChatGptSchema.IParameters;
@@ -411,5 +418,120 @@ export namespace ChatGptSchemaComposer {
   ): IChatGptSchema.IObject => {
     s.required = s.required.filter((key) => s.properties?.[key] !== undefined);
     return s;
+  };
+
+  /* -----------------------------------------------------------
+    INVERTERS
+  ----------------------------------------------------------- */
+  export const invert = (props: {
+    components: OpenApi.IComponents;
+    schema: IChatGptSchema;
+    $defs: Record<string, IChatGptSchema>;
+  }): OpenApi.IJsonSchema => {
+    const union: OpenApi.IJsonSchema[] = [];
+    const attribute: OpenApi.IJsonSchema.__IAttribute = {
+      title: props.schema.title,
+      description: props.schema.description,
+      ...Object.fromEntries(
+        Object.entries(props.schema).filter(
+          ([key, value]) => key.startsWith("x-") && value !== undefined,
+        ),
+      ),
+      example: props.schema.example,
+      examples: props.schema.examples,
+    };
+
+    const next = (schema: IChatGptSchema): OpenApi.IJsonSchema =>
+      invert({
+        components: props.components,
+        $defs: props.$defs,
+        schema,
+      });
+    const visit = (schema: IChatGptSchema): void => {
+      if (ChatGptTypeChecker.isArray(schema))
+        union.push({
+          ...LlmDescriptionInverter.array(schema.description ?? ""),
+          ...schema,
+          items: next(schema.items),
+        });
+      else if (ChatGptTypeChecker.isObject(schema))
+        union.push({
+          ...schema,
+          properties: Object.fromEntries(
+            Object.entries(schema.properties).map(([key, value]) => [
+              key,
+              next(value),
+            ]),
+          ),
+          additionalProperties:
+            typeof schema.additionalProperties === "object" &&
+            schema.additionalProperties !== null
+              ? next(schema.additionalProperties)
+              : schema.additionalProperties,
+        });
+      else if (ChatGptTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
+      else if (ChatGptTypeChecker.isReference(schema)) {
+        const key: string = schema.$ref.split("#/$defs/")[1];
+        if (props.components.schemas?.[key] === undefined) {
+          props.components.schemas ??= {};
+          props.components.schemas[key] = {};
+          props.components.schemas[key] = next(props.$defs[key] ?? {});
+        }
+        union.push({
+          ...schema,
+          $ref: `#/components/schemas/${key}`,
+        });
+      } else if (ChatGptTypeChecker.isBoolean(schema))
+        if (!!schema.enum?.length)
+          schema.enum.forEach((v) =>
+            union.push({
+              const: v,
+            }),
+          );
+        else union.push(schema);
+      else if (
+        ChatGptTypeChecker.isInteger(schema) ||
+        ChatGptTypeChecker.isNumber(schema)
+      )
+        if (!!schema.enum?.length)
+          schema.enum.forEach((v) =>
+            union.push({
+              const: v,
+            }),
+          );
+        else
+          union.push({
+            ...LlmDescriptionInverter.numeric(schema.description ?? ""),
+            ...schema,
+            ...{ enum: undefined },
+          });
+      else if (ChatGptTypeChecker.isString(schema))
+        if (!!schema.enum?.length)
+          schema.enum.forEach((v) =>
+            union.push({
+              const: v,
+            }),
+          );
+        else
+          union.push({
+            ...LlmDescriptionInverter.string(schema.description ?? ""),
+            ...schema,
+            ...{ enum: undefined },
+          });
+      else
+        union.push({
+          ...schema,
+        });
+    };
+    visit(props.schema);
+
+    return {
+      ...(union.length === 0
+        ? { type: undefined }
+        : union.length === 1
+          ? { ...union[0] }
+          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
+      ...attribute,
+    };
   };
 }

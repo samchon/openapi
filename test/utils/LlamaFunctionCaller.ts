@@ -30,8 +30,8 @@ export namespace LlamaFunctionCaller {
 
   export const test = async <Model extends ILlmSchema.Model>(
     props: IProps<Model>,
-  ): Promise<void> => {
-    if (TestGlobal.env.LLAMA_API_KEY === undefined) return;
+  ) => {
+    if (TestGlobal.env.LLAMA_API_KEY === undefined) return false;
 
     let result: IValidation<any> | undefined = undefined;
     for (let i: number = 0; i < 3; ++i) {
