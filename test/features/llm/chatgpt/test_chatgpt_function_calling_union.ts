@@ -4,7 +4,7 @@ import typia from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { ChatGptFunctionCaller } from "../../../utils/ChatGptFunctionCaller";
 
-export const test_chatgpt_function_calling_union = (): Promise<void> =>
+export const test_chatgpt_function_calling_union = () =>
   ChatGptFunctionCaller.test({
     config: {
       reference: false,

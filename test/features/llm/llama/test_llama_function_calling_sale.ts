@@ -6,7 +6,7 @@ import { IShoppingSale } from "../../../structures/IShoppingSale";
 import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 import { ShoppingSalePrompt } from "../../../utils/ShoppingSalePrompt";
 
-export const test_llama_function_calling_sale = async (): Promise<void> =>
+export const test_llama_function_calling_sale = async () =>
   LlamaFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     ...ShoppingSalePrompt.schema(),

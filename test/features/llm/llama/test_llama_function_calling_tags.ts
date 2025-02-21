@@ -4,7 +4,7 @@ import typia, { tags } from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 
-export const test_llama_function_calling_tags = (): Promise<void> =>
+export const test_llama_function_calling_tags = () =>
   LlamaFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     name: "reserve",

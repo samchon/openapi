@@ -4,7 +4,7 @@ import typia, { tags } from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { DeepSeekFunctionCaller } from "../../../utils/DeepSeekFunctionCaller";
 
-export const test_deepseek_function_calling_tags = (): Promise<void> =>
+export const test_deepseek_function_calling_tags = () =>
   DeepSeekFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "chatgpt",
     name: "reserve",

@@ -6,7 +6,7 @@ import { IShoppingSale } from "../../../structures/IShoppingSale";
 import { ChatGptFunctionCaller } from "../../../utils/ChatGptFunctionCaller";
 import { ShoppingSalePrompt } from "../../../utils/ShoppingSalePrompt";
 
-export const test_chatgpt_function_calling_sale = async (): Promise<void> =>
+export const test_chatgpt_function_calling_sale = async () =>
   ChatGptFunctionCaller.test({
     config: {
       reference: process.argv.includes("--reference"),

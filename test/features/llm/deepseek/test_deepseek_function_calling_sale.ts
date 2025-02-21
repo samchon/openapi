@@ -6,7 +6,7 @@ import { IShoppingSale } from "../../../structures/IShoppingSale";
 import { DeepSeekFunctionCaller } from "../../../utils/DeepSeekFunctionCaller";
 import { ShoppingSalePrompt } from "../../../utils/ShoppingSalePrompt";
 
-export const test_deepseek_function_calling_sale = async (): Promise<void> =>
+export const test_deepseek_function_calling_sale = async () =>
   DeepSeekFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "chatgpt",
     ...ShoppingSalePrompt.schema(),

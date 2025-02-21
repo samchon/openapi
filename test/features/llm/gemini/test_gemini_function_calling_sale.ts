@@ -6,8 +6,8 @@ import { IShoppingSale } from "../../../structures/IShoppingSale";
 import { GeminiFunctionCaller } from "../../../utils/GeminiFunctionCaller";
 import { ShoppingSalePrompt } from "../../../utils/ShoppingSalePrompt";
 
-export const test_gemini_function_calling_sale = async (): Promise<void> =>
-  await GeminiFunctionCaller.test({
+export const test_gemini_function_calling_sale = async () =>
+  GeminiFunctionCaller.test({
     config: {
       recursive: 3,
     },

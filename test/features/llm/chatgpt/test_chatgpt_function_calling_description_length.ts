@@ -2,8 +2,8 @@ import typia from "typia";
 
 import { ChatGptFunctionCaller } from "../../../utils/ChatGptFunctionCaller";
 
-export const test_chatgpt_function_calling_description_length = async () => {
-  await ChatGptFunctionCaller.test({
+export const test_chatgpt_function_calling_description_length = () =>
+  ChatGptFunctionCaller.test({
     config: {
       reference: true,
     },
@@ -25,7 +25,6 @@ export const test_chatgpt_function_calling_description_length = async () => {
       typia.assert<IPerson>(input);
     },
   });
-};
 
 interface IPerson {
   name: string;
