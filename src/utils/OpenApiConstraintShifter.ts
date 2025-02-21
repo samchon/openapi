@@ -38,6 +38,7 @@ export namespace OpenApiConstraintShifter {
       | "exclusiveMinimum"
       | "exclusiveMaximum"
       | "multipleOf"
+      | "default"
     >,
   >(
     v: Schema,
@@ -48,6 +49,7 @@ export namespace OpenApiConstraintShifter {
     | "exclusiveMinimum"
     | "exclusiveMaximum"
     | "multipleOf"
+    | "default"
   > => {
     const tags: string[] = [];
     if (v.exclusiveMinimum === undefined && v.minimum !== undefined) {
@@ -76,6 +78,10 @@ export namespace OpenApiConstraintShifter {
       description: v.description,
       tags,
     });
+    if (v.default !== undefined) {
+      tags.push(`@default ${v.default}`);
+      delete v.default;
+    }
     return v;
   };
 
@@ -88,12 +94,18 @@ export namespace OpenApiConstraintShifter {
       | "format"
       | "pattern"
       | "contentMediaType"
+      | "default"
     >,
   >(
     v: Schema,
   ): Omit<
     Schema,
-    "minLength" | "maxLength" | "format" | "pattern" | "contentMediaType"
+    | "minLength"
+    | "maxLength"
+    | "format"
+    | "pattern"
+    | "contentMediaType"
+    | "default"
   > => {
     const tags: string[] = [];
     if (v.minLength !== undefined) {
@@ -115,6 +127,10 @@ export namespace OpenApiConstraintShifter {
     if (v.contentMediaType !== undefined) {
       tags.push(`@contentMediaType ${v.contentMediaType}`);
       delete v.contentMediaType;
+    }
+    if (v.default !== undefined) {
+      tags.push(`@default ${v.default}`);
+      delete v.default;
     }
     v.description = writeTagWithDescription({
       description: v.description,
