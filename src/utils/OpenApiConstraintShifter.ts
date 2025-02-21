@@ -38,7 +38,6 @@ export namespace OpenApiConstraintShifter {
       | "exclusiveMinimum"
       | "exclusiveMaximum"
       | "multipleOf"
-      | "default"
     >,
   >(
     v: Schema,
@@ -49,32 +48,29 @@ export namespace OpenApiConstraintShifter {
     | "exclusiveMinimum"
     | "exclusiveMaximum"
     | "multipleOf"
-    | "default"
   > => {
     const tags: string[] = [];
-    if (v.minimum !== undefined) {
+    if (v.exclusiveMinimum === undefined && v.minimum !== undefined) {
       tags.push(`@minimum ${v.minimum}`);
       delete v.minimum;
     }
-    if (v.maximum !== undefined) {
+    if (v.exclusiveMaximum === undefined && v.maximum !== undefined) {
       tags.push(`@maximum ${v.maximum}`);
       delete v.maximum;
     }
-    if (v.exclusiveMinimum !== undefined) {
-      tags.push(`@exclusiveMinimum ${v.exclusiveMinimum}`);
+    if (v.minimum !== undefined && v.exclusiveMinimum === true) {
+      tags.push(`@exclusiveMinimum ${v.minimum}`);
+      delete v.minimum;
       delete v.exclusiveMinimum;
     }
-    if (v.exclusiveMaximum !== undefined) {
-      tags.push(`@exclusiveMaximum ${v.exclusiveMaximum}`);
+    if (v.maximum !== undefined && v.exclusiveMaximum === true) {
+      tags.push(`@exclusiveMaximum ${v.maximum}`);
+      delete v.maximum;
       delete v.exclusiveMaximum;
     }
     if (v.multipleOf !== undefined) {
       tags.push(`@multipleOf ${v.multipleOf}`);
       delete v.multipleOf;
-    }
-    if (v.default !== undefined) {
-      tags.push(`@default ${v.default}`);
-      delete v.default;
     }
     v.description = writeTagWithDescription({
       description: v.description,
@@ -92,18 +88,12 @@ export namespace OpenApiConstraintShifter {
       | "format"
       | "pattern"
       | "contentMediaType"
-      | "default"
     >,
   >(
     v: Schema,
   ): Omit<
     Schema,
-    | "minLength"
-    | "maxLength"
-    | "format"
-    | "pattern"
-    | "contentMediaType"
-    | "default"
+    "minLength" | "maxLength" | "format" | "pattern" | "contentMediaType"
   > => {
     const tags: string[] = [];
     if (v.minLength !== undefined) {
@@ -125,10 +115,6 @@ export namespace OpenApiConstraintShifter {
     if (v.contentMediaType !== undefined) {
       tags.push(`@contentMediaType ${v.contentMediaType}`);
       delete v.contentMediaType;
-    }
-    if (v.default !== undefined) {
-      tags.push(`@default ${v.default}`);
-      delete v.default;
     }
     v.description = writeTagWithDescription({
       description: v.description,

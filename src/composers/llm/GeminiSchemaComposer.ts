@@ -119,6 +119,10 @@ export namespace GeminiSchemaComposer {
       );
     return separated as any as ILlmFunction.ISeparated<"gemini">;
   };
+
+  export const invert = (props: {
+    schema: IGeminiSchema;
+  }): OpenApi.IJsonSchema => LlmSchemaV3Composer.invert(props);
 }
 
 const isOneOf =

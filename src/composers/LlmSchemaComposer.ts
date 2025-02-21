@@ -35,6 +35,9 @@ export namespace LlmSchemaComposer {
     model: Model,
   ) => SEPARATE_PARAMETERS[model];
 
+  export const invert = <Model extends ILlmSchema.Model>(model: Model) =>
+    INVERTS[model];
+
   /**
    * @internal
    */
@@ -68,6 +71,15 @@ const SEPARATE_PARAMETERS = {
   llama: LlamaSchemaComposer.separateParameters,
   "3.0": LlmSchemaV3Composer.separateParameters,
   "3.1": LlmSchemaV3_1Composer.separateParameters,
+};
+
+const INVERTS = {
+  chatgpt: ChatGptSchemaComposer.invert,
+  claude: ClaudeSchemaComposer.invert,
+  gemini: GeminiSchemaComposer.invert,
+  llama: LlamaSchemaComposer.invert,
+  "3.0": LlmSchemaV3Composer.invert,
+  "3.1": LlmSchemaV3_1Composer.invert,
 };
 
 const DEFAULT_CONFIGS = {

@@ -1,5 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { OpenApiV3Downgrader } from "../../converters/OpenApiV3Downgrader";
+import { OpenApiV3Upgrader } from "../../converters/OpenApiV3Upgrader";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
@@ -7,6 +8,7 @@ import { IResult } from "../../typings/IResult";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3Composer {
@@ -15,6 +17,9 @@ export namespace LlmSchemaV3Composer {
    */
   export const IS_DEFS = false;
 
+  /* -----------------------------------------------------------
+    CONVERTERS
+  ----------------------------------------------------------- */
   export const parameters = (props: {
     config: ILlmSchemaV3.IConfig;
     components: OpenApi.IComponents;
@@ -162,6 +167,9 @@ export namespace LlmSchemaV3Composer {
     };
   };
 
+  /* -----------------------------------------------------------
+    SEPARATORS
+  ----------------------------------------------------------- */
   export const separateParameters = (props: {
     predicate: (schema: ILlmSchemaV3) => boolean;
     parameters: ILlmSchemaV3.IParameters;
@@ -282,5 +290,41 @@ export namespace LlmSchemaV3Composer {
   const shrinkRequired = (s: ILlmSchemaV3.IObject): ILlmSchemaV3.IObject => {
     s.required = s.required.filter((key) => s.properties[key] !== undefined);
     return s;
+  };
+
+  /* -----------------------------------------------------------
+    INVERTERS
+  ----------------------------------------------------------- */
+  export const invert = (props: {
+    schema: ILlmSchemaV3;
+  }): OpenApi.IJsonSchema => {
+    const upgraded: OpenApi.IJsonSchema = OpenApiV3Upgrader.convertSchema({})(
+      props.schema,
+    );
+    OpenApiTypeChecker.visit({
+      closure: (schema) => {
+        if (OpenApiTypeChecker.isArray(schema))
+          Object.assign(schema, {
+            ...LlmDescriptionInverter.array(schema.description ?? ""),
+            ...schema,
+          });
+        else if (
+          OpenApiTypeChecker.isInteger(schema) ||
+          OpenApiTypeChecker.isNumber(schema)
+        )
+          Object.assign(schema, {
+            ...LlmDescriptionInverter.numeric(schema.description ?? ""),
+            ...schema,
+          });
+        else if (OpenApiTypeChecker.isString(schema))
+          Object.assign(schema, {
+            ...LlmDescriptionInverter.string(schema.description ?? ""),
+            ...schema,
+          });
+      },
+      components: {},
+      schema: upgraded,
+    });
+    return upgraded;
   };
 }
