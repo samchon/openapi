@@ -4,7 +4,7 @@ import typia, { tags } from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
 
-export const test_claude_function_calling_tags = (): Promise<void> =>
+export const test_claude_function_calling_tags = () =>
   ClaudeFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
     config: {

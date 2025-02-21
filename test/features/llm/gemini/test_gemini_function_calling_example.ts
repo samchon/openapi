@@ -4,7 +4,7 @@ import typia, { tags } from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { GeminiFunctionCaller } from "../../../utils/GeminiFunctionCaller";
 
-export const test_gemini_function_calling_example = (): Promise<void> =>
+export const test_gemini_function_calling_example = () =>
   GeminiFunctionCaller.test({
     config: {
       recursive: 3,

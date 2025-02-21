@@ -30,8 +30,8 @@ export namespace GeminiFunctionCaller {
     config?: Partial<IGeminiSchema.IConfig>;
   }
 
-  export const test = async (props: IProps): Promise<void> => {
-    if (TestGlobal.env.GEMINI_API_KEY === undefined) return;
+  export const test = async (props: IProps) => {
+    if (TestGlobal.env.GEMINI_API_KEY === undefined) return false;
 
     let result: IValidation<any> | undefined = undefined;
     for (let i: number = 0; i < 3; ++i) {

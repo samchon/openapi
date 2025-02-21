@@ -4,7 +4,7 @@ import typia from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { DeepSeekFunctionCaller } from "../../../utils/DeepSeekFunctionCaller";
 
-export const test_deepseek_function_calling_union = (): Promise<void> =>
+export const test_deepseek_function_calling_union = () =>
   DeepSeekFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "chatgpt",
     config: {

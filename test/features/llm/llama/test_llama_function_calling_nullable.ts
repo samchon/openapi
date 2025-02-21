@@ -4,7 +4,7 @@ import typia from "typia";
 import { TestGlobal } from "../../../TestGlobal";
 import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 
-export const test_llama_function_calling_nullable = (): Promise<void> =>
+export const test_llama_function_calling_nullable = () =>
   LlamaFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "llama",
     config: {

@@ -6,7 +6,7 @@ import { IShoppingSale } from "../../../structures/IShoppingSale";
 import { ClaudeFunctionCaller } from "../../../utils/ClaudeFunctionCaller";
 import { ShoppingSalePrompt } from "../../../utils/ShoppingSalePrompt";
 
-export const test_claude_function_calling_sale = async (): Promise<void> =>
+export const test_claude_function_calling_sale = async () =>
   ClaudeFunctionCaller.test({
     model: (TestGlobal.getArguments("model")[0] as any) ?? "claude",
     config: {
