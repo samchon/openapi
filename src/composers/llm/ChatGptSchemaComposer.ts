@@ -43,10 +43,16 @@ export namespace ChatGptSchemaComposer {
 
     // returns with transformation
     for (const key of Object.keys(result.value.$defs))
-      result.value.$defs[key] = transform(result.value.$defs[key]);
+      result.value.$defs[key] = transform({
+        config: props.config,
+        schema: result.value.$defs[key],
+      });
     return {
       success: true,
-      value: transform(result.value) as IChatGptSchema.IParameters,
+      value: transform({
+        config: props.config,
+        schema: result.value,
+      }) as IChatGptSchema.IParameters,
     };
   };
 
@@ -77,10 +83,16 @@ export namespace ChatGptSchemaComposer {
     // returns with transformation
     for (const key of Object.keys(props.$defs))
       if (oldbie.has(key) === false)
-        props.$defs[key] = transform(props.$defs[key]);
+        props.$defs[key] = transform({
+          config: props.config,
+          schema: props.$defs[key],
+        });
     return {
       success: true,
-      value: transform(result.value),
+      value: transform({
+        config: props.config,
+        schema: result.value,
+      }),
     };
   };
 
@@ -109,13 +121,16 @@ export namespace ChatGptSchemaComposer {
     return reasons;
   };
 
-  const transform = (schema: ILlmSchemaV3_1): IChatGptSchema => {
+  const transform = (props: {
+    config: IChatGptSchema.IConfig;
+    schema: ILlmSchemaV3_1;
+  }): IChatGptSchema => {
     const union: Array<IChatGptSchema> = [];
     const attribute: IChatGptSchema.__IAttribute = {
-      title: schema.title,
-      description: schema.description,
-      example: schema.example,
-      examples: schema.examples,
+      title: props.schema.title,
+      description: props.schema.description,
+      example: props.schema.example,
+      examples: props.schema.examples,
       ...Object.fromEntries(
         Object.entries(schema).filter(
           ([key, value]) => key.startsWith("x-") && value !== undefined,
@@ -127,7 +142,10 @@ export namespace ChatGptSchemaComposer {
       else if (LlmTypeCheckerV3_1.isArray(input))
         union.push({
           ...input,
-          items: transform(input.items),
+          items: transform({
+            config: props.config,
+            schema: input.items,
+          }),
         });
       else if (LlmTypeCheckerV3_1.isObject(input))
         union.push({
@@ -135,14 +153,22 @@ export namespace ChatGptSchemaComposer {
           properties: Object.fromEntries(
             Object.entries(input.properties).map(([key, value]) => [
               key,
-              transform(value),
+              transform({
+                config: props.config,
+                schema: value,
+              }),
             ]),
           ),
           additionalProperties:
-            typeof input.additionalProperties === "object" &&
-            input.additionalProperties !== null
-              ? transform(input.additionalProperties)
-              : input.additionalProperties,
+            props.config.strict === true
+              ? false
+              : typeof input.additionalProperties === "object" &&
+                  input.additionalProperties !== null
+                ? transform({
+                    config: props.config,
+                    schema: input.additionalProperties,
+                  })
+                : input.additionalProperties,
         });
       else if (LlmTypeCheckerV3_1.isConstant(input) === false)
         union.push(input);
@@ -167,8 +193,8 @@ export namespace ChatGptSchemaComposer {
       else if (OpenApiTypeChecker.isOneOf(input))
         input.oneOf.forEach(visitConstant);
     };
-    visit(schema);
-    visitConstant(schema);
+    visit(props.schema);
+    visitConstant(props.schema);
     if (union.length === 0)
       return {
         ...attribute,
