@@ -4,6 +4,7 @@ import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
 import { IResult } from "../../typings/IResult";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
+import { NamingConvention } from "../../utils/NamingConvention";
 import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
@@ -336,13 +337,18 @@ export namespace LlmSchemaV3_1Composer {
     SEPARATORS
   ----------------------------------------------------------- */
   export const separateParameters = (props: {
-    predicate: (schema: ILlmSchemaV3_1) => boolean;
     parameters: ILlmSchemaV3_1.IParameters;
+    predicate: (schema: ILlmSchemaV3_1) => boolean;
+    convention?: (key: string, type: "llm" | "human") => string;
   }): ILlmFunction.ISeparated<"3.1"> => {
+    const convention =
+      props.convention ??
+      ((key, type) => `${key}.${NamingConvention.capitalize(type)}`);
     const [llm, human] = separateObject({
       $defs: props.parameters.$defs,
-      predicate: props.predicate,
       schema: props.parameters,
+      predicate: props.predicate,
+      convention,
     });
     if (llm === null || human === null)
       return {
@@ -382,8 +388,9 @@ export namespace LlmSchemaV3_1Composer {
   };
 
   const separateStation = (props: {
-    $defs: Record<string, ILlmSchemaV3_1>;
     predicate: (schema: ILlmSchemaV3_1) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchemaV3_1>;
     schema: ILlmSchemaV3_1;
   }): [ILlmSchemaV3_1 | null, ILlmSchemaV3_1 | null] => {
     if (props.predicate(props.schema) === true) return [null, props.schema];
@@ -394,33 +401,38 @@ export namespace LlmSchemaV3_1Composer {
       return [props.schema, null];
     else if (LlmTypeCheckerV3_1.isObject(props.schema))
       return separateObject({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema,
       });
     else if (LlmTypeCheckerV3_1.isArray(props.schema))
       return separateArray({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema,
       });
     else if (LlmTypeCheckerV3_1.isReference(props.schema))
       return separateReference({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema,
       });
     return [props.schema, null];
   };
 
   const separateArray = (props: {
-    $defs: Record<string, ILlmSchemaV3_1>;
     predicate: (schema: ILlmSchemaV3_1) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchemaV3_1>;
     schema: ILlmSchemaV3_1.IArray;
   }): [ILlmSchemaV3_1.IArray | null, ILlmSchemaV3_1.IArray | null] => {
     const [x, y] = separateStation({
-      $defs: props.$defs,
       predicate: props.predicate,
+      convention: props.convention,
+      $defs: props.$defs,
       schema: props.schema.items,
     });
     return [
@@ -440,8 +452,9 @@ export namespace LlmSchemaV3_1Composer {
   };
 
   const separateObject = (props: {
-    $defs: Record<string, ILlmSchemaV3_1>;
     predicate: (schema: ILlmSchemaV3_1) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchemaV3_1>;
     schema: ILlmSchemaV3_1.IObject;
   }): [ILlmSchemaV3_1.IObject | null, ILlmSchemaV3_1.IObject | null] => {
     // EMPTY OBJECT
@@ -463,8 +476,9 @@ export namespace LlmSchemaV3_1Composer {
 
     for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
       const [x, y] = separateStation({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: value,
       });
       if (x !== null) llm.properties[key] = x;
@@ -475,8 +489,9 @@ export namespace LlmSchemaV3_1Composer {
       props.schema.additionalProperties !== null
     ) {
       const [dx, dy] = separateStation({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema.additionalProperties,
       });
       llm.additionalProperties = dx ?? false;
@@ -493,60 +508,64 @@ export namespace LlmSchemaV3_1Composer {
   };
 
   const separateReference = (props: {
-    $defs: Record<string, ILlmSchemaV3_1>;
     predicate: (schema: ILlmSchemaV3_1) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchemaV3_1>;
     schema: ILlmSchemaV3_1.IReference;
   }): [ILlmSchemaV3_1.IReference | null, ILlmSchemaV3_1.IReference | null] => {
     const key: string = props.schema.$ref.split("#/$defs/")[1];
+    const humanKey: string = props.convention(key, "human");
+    const llmKey: string = props.convention(key, "llm");
 
     // FIND EXISTING
-    if (props.$defs?.[`${key}.Human`] || props.$defs?.[`${key}.Llm`])
+    if (props.$defs?.[humanKey] || props.$defs?.[llmKey])
       return [
-        props.$defs?.[`${key}.Llm`]
+        props.$defs?.[llmKey]
           ? {
               ...props.schema,
-              $ref: `#/$defs/${key}.Llm`,
+              $ref: `#/$defs/${llmKey}`,
             }
           : null,
-        props.$defs?.[`${key}.Human`]
+        props.$defs?.[humanKey]
           ? {
               ...props.schema,
-              $ref: `#/$defs/${key}.Human`,
+              $ref: `#/$defs/${humanKey}`,
             }
           : null,
       ];
 
     // PRE-ASSIGNMENT
-    props.$defs![`${key}.Llm`] = {};
-    props.$defs![`${key}.Human`] = {};
+    props.$defs![llmKey] = {};
+    props.$defs![humanKey] = {};
 
     // DO COMPOSE
     const schema: ILlmSchemaV3_1 = props.$defs?.[key]!;
     const [llm, human] = separateStation({
-      $defs: props.$defs,
       predicate: props.predicate,
+      convention: props.convention,
+      $defs: props.$defs,
       schema,
     });
 
     // ONLY ONE
     if (llm === null || human === null) {
-      delete props.$defs[`${key}.Llm`];
-      delete props.$defs[`${key}.Human`];
+      delete props.$defs[llmKey];
+      delete props.$defs[humanKey];
       return llm === null ? [null, props.schema] : [props.schema, null];
     }
 
-    // FINALIZE
+    // BOTH OF THEM
     return [
       llm !== null
         ? {
             ...props.schema,
-            $ref: `#/$defs/${key}.Llm`,
+            $ref: `#/$defs/${llmKey}`,
           }
         : null,
       human !== null
         ? {
             ...props.schema,
-            $ref: `#/$defs/${key}.Human`,
+            $ref: `#/$defs/${humanKey}`,
           }
         : null,
     ];

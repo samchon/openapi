@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "3.0.0-dev.20250224",
+  "version": "3.0.0-dev.20250226",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",

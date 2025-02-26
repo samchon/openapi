@@ -83,7 +83,7 @@ export namespace NamingConvention {
       if (last.length) ret += capitalize(piece);
       return prefix + escaper(ret);
     };
-}
 
-const capitalize = (str: string): string =>
-  str.length !== 0 ? str[0].toUpperCase() + str.slice(1).toLowerCase() : str;
+  export const capitalize = (str: string): string =>
+    str.length !== 0 ? str[0].toUpperCase() + str.slice(1).toLowerCase() : str;
+}

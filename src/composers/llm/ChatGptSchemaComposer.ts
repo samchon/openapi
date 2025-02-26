@@ -6,6 +6,7 @@ import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
 import { IResult } from "../../typings/IResult";
 import { ChatGptTypeChecker } from "../../utils/ChatGptTypeChecker";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
+import { NamingConvention } from "../../utils/NamingConvention";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
@@ -223,12 +224,17 @@ export namespace ChatGptSchemaComposer {
     SEPARATORS
   ----------------------------------------------------------- */
   export const separateParameters = (props: {
-    predicate: (schema: IChatGptSchema) => boolean;
     parameters: IChatGptSchema.IParameters;
+    predicate: (schema: IChatGptSchema) => boolean;
+    convention?: (key: string, type: "llm" | "human") => string;
   }): ILlmFunction.ISeparated<"chatgpt"> => {
+    const convention =
+      props.convention ??
+      ((key, type) => `${key}.${NamingConvention.capitalize(type)}`);
     const [llm, human] = separateObject({
-      $defs: props.parameters.$defs,
       predicate: props.predicate,
+      convention,
+      $defs: props.parameters.$defs,
       schema: props.parameters,
     });
     if (llm === null || human === null)
@@ -269,8 +275,9 @@ export namespace ChatGptSchemaComposer {
   };
 
   const separateStation = (props: {
-    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, IChatGptSchema>;
     schema: IChatGptSchema;
   }): [IChatGptSchema | null, IChatGptSchema | null] => {
     if (props.predicate(props.schema) === true) return [null, props.schema];
@@ -281,33 +288,38 @@ export namespace ChatGptSchemaComposer {
       return [props.schema, null];
     else if (ChatGptTypeChecker.isObject(props.schema))
       return separateObject({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema,
       });
     else if (ChatGptTypeChecker.isArray(props.schema))
       return separateArray({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema,
       });
     else if (ChatGptTypeChecker.isReference(props.schema))
       return separateReference({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema,
       });
     return [props.schema, null];
   };
 
   const separateArray = (props: {
-    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, IChatGptSchema>;
     schema: IChatGptSchema.IArray;
   }): [IChatGptSchema.IArray | null, IChatGptSchema.IArray | null] => {
     const [x, y] = separateStation({
-      $defs: props.$defs,
       predicate: props.predicate,
+      convention: props.convention,
+      $defs: props.$defs,
       schema: props.schema.items,
     });
     return [
@@ -329,6 +341,7 @@ export namespace ChatGptSchemaComposer {
   const separateObject = (props: {
     $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
     schema: IChatGptSchema.IObject;
   }): [IChatGptSchema.IObject | null, IChatGptSchema.IObject | null] => {
     // EMPTY OBJECT
@@ -350,8 +363,9 @@ export namespace ChatGptSchemaComposer {
 
     for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
       const [x, y] = separateStation({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: value,
       });
       if (x !== null) llm.properties[key] = x;
@@ -362,8 +376,9 @@ export namespace ChatGptSchemaComposer {
       props.schema.additionalProperties !== null
     ) {
       const [dx, dy] = separateStation({
-        $defs: props.$defs,
         predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
         schema: props.schema.additionalProperties,
       });
       llm.additionalProperties = dx ?? false;
@@ -380,45 +395,49 @@ export namespace ChatGptSchemaComposer {
   };
 
   const separateReference = (props: {
-    $defs: Record<string, IChatGptSchema>;
     predicate: (schema: IChatGptSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, IChatGptSchema>;
     schema: IChatGptSchema.IReference;
   }): [IChatGptSchema.IReference | null, IChatGptSchema.IReference | null] => {
     const key: string = props.schema.$ref.split("#/$defs/")[1];
+    const humanKey: string = props.convention(key, "human");
+    const llmKey: string = props.convention(key, "llm");
 
     // FIND EXISTING
-    if (props.$defs?.[`${key}.Human`] || props.$defs?.[`${key}.Llm`])
+    if (props.$defs?.[humanKey] || props.$defs?.[llmKey])
       return [
-        props.$defs?.[`${key}.Llm`]
+        props.$defs?.[llmKey]
           ? {
               ...props.schema,
-              $ref: `#/$defs/${key}.Llm`,
+              $ref: `#/$defs/${llmKey}`,
             }
           : null,
-        props.$defs?.[`${key}.Human`]
+        props.$defs?.[humanKey]
           ? {
               ...props.schema,
-              $ref: `#/$defs/${key}.Human`,
+              $ref: `#/$defs/${humanKey}`,
             }
           : null,
       ];
 
     // PRE-ASSIGNMENT
-    props.$defs![`${key}.Llm`] = {};
-    props.$defs![`${key}.Human`] = {};
+    props.$defs![llmKey] = {};
+    props.$defs![humanKey] = {};
 
     // DO COMPOSE
     const schema: IChatGptSchema = props.$defs?.[key]!;
     const [llm, human] = separateStation({
-      $defs: props.$defs,
       predicate: props.predicate,
+      convention: props.convention,
+      $defs: props.$defs,
       schema,
     });
 
     // ONLY ONE
     if (llm === null || human === null) {
-      delete props.$defs[`${key}.Llm`];
-      delete props.$defs[`${key}.Human`];
+      delete props.$defs[llmKey];
+      delete props.$defs[humanKey];
       return llm === null ? [null, props.schema] : [props.schema, null];
     }
 
@@ -427,13 +446,13 @@ export namespace ChatGptSchemaComposer {
       llm !== null
         ? {
             ...props.schema,
-            $ref: `#/$defs/${key}.Llm`,
+            $ref: `#/$defs/${llmKey}`,
           }
         : null,
       human !== null
         ? {
             ...props.schema,
-            $ref: `#/$defs/${key}.Human`,
+            $ref: `#/$defs/${humanKey}`,
           }
         : null,
     ];
