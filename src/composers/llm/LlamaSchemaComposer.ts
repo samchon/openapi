@@ -39,8 +39,9 @@ export namespace LlamaSchemaComposer {
     });
 
   export const separateParameters = (props: {
-    predicate: (schema: ILlamaSchema) => boolean;
     parameters: ILlamaSchema.IParameters;
+    predicate: (schema: ILlamaSchema) => boolean;
+    convention?: (key: string, type: "llm" | "human") => string;
   }): ILlmFunction.ISeparated<"llama"> =>
     LlmSchemaV3_1Composer.separateParameters(
       props,
