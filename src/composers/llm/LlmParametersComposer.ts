@@ -1,6 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
-import { IResult } from "../../typings/IResult";
+import { IResult } from "../../structures/IResult";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 
 /**

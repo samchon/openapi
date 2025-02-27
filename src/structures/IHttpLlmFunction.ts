@@ -1,6 +1,7 @@
 import { OpenApi } from "../OpenApi";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmSchema } from "./ILlmSchema";
+import { IValidation } from "./IValidation";
 
 /**
  * LLM function calling schema from HTTP (OpenAPI) operation.
@@ -176,6 +177,29 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    * Same with {@link OpenApi.IOperation.tags} indicating the category of the function.
    */
   tags?: string[];
+
+  /**
+   * Validate function of the arguments.
+   *
+   * You know what? LLM (Large Language Model) like OpenAI takes a lot of
+   * mistakes when composing arguments in function calling. Even though
+   * `number` like simple type is defined in the {@link parameters} schema,
+   * LLM often fills it just by a `string` typed value.
+   *
+   * In that case, you have to give a validation feedback to the LLM by
+   * using this `validate` function. The `validate` function will return
+   * detailed information about every type errors about the arguments.
+   *
+   * And in my experience, OpenAI's `gpt-4o-mini` model tends to construct
+   * an invalid function calling arguments at the first trial about 50% of
+   * the time. However, if correct it through this `validate` function,
+   * the success rate soars to 99% at the second trial, and I've never failed
+   * at the third trial.
+   *
+   * @param args Arguments to validate.
+   * @returns Validation result
+   */
+  validate: (args: unknown) => IValidation<unknown>;
 
   /**
    * Get the Swagger operation metadata.

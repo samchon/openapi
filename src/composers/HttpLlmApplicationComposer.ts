@@ -1,11 +1,13 @@
 import { OpenApi } from "../OpenApi";
-import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { ILlmFunction } from "../structures/ILlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
+import { IOpenApiSchemaError } from "../structures/IOpenApiSchemaError";
+import { IResult } from "../structures/IResult";
+import { OpenApiValidator } from "../utils/OpenApiValidator";
 import { LlmSchemaComposer } from "./LlmSchemaComposer";
 
 export namespace HttpLlmComposer {
@@ -54,7 +56,7 @@ export namespace HttpLlmComposer {
         const localErrors: string[] = [];
         const func: IHttpLlmFunction<Model> | null = composeFunction<Model>({
           model: props.model,
-          options: props.options,
+          config: props.options,
           components: props.migrate.document().components,
           route: route,
           errors: localErrors,
@@ -86,95 +88,12 @@ export namespace HttpLlmComposer {
     model: Model;
     components: OpenApi.IComponents;
     route: IHttpMigrateRoute;
-    options: IHttpLlmApplication.IOptions<Model>;
+    config: IHttpLlmApplication.IOptions<Model>;
     errors: string[];
     index: number;
   }): IHttpLlmFunction<Model> | null => {
-    const $defs: Record<string, IChatGptSchema> = {};
-    const cast = (
-      s: OpenApi.IJsonSchema,
-      accessor: string,
-    ): ILlmSchema.ModelSchema[Model] | null => {
-      const result = LlmSchemaComposer.schema(props.model)({
-        config: props.options as any,
-        schema: s,
-        components: props.components,
-        $defs,
-        accessor,
-        refAccessor: `$input.components.schemas`,
-      });
-      if (result.success === false) {
-        props.errors.push(
-          ...result.error.reasons.map((r) => `${r.accessor}: ${r.message}`),
-        );
-        return null;
-      }
-      return result.value as ILlmSchema.ModelSchema[Model];
-    };
-
     // METADATA
     const endpoint: string = `$input.paths[${JSON.stringify(props.route.path)}][${JSON.stringify(props.route.method)}]`;
-    const output: ILlmSchema.ModelSchema[Model] | null | undefined = props.route
-      .success
-      ? cast(
-          props.route.success.schema,
-          `${endpoint}.responses[${JSON.stringify(props.route.success.status)}][${JSON.stringify(props.route.success.type)}].schema`,
-        )
-      : undefined;
-    const properties: Array<
-      readonly [string, ILlmSchema.ModelSchema[Model] | null]
-    > = [
-      ...props.route.parameters.map(
-        (s) =>
-          [
-            s.key,
-            cast(
-              {
-                ...s.schema,
-                title: s.parameter().title ?? s.schema.title,
-                description: s.parameter().description ?? s.schema.description,
-              },
-              `${endpoint}.parameters[${JSON.stringify(s.key)}].schema`,
-            ),
-          ] as const,
-      ),
-      ...(props.route.query
-        ? [
-            [
-              props.route.query.key,
-              cast(
-                {
-                  ...props.route.query.schema,
-                  title:
-                    props.route.query.title() ?? props.route.query.schema.title,
-                  description:
-                    props.route.query.description() ??
-                    props.route.query.schema.description,
-                },
-                `${endpoint}.parameters[${JSON.stringify(props.route.query.key)}].schema`,
-              ),
-            ] as const,
-          ]
-        : []),
-      ...(props.route.body
-        ? [
-            [
-              props.route.body.key,
-              cast(
-                {
-                  ...props.route.body.schema,
-                  description:
-                    props.route.body.description() ??
-                    props.route.body.schema.description,
-                },
-                `${endpoint}.requestBody.content[${JSON.stringify(props.route.body.type)}].schema`,
-              ),
-            ] as const,
-          ]
-        : []),
-    ];
-
-    // DESCRIPTION
     const operation: OpenApi.IOperation = props.route.operation();
     const description: [string | undefined, number] = (() => {
       if (!operation.summary?.length || !operation.description?.length)
@@ -204,44 +123,113 @@ export namespace HttpLlmComposer {
       props.errors.push(
         `Elements of path (separated by '/') must be composed with alphabets, numbers, underscores, and hyphens`,
       );
+
+    //----
+    // CONSTRUCT SCHEMAS
+    //----
+    // PARAMETERS
+    const parameters: OpenApi.IJsonSchema.IObject = {
+      type: "object",
+      properties: Object.fromEntries([
+        ...props.route.parameters.map(
+          (s) =>
+            [
+              s.key,
+              {
+                ...s.schema,
+                title: s.parameter().title ?? s.schema.title,
+                description: s.parameter().description ?? s.schema.description,
+              },
+            ] as const,
+        ),
+        ...(props.route.query
+          ? [
+              [
+                props.route.query.key,
+                {
+                  ...props.route.query.schema,
+                  title:
+                    props.route.query.title() ?? props.route.query.schema.title,
+                  description:
+                    props.route.query.description() ??
+                    props.route.query.schema.description,
+                },
+              ] as const,
+            ]
+          : []),
+        ...(props.route.body
+          ? [
+              [
+                props.route.body.key,
+                {
+                  ...props.route.body.schema,
+                  description:
+                    props.route.body.description() ??
+                    props.route.body.schema.description,
+                },
+              ] as const,
+            ]
+          : []),
+      ]),
+    };
+    parameters.required = Object.keys(parameters.properties ?? {});
+
+    const llmParameters: IResult<
+      ILlmSchema.IParameters<Model>,
+      IOpenApiSchemaError
+    > = LlmSchemaComposer.parameters(props.model)({
+      config: props.config as any,
+      components: props.components,
+      schema: parameters,
+      accessor: `${endpoint}.parameters`,
+    }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+
+    // RETURN VALUE
+    const output: IResult<ILlmSchema<Model>, IOpenApiSchemaError> | undefined =
+      props.route.success
+        ? (LlmSchemaComposer.schema(props.model)({
+            config: props.config as any,
+            components: props.components,
+            schema: props.route.success.schema,
+            accessor: `${endpoint}.responses[${JSON.stringify(props.route.success.status)}][${JSON.stringify(props.route.success.type)}].schema`,
+            $defs: llmParameters.success
+              ? (llmParameters.value as any).$defs!
+              : {},
+          }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>)
+        : undefined;
+
+    //----
+    // CONVERSION
+    //----
     if (
-      output === null ||
-      properties.some(([_k, v]) => v === null) ||
+      output?.success === false ||
+      llmParameters.success === false ||
       isNameVariable === false ||
       isNameStartsWithNumber === true ||
       description[1] > 1_024
     )
       return null;
-
-    // COMPOSE PARAMETERS
-    const parameters: ILlmSchema.ModelParameters[Model] = {
-      type: "object",
-      properties: Object.fromEntries(
-        properties as [string, ILlmSchema.ModelSchema[Model]][],
-      ),
-      additionalProperties: false,
-      required: properties.map(([k]) => k),
-    } as any as ILlmSchema.ModelParameters[Model];
-    if (LlmSchemaComposer.isDefs(props.model))
-      (parameters as any as IChatGptSchema.IParameters).$defs = $defs;
-
-    // FINALIZATION
     return {
       method: props.route.method as "get",
       path: props.route.path,
       name,
-      parameters,
-      separated: props.options.separate
+      parameters: llmParameters.value,
+      separated: props.config.separate
         ? (LlmSchemaComposer.separateParameters(props.model)({
-            predicate: props.options.separate as any,
+            predicate: props.config.separate as any,
             parameters:
-              parameters satisfies ILlmSchema.ModelParameters[Model] as any,
+              llmParameters.value satisfies ILlmSchema.ModelParameters[Model] as any,
           }) as ILlmFunction.ISeparated<Model>)
         : undefined,
-      output: output as any,
+      output: output?.value,
       description: description[0],
       deprecated: operation.deprecated,
       tags: operation.tags,
+      validate: OpenApiValidator.create({
+        components: props.components,
+        schema: parameters,
+        required: true,
+      }),
       route: () => props.route as any,
       operation: () => props.route.operation(),
     };

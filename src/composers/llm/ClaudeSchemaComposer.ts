@@ -2,7 +2,7 @@ import { OpenApi } from "../../OpenApi";
 import { IClaudeSchema } from "../../structures/IClaudeSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
-import { IResult } from "../../typings/IResult";
+import { IResult } from "../../structures/IResult";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ClaudeSchemaComposer {
