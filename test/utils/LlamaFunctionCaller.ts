@@ -11,7 +11,7 @@ import typia, { IJsonSchemaCollection, IValidation } from "typia";
 
 // import { v4 } from "uuid";
 import { TestGlobal } from "../TestGlobal";
-import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
+import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 
 export namespace LlamaFunctionCaller {
   export interface IProps<Model extends ILlmSchema.Model> {

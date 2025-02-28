@@ -321,7 +321,6 @@ export namespace IChatGptSchema {
      * than the strict mode. Therefore, I recommend you to just turn off the
      * strict mode and utilize the {@link typia.validate} function instead.
      *
-     * @todo Would be required in the future
      * @default false
      */
     strict?: boolean;

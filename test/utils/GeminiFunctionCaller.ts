@@ -16,7 +16,7 @@ import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaCompo
 import typia, { IJsonSchemaCollection, IValidation } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
-import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
+import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 
 export namespace GeminiFunctionCaller {
   export interface IProps {

@@ -26,21 +26,23 @@ export namespace OpenApiStringValidator {
   export const validate = (
     ctx: IOpenApiValidatorContext<OpenApi.IJsonSchema.IString>,
   ): boolean => {
-    if (typeof ctx.value !== "string") return false;
-    return [
-      ctx.schema.minLength !== undefined
-        ? ctx.value.length >= ctx.schema.minLength
-        : true,
-      ctx.schema.maxLength !== undefined
-        ? ctx.value.length <= ctx.schema.maxLength
-        : true,
-      ctx.schema.pattern !== undefined
-        ? new RegExp(ctx.schema.pattern).test(ctx.value)
-        : true,
-      ctx.schema.format && FORMAT[ctx.schema.format as "uuid"]
-        ? FORMAT[ctx.schema.format as "uuid"](ctx.value)
-        : true,
-    ].every((v) => v);
+    if (typeof ctx.value !== "string") return ctx.report(ctx);
+    return (
+      [
+        ctx.schema.minLength !== undefined
+          ? ctx.value.length >= ctx.schema.minLength
+          : true,
+        ctx.schema.maxLength !== undefined
+          ? ctx.value.length <= ctx.schema.maxLength
+          : true,
+        ctx.schema.pattern !== undefined
+          ? new RegExp(ctx.schema.pattern).test(ctx.value)
+          : true,
+        ctx.schema.format && FORMAT[ctx.schema.format as "uuid"]
+          ? FORMAT[ctx.schema.format as "uuid"](ctx.value)
+          : true,
+      ].every((v) => v) || ctx.report(ctx)
+    );
   };
 }
 

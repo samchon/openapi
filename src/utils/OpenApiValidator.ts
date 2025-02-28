@@ -21,8 +21,8 @@ export namespace OpenApiValidator {
     const errors: IValidation.IError[] = [];
     OpenApiStationValidator.validate({
       ...props,
-      exceptional: true,
       path: "$input",
+      exceptionable: true,
       report: createReporter(errors),
     });
     return errors.length === 0
@@ -45,8 +45,12 @@ export namespace OpenApiValidator {
         path.length > last.length || last.substring(0, path.length) !== path
       );
     };
-    return (exceptable: boolean, error: IValidation.IError): false => {
-      if (exceptable && reportable(error.path)) array.push(error);
+    return (
+      error: IValidation.IError & {
+        exceptionable: boolean;
+      },
+    ): false => {
+      if (error.exceptionable && reportable(error.path)) array.push(error);
       return false;
     };
   };

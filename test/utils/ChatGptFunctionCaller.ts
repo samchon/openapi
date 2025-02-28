@@ -10,7 +10,7 @@ import OpenAI from "openai";
 import typia, { IJsonSchemaCollection, IValidation } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
-import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
+import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 
 export namespace ChatGptFunctionCaller {
   export interface IProps {

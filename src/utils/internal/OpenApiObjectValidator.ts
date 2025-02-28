@@ -7,7 +7,8 @@ export namespace OpenApiObjectValidator {
   export const validate = (
     ctx: IOpenApiValidatorContext<OpenApi.IJsonSchema.IObject>,
   ): boolean => {
-    if (typeof ctx.value !== "object" || ctx.value === null) return false;
+    if (typeof ctx.value !== "object" || ctx.value === null)
+      return ctx.report(ctx);
     return [
       ...Object.entries(ctx.schema.properties ?? {}).map(([key, value]) =>
         OpenApiStationValidator.validate({

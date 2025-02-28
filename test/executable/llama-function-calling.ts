@@ -9,7 +9,7 @@ import fs from "fs";
 import typia, { IJsonSchemaCollection, tags } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
-import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
+import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 import { ShoppingSalePrompt } from "../utils/ShoppingSalePrompt";
 
 interface IDefaultPerson {
