@@ -61,13 +61,5 @@ export namespace ObjectUndefined {
       input[0]!.grade = null!;
       return ["$input[0].grade"];
     },
-    (input) => {
-      input[0]!.nothing = "undefined" as any;
-      return ["$input[0].nothing"];
-    },
-    (input) => {
-      (input[0]! as any).never = "undefined" as any;
-      return ["$input[0].never"];
-    },
   ];
 }

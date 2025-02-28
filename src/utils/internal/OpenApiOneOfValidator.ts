@@ -8,20 +8,23 @@ export namespace OpenApiOneOfValidator {
     ctx: IOpenApiValidatorContext<OpenApi.IJsonSchema.IOneOf>,
   ): boolean => {
     const discriminator: IDiscriminator = getDiscriminator(ctx);
-    for (const item of discriminator.items)
+    for (const item of discriminator.items) {
       if (item.predicator(ctx.value))
         return OpenApiStationValidator.validate({
           ...ctx,
           schema: item.schema,
         });
+    }
     return (
-      discriminator.remainders.every((schema) =>
-        OpenApiStationValidator.validate({
-          ...ctx,
-          schema,
-          exceptionable: false,
-        }),
-      ) || ctx.report(ctx)
+      discriminator.remainders
+        .map((schema) =>
+          OpenApiStationValidator.validate({
+            ...ctx,
+            schema,
+            exceptionable: false,
+          }),
+        )
+        .some((v) => v) || ctx.report(ctx)
     );
   };
 
@@ -85,8 +88,8 @@ export namespace OpenApiOneOfValidator {
               i === j ||
               !OpenApiTypeChecker.covers({
                 components: ctx.components,
-                x: item.schema,
-                y: resolved.schema,
+                x: item.escaped.items,
+                y: resolved.escaped.items,
               }),
           ),
         )
@@ -99,9 +102,10 @@ export namespace OpenApiOneOfValidator {
                 (value.length === 0 ||
                   OpenApiStationValidator.validate({
                     ...ctx,
-                    schema: (resolved.schema as OpenApi.IJsonSchema.IArray)
+                    schema: (resolved.escaped as OpenApi.IJsonSchema.IArray)
                       .items,
                     value: value[0]!,
+                    path: `${ctx.path}[0]`,
                     exceptionable: false,
                   })),
             }) satisfies IDiscriminatorItem,
@@ -111,8 +115,8 @@ export namespace OpenApiOneOfValidator {
     // CHECK OBJECTS
     const objects: IResolvedSchema<OpenApi.IJsonSchema.IObject>[] =
       nonNullables.filter(
-        (escaped): escaped is IResolvedSchema<OpenApi.IJsonSchema.IObject> =>
-          OpenApiTypeChecker.isObject(escaped.schema),
+        (resolved): resolved is IResolvedSchema<OpenApi.IJsonSchema.IObject> =>
+          OpenApiTypeChecker.isObject(resolved.escaped),
       );
     const significants: IObjectSignificant[] = objects.map((resolved) => {
       const properties: Map<string, OpenApi.IJsonSchema> = new Map();
@@ -122,11 +126,10 @@ export namespace OpenApiOneOfValidator {
         properties,
       });
       if (
-        !resolved.escaped.properties?.length ||
+        resolved.escaped.properties === undefined ||
         !resolved.escaped.required?.length
       )
         return out();
-
       for (const [key, value] of Object.entries(resolved.escaped.properties)) {
         if (resolved.escaped.required.includes(key) === false) continue;
         properties.set(key, value);
@@ -135,7 +138,7 @@ export namespace OpenApiOneOfValidator {
     });
     const objectItems: IDiscriminatorItem[] = significants
       .map((x, i, array) => {
-        for (const [key, value] of x.properties) {
+        for (const [key, schemaValue] of x.properties) {
           if (
             array.every(
               (y, j) =>
@@ -144,19 +147,19 @@ export namespace OpenApiOneOfValidator {
                 !OpenApiTypeChecker.covers({
                   components: ctx.components,
                   x: y.properties.get(key)!,
-                  y: value,
+                  y: schemaValue,
                 }),
             )
           )
             return {
               schema: x.schema,
-              predicator: (value) =>
-                typeof value === "object" &&
-                value !== null &&
+              predicator: (v) =>
+                typeof v === "object" &&
+                v !== null &&
                 OpenApiStationValidator.validate({
                   ...ctx,
-                  schema: value,
-                  value: (value as any)[key],
+                  schema: schemaValue,
+                  value: (v as any)[key],
                   exceptionable: false,
                 }),
             } satisfies IDiscriminatorItem;

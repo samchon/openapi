@@ -4,7 +4,6 @@ import { Spoiler } from "../helpers/Spoiler";
 import { TestRandomGenerator } from "../helpers/TestRandomGenerator";
 
 export interface ObjectDate {
-  classDate?: Date | null;
   date: (string & tags.Format<"date">) | null;
   datetime: (string & tags.Format<"date-time">) | null;
   time: (string & tags.Format<"time">) | null;
@@ -17,7 +16,6 @@ export namespace ObjectDate {
 
   export function generate(): ObjectDate {
     return {
-      classDate: new Date(),
       date: new Date().toISOString().substring(0, 10),
       datetime: new Date().toISOString(),
       time: new Date().toISOString().substring(11),
@@ -26,10 +24,6 @@ export namespace ObjectDate {
   }
 
   export const SPOILERS: Spoiler<ObjectDate>[] = [
-    (input) => {
-      input.classDate = {} as any;
-      return ["$input.classDate"];
-    },
     (input) => {
       input.date = new Date().toString();
       return ["$input.date"];

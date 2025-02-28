@@ -56,8 +56,8 @@ export namespace TypeTagTuple {
       return ["$input.tuple[2][0]", "$input.tuple[2][1]", "$input.tuple[2][2]"];
     },
     (input) => {
-      input.tuple[3][0] = 3;
-      return ["$input.tuple[3][0]"];
+      input.tuple[3][1] = 3;
+      return ["$input.tuple[3][1]"];
     },
     (input) => {
       input.tuple[3] = TestRandomGenerator.array(() => 2, 2);
@@ -65,7 +65,7 @@ export namespace TypeTagTuple {
     },
     (input) => {
       input.tuple[3] = TestRandomGenerator.array(() => 8, 8);
-      return ["$input.tuple[3]"];
+      return new Array(8).fill("").map((_, i) => `$input.tuple[3][${i}]`);
     },
   ];
 

@@ -18,11 +18,30 @@ export namespace OpenApiStationValidator {
     expected?: string,
   ): boolean => {
     // THE TYPE NAME
-    expected ??= OpenApiSchemaNamingRule.getName(ctx.schema);
+    expected ??= (() => {
+      const name = OpenApiSchemaNamingRule.getName(ctx.schema);
+      return ctx.required ? name : `${name} | undefined`;
+    })();
 
     // COALESCE
     if (OpenApiTypeChecker.isUnknown(ctx.schema)) return true;
-    else if (ctx.value === undefined) return ctx.required === false;
+    else if (ctx.value === undefined)
+      return (
+        ctx.required === false ||
+        ctx.report({
+          ...ctx,
+          expected,
+        })
+      );
+    else if (OpenApiTypeChecker.isNull(ctx.schema))
+      return (
+        ctx.value === null ||
+        ctx.report({
+          ...ctx,
+          expected,
+        })
+      );
+    // NESTED
     else if (OpenApiTypeChecker.isReference(ctx.schema)) {
       const schema: OpenApi.IJsonSchema | undefined =
         ctx.components.schemas?.[ctx.schema.$ref.split("/").pop() ?? ""];

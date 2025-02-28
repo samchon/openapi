@@ -7,7 +7,7 @@ export namespace OpenApiArrayValidator {
   export const validate = (
     ctx: IOpenApiValidatorContext<OpenApi.IJsonSchema.IArray>,
   ): boolean => {
-    if (!Array.isArray(ctx.value)) return ctx.report(ctx);
+    if (Array.isArray(ctx.value) === false) return ctx.report(ctx);
     return [
       ctx.value
         .map((value, i) =>

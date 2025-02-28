@@ -50,7 +50,12 @@ export namespace OpenApiValidator {
         exceptionable: boolean;
       },
     ): false => {
-      if (error.exceptionable && reportable(error.path)) array.push(error);
+      if (error.exceptionable && reportable(error.path))
+        array.push({
+          path: error.path,
+          expected: error.expected,
+          value: error.value,
+        });
       return false;
     };
   };
