@@ -207,8 +207,23 @@ export namespace HttpLlmComposer {
       isNameVariable === false ||
       isNameStartsWithNumber === true ||
       description[1] > 1_024
-    )
+    ) {
+      if (output?.success === false)
+        props.errors.push(
+          ...output.error.reasons.map((r) => `${r.accessor}: ${r.message}`),
+        );
+      if (llmParameters.success === false)
+        props.errors.push(
+          ...llmParameters.error.reasons.map((r) => {
+            const accessor: string = r.accessor.replace(
+              `parameters.properties["body"]`,
+              `requestBody.content[${JSON.stringify(props.route.body?.type ?? "application/json")}].schema`,
+            );
+            return `${accessor}: ${r.message}`;
+          }),
+        );
       return null;
+    }
     return {
       method: props.route.method as "get",
       path: props.route.path,
