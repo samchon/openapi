@@ -22,7 +22,7 @@ export const _test_validate = <T>(props: {
   typia.assert(result);
 
   if (result.success === false) {
-    console.log(result.errors);
+    console.log("errors", result.data, result.errors);
     throw new Error(
       `Bug on OpenApiValidator.validate(): failed to understand the ${props.name} type.`,
     );

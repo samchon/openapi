@@ -49,19 +49,19 @@ export namespace ArrayRepeatedUnion {
     },
     (input) => {
       (input as any)[1] = null!;
-      return ["$input[1]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[2][2] = 1;
-      return ["$input[2][2]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[3][3][0] = typia.random<ArrayRepeatedUnion.IPoint3D>();
-      return ["$input[3][3]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[4][0].pivot = null;
-      return ["$input[4]"];
+      return ["$input"];
     },
   ];
 }

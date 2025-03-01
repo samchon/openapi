@@ -23,19 +23,19 @@ export namespace ArrayRepeatedNullable {
   export const SPOILERS: Spoiler<ArrayRepeatedNullable>[] = [
     (input) => {
       (input as any)[0] = BigInt(3) as any;
-      return ["$input[0]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[1] = undefined!;
-      return ["$input[1]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[2] = false as any;
-      return ["$input[2]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[3][2] = {};
-      return ["$input[3][2]"];
+      return ["$input"];
     },
   ];
 

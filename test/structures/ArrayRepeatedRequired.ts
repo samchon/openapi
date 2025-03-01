@@ -19,19 +19,19 @@ export namespace ArrayRepeatedRequired {
   export const SPOILERS: Spoiler<ArrayRepeatedRequired>[] = [
     (input) => {
       (input as any)[0] = undefined!;
-      return ["$input[0]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[1] = null!;
-      return ["$input[1]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[2] = false as any;
-      return ["$input[2]"];
+      return ["$input"];
     },
     (input) => {
       (input as any)[3][2] = {};
-      return ["$input[3][2]"];
+      return ["$input"];
     },
   ];
 

@@ -24,15 +24,15 @@ export namespace TypeTagObjectUnion {
   export const SPOILERS: Spoiler<TypeTagObjectUnion>[] = [
     (input) => {
       input[0]!.value = "12";
-      return ["$input[0].value"];
+      return ["$input[0]"];
     },
     (input) => {
       input[1]!.value = "12345678";
-      return ["$input[1].value"];
+      return ["$input[1]"];
     },
     (input) => {
       input[2]!.value = 2;
-      return ["$input[2].value"];
+      return ["$input[2]"];
     },
   ];
   export const BINARABLE = false;

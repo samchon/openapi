@@ -136,7 +136,7 @@ export namespace ObjectUnionCompositePointer {
     (input) => {
       (input.value[5]!.value as ObjectUnionCompositePointer.IPolygon).outer =
         {} as any;
-      return ["$input.value[5].value.p1", "$input.value[5].value.p2"];
+      return ["$input.value[5].value"];
     },
     (input) => {
       (
@@ -144,7 +144,7 @@ export namespace ObjectUnionCompositePointer {
       ).outer = {
         length: 0,
       } as any;
-      return ["$input.value[6].value.p1", "$input.value[6].value.p2"];
+      return ["$input.value[6].value"];
     },
     (input) => {
       (input.value[7]!.value as ObjectUnionCompositePointer.ICircle).radius =

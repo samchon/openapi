@@ -39,7 +39,7 @@ export namespace OpenApiSchemaNamingRule {
             ? `tags.ExclusiveMinimum<${schema.minimum}>`
             : `tags.Minimum<${schema.minimum}>`,
         ]
-      : ["tags.Minimum<0>"]),
+      : []),
     ...(schema.maximum !== undefined
       ? [
           schema.exclusiveMaximum
@@ -60,7 +60,7 @@ export namespace OpenApiSchemaNamingRule {
             ? `tags.ExclusiveMinimum<${schema.minimum}>`
             : `tags.Minimum<${schema.minimum}>`,
         ]
-      : ["tags.Minimum<0>"]),
+      : []),
     ...(schema.maximum !== undefined
       ? [
           schema.exclusiveMaximum

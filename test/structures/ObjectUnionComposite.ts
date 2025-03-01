@@ -123,13 +123,13 @@ export namespace ObjectUnionComposite {
     },
     (input) => {
       (input[5] as ObjectUnionComposite.IPolygon).outer = {} as any;
-      return ["$input[5].p1", "$input[5].p2"];
+      return ["$input[5]"];
     },
     (input) => {
       (input[6] as ObjectUnionComposite.IPointedShape).outer = {
         length: 0,
       } as any;
-      return ["$input[6].p1", "$input[6].p2"];
+      return ["$input[6]"];
     },
     (input) => {
       (input[7] as ObjectUnionComposite.ICircle).radius = "string" as any;
