@@ -92,5 +92,11 @@
     "src",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "packageManager": "pnpm@10.5.2",
+  "pnpm": {
+    "executionEnv": {
+      "nodeVersion": "22.14.0"
+    }
+  }
 }
