@@ -37,6 +37,7 @@ export const test_llm_merge_parameters = (): void => {
             required: ["c", "d"],
           },
         },
+        validate: null!,
       },
       human: {
         a: false,

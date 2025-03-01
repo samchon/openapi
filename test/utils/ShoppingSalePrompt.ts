@@ -2,8 +2,8 @@ import fs from "fs";
 import typia from "typia";
 
 import { TestGlobal } from "../TestGlobal";
-import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
-import { IShoppingSale } from "../structures/IShoppingSale";
+import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
+import { IShoppingSale } from "../dto/IShoppingSale";
 
 export namespace ShoppingSalePrompt {
   export const documents = async (): Promise<string[]> => {

@@ -10,7 +10,7 @@ import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaCompo
 import typia, { IJsonSchemaCollection, IValidation } from "typia";
 
 import { TestGlobal } from "../TestGlobal";
-import { ILlmTextPrompt } from "../structures/ILlmTextPrompt";
+import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 
 export namespace ClaudeFunctionCaller {
   export interface IProps<Model extends "chatgpt" | "claude" | "gemini"> {
