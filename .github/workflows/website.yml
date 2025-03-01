@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+      - uses: pnpm/action-setup@v4
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
       - name: Build TypeDoc
-        run: npm run typedoc && npm run typedoc -- --json website/public/api/openapi.json
+        run: |
+          pnpm run typedoc 
+          pnpm run typedoc -- --json website/public/api/openapi.json
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.3
         with:
