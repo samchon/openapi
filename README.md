@@ -48,7 +48,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
 
 > https://github.com/user-attachments/assets/01604b53-aca4-41cb-91aa-3faf63549ea6
 >
-> Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`@nestia/chat`](https://nestia.io/docs/swagger/chat/)
+> Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`agentica`](https://github.com/wrtnlabs/agentica)
 >
 > - Shopping A.I. Chatbot Application: [https://nestia.io/chat/shopping](/chat/shopping)
 > - Shopping Backend Repository: https://github.com/samchon/shopping-backend
@@ -504,15 +504,30 @@ main().catch(console.error);
 
 
 
-## Wrtn OS
-[![Wrtn Logo](https://nestia.io/images/sponsors/wrtn-logo.png)](https://wrtnlabs.io)
+## Agentica
+![agentica-conceptual-diagram](https://github.com/user-attachments/assets/d7ebbd1f-04d3-4b0d-9e2a-234e29dd6c57)
 
-> https://wrtnlabs.io
+https://github.com/wrtnlabs/agentica
 
-The new era of software development.
+`agentica` is the simplest **Agentic AI** library, specialized in **LLM Function Calling** with `@samchon/openapi`.
 
-If you are not familiar with LLM (Large Language Model) development or RAG implementation, you can take another option. Prepare your swagger document file, and visit WrtnLabs homepage https://wrtnlabs.io. You can create your own A.I. chatbot with "Wrtn OS", and re-distribute it as you want. The A.I. assistant in the Wrtn OS is much more optimized and cost efficient than the `@nestia/agent`, and it is fully open sourced.
+With it, you don't need to compose complicate agent graph or workflow. Instead, just deliver **Swagger/OpenAPI** documents or **TypeScript class** types linearly to the `agentica`. Then `agentica` will do everything with the function calling.
 
-Also, you can sell your swagger document (backend API functions) in the "Wrtn Store", so that let other users to create their own A.I. chatbot with your backend API functions. Conversely, you can purchase the functions you need to create an A.I. chatbot from the store. If you have create an A.I. chatbot with only the functions purchased in the Wrtn Store, it is the no coding development.
+Look at the below demonstration, and feel how `agentica` is easy and powerful combining with `@samchon/openapi`.
 
-I think this is a new way of software development, and a new way of software distribution. It is a new era of software development, and I hope you to be a part of it.
+```typescript
+import { Agentica } from "@agentica/core";
+import typia from "typia";
+
+const agent = new Agentica({
+  controllers: [
+    await fetch(
+      "https://shopping-be.wrtn.ai/editor/swagger.json",
+    ).then(r => r.json()),
+    typia.llm.application<ShoppingCounselor>(),
+    typia.llm.application<ShoppingPolicy>(),
+    typia.llm.application<ShoppingSearchRag>(),
+  ],
+});
+await agent.conversate("I wanna buy MacBook Pro");
+```
