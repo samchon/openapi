@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
+
 /**
  * Type schema info for the Gemini function calling.
  *
@@ -68,6 +70,23 @@ export type IGeminiSchema =
   | IGeminiSchema.INullOnly;
 export namespace IGeminiSchema {
   /**
+   * Configuration for the Gemini schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow recursive types or not.
+     *
+     * If allow, then how many times to repeat the recursive types.
+     *
+     * By the way, if the model is "chatgpt", the recursive types are always
+     * allowed without any limitation, due to it supports the reference type.
+     *
+     * @default 3
+     */
+    recursive: false | number;
+  }
+
+  /**
    * Type of the function parameters.
    *
    * `IGeminiSchema.IParameters` is a type defining a function's parameters
@@ -82,7 +101,12 @@ export namespace IGeminiSchema {
   /**
    * Boolean type schema info.
    */
-  export interface IBoolean extends __ISignificant<"boolean"> {
+  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Enumeration values.
      */
@@ -92,7 +116,12 @@ export namespace IGeminiSchema {
   /**
    * Integer type schema info.
    */
-  export interface IInteger extends __ISignificant<"integer"> {
+  export interface IInteger extends IJsonSchemaAttribute.IInteger {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Enumeration values.
      *
@@ -104,7 +133,12 @@ export namespace IGeminiSchema {
   /**
    * Number type schema info.
    */
-  export interface INumber extends __ISignificant<"number"> {
+  export interface INumber extends IJsonSchemaAttribute.INumber {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Enumeration values.
      */
@@ -114,7 +148,12 @@ export namespace IGeminiSchema {
   /**
    * String type schema info.
    */
-  export interface IString extends __ISignificant<"string"> {
+  export interface IString extends IJsonSchemaAttribute.IString {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Enumeration values.
      */
@@ -124,7 +163,12 @@ export namespace IGeminiSchema {
   /**
    * Array type schema info.
    */
-  export interface IArray extends __ISignificant<"array"> {
+  export interface IArray extends IJsonSchemaAttribute.IArray {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Items type schema info.
      *
@@ -137,7 +181,12 @@ export namespace IGeminiSchema {
   /**
    * Object type schema info.
    */
-  export interface IObject extends __ISignificant<"object"> {
+  export interface IObject extends IJsonSchemaAttribute.IObject {
+    /**
+     * Whether to allow `null` value or not.
+     */
+    nullable?: boolean;
+
     /**
      * Properties of the object.
      *
@@ -187,29 +236,22 @@ export namespace IGeminiSchema {
   }
 
   /**
+   * Null only type schema info.
+   */
+  export interface INullOnly extends IJsonSchemaAttribute.INull {}
+
+  /**
    * Unknown type schema info.
    *
    * It means the type of the value is `any`.
    */
-  export interface IUnknown extends __IAttribute {
-    /**
-     * Type is never be defined.
-     */
-    type?: undefined;
-  }
-
-  /**
-   * Null only type schema info.
-   */
-  export interface INullOnly extends __IAttribute {
-    /**
-     * Type is always `null`.
-     */
-    type: "null";
-  }
+  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
 
   /**
    * Significant attributes that can be applied to the most types.
+   *
+   * @deprecated
+   * @hidden
    */
   export interface __ISignificant<Type extends string> extends __IAttribute {
     /**
@@ -225,49 +267,9 @@ export namespace IGeminiSchema {
 
   /**
    * Common attributes that can be applied to all types.
+   *
+   * @deprecated
+   * @hidden
    */
-  export interface __IAttribute {
-    /**
-     * Detailed description of the schema.
-     */
-    description?: string;
-
-    /**
-     * Whether the type is deprecated or not.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    deprecated?: boolean;
-
-    /**
-     * Example value.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    example?: any;
-
-    /**
-     * List of example values as key-value pairs.
-     *
-     * @warning document of Gemini says not supported, but cannot sure
-     */
-    examples?: Record<string, any>;
-  }
-
-  /**
-   * Configuration for the Gemini schema composition.
-   */
-  export interface IConfig {
-    /**
-     * Whether to allow recursive types or not.
-     *
-     * If allow, then how many times to repeat the recursive types.
-     *
-     * By the way, if the model is "chatgpt", the recursive types are always
-     * allowed without any limitation, due to it supports the reference type.
-     *
-     * @default 3
-     */
-    recursive: false | number;
-  }
+  export type __IAttribute = IJsonSchemaAttribute;
 }

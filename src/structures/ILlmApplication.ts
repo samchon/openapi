@@ -25,7 +25,10 @@ import { ILlmSchema } from "./ILlmSchema";
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface ILlmApplication<Model extends ILlmSchema.Model> {
+export interface ILlmApplication<
+  Model extends ILlmSchema.Model,
+  Class extends object = any,
+> {
   /**
    * Model of the LLM.
    */
@@ -42,6 +45,14 @@ export interface ILlmApplication<Model extends ILlmSchema.Model> {
    * Configuration for the application.
    */
   options: ILlmApplication.IOptions<Model>;
+
+  /**
+   * Class type, the source of the LLM application.
+   *
+   * This property is just for the generic type inference,
+   * and its value is always `undefined`.
+   */
+  __class?: Class | undefined;
 }
 export namespace ILlmApplication {
   /**

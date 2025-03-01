@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./structures/IJsonSchemaAttribute";
+
 /**
  * Swagger v2.0 definition.
  *
@@ -125,16 +127,20 @@ export namespace SwaggerV2 {
     | IJsonSchema.IArray
     | IJsonSchema.IObject
     | IJsonSchema.IReference
-    | IJsonSchema.IUnknown
-    | IJsonSchema.INullOnly
     | IJsonSchema.IAnyOf
-    | IJsonSchema.IOneOf;
+    | IJsonSchema.IOneOf
+    | IJsonSchema.INullOnly
+    | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
-    export interface IBoolean extends __ISignificant<"boolean"> {
+    export interface IBoolean
+      extends Omit<IJsonSchemaAttribute.IBoolean, "examples">,
+        __ISignificant<"boolean"> {
       default?: boolean | null;
       enum?: Array<boolean | null>;
     }
-    export interface IInteger extends __ISignificant<"integer"> {
+    export interface IInteger
+      extends Omit<IJsonSchemaAttribute.IInteger, "examples">,
+        __ISignificant<"integer"> {
       /** @type int64 */ default?: number | null;
       /** @type int64 */ enum?: Array<number | null>;
       /** @type int64 */ minimum?: number;
@@ -147,7 +153,9 @@ export namespace SwaggerV2 {
        */
       multipleOf?: number;
     }
-    export interface INumber extends __ISignificant<"number"> {
+    export interface INumber
+      extends Omit<IJsonSchemaAttribute.INumber, "examples">,
+        __ISignificant<"number"> {
       default?: number | null;
       enum?: Array<number | null>;
       minimum?: number;
@@ -156,7 +164,9 @@ export namespace SwaggerV2 {
       exclusiveMaximum?: boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
     }
-    export interface IString extends __ISignificant<"string"> {
+    export interface IString
+      extends Omit<IJsonSchemaAttribute.IString, "examples">,
+        __ISignificant<"string"> {
       default?: string | null;
       enum?: Array<string | null>;
       format?:
@@ -189,13 +199,17 @@ export namespace SwaggerV2 {
       /** @type uint64 */ maxLength?: number;
     }
 
-    export interface IArray extends __ISignificant<"array"> {
+    export interface IArray
+      extends Omit<IJsonSchemaAttribute.IArray, "examples">,
+        __ISignificant<"array"> {
       items: IJsonSchema;
       uniqueItems?: boolean;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
-    export interface IObject extends __ISignificant<"object"> {
+    export interface IObject
+      extends Omit<IJsonSchemaAttribute.IObject, "examples">,
+        __ISignificant<"object"> {
       properties?: Record<string, IJsonSchema>;
       required?: string[];
       additionalProperties?: boolean | IJsonSchema;
@@ -206,13 +220,6 @@ export namespace SwaggerV2 {
       $ref: Key;
     }
 
-    export interface IUnknown extends __IAttribute {
-      type?: undefined;
-    }
-    export interface INullOnly extends __IAttribute {
-      type: "null";
-      default?: null;
-    }
     export interface IAllOf extends __IAttribute {
       allOf: IJsonSchema[];
     }
@@ -223,15 +230,20 @@ export namespace SwaggerV2 {
       "x-oneOf": IJsonSchema[];
     }
 
+    export interface INullOnly extends __IAttribute {
+      type: "null";
+      default?: null;
+    }
+    export interface IUnknown extends __IAttribute {
+      type?: undefined;
+    }
+
     export interface __ISignificant<Type extends string> extends __IAttribute {
       type: Type;
       "x-nullable"?: boolean;
     }
-    export interface __IAttribute {
-      title?: string;
-      description?: string;
-      deprecated?: boolean;
-      example?: any;
+    export interface __IAttribute
+      extends Omit<IJsonSchemaAttribute, "examples"> {
       examples?: any[];
     }
   }

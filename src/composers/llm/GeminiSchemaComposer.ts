@@ -5,7 +5,7 @@ import { IGeminiSchema } from "../../structures/IGeminiSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3 } from "../../structures/ILlmSchemaV3";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
-import { IResult } from "../../typings/IResult";
+import { IResult } from "../../structures/IResult";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { LlmParametersFinder } from "./LlmParametersComposer";

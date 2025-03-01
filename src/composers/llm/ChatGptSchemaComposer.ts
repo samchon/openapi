@@ -3,7 +3,7 @@ import { IChatGptSchema } from "../../structures/IChatGptSchema";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
-import { IResult } from "../../typings/IResult";
+import { IResult } from "../../structures/IResult";
 import { ChatGptTypeChecker } from "../../utils/ChatGptTypeChecker";
 import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
 import { NamingConvention } from "../../utils/NamingConvention";
@@ -192,7 +192,7 @@ export namespace ChatGptSchemaComposer {
       };
       if (OpenApiTypeChecker.isConstant(input)) insert(input.const);
       else if (OpenApiTypeChecker.isOneOf(input))
-        input.oneOf.forEach(visitConstant);
+        input.oneOf.forEach((s) => visitConstant(s as ILlmSchemaV3_1));
     };
     visit(props.schema);
     visitConstant(props.schema);

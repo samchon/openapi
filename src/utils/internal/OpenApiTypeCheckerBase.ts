@@ -1,6 +1,6 @@
 import { OpenApi } from "../../OpenApi";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
-import { IResult } from "../../typings/IResult";
+import { IResult } from "../../structures/IResult";
 import { AccessorUtil } from "../AccessorUtil";
 import { MapUtil } from "../MapUtil";
 import { JsonDescriptionUtil } from "./JsonDescriptionUtil";

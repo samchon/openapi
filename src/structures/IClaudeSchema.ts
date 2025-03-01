@@ -53,21 +53,6 @@ export type IClaudeSchema =
   | IClaudeSchema.INull
   | IClaudeSchema.IUnknown;
 export namespace IClaudeSchema {
-  export import IParameters = ILlmSchemaV3_1.IParameters;
-
-  export import IConstant = ILlmSchemaV3_1.IConstant;
-  export import IBoolean = ILlmSchemaV3_1.IBoolean;
-  export import IInteger = ILlmSchemaV3_1.IInteger;
-  export import INumber = ILlmSchemaV3_1.INumber;
-  export import IString = ILlmSchemaV3_1.IString;
-
-  export import IObject = ILlmSchemaV3_1.IObject;
-  export import IArray = ILlmSchemaV3_1.IArray;
-  export import IReference = ILlmSchemaV3_1.IReference;
-  export import IOneOf = ILlmSchemaV3_1.IOneOf;
-  export import INull = ILlmSchemaV3_1.INull;
-  export import IUnknown = ILlmSchemaV3_1.IUnknown;
-
   /**
    * Configuration for Claude schema composition.
    */
@@ -92,4 +77,19 @@ export namespace IClaudeSchema {
      */
     reference: boolean;
   }
+
+  export import IParameters = ILlmSchemaV3_1.IParameters;
+
+  export import IConstant = ILlmSchemaV3_1.IConstant;
+  export import IBoolean = ILlmSchemaV3_1.IBoolean;
+  export import IInteger = ILlmSchemaV3_1.IInteger;
+  export import INumber = ILlmSchemaV3_1.INumber;
+  export import IString = ILlmSchemaV3_1.IString;
+
+  export import IObject = ILlmSchemaV3_1.IObject;
+  export import IArray = ILlmSchemaV3_1.IArray;
+  export import IReference = ILlmSchemaV3_1.IReference;
+  export import IOneOf = ILlmSchemaV3_1.IOneOf;
+  export import INull = ILlmSchemaV3_1.INull;
+  export import IUnknown = ILlmSchemaV3_1.IUnknown;
 }

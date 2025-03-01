@@ -2,7 +2,7 @@ import fs from "fs";
 import typia from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
-import { IShoppingSale } from "../../../structures/IShoppingSale";
+import { IShoppingSale } from "../../../dto/IShoppingSale";
 import { LlamaFunctionCaller } from "../../../utils/LlamaFunctionCaller";
 import { ShoppingSalePrompt } from "../../../utils/ShoppingSalePrompt";
 

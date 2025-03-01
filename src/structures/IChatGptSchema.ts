@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
+
 /**
  * Type schema info of the ChatGPT.
  *
@@ -106,7 +108,7 @@ export namespace IChatGptSchema {
   /**
    * Boolean type info.
    */
-  export interface IBoolean extends __ISignificant<"boolean"> {
+  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
     /**
      * Enumeration values.
      */
@@ -116,7 +118,7 @@ export namespace IChatGptSchema {
   /**
    * Integer type info.
    */
-  export interface IInteger extends __ISignificant<"integer"> {
+  export interface IInteger extends IJsonSchemaAttribute.IInteger {
     /**
      * Enumeration values.
      */
@@ -126,7 +128,7 @@ export namespace IChatGptSchema {
   /**
    * Number (double) type info.
    */
-  export interface INumber extends __ISignificant<"number"> {
+  export interface INumber extends IJsonSchemaAttribute.INumber {
     /**
      * Enumeration values.
      */
@@ -136,7 +138,7 @@ export namespace IChatGptSchema {
   /**
    * String type info.
    */
-  export interface IString extends __ISignificant<"string"> {
+  export interface IString extends IJsonSchemaAttribute.IString {
     /**
      * Enumeration values.
      */
@@ -146,7 +148,7 @@ export namespace IChatGptSchema {
   /**
    * Array type info.
    */
-  export interface IArray extends __ISignificant<"array"> {
+  export interface IArray extends IJsonSchemaAttribute.IArray {
     /**
      * Items type info.
      *
@@ -159,7 +161,7 @@ export namespace IChatGptSchema {
   /**
    * Object type info.
    */
-  export interface IObject extends __ISignificant<"object"> {
+  export interface IObject extends IJsonSchemaAttribute.IObject {
     /**
      * Properties of the object.
      *
@@ -220,7 +222,7 @@ export namespace IChatGptSchema {
   /**
    * Reference type directing named schema.
    */
-  export interface IReference extends __IAttribute {
+  export interface IReference extends IJsonSchemaAttribute {
     /**
      * Reference to the named schema.
      *
@@ -244,7 +246,7 @@ export namespace IChatGptSchema {
    * defined `anyOf` instead of the `oneOf`, {@link IChatGptSchema} forcibly
    * converts it to `oneOf` type.
    */
-  export interface IAnyOf extends __IAttribute {
+  export interface IAnyOf extends IJsonSchemaAttribute {
     /**
      * List of the union types.
      */
@@ -254,20 +256,18 @@ export namespace IChatGptSchema {
   /**
    * Null type.
    */
-  export interface INull extends __ISignificant<"null"> {}
+  export interface INull extends IJsonSchemaAttribute.INull {}
 
   /**
    * Unknown, the `any` type.
    */
-  export interface IUnknown extends __IAttribute {
-    /**
-     * Type is never be defined.
-     */
-    type?: undefined;
-  }
+  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
 
   /**
    * Significant attributes that can be applied to the most types.
+   *
+   * @deprecated
+   * @hidden
    */
   export interface __ISignificant<Type extends string> extends __IAttribute {
     /**
@@ -278,33 +278,11 @@ export namespace IChatGptSchema {
 
   /**
    * Common attributes that can be applied to all types.
+   *
+   * @deprecated
+   * @hidden
    */
-  export interface __IAttribute {
-    /**
-     * Title of the schema.
-     */
-    title?: string;
-
-    /**
-     * Detailed description of the schema.
-     */
-    description?: string;
-
-    /**
-     * Whether the type is deprecated or not.
-     */
-    deprecated?: boolean;
-
-    /**
-     * Example value.
-     */
-    example?: any;
-
-    /**
-     * List of example values as key-value pairs.
-     */
-    examples?: Record<string, any>;
-  }
+  export type __IAttribute = IJsonSchemaAttribute;
 
   /**
    * Configuration for ChatGPT schema composition.
@@ -343,7 +321,6 @@ export namespace IChatGptSchema {
      * than the strict mode. Therefore, I recommend you to just turn off the
      * strict mode and utilize the {@link typia.validate} function instead.
      *
-     * @todo Would be required in the future
      * @default false
      */
     strict?: boolean;

@@ -6,6 +6,7 @@ import { OpenApiV3Upgrader } from "./converters/OpenApiV3Upgrader";
 import { OpenApiV3_1Emender } from "./converters/OpenApiV3_1Emender";
 import { SwaggerV2Downgrader } from "./converters/SwaggerV2Downgrader";
 import { SwaggerV2Upgrader } from "./converters/SwaggerV2Upgrader";
+import { IJsonSchemaAttribute } from "./structures/IJsonSchemaAttribute";
 
 /**
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
@@ -668,7 +669,7 @@ export namespace OpenApi {
     /**
      * Constant value type.
      */
-    export interface IConstant extends __IAttribute {
+    export interface IConstant extends IJsonSchemaAttribute {
       /**
        * The constant value.
        */
@@ -678,9 +679,9 @@ export namespace OpenApi {
     /**
      * Boolean type info.
      */
-    export interface IBoolean extends __ISignificant<"boolean"> {
+    export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
       /**
-       * The default value.
+       * The default value of the boolean type.
        */
       default?: boolean;
     }
@@ -688,9 +689,9 @@ export namespace OpenApi {
     /**
      * Integer type info.
      */
-    export interface IInteger extends __ISignificant<"integer"> {
+    export interface IInteger extends IJsonSchemaAttribute.IInteger {
       /**
-       * Default value.
+       * Default value of the integer type.
        *
        * @type int64
        */
@@ -742,9 +743,9 @@ export namespace OpenApi {
     /**
      * Number (double) type info.
      */
-    export interface INumber extends __ISignificant<"number"> {
+    export interface INumber extends IJsonSchemaAttribute.INumber {
       /**
-       * Default value.
+       * Default value of the number type.
        */
       default?: number;
 
@@ -789,9 +790,9 @@ export namespace OpenApi {
     /**
      * String type info.
      */
-    export interface IString extends __ISignificant<"string"> {
+    export interface IString extends IJsonSchemaAttribute.IString {
       /**
-       * Default value.
+       * Default value of the string type.
        */
       default?: string;
 
@@ -852,7 +853,7 @@ export namespace OpenApi {
     /**
      * Array type info.
      */
-    export interface IArray extends __ISignificant<"array"> {
+    export interface IArray extends IJsonSchemaAttribute.IArray {
       /**
        * Items type info.
        *
@@ -890,7 +891,19 @@ export namespace OpenApi {
     /**
      * Tuple type info.
      */
-    export interface ITuple extends __ISignificant<"array"> {
+    export interface ITuple extends IJsonSchemaAttribute {
+      /**
+       * Discriminator value of the type.
+       *
+       * Note that, the tuple type cannot be distinguished with
+       * {@link IArray} type just by this `discriminator` property.
+       *
+       * To check whether the type is tuple or array, you have to check
+       * the existence of {@link IArray.items} or {@link ITuple.prefixItems}
+       * properties.
+       */
+      type: "array";
+
       /**
        * Prefix items.
        *
@@ -948,7 +961,7 @@ export namespace OpenApi {
     /**
      * Object type info.
      */
-    export interface IObject extends __ISignificant<"object"> {
+    export interface IObject extends IJsonSchemaAttribute.IObject {
       /**
        * Properties of the object.
        *
@@ -1016,7 +1029,7 @@ export namespace OpenApi {
     /**
      * Reference type directing named schema.
      */
-    export interface IReference<Key = string> extends __IAttribute {
+    export interface IReference<Key = string> extends IJsonSchemaAttribute {
       /**
        * Reference to the named schema.
        *
@@ -1040,7 +1053,7 @@ export namespace OpenApi {
      * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
      * converts it to `oneOf` type.
      */
-    export interface IOneOf extends __IAttribute {
+    export interface IOneOf extends IJsonSchemaAttribute {
       /**
        * List of the union types.
        */
@@ -1076,9 +1089,9 @@ export namespace OpenApi {
     /**
      * Null type.
      */
-    export interface INull extends __ISignificant<"null"> {
+    export interface INull extends IJsonSchemaAttribute.INull {
       /**
-       * Default value.
+       * Default value of the `null` type.
        */
       default?: null;
     }
@@ -1086,17 +1099,21 @@ export namespace OpenApi {
     /**
      * Unknown, the `any` type.
      */
-    export interface IUnknown extends __IAttribute {
+    export interface IUnknown extends IJsonSchemaAttribute.IUnknown {
       /**
-       * Type is never be defined.
+       * Default value of the `any` type.
        */
-      type?: undefined;
+      default?: any;
     }
 
     /**
      * Significant attributes that can be applied to the most types.
+     *
+     * @deprecated
+     * @hidden
      */
-    export interface __ISignificant<Type extends string> extends __IAttribute {
+    export interface __ISignificant<Type extends string>
+      extends IJsonSchemaAttribute {
       /**
        * Discriminator value of the type.
        */
@@ -1105,33 +1122,11 @@ export namespace OpenApi {
 
     /**
      * Common attributes that can be applied to all types.
+     *
+     * @deprecated
+     * @hidden
      */
-    export interface __IAttribute {
-      /**
-       * Title of the schema.
-       */
-      title?: string;
-
-      /**
-       * Detailed description of the schema.
-       */
-      description?: string;
-
-      /**
-       * Whether the type is deprecated or not.
-       */
-      deprecated?: boolean;
-
-      /**
-       * Example value.
-       */
-      example?: any;
-
-      /**
-       * List of example values as key-value pairs.
-       */
-      examples?: Record<string, any>;
-    }
+    export type __IAttribute = IJsonSchemaAttribute;
   }
 
   /**

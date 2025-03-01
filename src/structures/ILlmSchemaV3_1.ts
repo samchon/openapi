@@ -1,3 +1,5 @@
+import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
+
 /**
  * Type schema based on OpenAPI v3.1 for LLM function calling.
  *
@@ -69,6 +71,64 @@ export type ILlmSchemaV3_1 =
   | ILlmSchemaV3_1.IUnknown;
 export namespace ILlmSchemaV3_1 {
   /**
+   * Configuration for OpenAPI v3.1 based LLM schema composition.
+   */
+  export interface IConfig {
+    /**
+     * Whether to allow constraint properties or not.
+     *
+     * If you configure this property to `false`, the schemas do not contain
+     * the constraint properties of below. Instead, below properties would be
+     * written to the {@link ILlmSchemaV3_1.__IAttribute.description} property
+     * as a comment string like `"@format uuid"`.
+     *
+     * This is because some LLM schema model like {@link IChatGptSchema}
+     * has banned such constraint, because their LLM cannot understand the
+     * constraint properties and occur the hallucination.
+     *
+     * Therefore, considering your LLM model's performance, capability,
+     * and the complexity of your parameter types, determine which is better,
+     * to allow the constraint properties or not.
+     *
+     * - {@link ILlmSchemaV3_1.INumber.minimum}
+     * - {@link ILlmSchemaV3_1.INumber.maximum}
+     * - {@link ILlmSchemaV3_1.INumber.multipleOf}
+     * - {@link ILlmSchemaV3_1.IString.minLength}
+     * - {@link ILlmSchemaV3_1.IString.maxLength}
+     * - {@link ILlmSchemaV3_1.IString.format}
+     * - {@link ILlmSchemaV3_1.IString.pattern}
+     * - {@link ILlmSchemaV3_1.IString.contentMediaType}
+     * - {@link ILlmSchemaV3_1.IString.default}
+     * - {@link ILlmSchemaV3_1.IArray.minItems}
+     * - {@link ILlmSchemaV3_1.IArray.maxItems}
+     * - {@link ILlmSchemaV3_1.IArray.unique}
+     *
+     * @default true
+     */
+    constraint: boolean;
+
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link ILlmSchemaV3_1.IReference} would be escaped to
+     * a plain type unless recursive type case.
+     *
+     * This is because some low sized LLM models does not understand the
+     * reference type well, and even the large size LLM models sometimes occur
+     * the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that reduces
+     * the LLM token cost. Therefore, if you're using the large size of LLM model,
+     * and want to reduce the LLM token cost, you can configure this property to
+     * `true`.
+     *
+     * @default false
+     */
+    reference: boolean;
+  }
+
+  /**
    * Type of the function parameters.
    *
    * `ILlmSchemaV3_1.IParameters` is a type defining a function's parameters
@@ -98,7 +158,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Constant value type.
    */
-  export interface IConstant extends __IAttribute {
+  export interface IConstant extends IJsonSchemaAttribute {
     /**
      * The constant value.
      */
@@ -108,7 +168,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Boolean type info.
    */
-  export interface IBoolean extends __ISignificant<"boolean"> {
+  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
     /**
      * The default value.
      */
@@ -118,7 +178,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Integer type info.
    */
-  export interface IInteger extends __ISignificant<"integer"> {
+  export interface IInteger extends IJsonSchemaAttribute.IInteger {
     /**
      * Default value.
      *
@@ -172,7 +232,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Number (double) type info.
    */
-  export interface INumber extends __ISignificant<"number"> {
+  export interface INumber extends IJsonSchemaAttribute.INumber {
     /**
      * Default value.
      */
@@ -219,7 +279,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * String type info.
    */
-  export interface IString extends __ISignificant<"string"> {
+  export interface IString extends IJsonSchemaAttribute.IString {
     /**
      * Default value.
      */
@@ -282,7 +342,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Array type info.
    */
-  export interface IArray extends __ISignificant<"array"> {
+  export interface IArray extends IJsonSchemaAttribute.IArray {
     /**
      * Items type info.
      *
@@ -320,7 +380,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Object type info.
    */
-  export interface IObject extends __ISignificant<"object"> {
+  export interface IObject extends IJsonSchemaAttribute.IObject {
     /**
      * Properties of the object.
      *
@@ -388,7 +448,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Reference type directing named schema.
    */
-  export interface IReference extends __IAttribute {
+  export interface IReference extends IJsonSchemaAttribute {
     /**
      * Reference to the named schema.
      *
@@ -412,7 +472,7 @@ export namespace ILlmSchemaV3_1 {
    * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
    * converts it to `oneOf` type.
    */
-  export interface IOneOf extends __IAttribute {
+  export interface IOneOf extends IJsonSchemaAttribute {
     /**
      * List of the union types.
      */
@@ -448,7 +508,7 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Null type.
    */
-  export interface INull extends __ISignificant<"null"> {
+  export interface INull extends IJsonSchemaAttribute.INull {
     /**
      * Default value.
      */
@@ -458,15 +518,13 @@ export namespace ILlmSchemaV3_1 {
   /**
    * Unknown, the `any` type.
    */
-  export interface IUnknown extends __IAttribute {
-    /**
-     * Type is never be defined.
-     */
-    type?: undefined;
-  }
+  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
 
   /**
    * Significant attributes that can be applied to the most types.
+   *
+   * @deprecated
+   * @hidden
    */
   export interface __ISignificant<Type extends string> extends __IAttribute {
     /**
@@ -477,89 +535,9 @@ export namespace ILlmSchemaV3_1 {
 
   /**
    * Common attributes that can be applied to all types.
+   *
+   * @deprecated
+   * @hidden
    */
-  export interface __IAttribute {
-    /**
-     * Title of the schema.
-     */
-    title?: string;
-
-    /**
-     * Detailed description of the schema.
-     */
-    description?: string;
-
-    /**
-     * Whether the type is deprecated or not.
-     */
-    deprecated?: boolean;
-
-    /**
-     * Example value.
-     */
-    example?: any;
-
-    /**
-     * List of example values as key-value pairs.
-     */
-    examples?: Record<string, any>;
-  }
-
-  /**
-   * Configuration for OpenAPI v3.1 based LLM schema composition.
-   */
-  export interface IConfig {
-    /**
-     * Whether to allow constraint properties or not.
-     *
-     * If you configure this property to `false`, the schemas do not contain
-     * the constraint properties of below. Instead, below properties would be
-     * written to the {@link ILlmSchemaV3_1.__IAttribute.description} property
-     * as a comment string like `"@format uuid"`.
-     *
-     * This is because some LLM schema model like {@link IChatGptSchema}
-     * has banned such constraint, because their LLM cannot understand the
-     * constraint properties and occur the hallucination.
-     *
-     * Therefore, considering your LLM model's performance, capability,
-     * and the complexity of your parameter types, determine which is better,
-     * to allow the constraint properties or not.
-     *
-     * - {@link ILlmSchemaV3_1.INumber.minimum}
-     * - {@link ILlmSchemaV3_1.INumber.maximum}
-     * - {@link ILlmSchemaV3_1.INumber.multipleOf}
-     * - {@link ILlmSchemaV3_1.IString.minLength}
-     * - {@link ILlmSchemaV3_1.IString.maxLength}
-     * - {@link ILlmSchemaV3_1.IString.format}
-     * - {@link ILlmSchemaV3_1.IString.pattern}
-     * - {@link ILlmSchemaV3_1.IString.contentMediaType}
-     * - {@link ILlmSchemaV3_1.IString.default}
-     * - {@link ILlmSchemaV3_1.IArray.minItems}
-     * - {@link ILlmSchemaV3_1.IArray.maxItems}
-     * - {@link ILlmSchemaV3_1.IArray.unique}
-     *
-     * @default true
-     */
-    constraint: boolean;
-
-    /**
-     * Whether to allow reference type in everywhere.
-     *
-     * If you configure this property to `false`, most of reference types
-     * represented by {@link ILlmSchemaV3_1.IReference} would be escaped to
-     * a plain type unless recursive type case.
-     *
-     * This is because some low sized LLM models does not understand the
-     * reference type well, and even the large size LLM models sometimes occur
-     * the hallucination.
-     *
-     * However, the reference type makes the schema size smaller, so that reduces
-     * the LLM token cost. Therefore, if you're using the large size of LLM model,
-     * and want to reduce the LLM token cost, you can configure this property to
-     * `true`.
-     *
-     * @default false
-     */
-    reference: boolean;
-  }
+  export type __IAttribute = IJsonSchemaAttribute;
 }

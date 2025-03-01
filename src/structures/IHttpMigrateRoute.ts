@@ -34,8 +34,7 @@ export interface IHttpMigrateRoute {
    * The difference between {@link path} is:
    *
    * 1. Path parameters are replaced with `:param` format.
-   * 2. Empty sub-paths are removed.
-   * 3. Do not starts with `/`.
+   * 2. Always starts with `/`.
    */
   emendedPath: string;
 
