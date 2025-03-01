@@ -12,7 +12,8 @@
     "build:test": "rimraf bin && tsc -p test/tsconfig.json",
     "dev": "npm run build:test -- --watch",
     "test": "node bin/test",
-    "typedoc": "typedoc --plugin typedoc-github-theme --theme typedoc-github-theme"
+    "typedoc": "typedoc --plugin typedoc-github-theme --theme typedoc-github-theme",
+    "preinstall": "npx only-allow pnpm"
   },
   "keywords": [
     "swagger",
