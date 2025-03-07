@@ -495,8 +495,8 @@ export namespace ChatGptSchemaComposer {
     const visit = (schema: IChatGptSchema): void => {
       if (ChatGptTypeChecker.isArray(schema))
         union.push({
-          ...LlmDescriptionInverter.array(schema.description ?? ""),
           ...schema,
+          ...LlmDescriptionInverter.array(schema.description ?? ""),
           items: next(schema.items),
         });
       else if (ChatGptTypeChecker.isObject(schema))
@@ -546,8 +546,8 @@ export namespace ChatGptSchemaComposer {
           );
         else
           union.push({
-            ...LlmDescriptionInverter.numeric(schema.description ?? ""),
             ...schema,
+            ...LlmDescriptionInverter.numeric(schema.description),
             ...{ enum: undefined },
           });
       else if (ChatGptTypeChecker.isString(schema))
@@ -559,8 +559,8 @@ export namespace ChatGptSchemaComposer {
           );
         else
           union.push({
-            ...LlmDescriptionInverter.string(schema.description ?? ""),
             ...schema,
+            ...LlmDescriptionInverter.string(schema.description ?? ""),
             ...{ enum: undefined },
           });
       else

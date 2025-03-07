@@ -2,7 +2,7 @@ import { OpenApi } from "../../OpenApi";
 
 export namespace LlmDescriptionInverter {
   export const numeric = (
-    description: string,
+    description: string | undefined,
   ): Pick<
     OpenApi.IJsonSchema.INumber,
     | "minimum"
@@ -10,7 +10,10 @@ export namespace LlmDescriptionInverter {
     | "exclusiveMinimum"
     | "exclusiveMaximum"
     | "multipleOf"
+    | "description"
   > => {
+    if (!description?.length) return {};
+
     const lines: string[] = description.split("\n");
     const exclusiveMinimum: number | undefined = find({
       type: "number",
@@ -44,15 +47,23 @@ export namespace LlmDescriptionInverter {
         name: "multipleOf",
         lines,
       }),
+      description: lines.join("\n").trim(),
     };
   };
 
   export const string = (
-    description: string,
+    description: string | undefined,
   ): Pick<
     OpenApi.IJsonSchema.IString,
-    "format" | "pattern" | "contentMediaType" | "minLength" | "maxLength"
+    | "format"
+    | "pattern"
+    | "contentMediaType"
+    | "minLength"
+    | "maxLength"
+    | "description"
   > => {
+    if (!description?.length) return {};
+
     const lines: string[] = description.split("\n");
     return {
       format: find({
@@ -63,7 +74,7 @@ export namespace LlmDescriptionInverter {
       pattern: find({
         type: "string",
         name: "pattern",
-        lines: description.split("\n"),
+        lines,
       }),
       contentMediaType: find({
         type: "string",
@@ -78,17 +89,20 @@ export namespace LlmDescriptionInverter {
       maxLength: find({
         type: "number",
         name: "maxLength",
-        lines: description.split("\n"),
+        lines,
       }),
+      description: lines.join("\n").trim(),
     };
   };
 
   export const array = (
-    description: string,
+    description: string | undefined,
   ): Pick<
     OpenApi.IJsonSchema.IArray,
-    "minItems" | "maxItems" | "uniqueItems"
+    "minItems" | "maxItems" | "uniqueItems" | "description"
   > => {
+    if (!description?.length) return {};
+
     const lines: string[] = description.split("\n");
     return {
       minItems: find({
@@ -106,6 +120,7 @@ export namespace LlmDescriptionInverter {
         name: "uniqueItems",
         lines,
       }),
+      description: lines.join("\n").trim(),
     };
   };
 
@@ -116,17 +131,24 @@ export namespace LlmDescriptionInverter {
   }):
     | (Type extends "boolean" ? true : Type extends "number" ? number : string)
     | undefined => {
-    if (props.type === "boolean")
-      return props.lines.some((line) => line.startsWith(`@${props.name}`))
-        ? true
-        : (undefined as any);
-    for (const line of props.lines) {
+    if (props.type === "boolean") {
+      const index: number = props.lines.findIndex((line) =>
+        line.startsWith(`@${props.name}`),
+      );
+      if (index === -1) return undefined as any;
+      props.lines.splice(index, 1);
+      return true as any;
+    }
+    for (let i: number = 0; i < props.lines.length; ++i) {
+      const line: string = props.lines[i];
       if (line.startsWith(`@${props.name} `) === false) continue;
       const value: string = line.replace(`@${props.name} `, "").trim();
-      if (props.type === "number")
-        return (isNaN(Number(value)) ? undefined : Number(value)) satisfies
-          | number
-          | undefined as any;
+      if (props.type === "number") {
+        if (isNaN(Number(value))) return undefined as any;
+        props.lines.splice(i, 1);
+        return Number(value) as any;
+      }
+      props.lines.splice(i, 1);
       return value as any;
     }
     return undefined as any;

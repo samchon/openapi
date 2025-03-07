@@ -38,10 +38,7 @@ const validate_llm_invert_enum = <Model extends ILlmSchema.Model>(
       components: collection.components,
       schema: collection.schemas[0],
     } as any);
-    TestValidator.equals(
-      "inverted",
-      (key) => key !== "description",
-    )(collection.schemas[0])(inverted);
+    TestValidator.equals("inverted")(collection.schemas[0])(inverted);
   };
   validate(typia.json.schemas<[false]>());
   validate(typia.json.schemas<[1 | 2 | 3]>());

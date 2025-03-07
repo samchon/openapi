@@ -38,10 +38,7 @@ const validate_llm_invert_nullable = <Model extends ILlmSchema.Model>(
       components: collection.components,
       schema: converted.value,
     } as any);
-    TestValidator.equals(
-      "inverted",
-      (key) => key !== "description",
-    )(collection.schemas[0])(inverted);
+    TestValidator.equals("inverted")(collection.schemas[0])(inverted);
   };
   validate(typia.json.schemas<[boolean | null]>());
   validate(
