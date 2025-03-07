@@ -50,7 +50,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
 >
 > Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`agentica`](https://github.com/wrtnlabs/agentica)
 >
-> - Shopping A.I. Chatbot Application: [https://nestia.io/chat/shopping](/chat/shopping)
+> - Shopping A.I. Chatbot Application: https://nestia.io/chat/shopping
 > - Shopping Backend Repository: https://github.com/samchon/shopping-backend
 > - Shopping Swagger Document (`@nestia/editor`): [https://nestia.io/editor/?url=...](https://nestia.io/editor/?simulate=true&e2e=true&url=https%3A%2F%2Fraw.githubusercontent.com%2Fsamchon%2Fshopping-backend%2Frefs%2Fheads%2Fmaster%2Fpackages%2Fapi%2Fswagger.json)
 
@@ -376,6 +376,75 @@ const main = async (): Promise<void> => {
 };
 main().catch(console.error);
 ```
+
+### Validation Feedback
+```typescript
+import { IHttpLlmFunction, IValidation } from "@samchon/openapi";
+import { FunctionCall } from "pseudo";
+
+export const correctFunctionCall = (p: {
+  call: FunctionCall;
+  functions: Array<IHttpLlmFunction<"chatgpt">>;
+  retry: (reason: string, errors?: IValidation.IError[]) => Promise<unknown>;
+}): Promise<unknown> => {
+  // FIND FUNCTION
+  const func: IHttpLlmFunction<"chatgpt"> | undefined =
+    p.functions.find((f) => f.name === p.call.name);
+  if (func === undefined) {
+    // never happened in my experience
+    return p.retry(
+      "Unable to find the matched function name. Try it again.",
+    );
+  }
+
+  // VALIDATE
+  const result: IValidation<unknown> = func.validate(p.call.arguments);
+  if (result.success === false) {
+    // 1st trial: 30% (gpt-4o-mini in shopping mall chatbot)
+    // 2nd trial with validation feedback: 99%
+    // 3nd trial with validation feedback again: never have failed
+    return p.retry(
+      "Type errors are detected. Correct it through validation errors",
+      {
+        errors: result.errors,
+      },
+    );
+  }
+  return result.data;
+}
+```
+
+Is LLM Function Calling perfect? No, absolutely not.
+
+LLM (Large Language Model) service vendor like OpenAI takes a lot of type level mistakes when composing the arguments of function calling or structured output. Even though target schema is super simple like `Array<string>` type, LLM often fills it just by a `string` typed value.
+
+In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) is taking about 70% of type level mistakes when filling the arguments of function calling to Shopping Mall service. To overcome the imperfection of such LLM function calling, `@samchon/openapi` supports validation feedback strategy.
+
+The key concept of validation feedback strategy is, let LLM function calling to construct invalid typed arguments first, and informing detailed type errors to the LLM, so that induce LLM to emend the wrong typed arguments at the next turn by using `IHttpLlmFunction<Model>.validate()` function.
+
+Embedded validator function in `IHttpLlmFunction<Model>.validate()` is exactly same with [`typia.validate<T>()`](https://typia.io/docs/validators/validate) function, so that detailed and accurate than any other validators like below. By such validation feedback strategy, 30% success rate of the 1st function calling trial has been increased to 99% success rate of the 2nd function calling trial. And have never failed from the 3rd trial.
+
+Components               | `typia` | `TypeBox` | `ajv` | `io-ts` | `zod` | `C.V.`
+-------------------------|--------|-----------|-------|---------|-------|------------------
+**Easy to use**          | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ 
+[Object (simple)](https://github.com/samchon/typia/blob/master/test/src/structures/ObjectSimple.ts)          | ✔ | ✔ | ✔ | ✔ | ✔ | ✔
+[Object (hierarchical)](https://github.com/samchon/typia/blob/master/test/src/structures/ObjectHierarchical.ts)    | ✔ | ✔ | ✔ | ✔ | ✔ | ✔
+[Object (recursive)](https://github.com/samchon/typia/blob/master/test/src/structures/ObjectRecursive.ts)       | ✔ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔
+[Object (union, implicit)](https://github.com/samchon/typia/blob/master/test/src/structures/ObjectUnionImplicit.ts) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
+[Object (union, explicit)](https://github.com/samchon/typia/blob/master/test/src/structures/ObjectUnionExplicit.ts) | ✔ | ✔ | ✔ | ✔ | ✔ | ❌
+[Object (additional tags)](https://github.com/samchon/typia/#comment-tags)        | ✔ | ✔ | ✔ | ✔ | ✔ | ✔
+[Object (template literal types)](https://github.com/samchon/typia/blob/master/test/src/structures/TemplateUnion.ts) | ✔ | ✔ | ✔ | ❌ | ❌ | ❌
+[Object (dynamic properties)](https://github.com/samchon/typia/blob/master/test/src/structures/DynamicTemplate.ts) | ✔ | ✔ | ✔ | ❌ | ❌ | ❌
+[Array (rest tuple)](https://github.com/samchon/typia/blob/master/test/src/structures/TupleRestAtomic.ts) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
+[Array (hierarchical)](https://github.com/samchon/typia/blob/master/test/src/structures/ArrayHierarchical.ts)     | ✔ | ✔ | ✔ | ✔ | ✔ | ✔
+[Array (recursive)](https://github.com/samchon/typia/blob/master/test/src/structures/ArrayRecursive.ts)        | ✔ | ✔ | ✔ | ✔ | ✔ | ❌
+[Array (recursive, union)](https://github.com/samchon/typia/blob/master/test/src/structures/ArrayRecursiveUnionExplicit.ts) | ✔ | ✔ | ❌ | ✔ | ✔ | ❌
+[Array (R+U, implicit)](https://github.com/samchon/typia/blob/master/test/src/structures/ArrayRecursiveUnionImplicit.ts)    | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
+[Array (repeated)](https://github.com/samchon/typia/blob/master/test/src/structures/ArrayRepeatedNullable.ts)    | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
+[Array (repeated, union)](https://github.com/samchon/typia/blob/master/test/src/structures/ArrayRepeatedUnionWithTuple.ts)    | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
+[**Ultimate Union Type**](https://github.com/samchon/typia/blob/master/test/src/structures/UltimateUnion.ts)  | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
+
+> `C.V.` means `class-validator`
 
 ### Separation
 Arguments from both Human and LLM sides.
