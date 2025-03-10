@@ -33,7 +33,7 @@ const main = async (): Promise<void> => {
   // Let's imagine that LLM has selected a function to call
   const func: IHttpLlmFunction<"chatgpt"> | undefined =
     application.functions.find(
-      // (f) => f.name === "llm_selected_fuction_name"
+      // (f) => f.name === "llm_selected_function_name"
       (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
     );
   if (func === undefined) throw new Error("No matched function exists.");
