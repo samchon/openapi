@@ -24,6 +24,8 @@ export namespace ChatGptFunctionCaller {
       parameters: IChatGptSchema.IParameters,
     ) => Promise<void>;
     config?: Partial<IChatGptSchema.IConfig>;
+    counter?: { value: number };
+    model?: OpenAI.ChatModel | (string & {});
   }
 
   export const test = async (props: IProps) => {
@@ -31,6 +33,7 @@ export namespace ChatGptFunctionCaller {
 
     let result: IValidation<any> | undefined = undefined;
     for (let i: number = 0; i < 3; ++i) {
+      if (props.counter) props.counter.value = i + 1;
       if (result && result.success === true) break;
       result = await step(props, TestGlobal.env.CHATGPT_API_KEY, result);
     }
@@ -65,7 +68,7 @@ export namespace ChatGptFunctionCaller {
     });
     const completion: OpenAI.ChatCompletion =
       await client.chat.completions.create({
-        model: "gpt-4o",
+        model: props.model ?? "gpt-4o",
         messages: previous
           ? [
               ...props.texts.slice(0, -1),
