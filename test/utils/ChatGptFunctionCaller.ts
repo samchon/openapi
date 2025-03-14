@@ -36,7 +36,12 @@ export namespace ChatGptFunctionCaller {
 
     const TRY_LIMIT: number = 3;
 
-    /** try to call the function */
+    /**
+     * try to call the function 
+     * first, increment the counter to record the number of tries
+     * if the result is successful, break
+     * if the result is not successful, try again until the TRY_LIMIT is reached
+     */
     for (let i: number = 0; i < TRY_LIMIT; ++i) {
       /** increment the counter */
       if (props.counter) props.counter.value = i + 1;
