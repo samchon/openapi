@@ -31,11 +31,24 @@ export namespace ChatGptFunctionCaller {
   export const test = async (props: IProps) => {
     if (TestGlobal.env.CHATGPT_API_KEY === undefined) return false;
 
+    /** store previous result */
     let result: IValidation<any> | undefined = undefined;
-    for (let i: number = 0; i < 3; ++i) {
-      if (props.counter) props.counter.value = i + 1;
-      if (result && result.success === true) break;
+
+    /**
+     * try to call the function 
+     * first, increment the counter to record the number of tries
+     * if the result is successful, break
+     * if the result is not successful, try again until the TRY_LIMIT is reached
+     */
+    for (let i: number = 0; i < TRY_LIMIT; ++i) {
+      /** call the function */
       result = await step(props, TestGlobal.env.CHATGPT_API_KEY, result);
+
+      /** increment the counter */
+      if (props.counter) props.counter.value = i + 1;
+
+      /** break if the result is successful */
+      if (result && result.success === true) break;
     }
     await props.handleCompletion(result?.data);
   };
@@ -118,3 +131,5 @@ export namespace ChatGptFunctionCaller {
     return results.find((r) => r.success === true) ?? results[0];
   };
 }
+
+const TRY_LIMIT: number = 3;
