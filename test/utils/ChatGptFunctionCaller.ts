@@ -31,11 +31,21 @@ export namespace ChatGptFunctionCaller {
   export const test = async (props: IProps) => {
     if (TestGlobal.env.CHATGPT_API_KEY === undefined) return false;
 
+    /** store previous result */
     let result: IValidation<any> | undefined = undefined;
-    for (let i: number = 0; i < 3; ++i) {
+
+    const TRY_LIMIT: number = 3;
+
+    /** try to call the function */
+    for (let i: number = 0; i < TRY_LIMIT; ++i) {
+      /** increment the counter */
       if (props.counter) props.counter.value = i + 1;
-      if (result && result.success === true) break;
+
+      /** call the function */
       result = await step(props, TestGlobal.env.CHATGPT_API_KEY, result);
+
+      /** break if the result is successful */
+      if (result && result.success === true) break;
     }
     await props.handleCompletion(result?.data);
   };
