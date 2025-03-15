@@ -1,5 +1,8 @@
 import { HttpMigration } from "./HttpMigration";
 import { OpenApi } from "./OpenApi";
+import { OpenApiV3 } from "./OpenApiV3";
+import { OpenApiV3_1 } from "./OpenApiV3_1";
+import { SwaggerV2 } from "./SwaggerV2";
 import { HttpLlmComposer } from "./composers/HttpLlmApplicationComposer";
 import { LlmSchemaComposer } from "./composers/LlmSchemaComposer";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
@@ -52,7 +55,11 @@ export namespace HttpLlm {
     /**
      * OpenAPI document to convert.
      */
-    document: OpenApi.IDocument;
+    document:
+      | OpenApi.IDocument
+      | SwaggerV2.IDocument
+      | OpenApiV3.IDocument
+      | OpenApiV3_1.IDocument;
 
     /**
      * Options for the LLM function calling schema conversion.
@@ -90,7 +97,7 @@ export namespace HttpLlm {
   ): IHttpLlmApplication<Model> => {
     // MIGRATE
     const migrate: IHttpMigrateApplication = HttpMigration.application(
-      props.document as OpenApi.IDocument,
+      props.document,
     );
     return HttpLlmComposer.application<Model>({
       migrate,
