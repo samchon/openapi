@@ -76,7 +76,7 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
    *
    * You can fill this property by the `@tag ${name}` comment tag.
    */
-  tags?: string[];
+  tags?: string[] | undefined;
 
   /**
    * Validate function of the arguments.
@@ -93,10 +93,18 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
    * And in my experience, OpenAI's `gpt-4o-mini` model tends to construct
    * an invalid function calling arguments at the first trial about 50% of
    * the time. However, if correct it through this `validate` function,
-   * the success rate soars to 99% at the second trial, and I've never failed
-   * at the third trial.
+   * the success rate soars to 99% at the second trial, and I've never
+   * failed at the third trial.
    *
-   * @param args Arguments to validate.
+   * > If you've {@link separated} parameters, use the
+   * > {@link ILlmFunction.ISeparated.validate} function instead when
+   * > validating the LLM composed arguments.
+   * >
+   * > In that case, This `validate` function would be meaningful only
+   * > when you've merged the LLM and human composed arguments by
+   * > {@link HttpLlm.mergeParameters} function.
+   *
+   * @param args Arguments to validate
    * @returns Validation result
    */
   validate: (args: unknown) => IValidation<unknown>;
@@ -118,5 +126,32 @@ export namespace ILlmFunction {
      * Parameters that would be composed by the human.
      */
     human: ILlmSchema.ModelParameters[Model] | null;
+
+    /**
+     * Validate function of the separated arguments.
+     *
+     * If LLM part of separated parameters has some properties,
+     * this `validate` function will be filled for the {@link llm}
+     * type validation.
+     *
+     * > You know what? LLM (Large Language Model) like OpenAI takes a lot of
+     * > mistakes when composing arguments in function calling. Even though
+     * > `number` like simple type is defined in the {@link parameters} schema,
+     * > LLM often fills it just by a `string` typed value.
+     * >
+     * > In that case, you have to give a validation feedback to the LLM by
+     * > using this `validate` function. The `validate` function will return
+     * > detailed information about every type errors about the arguments.
+     * >
+     * > And in my experience, OpenAI's `gpt-4o-mini` model tends to construct
+     * > an invalid function calling arguments at the first trial about 50% of
+     * > the time. However, if correct it through this `validate` function,
+     * > the success rate soars to 99% at the second trial, and I've never
+     * > failed at the third trial.
+     *
+     * @param args Arguments to validate
+     * @returns Validate result
+     */
+    validate?: ((args: unknown) => IValidation<unknown>) | undefined;
   }
 }

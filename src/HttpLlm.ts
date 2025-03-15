@@ -194,11 +194,11 @@ export namespace HttpLlm {
   /**
    * Properties for the parameters' merging.
    */
-  export interface IMergeProps {
+  export interface IMergeProps<Model extends ILlmSchema.Model> {
     /**
      * Metadata of the target function.
      */
-    function: ILlmFunction<any>;
+    function: ILlmFunction<Model>;
 
     /**
      * Arguments composed by the LLM.
@@ -217,7 +217,7 @@ export namespace HttpLlm {
    * If you've configured the {@link IHttpLlmApplication.IOptions.separate} option,
    * so that the parameters are separated to human and LLM sides, you can merge these
    * humand and LLM sides' parameters into one through this `HttpLlm.mergeParameters()`
-   * function before the actual LLM function call execution.
+   * function before the actual LLM function call wexecution.
    *
    * On contrary, if you've not configured the
    * {@link IHttpLlmApplication.IOptions.separate} option, this function would throw
@@ -226,8 +226,9 @@ export namespace HttpLlm {
    * @param props Properties for the parameters' merging
    * @returns Merged parameter values
    */
-  export const mergeParameters = (props: IMergeProps): object =>
-    LlmDataMerger.parameters(props);
+  export const mergeParameters = <Model extends ILlmSchema.Model>(
+    props: IMergeProps<Model>,
+  ): object => LlmDataMerger.parameters(props);
 
   /**
    * Merge two values.

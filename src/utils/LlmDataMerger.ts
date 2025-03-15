@@ -10,11 +10,11 @@ export namespace LlmDataMerger {
   /**
    * Properties of {@link parameters} function.
    */
-  export interface IProps {
+  export interface IProps<Model extends ILlmSchema.Model> {
     /**
      * Target function to call.
      */
-    function: ILlmFunction<ILlmSchema.Model>;
+    function: ILlmFunction<Model>;
 
     /**
      * Arguments composed by LLM (Large Language Model).
@@ -42,7 +42,9 @@ export namespace LlmDataMerger {
    * @param props Properties to combine LLM and human arguments with metadata.
    * @returns Combined arguments
    */
-  export const parameters = (props: IProps): object => {
+  export const parameters = <Model extends ILlmSchema.Model>(
+    props: IProps<Model>,
+  ): object => {
     const separated = props.function.separated;
     if (separated === undefined)
       throw new Error(
