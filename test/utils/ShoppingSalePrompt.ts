@@ -53,5 +53,20 @@ export namespace ShoppingSalePrompt {
   ];
 }
 
-const SYSTEM_MESSAGE =
-  "You are a helpful customer support assistant. Use the supplied tools to assist the user.";
+const SYSTEM_MESSAGE = [
+    "You are a helpful customer support assistant. Use the supplied tools to assist the user.",
+    "",
+    "When you use tool calling, DO NOT RETURN AN EMPTY OBJECT FOR THE TOOL. Check the input schema carefully and return the correct object.",
+    "",
+    "example:",
+    "❌ { input: undefined }",
+    "✅ { input: { message: 'hello' } }",
+    "",
+    "When you cannot find data for some properties, return null instead of an empty string, undefined, or nothing.",
+    "When the property is optional, you can return null.",
+    "When the property is array and no information is available, return an empty array. However check out the minimun/maximum length of the array",
+    "",
+    "example:",
+    "❌ { input: { a: '' } } // b and c are missing",
+    "✅ { input: { a: '', b: null, c: [] } } // b and c are optional",
+  ].join("\n");

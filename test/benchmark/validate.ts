@@ -31,6 +31,8 @@ const main = async (): Promise<void> => {
     }),
   );
   console.log(trials);
+  const successRate = trials.filter((trial) => trial === 1).length / trials.length;
+  console.log(`Success rate: ${successRate*100}%`);
 };
 main().catch((error) => {
   console.error(error);

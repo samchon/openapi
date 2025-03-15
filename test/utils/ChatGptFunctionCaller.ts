@@ -49,6 +49,8 @@ export namespace ChatGptFunctionCaller {
 
       /** break if the result is successful */
       if (result && result.success === true) break;
+
+      console.table(result?.errors);
     }
     await props.handleCompletion(result?.data);
   };
@@ -115,6 +117,10 @@ export namespace ChatGptFunctionCaller {
         tool_choice: "required",
         parallel_tool_calls: false,
       });
+
+    if(completion.choices.some((c) => c.finish_reason !== "tool_calls")){
+      throw new Error("ChatGPT has not called any function.");
+    }
 
     const toolCalls: OpenAI.ChatCompletionMessageToolCall[] = completion.choices
       .map((c) => c.message.tool_calls ?? [])
