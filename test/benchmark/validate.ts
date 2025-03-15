@@ -11,6 +11,7 @@ const main = async (): Promise<void> => {
       await ChatGptFunctionCaller.test({
         config: {
           reference: process.argv.includes("--reference"),
+          strict: process.argv.includes("--strict"),
         },
         ...ShoppingSalePrompt.schema(),
         texts: await ShoppingSalePrompt.texts(),
