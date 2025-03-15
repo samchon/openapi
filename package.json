@@ -12,7 +12,8 @@
     "build:test": "rimraf bin && tsc -p test/tsconfig.json",
     "dev": "npm run build:test -- --watch",
     "test": "node bin/test",
-    "typedoc": "typedoc --plugin typedoc-github-theme --theme typedoc-github-theme"
+    "typedoc": "typedoc --plugin typedoc-github-theme --theme typedoc-github-theme",
+    "preinstall": "npx only-allow pnpm"
   },
   "keywords": [
     "swagger",
@@ -91,5 +92,14 @@
     "src",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "packageManager": "pnpm@10.5.2",
+  "pnpm": {
+    "executionEnv": {
+      "nodeVersion": "22.14.0"
+    },
+    "onlyBuiltDependencies": [
+      "@nestjs/core"
+    ]
+  }
 }
