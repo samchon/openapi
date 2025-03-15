@@ -49,6 +49,8 @@ export namespace ChatGptFunctionCaller {
 
       /** break if the result is successful */
       if (result && result.success === true) break;
+
+      console.table(result?.errors);
     }
     await props.handleCompletion(result?.data);
   };
