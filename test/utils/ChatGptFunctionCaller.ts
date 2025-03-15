@@ -108,6 +108,7 @@ export namespace ChatGptFunctionCaller {
               name: props.name,
               description: props.description,
               parameters: parameters.value as Record<string, any>,
+              strict: props.config?.strict ?? false,
             },
           },
         ],
