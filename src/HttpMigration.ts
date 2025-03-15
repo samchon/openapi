@@ -1,4 +1,7 @@
 import { OpenApi } from "./OpenApi";
+import { OpenApiV3 } from "./OpenApiV3";
+import { OpenApiV3_1 } from "./OpenApiV3_1";
+import { SwaggerV2 } from "./SwaggerV2";
 import { HttpMigrateApplicationComposer } from "./composers/migrate/HttpMigrateApplicationComposer";
 import { HttpMigrateRouteFetcher } from "./http/HttpMigrateRouteFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
@@ -73,9 +76,13 @@ export namespace HttpMigration {
    * @returns Migrated application.
    */
   export const application = (
-    document: OpenApi.IDocument,
+    document:
+      | OpenApi.IDocument
+      | SwaggerV2.IDocument
+      | OpenApiV3.IDocument
+      | OpenApiV3_1.IDocument,
   ): IHttpMigrateApplication =>
-    HttpMigrateApplicationComposer.compose(document);
+    HttpMigrateApplicationComposer.compose(OpenApi.convert(document));
 
   /**
    * Properties for the request to the HTTP server.
