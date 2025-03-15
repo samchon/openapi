@@ -8,6 +8,7 @@ import { IResult } from "../../structures/IResult";
 import { LlmTypeCheckerV3 } from "../../utils/LlmTypeCheckerV3";
 import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { OpenApiValidator } from "../../utils/OpenApiValidator";
 import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
@@ -186,6 +187,13 @@ export namespace LlmSchemaV3Composer {
         required: [],
       },
       human: human as ILlmSchemaV3.IParameters | null,
+      validate: llm
+        ? OpenApiValidator.create({
+            components: {},
+            schema: invert({ schema: llm }),
+            required: true,
+          })
+        : undefined,
     };
   };
 

@@ -7,6 +7,7 @@ import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
 import { NamingConvention } from "../../utils/NamingConvention";
 import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { OpenApiValidator } from "../../utils/OpenApiValidator";
 import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
 import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
@@ -384,6 +385,18 @@ export namespace LlmSchemaV3_1Composer {
     for (const key of Object.keys(props.parameters.$defs))
       if (key.endsWith(".Llm") === false && key.endsWith(".Human") === false)
         delete props.parameters.$defs[key];
+    if (Object.keys(output.llm.properties).length !== 0) {
+      const components: OpenApi.IComponents = {};
+      output.validate = OpenApiValidator.create({
+        components,
+        schema: invert({
+          components,
+          schema: output.llm,
+          $defs: output.llm.$defs,
+        }),
+        required: true,
+      });
+    }
     return output;
   };
 
