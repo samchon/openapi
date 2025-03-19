@@ -12,6 +12,9 @@ export default defineConfig({
     {
       format: "cjs",
       bundle: false,
+      dts: {
+        autoExtension: true,
+      },
       output: {
         filename: {
           js: "[name].js",
@@ -24,9 +27,10 @@ export default defineConfig({
     },
     {
       format: "esm",
-      syntax: "es2020",
       bundle: false,
-      dts: true,
+      dts: {
+        autoExtension: true,
+      },
       output: {
         filename: {
           js: "[name].mjs",
