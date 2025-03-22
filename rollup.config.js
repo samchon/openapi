@@ -30,5 +30,22 @@ module.exports = {
       mangle: false,
       module: true,
     }),
+    {
+      name: "copy-dts-to-dmts",
+      async generateBundle(_, bundle) {
+        for (const fileName of Object.keys(bundle)) {
+          if (fileName.endsWith(".d.ts")) {
+            const dtsFile = bundle[fileName];
+            const dmtsFileName = fileName.replace(/\.d\.ts$/, ".d.mts");
+
+            this.emitFile({
+              type: "asset",
+              fileName: dmtsFileName,
+              source: dtsFile.source,
+            });
+          }
+        }
+      },
+    },
   ],
 };
