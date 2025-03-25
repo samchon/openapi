@@ -46,7 +46,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
     - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
 
-> https://github.com/user-attachments/assets/01604b53-aca4-41cb-91aa-3faf63549ea6
+> https://github.com/user-attachments/assets/e1faf30b-c703-4451-b68b-2e7a8170bce5
 >
 > Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`agentica`](https://github.com/wrtnlabs/agentica)
 >
