@@ -35,7 +35,7 @@ export namespace ChatGptFunctionCaller {
     let result: IValidation<any> | undefined = undefined;
 
     /**
-     * try to call the function 
+     * try to call the function
      * first, increment the counter to record the number of tries
      * if the result is successful, break
      * if the result is not successful, try again until the TRY_LIMIT is reached
@@ -118,7 +118,7 @@ export namespace ChatGptFunctionCaller {
         parallel_tool_calls: false,
       });
 
-    if(completion.choices.some((c) => c.finish_reason !== "tool_calls")){
+    if (completion.choices.some((c) => c.finish_reason !== "tool_calls")) {
       throw new Error("ChatGPT has not called any function.");
     }
 

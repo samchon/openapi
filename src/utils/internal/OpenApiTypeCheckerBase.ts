@@ -317,8 +317,7 @@ export namespace OpenApiTypeCheckerBase {
               description: JsonDescriptionUtil.cascade({
                 prefix: props.prefix,
                 components: props.components,
-                $ref: props.schema.$ref,
-                description: res.description,
+                schema: props.schema,
                 escape: true,
               }),
             }
@@ -336,8 +335,7 @@ export namespace OpenApiTypeCheckerBase {
               description: JsonDescriptionUtil.cascade({
                 prefix: props.prefix,
                 components: props.components,
-                $ref: props.schema.$ref,
-                description: res.description,
+                schema: props.schema,
                 escape: true,
               }),
             }

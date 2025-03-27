@@ -37,7 +37,7 @@ const main = async (): Promise<void> => {
   // actual execution is by yourself
   const article = await HttpLlm.execute({
     connection: {
-      host: "http://localhost:3000",
+      host: "http://localhost:4000",
     },
     application,
     function: func,

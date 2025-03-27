@@ -3,24 +3,14 @@
   "type": "object",
   "properties": {
     "input": {
-      "$ref": "#/$defs/IPerson"
-    }
-  },
-  "required": [
-    "input"
-  ],
-  "additionalProperties": false,
-  "$defs": {
-    "IPerson": {
-      "description": "",
+      "description": "Current Type: {@link IPerson}",
       "type": "object",
       "properties": {
         "name": {
-          "example": "John Doe",
+          "description": "@default John Doe",
           "type": "string"
         },
         "age": {
-          "example": 42,
           "type": "number"
         }
       },
@@ -29,5 +19,10 @@
         "age"
       ]
     }
-  }
+  },
+  "required": [
+    "input"
+  ],
+  "additionalProperties": false,
+  "$defs": {}
 }

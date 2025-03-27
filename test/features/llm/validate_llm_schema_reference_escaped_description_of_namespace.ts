@@ -8,25 +8,31 @@ import {
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
-export const test_chatgpt_schema_reference_description = (): void =>
-  validate_llm_schema_reference_description("chatgpt");
+export const test_chatgpt_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("chatgpt");
 
-export const test_claude_schema_reference_description = (): void =>
-  validate_llm_schema_reference_description("claude");
+export const test_claude_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("claude");
 
-export const test_gemini_schema_reference_description = (): void =>
-  validate_llm_schema_reference_description("gemini");
+export const test_gemini_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("gemini");
 
-export const test_llama_schema_reference_description = (): void =>
-  validate_llm_schema_reference_description("llama");
+export const test_llama_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("llama");
 
-export const test_llm_v30_schema_reference_description = (): void =>
-  validate_llm_schema_reference_description("3.0");
+export const test_llm_v30_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("3.0");
 
-export const test_llm_v31_schema_reference_description = (): void =>
-  validate_llm_schema_reference_description("3.1");
+export const test_llm_v31_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("3.1");
 
-const validate_llm_schema_reference_description = <
+const validate_llm_schema_reference_escaped_description_of_namespace = <
   Model extends ILlmSchema.Model,
 >(
   model: Model,
@@ -43,7 +49,6 @@ const validate_llm_schema_reference_description = <
   const schema: ILlmSchema.IParameters<Model> =
     composeSchema(model)(collection);
   const deep: ILlmSchema<Model> = schema.properties.deep as ILlmSchema<Model>;
-
   TestValidator.predicate("description")(
     () =>
       !!deep.description &&

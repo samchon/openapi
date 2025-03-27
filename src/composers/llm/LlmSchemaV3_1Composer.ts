@@ -172,8 +172,7 @@ export namespace LlmSchemaV3_1Composer {
               description: JsonDescriptionUtil.cascade({
                 prefix: "#/components/schemas/",
                 components: props.components,
-                $ref: input.$ref,
-                description: union[union.length - 1]!.description,
+                schema: input,
                 escape: true,
               }),
             };
@@ -181,8 +180,7 @@ export namespace LlmSchemaV3_1Composer {
             attribute.description = JsonDescriptionUtil.cascade({
               prefix: "#/components/schemas/",
               components: props.components,
-              $ref: input.$ref,
-              description: attribute.description,
+              schema: input,
               escape: true,
             });
           return union.length;
@@ -315,21 +313,13 @@ export namespace LlmSchemaV3_1Composer {
         value: {
           ...attribute,
           ...union[0]!,
-          description: LlmTypeCheckerV3_1.isReference(union[0]!)
-            ? undefined
-            : union[0]!.description,
         },
       };
     return {
       success: true,
       value: {
         ...attribute,
-        oneOf: union.map((u) => ({
-          ...u!,
-          description: LlmTypeCheckerV3_1.isReference(u!)
-            ? undefined
-            : u!.description,
-        })),
+        oneOf: union.filter((u) => u !== null),
       },
     };
   };

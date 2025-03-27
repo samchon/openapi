@@ -1,7 +1,9 @@
 {
+  "description": "",
   "type": "object",
   "properties": {
     "input": {
+      "description": "Current Type: {@link Shape}",
       "anyOf": [
         {
           "type": "object",
@@ -13,6 +15,7 @@
               ]
             },
             "p1": {
+              "description": "Current Type: {@link IPoint}",
               "type": "object",
               "properties": {
                 "x": {
@@ -25,10 +28,10 @@
               "required": [
                 "x",
                 "y"
-              ],
-              "additionalProperties": false
+              ]
             },
             "p2": {
+              "description": "Current Type: {@link IPoint}",
               "type": "object",
               "properties": {
                 "x": {
@@ -41,8 +44,7 @@
               "required": [
                 "x",
                 "y"
-              ],
-              "additionalProperties": false
+              ]
             }
           },
           "required": [
@@ -50,7 +52,7 @@
             "p1",
             "p2"
           ],
-          "additionalProperties": false
+          "description": "Current Type: {@link IRectangle}"
         },
         {
           "type": "object",
@@ -65,6 +67,7 @@
               "type": "number"
             },
             "center": {
+              "description": "Current Type: {@link IPoint}",
               "type": "object",
               "properties": {
                 "x": {
@@ -77,8 +80,7 @@
               "required": [
                 "x",
                 "y"
-              ],
-              "additionalProperties": false
+              ]
             }
           },
           "required": [
@@ -86,7 +88,7 @@
             "radius",
             "center"
           ],
-          "additionalProperties": false
+          "description": "Current Type: {@link ICircle}"
         }
       ]
     }
