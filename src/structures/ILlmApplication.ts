@@ -1,4 +1,3 @@
-import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlmFunction } from "./ILlmFunction";
 import { ILlmSchema } from "./ILlmSchema";
 

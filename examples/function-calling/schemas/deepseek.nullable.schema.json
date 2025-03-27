@@ -1,4 +1,5 @@
 {
+  "description": "",
   "type": "object",
   "properties": {
     "input": {
@@ -6,10 +7,13 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "polygon"
+          "type": "string",
+          "enum": [
+            "polygon"
+          ]
         },
         "inner": {
-          "oneOf": [
+          "anyOf": [
             {
               "type": "null"
             },

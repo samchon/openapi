@@ -29,7 +29,7 @@
           },
           {
             "code": "2in1_laptops",
-            "name": "2 in 1 Laptops",
+            "name": "2-in-1 Laptops",
             "children": []
           }
         ]
@@ -56,7 +56,7 @@
         ]
       },
       {
-        "code": "smart_phones",
+        "code": "smartphones",
         "name": "Smart Phones",
         "children": [
           {
@@ -87,12 +87,12 @@
         ]
       },
       {
-        "code": "smart_watches",
+        "code": "smartwatches",
         "name": "Smart Watches",
         "children": []
       },
       {
-        "code": "smart_glasses",
+        "code": "smartglasses",
         "name": "Smart Glasses",
         "children": []
       },

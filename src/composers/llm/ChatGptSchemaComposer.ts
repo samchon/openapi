@@ -9,6 +9,7 @@ import { LlmTypeCheckerV3_1 } from "../../utils/LlmTypeCheckerV3_1";
 import { NamingConvention } from "../../utils/NamingConvention";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { OpenApiValidator } from "../../utils/OpenApiValidator";
+import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
 import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
@@ -171,6 +172,7 @@ export namespace ChatGptSchemaComposer {
                     schema: input.additionalProperties,
                   })
                 : input.additionalProperties,
+          description: JsonDescriptionUtil.take(input),
         });
       else if (LlmTypeCheckerV3_1.isConstant(input) === false)
         union.push(input);

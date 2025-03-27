@@ -16,7 +16,8 @@
       "required": [
         "name",
         "age"
-      ]
+      ],
+      "description": "Current Type: {@link IPerson}"
     }
   },
   "required": [

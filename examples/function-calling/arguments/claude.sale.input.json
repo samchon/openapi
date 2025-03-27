@@ -5,7 +5,6 @@
       "code": "samchon",
       "category_codes": [
         "2in1_laptops",
-        "tablets",
         "windows_tablets"
       ]
     }
@@ -16,6 +15,7 @@
     "title": "Surface Pro 9",
     "format": "md",
     "body": "The Surface Pro 9 is a versatile 2-in-1 device that combines the power of a laptop with the flexibility of a tablet. It features advanced technology, making it suitable for both professional and personal use.\n\n- \"Unleash Your Creativity Anywhere\": The Surface Pro 9 is designed for those who need power and portability, making it perfect for creative professionals and students alike.\n- \"The Ultimate 2-in-1 Experience\": With its detachable keyboard and touchscreen capabilities, the Surface Pro 9 adapts to your needs, whether you're working, studying, or relaxing.\n- \"Stay Connected with 5G\": Experience lightning-fast internet speeds and seamless connectivity, no matter where you are.\n- \"Power Meets Flexibility\": The Surface Pro 9 combines the performance of a laptop with the convenience of a tablet, making it the ideal device for multitasking.\n\nIn summary, the Surface Pro 9 stands out as a powerful and flexible device, perfect for users who require both performance and portability. With its advanced features and sleek design, it is an excellent choice for anyone looking to enhance their productivity and creativity. Whether for work or play, the Surface Pro 9 is ready to meet your needs.",
+    "files": [],
     "thumbnails": [
       {
         "name": "microsoft-surface-pro-9-thumbnail-1",
@@ -32,15 +32,16 @@
         "extension": "jpeg",
         "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg"
       }
-    ],
-    "files": []
+    ]
   },
   "tags": [
     "surface",
-    "tablet",
-    "2-in-1",
+    "pro",
+    "9",
     "microsoft",
-    "windows"
+    "2-in-1",
+    "tablet",
+    "laptop"
   ],
   "units": [
     {

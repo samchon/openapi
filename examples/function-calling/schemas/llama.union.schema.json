@@ -2,6 +2,7 @@
   "type": "object",
   "properties": {
     "input": {
+      "description": "Current Type: {@link Shape}",
       "oneOf": [
         {
           "type": "object",
@@ -10,6 +11,7 @@
               "const": "rectangle"
             },
             "p1": {
+              "description": "Current Type: {@link IPoint}",
               "type": "object",
               "properties": {
                 "x": {
@@ -25,6 +27,7 @@
               ]
             },
             "p2": {
+              "description": "Current Type: {@link IPoint}",
               "type": "object",
               "properties": {
                 "x": {
@@ -44,7 +47,8 @@
             "type",
             "p1",
             "p2"
-          ]
+          ],
+          "description": "Current Type: {@link IRectangle}"
         },
         {
           "type": "object",
@@ -56,6 +60,7 @@
               "type": "number"
             },
             "center": {
+              "description": "Current Type: {@link IPoint}",
               "type": "object",
               "properties": {
                 "x": {
@@ -75,7 +80,8 @@
             "type",
             "radius",
             "center"
-          ]
+          ],
+          "description": "Current Type: {@link ICircle}"
         }
       ]
     }

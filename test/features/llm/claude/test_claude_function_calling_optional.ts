@@ -8,7 +8,7 @@ export const test_claude_function_calling_optional = () =>
   ClaudeFunctionCaller.test({
     model: "claude",
     config: {
-      reference: false,
+      reference: true,
     },
     name: "registerMember",
     description: "Register a membership.",

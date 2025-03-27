@@ -1,4 +1,5 @@
 {
+  "description": "",
   "type": "object",
   "properties": {
     "input": {
@@ -11,6 +12,7 @@
   "additionalProperties": false,
   "$defs": {
     "IPerson": {
+      "description": "",
       "type": "object",
       "properties": {
         "name": {
@@ -25,8 +27,7 @@
       "required": [
         "name",
         "age"
-      ],
-      "additionalProperties": false
+      ]
     }
   }
 }

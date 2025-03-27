@@ -14,15 +14,18 @@
             "paused",
             "suspended"
           ],
-          "nullable": true
+          "nullable": true,
+          "description": "Initial status of the sale.\n\n`null` or `undefined`: No restriction\n`paused`: Starts with {@link ITimestamps.paused_at paused} status\n`suspended`: Starts with {@link ITimestamps.suspended_at suspended} status"
         },
         "opened_at": {
           "type": "string",
-          "nullable": true
+          "nullable": true,
+          "description": "Opening time of the sale."
         },
         "closed_at": {
           "type": "string",
-          "nullable": true
+          "nullable": true,
+          "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever."
         },
         "content": {
           "type": "object",
@@ -37,7 +40,7 @@
                 "md",
                 "txt"
               ],
-              "description": "Description of the current {@link IShoppingSaleContent} type:\n\n> Content information of sale snapshot.\n> \n> `IShoppingSaleContent` is an entity embodies the description contents\n> of {@link IShoppingSale}."
+              "description": "Current Type: {@link IShoppingSaleContent.Type}\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleContent} type:\n\n> Content information of sale snapshot.\n> \n> `IShoppingSaleContent` is an entity embodies the description contents\n> of {@link IShoppingSale}."
             },
             "body": {
               "type": "string"
@@ -54,7 +57,7 @@
                   "extension": {
                     "type": "string",
                     "nullable": true,
-                    "description": "@minLength 1\n@maxLength 8"
+                    "description": "Extension.\n\nPossible to omit like `README` case.\n\n\n@minLength 1\n@maxLength 8"
                   },
                   "url": {
                     "type": "string",
@@ -66,7 +69,7 @@
                   "extension",
                   "url"
                 ],
-                "description": "Description of the current {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
+                "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
               }
             },
             "thumbnails": {
@@ -81,7 +84,7 @@
                   "extension": {
                     "type": "string",
                     "nullable": true,
-                    "description": "@minLength 1\n@maxLength 8"
+                    "description": "Extension.\n\nPossible to omit like `README` case.\n\n\n@minLength 1\n@maxLength 8"
                   },
                   "url": {
                     "type": "string",
@@ -93,7 +96,7 @@
                   "extension",
                   "url"
                 ],
-                "description": "Description of the current {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
+                "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
               }
             }
           },
@@ -104,7 +107,7 @@
             "files",
             "thumbnails"
           ],
-          "description": "Description of the current {@link IShoppingSaleContent} type:\n\n> Content information of sale snapshot.\n> \n> `IShoppingSaleContent` is an entity embodies the description contents\n> of {@link IShoppingSale}."
+          "description": "Description and image content describing the sale.\n\n------------------------------\n\nCurrent Type: {@link IShoppingSaleContent.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleContent} type:\n\n> Content information of sale snapshot.\n> \n> `IShoppingSaleContent` is an entity embodies the description contents\n> of {@link IShoppingSale}."
         },
         "channels": {
           "type": "array",
@@ -127,7 +130,7 @@
               "code",
               "category_codes"
             ],
-            "description": "Creation information of the target channel (and categories) of sale to sell.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleChannel.ICreate} type:\n\n> Creation information of the target channel (and categories) of sale to sell.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleChannel} type:\n\n> Target channel (and categories) of sale to sell.\n> \n> `IShoppingSaleChannel` is an entity that expresses through which\n> {@link IShoppingChannel channel} a listing {@link IShoppingSale} is sold.\n> \n> Also, if {@link IShoppingChannelCategory categories} are specified, it also\n> means that the sale be sold. Otherwise, none of the categories of the channel\n> being specified, it means that every categories of the channel is listing the\n> target sale."
+            "description": "Description of the current {@link IShoppingSaleChannel.ICreate} type:\n\n> Creation information of the target channel (and categories) of sale to sell.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleChannel} type:\n\n> Target channel (and categories) of sale to sell.\n> \n> `IShoppingSaleChannel` is an entity that expresses through which\n> {@link IShoppingChannel channel} a listing {@link IShoppingSale} is sold.\n> \n> Also, if {@link IShoppingChannelCategory categories} are specified, it also\n> means that the sale be sold. Otherwise, none of the categories of the channel\n> being specified, it means that every categories of the channel is listing the\n> target sale."
           },
           "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.\n\n\n@minItems 1"
         },
@@ -169,7 +172,7 @@
                         "required": [
                           "name"
                         ],
-                        "description": "Creation information of the candidate value.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitOptionCandidate.ICreate} type:\n\n> Creation information of the candidate value.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitOptionCandidate} type:\n\n> Selectable candidate values within an option.\n> \n> `IShoppingSaleUnitOptionCandidate` is an entity that represents individual\n> candidate values that can be selected from\n> {@link IShoppingSaleUnitSelectableOption options of the \"select\" type}.\n> \n> - Example\n>   - RAM: 8GB, 16GB, 32GB\n>   - GPU: RTX 3060, RTX 4080, TESLA\n>   - License: Private, Commercial, Educatiion\n> \n> By the way, if belonged option is not \"select\" type, this entity never\n> being used."
+                        "description": "Description of the current {@link IShoppingSaleUnitOptionCandidate.ICreate} type:\n\n> Creation information of the candidate value.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitOptionCandidate} type:\n\n> Selectable candidate values within an option.\n> \n> `IShoppingSaleUnitOptionCandidate` is an entity that represents individual\n> candidate values that can be selected from\n> {@link IShoppingSaleUnitSelectableOption options of the \"select\" type}.\n> \n> - Example\n>   - RAM: 8GB, 16GB, 32GB\n>   - GPU: RTX 3060, RTX 4080, TESLA\n>   - License: Private, Commercial, Educatiion\n> \n> By the way, if belonged option is not \"select\" type, this entity never\n> being used."
                       },
                       "description": "List of candidate values.\n\n\n@minItems 1"
                     }
@@ -180,7 +183,7 @@
                     "variable",
                     "candidates"
                   ],
-                  "description": "Creation information of the selectable option.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitSelectableOption.ICreate} type:\n\n> Creation information of the selectable option.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitSelectableOption} type:\n\n> Individual option information on units for sale.\n> \n> `IShoppingSaleUnitSelectableOption` is a subsidiary entity of\n> {@link IShoppingSaleUnit} that represents individual products in the\n> {@link IShoppingSale sale}, and is an entity designed to represent individual\n> selectable option information for the unit.\n> \n> - Examples of Options\n>   - selectable options\n>     - Computer: CPU, RAM, SSD, etc.\n>     - Clothes: size, color, style, etc.\n>   - descriptive options\n>     - Engrave\n>     - Simple question\n> \n> If the {@link variable} property value is `true`, the final stock that the\n> {@link IShoppingCustomer customer} will purchase changes depending on the\n> selection of the {@link IShoppingSaleUnitOptionCandidate candidate value}.\n> \n> Conversely, if it is a type other than \"select\", or if the {@link variable}\n> property value is \"false\", , this is an option that has no meaning beyond\n> simple information transfer. Therefore, no matter what value the customer\n> chooses when purchasing it, the option in this case does not affect the\n> {@link IShoppingSaleUnitStock final stock}."
+                  "description": "Description of the current {@link IShoppingSaleUnitSelectableOption.ICreate} type:\n\n> Creation information of the selectable option.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitSelectableOption} type:\n\n> Individual option information on units for sale.\n> \n> `IShoppingSaleUnitSelectableOption` is a subsidiary entity of\n> {@link IShoppingSaleUnit} that represents individual products in the\n> {@link IShoppingSale sale}, and is an entity designed to represent individual\n> selectable option information for the unit.\n> \n> - Examples of Options\n>   - selectable options\n>     - Computer: CPU, RAM, SSD, etc.\n>     - Clothes: size, color, style, etc.\n>   - descriptive options\n>     - Engrave\n>     - Simple question\n> \n> If the {@link variable} property value is `true`, the final stock that the\n> {@link IShoppingCustomer customer} will purchase changes depending on the\n> selection of the {@link IShoppingSaleUnitOptionCandidate candidate value}.\n> \n> Conversely, if it is a type other than \"select\", or if the {@link variable}\n> property value is \"false\", , this is an option that has no meaning beyond\n> simple information transfer. Therefore, no matter what value the customer\n> chooses when purchasing it, the option in this case does not affect the\n> {@link IShoppingSaleUnitStock final stock}."
                 },
                 "description": "List of options."
               },
@@ -209,7 +212,7 @@
                         "nominal",
                         "real"
                       ],
-                      "description": "Shopping price interface."
+                      "description": "Price of the stock.\n\n------------------------------\n\nDescription of the current {@link IShoppingPrice} type:\n\n> Shopping price interface."
                     },
                     "quantity": {
                       "type": "integer",
@@ -233,7 +236,7 @@
                           "option_index",
                           "candidate_index"
                         ],
-                        "description": "Creation information of stock choice.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitStockChoice.ICreate} type:\n\n> Creation information of stock choice.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStockChoice} type:\n\n> Selection information of final stock.\n> \n> `IShoppingSaleUnitStockChoice` is an entity that represents which\n> {@link IShoppingSaleUnitSelectableOption option} of each variable \"select\"\n> type was selected for each {@link IShoppingSaleUnitStock stock} and which\n> {@link IShoppingSaleUnitOptionCandidate candidate value} was selected within\n> it.\n> \n> Of course, if the bound {@link IShoppingSaleUnit unit} does not have any\n> options, this entity can also be ignored."
+                        "description": "Description of the current {@link IShoppingSaleUnitStockChoice.ICreate} type:\n\n> Creation information of stock choice.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStockChoice} type:\n\n> Selection information of final stock.\n> \n> `IShoppingSaleUnitStockChoice` is an entity that represents which\n> {@link IShoppingSaleUnitSelectableOption option} of each variable \"select\"\n> type was selected for each {@link IShoppingSaleUnitStock stock} and which\n> {@link IShoppingSaleUnitOptionCandidate candidate value} was selected within\n> it.\n> \n> Of course, if the bound {@link IShoppingSaleUnit unit} does not have any\n> options, this entity can also be ignored."
                       },
                       "description": "List of choices.\n\nWhich candidate values being chosen for each option."
                     }
@@ -244,7 +247,7 @@
                     "quantity",
                     "choices"
                   ],
-                  "description": "Creation information of the stock.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnitStock.ICreate} type:\n\n> Creation information of the stock.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStock} type:\n\n> Final component information on units for sale.\n> \n> `IShoppingSaleUnitStock` is a subsidiary entity of {@link IShoppingSaleUnit}\n> that represents a product catalog for sale, and is a kind of final stock that is\n> constructed by selecting all {@link IShoppingSaleUnitSelectableOption options}\n> (variable \"select\" type) and their\n> {@link IShoppingSaleUnitOptionCandidate candidate} values in the belonging unit.\n> It is the \"good\" itself that customers actually purchase.\n> \n> - Product Name) MacBook\n>   - Options\n>     - CPU: { i3, i5, i7, i9 }\n>     - RAM: { 8GB, 16GB, 32GB, 64GB, 96GB }\n>     - SSD: { 256GB, 512GB, 1TB }\n>   - Number of final stocks: 4 * 5 * 3 = 60\n> \n> For reference, the total number of `IShoppingSaleUnitStock` records in an\n> attribution unit can be obtained using Cartesian Product. In other words, the\n> value obtained by multiplying all the candidate values that each\n> (variable \"select\" type) option can have by the number of cases is the total\n> number of final stocks in the unit.\n> \n> Of course, without a single variable \"select\" type option, the final stocks\n> count in the unit is only 1."
+                  "description": "Description of the current {@link IShoppingSaleUnitStock.ICreate} type:\n\n> Creation information of the stock.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStock} type:\n\n> Final component information on units for sale.\n> \n> `IShoppingSaleUnitStock` is a subsidiary entity of {@link IShoppingSaleUnit}\n> that represents a product catalog for sale, and is a kind of final stock that is\n> constructed by selecting all {@link IShoppingSaleUnitSelectableOption options}\n> (variable \"select\" type) and their\n> {@link IShoppingSaleUnitOptionCandidate candidate} values in the belonging unit.\n> It is the \"good\" itself that customers actually purchase.\n> \n> - Product Name) MacBook\n>   - Options\n>     - CPU: { i3, i5, i7, i9 }\n>     - RAM: { 8GB, 16GB, 32GB, 64GB, 96GB }\n>     - SSD: { 256GB, 512GB, 1TB }\n>   - Number of final stocks: 4 * 5 * 3 = 60\n> \n> For reference, the total number of `IShoppingSaleUnitStock` records in an\n> attribution unit can be obtained using Cartesian Product. In other words, the\n> value obtained by multiplying all the candidate values that each\n> (variable \"select\" type) option can have by the number of cases is the total\n> number of final stocks in the unit.\n> \n> Of course, without a single variable \"select\" type option, the final stocks\n> count in the unit is only 1."
                 },
                 "description": "List of final stocks.\n\n\n@minItems 1"
               },
@@ -268,9 +271,9 @@
               "required",
               "primary"
             ],
-            "description": "Creation information of sale unit.\n\n------------------------------\n\nDescription of the current {@link IShoppingSaleUnit.ICreate} type:\n\n> Creation information of sale unit.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnit} type:\n\n> Product composition information handled in the sale.\n> \n> `IShoppingSaleUnit` is an entity that embodies the \"individual product\"\n> information handled in the {@link IShoppingSale sale}.\n> \n> For reference, the reason why `IShoppingSaleUnit` is separated from\n> {@link IShoppingSaleSnapshot} by an algebraic relationship of 1: N is because\n> there are some cases where multiple products are sold in one listing. This is\n> the case with so-called \"bundled products\".\n> \n> - Bundle from regular product (Mackbook Set)\n>   - Main Body\n>   - Keyboard\n>   - Mouse\n>   - Apple Care (Free A/S Voucher)\n> \n> And again, `IShoppingSaleUnit` does not in itself refer to the\n> {@link IShoppingSaleUnitStock final stock} that the\n> {@link IShoppingCustomer customer} will {@link IShoppingOrder purchase}.\n> The final stock can be found only after selecting all given\n> {@link IShoppingSaleUnitOption options} and their\n> {@link IShoppingSaleUnitOptionCandidate candidate values}.\n> \n> For example, even if you buy a Macbook, the final stocks are determined only\n> after selecting all the options (CPU / RAM / SSD), etc."
+            "description": "Description of the current {@link IShoppingSaleUnit.ICreate} type:\n\n> Creation information of sale unit.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnit} type:\n\n> Product composition information handled in the sale.\n> \n> `IShoppingSaleUnit` is an entity that embodies the \"individual product\"\n> information handled in the {@link IShoppingSale sale}.\n> \n> For reference, the reason why `IShoppingSaleUnit` is separated from\n> {@link IShoppingSaleSnapshot} by an algebraic relationship of 1: N is because\n> there are some cases where multiple products are sold in one listing. This is\n> the case with so-called \"bundled products\".\n> \n> - Bundle from regular product (Mackbook Set)\n>   - Main Body\n>   - Keyboard\n>   - Mouse\n>   - Apple Care (Free A/S Voucher)\n> \n> And again, `IShoppingSaleUnit` does not in itself refer to the\n> {@link IShoppingSaleUnitStock final stock} that the\n> {@link IShoppingCustomer customer} will {@link IShoppingOrder purchase}.\n> The final stock can be found only after selecting all given\n> {@link IShoppingSaleUnitOption options} and their\n> {@link IShoppingSaleUnitOptionCandidate candidate values}.\n> \n> For example, even if you buy a Macbook, the final stocks are determined only\n> after selecting all the options (CPU / RAM / SSD), etc."
           },
-          "description": "List of units.\n\nRecords about individual product composition informations that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1"
+          "description": "List of units.\n\nRecords about individual product composition information that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1"
         },
         "tags": {
           "type": "array",
@@ -289,7 +292,7 @@
         "units",
         "tags"
       ],
-      "description": "Creation information of sale.\n\n------------------------------\n\nDescription of the current {@link IShoppingSale.ICreate} type:\n\n> Creation information of sale.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSale} type:\n\n> Seller sales products.\n> \n> `IShoppingSale` is an entity that embodies \"product sales\" (sales)\n> information registered by the {@link ISoppingSeller seller}. And the main\n> information of the sale is recorded in the sub {@link IShoppingSaleSnapshot},\n> not in the main `IShoppingSale`. When a seller changes a previously registered\n> item, the existing `IShoppingSale` record is not changed, but a new\n> {@link IShoppingSaleSnapshot snapshot} record be created.\n> \n> This is to preserve the {@link IShoppingCustomer customer}'s\n> {@link IShoppingOrder purchase history} flawlessly after the customer\n> purchases a specific item, even if the seller changes the components or\n> price of the item. It is also intended to support sellers in so-called A/B\n> testing, which involves changing components or prices and measuring the\n> performance in each case."
+      "description": "Description of the current {@link IShoppingSale.ICreate} type:\n\n> Creation information of sale.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSale} type:\n\n> Seller sales products.\n> \n> `IShoppingSale` is an entity that embodies \"product sales\" (sales)\n> information registered by the {@link ISoppingSeller seller}. And the main\n> information of the sale is recorded in the sub {@link IShoppingSaleSnapshot},\n> not in the main `IShoppingSale`. When a seller changes a previously registered\n> item, the existing `IShoppingSale` record is not changed, but a new\n> {@link IShoppingSaleSnapshot snapshot} record be created.\n> \n> This is to preserve the {@link IShoppingCustomer customer}'s\n> {@link IShoppingOrder purchase history} flawlessly after the customer\n> purchases a specific item, even if the seller changes the components or\n> price of the item. It is also intended to support sellers in so-called A/B\n> testing, which involves changing components or prices and measuring the\n> performance in each case."
     }
   },
   "required": [

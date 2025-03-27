@@ -9,14 +9,14 @@
           "description": "@default John Doe"
         },
         "age": {
-          "type": "number",
-          "description": "@default 42"
+          "type": "number"
         }
       },
       "required": [
         "name",
         "age"
-      ]
+      ],
+      "description": "Current Type: {@link IPerson}"
     }
   },
   "required": [

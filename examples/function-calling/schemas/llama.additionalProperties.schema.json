@@ -2,6 +2,7 @@
   "type": "object",
   "properties": {
     "input": {
+      "description": "Current Type: {@link IPerson}",
       "type": "object",
       "properties": {
         "name": {
@@ -15,8 +16,8 @@
           "type": "integer"
         },
         "etc": {
-          "title": "Additional informations about the person",
-          "description": "Construct a type with a set of properties K of type T",
+          "title": "Additional information about the person",
+          "description": "Additional information about the person.\n\n------------------------------\n\nDescription of the current {@link Recordstringstring} type:\n\n> Construct a type with a set of properties K of type T",
           "type": "object",
           "properties": {},
           "required": [],

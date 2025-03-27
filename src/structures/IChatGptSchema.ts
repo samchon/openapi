@@ -40,8 +40,8 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * {@link IChatGptSchema.IParameters.$defs}, and the others would be ecaped from the
  * {@link IChatGptSchema.IReference} type.
  *
- * Also, ChatGPT has banned below constraint properties. Instead, I'll will
- * fill the {@link IChatGptSchema.__IAttribute.description} property with
+ * Also, OpenAI has banned below constraint properties. Instead, `IChatGptSchema`
+ * fills the {@link IChatGptSchema.__IAttribute.description} property with
  * the comment text like `"@format uuid"`.
  *
  * - {@link OpenApi.IJsonSchema.INumber.minimum}
@@ -56,6 +56,24 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link OpenApi.IJsonSchema.IArray.minItems}
  * - {@link OpenApi.IJsonSchema.IArray.maxItems}
  * - {@link OpenApi.IJsonSchema.IArray.unique}
+ *
+ * Additionally, OpenAI cannot define the `description` property to the
+ * {@link IChatGptSchema.IReference} type, and even does not understand
+ * the capsulization to the {@link IChatGptSchema.IAnyOf} type.
+ * Therefore, the `description` is written to the parent object type,
+ * not the reference type.
+ *
+ * ```json
+ * {
+ *   "type": "object",
+ *   "description": "### Description of {@link something} property.\n\n> Hello?",
+ *   "properties": {
+ *     "something": {
+ *       "$ref": "#/$defs/SomeObject"
+ *     }
+ *   }
+ * }
+ * ```
  *
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @reference https://platform.openai.com/docs/guides/structured-outputs
