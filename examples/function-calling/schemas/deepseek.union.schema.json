@@ -1,14 +1,18 @@
 {
+  "description": "",
   "type": "object",
   "properties": {
     "input": {
       "description": "Current Type: {@link Shape}",
-      "oneOf": [
+      "anyOf": [
         {
           "type": "object",
           "properties": {
             "type": {
-              "const": "rectangle"
+              "type": "string",
+              "enum": [
+                "rectangle"
+              ]
             },
             "p1": {
               "description": "Current Type: {@link IPoint}",
@@ -54,7 +58,10 @@
           "type": "object",
           "properties": {
             "type": {
-              "const": "circle"
+              "type": "string",
+              "enum": [
+                "circle"
+              ]
             },
             "radius": {
               "type": "number"

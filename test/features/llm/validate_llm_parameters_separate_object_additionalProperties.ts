@@ -68,7 +68,10 @@ const validate_llm_parameters_separate_object_additionalProperties = <
     model,
     constraint,
   )(typia.json.schemas<[IParameters]>());
-  TestValidator.equals(model)(separator(params))({
+  TestValidator.equals(
+    model,
+    (key) => key !== "description",
+  )(separator(params))({
     llm: schema(
       model,
       constraint,

@@ -1,4 +1,5 @@
 {
+  "description": "",
   "type": "object",
   "properties": {
     "input": {
@@ -6,23 +7,23 @@
       "type": "object",
       "properties": {
         "reasons": {
+          "description": "@minItems 1",
           "type": "array",
           "items": {
             "type": "string"
-          },
-          "minItems": 1
+          }
         },
         "temporary": {
           "type": "boolean"
         },
         "time": {
-          "oneOf": [
+          "anyOf": [
             {
               "type": "null"
             },
             {
               "type": "string",
-              "format": "date-time"
+              "description": "@format date-time"
             }
           ]
         }

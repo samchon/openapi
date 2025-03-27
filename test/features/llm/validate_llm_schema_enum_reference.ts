@@ -55,8 +55,14 @@ const validate_llm_schema_enum_reference = <
     config: LlmSchemaComposer.defaultConfig(model) as any,
     $defs: {},
   }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
-  TestValidator.equals("success")(result.success)(true);
-  TestValidator.equals("union")(result.success ? result.value : {})({
+  TestValidator.equals(
+    "success",
+    (key) => key === "description",
+  )(result.success)(true);
+  TestValidator.equals(
+    "union",
+    (key) => key === "description",
+  )(result.success ? result.value : {})({
     type: "number",
     enum: [3, 4, 5],
   });

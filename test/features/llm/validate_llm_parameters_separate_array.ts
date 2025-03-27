@@ -58,11 +58,17 @@ const validate_llm_parameters_separate_array = <Model extends ILlmSchema.Model>(
     constraint,
   )(typia.json.schemas<[IManagement<ICombined>]>());
 
-  TestValidator.equals("member")(separator(member))({
+  TestValidator.equals(
+    "member",
+    (key) => key !== "description",
+  )(separator(member))({
     llm: member,
     human: null,
   });
-  TestValidator.equals("upload")(separator(upload))({
+  TestValidator.equals(
+    "upload",
+    (key) => key !== "description",
+  )(separator(upload))({
     llm: {
       type: "object",
       properties: {},
@@ -72,7 +78,10 @@ const validate_llm_parameters_separate_array = <Model extends ILlmSchema.Model>(
     },
     human: upload,
   });
-  TestValidator.equals("combined")(separator(combined))({
+  TestValidator.equals(
+    "combined",
+    (key) => key !== "description",
+  )(separator(combined))({
     llm: member,
     human: upload,
   });

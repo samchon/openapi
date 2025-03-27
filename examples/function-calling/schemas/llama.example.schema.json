@@ -2,6 +2,7 @@
   "type": "object",
   "properties": {
     "input": {
+      "description": "Current Type: {@link IPerson}",
       "type": "object",
       "properties": {
         "name": {

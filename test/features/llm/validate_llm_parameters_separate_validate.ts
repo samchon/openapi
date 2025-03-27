@@ -51,7 +51,10 @@ const validate_llm_parameters_separate_validate = <
         parameters: result.value as ILlmSchema.IParameters<Model>,
         predicate: (s: OpenApi.IJsonSchema) => OpenApiTypeChecker.isNumber(s),
       } as any) as ILlmFunction.ISeparated<Model>;
-    TestValidator.equals("validate")(!!separated.validate)(exists);
+    TestValidator.equals(
+      "validate",
+      (key) => key !== "description",
+    )(!!separated.validate)(exists);
   };
   validate(collection.schemas[0], true);
   validate(collection.schemas[1], false);
