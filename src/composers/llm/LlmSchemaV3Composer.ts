@@ -40,10 +40,7 @@ export namespace LlmSchemaV3Composer {
       });
     if (entity.success === false) return entity;
 
-    const result: IResult<ILlmSchemaV3, IOpenApiSchemaError> = schema({
-      ...props,
-      schema: entity.value,
-    });
+    const result: IResult<ILlmSchemaV3, IOpenApiSchemaError> = schema(props);
     if (result.success === false) return result;
     return {
       success: true,

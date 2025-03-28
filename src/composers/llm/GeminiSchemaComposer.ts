@@ -30,10 +30,10 @@ export namespace GeminiSchemaComposer {
         method: "GeminiSchemaComposer.parameters",
       });
     if (entity.success === false) return entity;
-    return schema({
-      ...props,
-      schema: entity.value,
-    }) as IResult<IGeminiSchema.IParameters, IOpenApiSchemaError>;
+    return schema(props) as IResult<
+      IGeminiSchema.IParameters,
+      IOpenApiSchemaError
+    >;
   };
 
   export const schema = (props: {
