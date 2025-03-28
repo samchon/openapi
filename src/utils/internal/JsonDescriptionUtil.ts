@@ -24,6 +24,8 @@ export namespace JsonDescriptionUtil {
         (schema, i): schema is IParentReference =>
           i === 0 || !!schema?.description,
       );
+    if (!props.schema.description?.length && pReferences.length === 0)
+      return undefined;
     return [
       ...(!!props.schema.description?.length ? [props.schema.description] : []),
       ...pReferences.map((pRef, i) =>
