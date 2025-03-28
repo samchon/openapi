@@ -54,6 +54,14 @@ export namespace LlmSchemaV3_1Composer {
         ...(result.value as ILlmSchemaV3_1.IObject),
         additionalProperties: false,
         $defs,
+        description: OpenApiTypeChecker.isReference(props.schema)
+          ? JsonDescriptionUtil.cascade({
+              prefix: "#/components/schemas/",
+              components: props.components,
+              schema: props.schema,
+              escape: true,
+            })
+          : result.value.description,
       } satisfies ILlmSchemaV3_1.IParameters,
     };
   };
