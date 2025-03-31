@@ -99,11 +99,18 @@ export namespace HttpLlm {
     const migrate: IHttpMigrateApplication = HttpMigration.application(
       props.document,
     );
+    const defaultConfig: ILlmSchema.IConfig<Model> =
+      LlmSchemaComposer.defaultConfig(props.model);
     return HttpLlmComposer.application<Model>({
       migrate,
       model: props.model,
       options: {
-        ...LlmSchemaComposer.defaultConfig(props.model),
+        ...Object.fromEntries(
+          Object.entries(defaultConfig).map(
+            ([key, value]) =>
+              [key, (props.options as any)?.[key] ?? value] as const,
+          ),
+        ),
         separate: props.options?.separate ?? null,
         maxLength: props.options?.maxLength ?? null,
       } as any as IHttpLlmApplication.IOptions<Model>,
