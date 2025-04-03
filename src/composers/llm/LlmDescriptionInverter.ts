@@ -80,7 +80,7 @@ export namespace LlmDescriptionInverter {
       pattern: find({
         type: "string",
         name: "pattern",
-        lines: description.split("\n"),
+        lines,
       }),
       contentMediaType: find({
         type: "string",
@@ -95,7 +95,7 @@ export namespace LlmDescriptionInverter {
       maxLength: find({
         type: "number",
         name: "maxLength",
-        lines: description.split("\n"),
+        lines,
       }),
       description: describe(lines, [
         "format",
@@ -160,13 +160,12 @@ export namespace LlmDescriptionInverter {
   };
 
   const describe = (lines: string[], tags: string[]): string | undefined => {
-    const ret = trimArray(
+    const ret: string = trimArray(
       lines
         .map((str) => str.trim())
-        .filter((str) => {
-          str = str.trim();
-          return tags.every((tag) => str.startsWith(`@${tag}`) === false);
-        }),
+        .filter((str) =>
+          tags.every((tag) => str.startsWith(`@${tag}`) === false),
+        ),
     ).join("\n");
     return ret.length === 0 ? undefined : ret;
   };

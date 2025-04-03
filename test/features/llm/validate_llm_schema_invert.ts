@@ -104,4 +104,61 @@ const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
     maxItems: 5,
     uniqueItems: true,
   });
+
+  TestValidator.equals("number")(
+    LlmSchemaComposer.invert(model)({
+      components: {},
+      $defs: {},
+      schema: typia.llm.schema<
+        number &
+          tags.ExclusiveMinimum<0> &
+          tags.ExclusiveMaximum<100> &
+          tags.MultipleOf<5>,
+        "chatgpt"
+      >({}),
+    } as any),
+  )({
+    type: "number",
+    minimum: 0,
+    maximum: 100,
+    multipleOf: 5,
+    exclusiveMinimum: true,
+    exclusiveMaximum: true,
+  });
+
+  TestValidator.equals("object")(
+    LlmSchemaComposer.invert(model)({
+      components: {},
+      $defs: {},
+      schema: typia.llm.schema<
+        {
+          /**
+           * List of items.
+           *
+           * List of items containing any string values.
+           */
+          array: Array<string & tags.Pattern<"*">>;
+        },
+        "chatgpt"
+      >({}),
+    } as any),
+  )({
+    type: "object",
+    properties: {
+      array: {
+        type: "array",
+        items: {
+          type: "string",
+          pattern: "*",
+        },
+        minItems: 1,
+        maxItems: 5,
+        uniqueItems: true,
+        title: "List of items",
+        description:
+          "List of items.\n\nList of items containing any string values.",
+      },
+    },
+    required: ["array"],
+  });
 };
