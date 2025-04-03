@@ -608,8 +608,8 @@ export namespace LlmSchemaV3_1Composer {
       });
     if (LlmTypeCheckerV3_1.isArray(props.schema))
       return {
-        ...LlmDescriptionInverter.array(props.schema.description ?? ""),
         ...props.schema,
+        ...LlmDescriptionInverter.array(props.schema.description),
         items: next(props.schema.items),
       };
     else if (LlmTypeCheckerV3_1.isObject(props.schema))
@@ -645,13 +645,13 @@ export namespace LlmSchemaV3_1Composer {
       LlmTypeCheckerV3_1.isNumber(props.schema)
     )
       return {
-        ...LlmDescriptionInverter.numeric(props.schema.description ?? ""),
         ...props.schema,
+        ...LlmDescriptionInverter.numeric(props.schema.description),
       };
     else if (LlmTypeCheckerV3_1.isString(props.schema))
       return {
-        ...LlmDescriptionInverter.string(props.schema.description ?? ""),
         ...props.schema,
+        ...LlmDescriptionInverter.string(props.schema.description),
       };
     return props.schema;
   };

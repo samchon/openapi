@@ -2,7 +2,7 @@ import { OpenApi } from "../../OpenApi";
 
 export namespace LlmDescriptionInverter {
   export const numeric = (
-    description: string,
+    description: string | undefined,
   ): Pick<
     OpenApi.IJsonSchema.INumber,
     | "minimum"
@@ -10,7 +10,10 @@ export namespace LlmDescriptionInverter {
     | "exclusiveMinimum"
     | "exclusiveMaximum"
     | "multipleOf"
+    | "description"
   > => {
+    if (description === undefined) return {};
+
     const lines: string[] = description.split("\n");
     const exclusiveMinimum: number | undefined = find({
       type: "number",
@@ -44,15 +47,29 @@ export namespace LlmDescriptionInverter {
         name: "multipleOf",
         lines,
       }),
+      description: describe(lines, [
+        "minimum",
+        "maximum",
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "multipleOf",
+      ]),
     };
   };
 
   export const string = (
-    description: string,
+    description: string | undefined,
   ): Pick<
     OpenApi.IJsonSchema.IString,
-    "format" | "pattern" | "contentMediaType" | "minLength" | "maxLength"
+    | "format"
+    | "pattern"
+    | "contentMediaType"
+    | "minLength"
+    | "maxLength"
+    | "description"
   > => {
+    if (description === undefined) return {};
+
     const lines: string[] = description.split("\n");
     return {
       format: find({
@@ -63,7 +80,7 @@ export namespace LlmDescriptionInverter {
       pattern: find({
         type: "string",
         name: "pattern",
-        lines: description.split("\n"),
+        lines,
       }),
       contentMediaType: find({
         type: "string",
@@ -78,17 +95,26 @@ export namespace LlmDescriptionInverter {
       maxLength: find({
         type: "number",
         name: "maxLength",
-        lines: description.split("\n"),
+        lines,
       }),
+      description: describe(lines, [
+        "format",
+        "pattern",
+        "contentMediaType",
+        "minLength",
+        "maxLength",
+      ]),
     };
   };
 
   export const array = (
-    description: string,
+    description: string | undefined,
   ): Pick<
     OpenApi.IJsonSchema.IArray,
-    "minItems" | "maxItems" | "uniqueItems"
+    "minItems" | "maxItems" | "uniqueItems" | "description"
   > => {
+    if (description === undefined) return {};
+
     const lines: string[] = description.split("\n");
     return {
       minItems: find({
@@ -106,6 +132,7 @@ export namespace LlmDescriptionInverter {
         name: "uniqueItems",
         lines,
       }),
+      description: describe(lines, ["minItems", "maxItems", "uniqueItems"]),
     };
   };
 
@@ -130,5 +157,26 @@ export namespace LlmDescriptionInverter {
       return value as any;
     }
     return undefined as any;
+  };
+
+  const describe = (lines: string[], tags: string[]): string | undefined => {
+    const ret: string = trimArray(
+      lines
+        .map((str) => str.trim())
+        .filter((str) =>
+          tags.every((tag) => str.startsWith(`@${tag}`) === false),
+        ),
+    ).join("\n");
+    return ret.length === 0 ? undefined : ret;
+  };
+
+  const trimArray = (array: string[]): string[] => {
+    let first: number = 0;
+    let last: number = array.length - 1;
+
+    for (; first < array.length; ++first)
+      if (array[first]!.trim().length !== 0) break;
+    for (; last >= 0; --last) if (array[last]!.trim().length !== 0) break;
+    return array.slice(first, last + 1);
   };
 }

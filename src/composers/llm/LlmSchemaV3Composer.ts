@@ -310,21 +310,21 @@ export namespace LlmSchemaV3Composer {
       closure: (schema) => {
         if (OpenApiTypeChecker.isArray(schema))
           Object.assign(schema, {
-            ...LlmDescriptionInverter.array(schema.description ?? ""),
             ...schema,
+            ...LlmDescriptionInverter.array(schema.description),
           });
         else if (
           OpenApiTypeChecker.isInteger(schema) ||
           OpenApiTypeChecker.isNumber(schema)
         )
           Object.assign(schema, {
-            ...LlmDescriptionInverter.numeric(schema.description ?? ""),
             ...schema,
+            ...LlmDescriptionInverter.numeric(schema.description),
           });
         else if (OpenApiTypeChecker.isString(schema))
           Object.assign(schema, {
-            ...LlmDescriptionInverter.string(schema.description ?? ""),
             ...schema,
+            ...LlmDescriptionInverter.string(schema.description),
           });
       },
       components: {},
