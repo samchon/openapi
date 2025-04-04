@@ -1,5 +1,6 @@
 import { OpenApi } from "../OpenApi";
 import { OpenApiV3 } from "../OpenApiV3";
+import { OpenApiExclusiveEmender } from "../utils/OpenApiExclusiveEmender";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace OpenApiV3Upgrader {
@@ -16,7 +17,7 @@ export namespace OpenApiV3Upgrader {
         )
       : undefined,
     openapi: "3.1.0",
-    "x-samchon-emended": true,
+    "x-samchon-emended-v4": true,
   });
 
   /* -----------------------------------------------------------
@@ -303,31 +304,33 @@ export namespace OpenApiV3Upgrader {
             TypeChecker.isInteger(schema) ||
             TypeChecker.isNumber(schema)
           )
-            union.push({
-              ...schema,
-              default: (schema.default ?? undefined) satisfies
-                | boolean
-                | number
-                | string
-                | undefined as any,
-              ...{ enum: undefined },
-              ...(typeof schema.exclusiveMinimum === "number"
-                ? {
-                    minimum: schema.exclusiveMinimum,
-                    exclusiveMinimum: true,
-                  }
-                : {
-                    exclusiveMinimum: schema.exclusiveMinimum,
-                  }),
-              ...(typeof schema.exclusiveMaximum === "number"
-                ? {
-                    maximum: schema.exclusiveMaximum,
-                    exclusiveMaximum: true,
-                  }
-                : {
-                    exclusiveMaximum: schema.exclusiveMaximum,
-                  }),
-            });
+            union.push(
+              OpenApiExclusiveEmender.emend({
+                ...schema,
+                default: (schema.default ?? undefined) satisfies
+                  | boolean
+                  | number
+                  | string
+                  | undefined as any,
+                exclusiveMinimum:
+                  typeof schema.exclusiveMinimum === "boolean"
+                    ? schema.exclusiveMinimum === true
+                      ? schema.minimum
+                      : undefined
+                    : schema.exclusiveMinimum,
+                exclusiveMaximum:
+                  typeof schema.exclusiveMaximum === "boolean"
+                    ? schema.exclusiveMaximum === true
+                      ? schema.maximum
+                      : undefined
+                    : schema.exclusiveMaximum,
+                minimum:
+                  schema.exclusiveMinimum === true ? undefined : schema.minimum,
+                maximum:
+                  schema.exclusiveMaximum === true ? undefined : schema.maximum,
+                ...{ enum: undefined },
+              }),
+            );
           else
             union.push({
               ...schema,

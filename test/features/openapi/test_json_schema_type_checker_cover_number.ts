@@ -50,7 +50,7 @@ export const test_json_schema_type_checker_cover_number = (): void => {
   TestValidator.equals("exclusiveMinimum covers minimum only when less")(true)(
     OpenApiTypeChecker.covers({
       components: {},
-      x: { type: "number", minimum: 1, exclusiveMinimum: true },
+      x: { type: "number", exclusiveMinimum: 1 },
       y: { type: "number", minimum: 2 },
     }),
   );
@@ -75,7 +75,7 @@ export const test_json_schema_type_checker_cover_number = (): void => {
   )(
     OpenApiTypeChecker.covers({
       components: {},
-      x: { type: "number", maximum: 2, exclusiveMaximum: true },
+      x: { type: "number", exclusiveMaximum: 2 },
       y: { type: "number", maximum: 1 },
     }),
   );
@@ -121,7 +121,7 @@ export const test_json_schema_type_checker_cover_number = (): void => {
   TestValidator.equals("exclusiveMinimum can't cover equal")(false)(
     OpenApiTypeChecker.covers({
       components: {},
-      x: { type: "number", minimum: 1, exclusiveMinimum: true },
+      x: { type: "number", exclusiveMinimum: 1 },
       y: { type: "number", minimum: 1 },
     }),
   );
@@ -137,7 +137,7 @@ export const test_json_schema_type_checker_cover_number = (): void => {
   TestValidator.equals("exclusiveMaximum can't cover equal")(false)(
     OpenApiTypeChecker.covers({
       components: {},
-      x: { type: "number", maximum: 2, exclusiveMaximum: true },
+      x: { type: "number", exclusiveMaximum: 2 },
       y: { type: "number", maximum: 2 },
     }),
   );

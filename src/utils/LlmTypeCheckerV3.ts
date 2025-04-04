@@ -1,4 +1,5 @@
 import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
+import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
 /**
  * Type checker for LLM type schema.
@@ -110,25 +111,7 @@ export namespace LlmTypeCheckerV3 {
   ): boolean => {
     if (x.enum !== undefined)
       return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
-    return [
-      x.type === y.type,
-      x.minimum === undefined ||
-        (y.minimum !== undefined && x.minimum <= y.minimum),
-      x.maximum === undefined ||
-        (y.maximum !== undefined && x.maximum >= y.maximum),
-      x.exclusiveMinimum !== true ||
-        x.minimum === undefined ||
-        (y.minimum !== undefined &&
-          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      x.exclusiveMaximum !== true ||
-        x.maximum === undefined ||
-        (y.maximum !== undefined &&
-          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      x.multipleOf === undefined ||
-        (y.multipleOf !== undefined &&
-          y.multipleOf / x.multipleOf ===
-            Math.floor(y.multipleOf / x.multipleOf)),
-    ].every((v) => v);
+    return x.type === y.type && OpenApiTypeCheckerBase.coverNumericRange(x, y);
   };
 
   /**
@@ -140,25 +123,10 @@ export namespace LlmTypeCheckerV3 {
   ): boolean => {
     if (x.enum !== undefined)
       return y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v));
-    return [
-      x.type === y.type || (x.type === "number" && y.type === "integer"),
-      x.minimum === undefined ||
-        (y.minimum !== undefined && x.minimum <= y.minimum),
-      x.maximum === undefined ||
-        (y.maximum !== undefined && x.maximum >= y.maximum),
-      x.exclusiveMinimum !== true ||
-        x.minimum === undefined ||
-        (y.minimum !== undefined &&
-          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      x.exclusiveMaximum !== true ||
-        x.maximum === undefined ||
-        (y.maximum !== undefined &&
-          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      x.multipleOf === undefined ||
-        (y.multipleOf !== undefined &&
-          y.multipleOf / x.multipleOf ===
-            Math.floor(y.multipleOf / x.multipleOf)),
-    ].every((v) => v);
+    return (
+      (x.type === y.type || (x.type === "number" && y.type === "integer")) &&
+      OpenApiTypeCheckerBase.coverNumericRange(x, y)
+    );
   };
 
   /**

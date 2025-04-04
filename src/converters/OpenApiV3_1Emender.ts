@@ -1,9 +1,10 @@
 import { OpenApi } from "../OpenApi";
 import { OpenApiV3_1 } from "../OpenApiV3_1";
+import { OpenApiExclusiveEmender } from "../utils/OpenApiExclusiveEmender";
 
 export namespace OpenApiV3_1Emender {
   export const convert = (input: OpenApiV3_1.IDocument): OpenApi.IDocument => {
-    if ((input as OpenApi.IDocument)["x-samchon-emended"] === true)
+    if ((input as OpenApi.IDocument)["x-samchon-emended-v4"] === true)
       return input as OpenApi.IDocument;
     return {
       ...input,
@@ -28,7 +29,7 @@ export namespace OpenApiV3_1Emender {
               .filter(([_, value]) => value !== undefined),
           )
         : undefined,
-      "x-samchon-emended": true,
+      "x-samchon-emended-v4": true,
     };
   };
 
@@ -425,29 +426,31 @@ export namespace OpenApiV3_1Emender {
                 } satisfies OpenApiV3_1.IJsonSchema.IInteger as any),
               } satisfies OpenApi.IJsonSchema.IConstant);
           else
-            union.push({
-              ...schema,
-              default: schema.default ?? undefined,
-              ...{
-                enum: undefined,
-              },
-              ...(typeof schema.exclusiveMinimum === "number"
-                ? {
-                    minimum: schema.exclusiveMinimum,
-                    exclusiveMinimum: true,
-                  }
-                : {
-                    exclusiveMinimum: schema.exclusiveMinimum,
-                  }),
-              ...(typeof schema.exclusiveMaximum === "number"
-                ? {
-                    maximum: schema.exclusiveMaximum,
-                    exclusiveMaximum: true,
-                  }
-                : {
-                    exclusiveMaximum: schema.exclusiveMaximum,
-                  }),
-            });
+            union.push(
+              OpenApiExclusiveEmender.emend({
+                ...schema,
+                default: schema.default ?? undefined,
+                ...{
+                  enum: undefined,
+                },
+                exclusiveMinimum:
+                  typeof schema.exclusiveMinimum === "boolean"
+                    ? schema.exclusiveMinimum === true
+                      ? schema.minimum
+                      : undefined
+                    : schema.exclusiveMinimum,
+                exclusiveMaximum:
+                  typeof schema.exclusiveMaximum === "boolean"
+                    ? schema.exclusiveMaximum === true
+                      ? schema.maximum
+                      : undefined
+                    : schema.exclusiveMaximum,
+                minimum:
+                  schema.exclusiveMinimum === true ? undefined : schema.minimum,
+                maximum:
+                  schema.exclusiveMaximum === true ? undefined : schema.maximum,
+              }),
+            );
         else if (TypeChecker.isString(schema))
           if (
             schema.enum?.length &&

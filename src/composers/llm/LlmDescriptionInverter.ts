@@ -1,4 +1,5 @@
 import { OpenApi } from "../../OpenApi";
+import { OpenApiExclusiveEmender } from "../../utils/OpenApiExclusiveEmender";
 
 export namespace LlmDescriptionInverter {
   export const numeric = (
@@ -15,33 +16,27 @@ export namespace LlmDescriptionInverter {
     if (description === undefined) return {};
 
     const lines: string[] = description.split("\n");
-    const exclusiveMinimum: number | undefined = find({
-      type: "number",
-      name: "exclusiveMinimum",
-      lines,
-    });
-    const exclusiveMaximum: number | undefined = find({
-      type: "number",
-      name: "exclusiveMaximum",
-      lines,
-    });
-    return {
-      minimum:
-        exclusiveMinimum ??
-        find({
-          type: "number",
-          name: "minimum",
-          lines,
-        }),
-      maximum:
-        exclusiveMaximum ??
-        find({
-          type: "number",
-          name: "maximum",
-          lines,
-        }),
-      exclusiveMinimum: exclusiveMinimum !== undefined ? true : undefined,
-      exclusiveMaximum: exclusiveMaximum !== undefined ? true : undefined,
+    return OpenApiExclusiveEmender.emend({
+      minimum: find({
+        type: "number",
+        name: "minimum",
+        lines,
+      }),
+      maximum: find({
+        type: "number",
+        name: "maximum",
+        lines,
+      }),
+      exclusiveMinimum: find({
+        type: "number",
+        name: "exclusiveMinimum",
+        lines,
+      }),
+      exclusiveMaximum: find({
+        type: "number",
+        name: "exclusiveMaximum",
+        lines,
+      }),
       multipleOf: find({
         type: "number",
         name: "multipleOf",
@@ -54,7 +49,7 @@ export namespace LlmDescriptionInverter {
         "exclusiveMaximum",
         "multipleOf",
       ]),
-    };
+    });
   };
 
   export const string = (
@@ -145,7 +140,7 @@ export namespace LlmDescriptionInverter {
     | undefined => {
     if (props.type === "boolean")
       return props.lines.some((line) => line.startsWith(`@${props.name}`))
-        ? true
+        ? (true as any)
         : (undefined as any);
     for (const line of props.lines) {
       if (line.startsWith(`@${props.name} `) === false) continue;
