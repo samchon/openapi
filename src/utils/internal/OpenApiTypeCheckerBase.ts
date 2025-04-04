@@ -804,5 +804,9 @@ export namespace OpenApiTypeCheckerBase {
         (y.maximum !== undefined && x.exclusiveMaximum >= y.maximum) ||
         (y.exclusiveMaximum !== undefined &&
           x.exclusiveMaximum >= y.exclusiveMaximum),
+      x.multipleOf === undefined ||
+        (y.multipleOf !== undefined &&
+          y.multipleOf / x.multipleOf ===
+            Math.floor(y.multipleOf / x.multipleOf)),
     ].every((v) => v);
 }

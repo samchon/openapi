@@ -118,7 +118,7 @@ export const test_json_schema_type_checker_cover_number = (): void => {
       y: { type: "number", minimum: 1 },
     }),
   );
-  TestValidator.equals("exclusiveMinimum can't cover equal")(false)(
+  TestValidator.equals("exclusiveMinimum can cover equal")(true)(
     OpenApiTypeChecker.covers({
       components: {},
       x: { type: "number", exclusiveMinimum: 1 },
@@ -134,7 +134,7 @@ export const test_json_schema_type_checker_cover_number = (): void => {
       y: { type: "number", maximum: 2 },
     }),
   );
-  TestValidator.equals("exclusiveMaximum can't cover equal")(false)(
+  TestValidator.equals("exclusiveMaximum can cover equal")(true)(
     OpenApiTypeChecker.covers({
       components: {},
       x: { type: "number", exclusiveMaximum: 2 },
