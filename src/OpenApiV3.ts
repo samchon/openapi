@@ -193,8 +193,8 @@ export namespace OpenApiV3 {
       /** @type int64 */ enum?: Array<number | null>;
       /** @type int64 */ minimum?: number;
       /** @type int64 */ maximum?: number;
-      exclusiveMinimum?: boolean;
-      exclusiveMaximum?: boolean;
+      exclusiveMinimum?: number | boolean;
+      exclusiveMaximum?: number | boolean;
       /**
        * @type uint64
        * @exclusiveMinimum 0
@@ -207,8 +207,8 @@ export namespace OpenApiV3 {
       enum?: Array<number | null>;
       minimum?: number;
       maximum?: number;
-      exclusiveMinimum?: boolean;
-      exclusiveMaximum?: boolean;
+      exclusiveMinimum?: number | boolean;
+      exclusiveMaximum?: number | boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
     }
     export interface IString extends __ISignificant<"string"> {
