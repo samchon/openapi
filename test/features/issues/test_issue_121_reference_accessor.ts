@@ -3,7 +3,7 @@ import { OpenApiTypeChecker } from "@samchon/openapi";
 import typia from "typia";
 
 export const test_issue_121_reference_accessor = (): void => {
-  const collection = typia.json.application<[IMember]>();
+  const collection = typia.json.schemas<[IMember]>();
   const accessors: string[] = [];
   OpenApiTypeChecker.visit({
     closure: (_schema, acc) => {
