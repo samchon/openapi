@@ -299,6 +299,35 @@ export namespace OpenApiV3Upgrader {
                 .filter((v) => v !== null)
                 .map((value) => ({ const: value })),
             );
+          else if (
+            TypeChecker.isInteger(schema) ||
+            TypeChecker.isNumber(schema)
+          )
+            union.push({
+              ...schema,
+              default: (schema.default ?? undefined) satisfies
+                | boolean
+                | number
+                | string
+                | undefined as any,
+              ...{ enum: undefined },
+              ...(typeof schema.exclusiveMinimum === "number"
+                ? {
+                    minimum: schema.exclusiveMinimum,
+                    exclusiveMinimum: true,
+                  }
+                : {
+                    exclusiveMinimum: schema.exclusiveMinimum,
+                  }),
+              ...(typeof schema.exclusiveMaximum === "number"
+                ? {
+                    maximum: schema.exclusiveMaximum,
+                    exclusiveMaximum: true,
+                  }
+                : {
+                    exclusiveMaximum: schema.exclusiveMaximum,
+                  }),
+            });
           else
             union.push({
               ...schema,
