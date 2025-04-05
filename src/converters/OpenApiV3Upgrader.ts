@@ -258,16 +258,15 @@ export namespace OpenApiV3Upgrader {
           ),
         ),
         example: input.example,
-        examples: input.examples,
+        examples: Array.isArray(input.examples)
+          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
+          : input.examples,
       };
       const visit = (schema: OpenApiV3.IJsonSchema): void => {
         // NULLABLE PROPERTY
-        if (
-          (schema as OpenApiV3.IJsonSchema.__ISignificant<any>).nullable ===
-          true
-        ) {
+        if ((schema as OpenApiV3.IJsonSchema.IBoolean).nullable === true) {
           nullable.value ||= true;
-          if ((schema as OpenApiV3.IJsonSchema.INumber).default === null)
+          if ((schema as OpenApiV3.IJsonSchema.IBoolean).default === null)
             nullable.default = null;
         }
         if (
