@@ -278,7 +278,7 @@ export namespace SwaggerV2Upgrader {
         ),
         example: input.example,
         examples: input.examples
-          ? Object.fromEntries(input.examples.map((v, i) => [i.toString(), v]))
+          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
           : undefined,
       };
       const visit = (schema: SwaggerV2.IJsonSchema): void => {
@@ -336,7 +336,7 @@ export namespace SwaggerV2Upgrader {
                   | undefined as any,
                 examples: schema.examples
                   ? Object.fromEntries(
-                      schema.examples.map((v, i) => [i.toString(), v]),
+                      schema.examples.map((v, i) => [`v${i}`, v]),
                     )
                   : undefined,
                 exclusiveMinimum:
@@ -368,7 +368,7 @@ export namespace SwaggerV2Upgrader {
                 | undefined as any,
               examples: schema.examples
                 ? Object.fromEntries(
-                    schema.examples.map((v, i) => [i.toString(), v]),
+                    schema.examples.map((v, i) => [`v${i}`, v]),
                   )
                 : undefined,
               ...{ enum: undefined },
@@ -379,9 +379,7 @@ export namespace SwaggerV2Upgrader {
             ...schema,
             items: convertSchema(definitions)(schema.items),
             examples: schema.examples
-              ? Object.fromEntries(
-                  schema.examples.map((v, i) => [i.toString(), v]),
-                )
+              ? Object.fromEntries(schema.examples.map((v, i) => [`v${i}`, v]))
               : undefined,
           });
         else if (TypeChecker.isObject(schema))
@@ -406,9 +404,7 @@ export namespace SwaggerV2Upgrader {
                 : undefined,
             },
             examples: schema.examples
-              ? Object.fromEntries(
-                  schema.examples.map((v, i) => [i.toString(), v]),
-                )
+              ? Object.fromEntries(schema.examples.map((v, i) => [`v${i}`, v]))
               : undefined,
             required: schema.required ?? [],
           });
@@ -420,18 +416,14 @@ export namespace SwaggerV2Upgrader {
               "#/components/schemas/",
             ),
             examples: schema.examples
-              ? Object.fromEntries(
-                  schema.examples.map((v, i) => [i.toString(), v]),
-                )
+              ? Object.fromEntries(schema.examples.map((v, i) => [`v${i}`, v]))
               : undefined,
           });
         else
           union.push({
             ...schema,
             examples: schema.examples
-              ? Object.fromEntries(
-                  schema.examples.map((v, i) => [i.toString(), v]),
-                )
+              ? Object.fromEntries(schema.examples.map((v, i) => [`v${i}`, v]))
               : undefined,
           });
       };

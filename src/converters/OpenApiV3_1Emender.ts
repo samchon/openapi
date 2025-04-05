@@ -280,6 +280,9 @@ export namespace OpenApiV3_1Emender {
             ([key, value]) => key.startsWith("x-") && value !== undefined,
           ),
         ),
+        examples: Array.isArray(input.examples)
+          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
+          : input.examples,
       };
       const nullable: { value: boolean; default?: null } = {
         value: false,
@@ -288,10 +291,7 @@ export namespace OpenApiV3_1Emender {
 
       const visit = (schema: OpenApiV3_1.IJsonSchema): void => {
         // NULLABLE PROPERTY
-        if (
-          (schema as OpenApiV3_1.IJsonSchema.__ISignificant<any>).nullable ===
-          true
-        ) {
+        if ((schema as OpenApiV3_1.IJsonSchema.INumber).nullable === true) {
           nullable.value ||= true;
           if ((schema as OpenApiV3_1.IJsonSchema.INumber).default === null)
             nullable.default = null;

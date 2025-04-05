@@ -159,9 +159,7 @@ const isOneOf =
     const visitConstant = (schema: OpenApi.IJsonSchema): void => {
       const insert = (value: any): void => {
         const matched: OpenApiV3_1.IJsonSchema.INumber | undefined = union.find(
-          (u) =>
-            (u as OpenApiV3.IJsonSchema.__ISignificant<any>).type ===
-            typeof value,
+          (u) => (u as OpenApiV3.IJsonSchema.INumber).type === typeof value,
         ) as OpenApiV3.IJsonSchema.INumber | undefined;
         if (matched !== undefined) {
           matched.enum ??= [];

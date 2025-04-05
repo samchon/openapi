@@ -182,12 +182,16 @@ export namespace OpenApiV3 {
     | IJsonSchema.INullOnly
     | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
-    export interface IBoolean extends __ISignificant<"boolean"> {
+    export interface IBoolean
+      extends Omit<IJsonSchemaAttribute.IBoolean, "examples">,
+        __IAttribute {
       nullable?: boolean;
       default?: boolean | null;
       enum?: Array<boolean | null>;
     }
-    export interface IInteger extends __ISignificant<"integer"> {
+    export interface IInteger
+      extends Omit<IJsonSchemaAttribute.IInteger, "examples">,
+        __IAttribute {
       nullable?: boolean;
       /** @type int64 */ default?: number | null;
       /** @type int64 */ enum?: Array<number | null>;
@@ -201,7 +205,9 @@ export namespace OpenApiV3 {
        */
       multipleOf?: number;
     }
-    export interface INumber extends __ISignificant<"number"> {
+    export interface INumber
+      extends Omit<IJsonSchemaAttribute.INumber, "examples">,
+        __IAttribute {
       nullable?: boolean;
       default?: number | null;
       enum?: Array<number | null>;
@@ -211,7 +217,9 @@ export namespace OpenApiV3 {
       exclusiveMaximum?: number | boolean;
       /** @exclusiveMinimum 0 */ multipleOf?: number;
     }
-    export interface IString extends __ISignificant<"string"> {
+    export interface IString
+      extends Omit<IJsonSchemaAttribute.IString, "examples">,
+        __IAttribute {
       nullable?: boolean;
       default?: string | null;
       enum?: Array<string | null>;
@@ -245,14 +253,18 @@ export namespace OpenApiV3 {
       /** @type uint64 */ maxLength?: number;
     }
 
-    export interface IArray extends IJsonSchemaAttribute.IArray {
+    export interface IArray
+      extends Omit<IJsonSchemaAttribute.IArray, "examples">,
+        __IAttribute {
       nullable?: boolean;
       items: IJsonSchema;
       uniqueItems?: boolean;
       /** @type uint64 */ minItems?: number;
       /** @type uint64 */ maxItems?: number;
     }
-    export interface IObject extends IJsonSchemaAttribute.IObject {
+    export interface IObject
+      extends Omit<IJsonSchemaAttribute.IObject, "examples">,
+        __IAttribute {
       nullable?: boolean;
       properties?: Record<string, IJsonSchema>;
       required?: string[];
@@ -260,17 +272,17 @@ export namespace OpenApiV3 {
       maxProperties?: number;
       minProperties?: number;
     }
-    export interface IReference<Key = string> extends IJsonSchemaAttribute {
+    export interface IReference<Key = string> extends __IAttribute {
       $ref: Key;
     }
 
-    export interface IAllOf extends IJsonSchemaAttribute {
+    export interface IAllOf extends __IAttribute {
       allOf: IJsonSchema[];
     }
-    export interface IAnyOf extends IJsonSchemaAttribute {
+    export interface IAnyOf extends __IAttribute {
       anyOf: IJsonSchema[];
     }
-    export interface IOneOf extends IJsonSchemaAttribute {
+    export interface IOneOf extends __IAttribute {
       oneOf: IJsonSchema[];
       discriminator?: IOneOf.IDiscriminator;
     }
@@ -281,28 +293,21 @@ export namespace OpenApiV3 {
       }
     }
 
-    export interface INullOnly extends IJsonSchemaAttribute.INull {
+    export interface INullOnly
+      extends Omit<IJsonSchemaAttribute.INull, "examples">,
+        __IAttribute {
       default?: null;
     }
-    export interface IUnknown extends IJsonSchemaAttribute.IUnknown {
+    export interface IUnknown
+      extends Omit<IJsonSchemaAttribute.IUnknown, "examples">,
+        __IAttribute {
       default?: any;
     }
 
-    /**
-     * @deprecated
-     * @hidden
-     */
-    export interface __ISignificant<Type extends string>
-      extends IJsonSchemaAttribute {
-      type: Type;
-      nullable?: boolean;
+    export interface __IAttribute
+      extends Omit<IJsonSchemaAttribute, "examples"> {
+      examples?: any[] | Record<string, any>;
     }
-
-    /**
-     * @deprecated
-     * @hidden
-     */
-    export type __IAttribute = IJsonSchemaAttribute;
   }
 
   export type ISecurityScheme =
