@@ -192,9 +192,9 @@ export namespace OpenApi {
     tags?: IDocument.ITag[];
 
     /**
-     * Flag for indicating this document is emended by `@samchon/openapi`.
+     * Flag for indicating this document is emended by `@samchon/openapi` v4.
      */
-    "x-samchon-emended": true;
+    "x-samchon-emended-v4": true;
   }
   export namespace IDocument {
     /**
@@ -713,23 +713,13 @@ export namespace OpenApi {
 
       /**
        * Exclusive minimum value restriction.
-       *
-       * For reference, even though your Swagger (or OpenAPI) document has
-       * defined the `exclusiveMinimum` value as `number`, {@link OpenApi}
-       * forcibly converts it to `boolean` type, and assign the numeric value to
-       * the {@link minimum} property.
        */
-      exclusiveMinimum?: boolean;
+      exclusiveMinimum?: number;
 
       /**
        * Exclusive maximum value restriction.
-       *
-       * For reference, even though your Swagger (or OpenAPI) document has
-       * defined the `exclusiveMaximum` value as `number`, {@link OpenApi}
-       * forcibly converts it to `boolean` type, and assign the numeric value to
-       * the {@link maximum} property.
        */
-      exclusiveMaximum?: boolean;
+      exclusiveMaximum?: number;
 
       /**
        * Multiple of value restriction.
@@ -761,23 +751,13 @@ export namespace OpenApi {
 
       /**
        * Exclusive minimum value restriction.
-       *
-       * For reference, even though your Swagger (or OpenAPI) document has
-       * defined the `exclusiveMinimum` value as `number`, {@link OpenAiComposer}
-       * forcibly converts it to `boolean` type, and assign the numeric value to
-       * the {@link minimum} property.
        */
-      exclusiveMinimum?: boolean;
+      exclusiveMinimum?: number;
 
       /**
        * Exclusive maximum value restriction.
-       *
-       * For reference, even though your Swagger (or OpenAPI) document has
-       * defined the `exclusiveMaximum` value as `number`, {@link OpenAiComposer}
-       * forcibly converts it to `boolean` type, and assign the numeric value to
-       * the {@link maximum} property.
        */
-      exclusiveMaximum?: boolean;
+      exclusiveMaximum?: number;
 
       /**
        * Multiple of value restriction.

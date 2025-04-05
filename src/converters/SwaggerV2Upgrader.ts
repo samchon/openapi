@@ -1,5 +1,6 @@
 import { OpenApi } from "../OpenApi";
 import { SwaggerV2 } from "../SwaggerV2";
+import { OpenApiExclusiveEmender } from "../utils/OpenApiExclusiveEmender";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace SwaggerV2Upgrader {
@@ -25,7 +26,7 @@ export namespace SwaggerV2Upgrader {
       : undefined,
     security: input.security,
     tags: input.tags,
-    "x-samchon-emended": true,
+    "x-samchon-emended-v4": true,
   });
 
   /* -----------------------------------------------------------
@@ -325,36 +326,38 @@ export namespace SwaggerV2Upgrader {
             TypeChecker.isInteger(schema) ||
             TypeChecker.isNumber(schema)
           )
-            union.push({
-              ...schema,
-              default: (schema.default ?? undefined) satisfies
-                | boolean
-                | number
-                | string
-                | undefined as any,
-              examples: schema.examples
-                ? Object.fromEntries(
-                    schema.examples.map((v, i) => [i.toString(), v]),
-                  )
-                : undefined,
-              ...{ enum: undefined },
-              ...(typeof schema.exclusiveMinimum === "number"
-                ? {
-                    minimum: schema.exclusiveMinimum,
-                    exclusiveMinimum: true,
-                  }
-                : {
-                    exclusiveMinimum: schema.exclusiveMinimum,
-                  }),
-              ...(typeof schema.exclusiveMaximum === "number"
-                ? {
-                    maximum: schema.exclusiveMaximum,
-                    exclusiveMaximum: true,
-                  }
-                : {
-                    exclusiveMaximum: schema.exclusiveMaximum,
-                  }),
-            });
+            union.push(
+              OpenApiExclusiveEmender.emend({
+                ...schema,
+                default: (schema.default ?? undefined) satisfies
+                  | boolean
+                  | number
+                  | string
+                  | undefined as any,
+                examples: schema.examples
+                  ? Object.fromEntries(
+                      schema.examples.map((v, i) => [i.toString(), v]),
+                    )
+                  : undefined,
+                exclusiveMinimum:
+                  typeof schema.exclusiveMinimum === "boolean"
+                    ? schema.exclusiveMinimum === true
+                      ? schema.minimum
+                      : undefined
+                    : schema.exclusiveMinimum,
+                exclusiveMaximum:
+                  typeof schema.exclusiveMaximum === "boolean"
+                    ? schema.exclusiveMaximum === true
+                      ? schema.maximum
+                      : undefined
+                    : schema.exclusiveMaximum,
+                minimum:
+                  schema.exclusiveMinimum === true ? undefined : schema.minimum,
+                maximum:
+                  schema.exclusiveMaximum === true ? undefined : schema.maximum,
+                ...{ enum: undefined },
+              }),
+            );
           else
             union.push({
               ...schema,

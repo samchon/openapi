@@ -98,7 +98,7 @@ const validate_llm_application_tuple = <Model extends ILlmSchema.Model>(
         },
       },
     },
-    "x-samchon-emended": true,
+    "x-samchon-emended-v4": true,
   };
   const app: IHttpLlmApplication<Model> = HttpLlm.application({
     model,

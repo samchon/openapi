@@ -202,23 +202,13 @@ export namespace ILlmSchemaV3_1 {
 
     /**
      * Exclusive minimum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMinimum` value as `number`, {@link OpenApi}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link minimum} property.
      */
-    exclusiveMinimum?: boolean;
+    exclusiveMinimum?: number;
 
     /**
      * Exclusive maximum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMaximum` value as `number`, {@link OpenApi}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link maximum} property.
      */
-    exclusiveMaximum?: boolean;
+    exclusiveMaximum?: number;
 
     /**
      * Multiple of value restriction.
@@ -250,23 +240,13 @@ export namespace ILlmSchemaV3_1 {
 
     /**
      * Exclusive minimum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMinimum` value as `number`, {@link OpenAiComposer}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link minimum} property.
      */
-    exclusiveMinimum?: boolean;
+    exclusiveMinimum?: number;
 
     /**
      * Exclusive maximum value restriction.
-     *
-     * For reference, even though your Swagger (or OpenAPI) document has
-     * defined the `exclusiveMaximum` value as `number`, {@link OpenAiComposer}
-     * forcibly converts it to `boolean` type, and assign the numeric value to
-     * the {@link maximum} property.
      */
-    exclusiveMaximum?: boolean;
+    exclusiveMaximum?: number;
 
     /**
      * Multiple of value restriction.

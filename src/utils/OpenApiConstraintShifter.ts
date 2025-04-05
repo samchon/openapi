@@ -1,4 +1,5 @@
 import { OpenApi } from "../OpenApi";
+import { OpenApiExclusiveEmender } from "./OpenApiExclusiveEmender";
 
 export namespace OpenApiConstraintShifter {
   export const shiftArray = <
@@ -7,26 +8,26 @@ export namespace OpenApiConstraintShifter {
       "description" | "minItems" | "maxItems" | "uniqueItems"
     >,
   >(
-    v: Schema,
+    schema: Schema,
   ): Omit<Schema, "minItems" | "maxItems" | "uniqueItems"> => {
     const tags: string[] = [];
-    if (v.minItems !== undefined) {
-      tags.push(`@minItems ${v.minItems}`);
-      delete v.minItems;
+    if (schema.minItems !== undefined) {
+      tags.push(`@minItems ${schema.minItems}`);
+      delete schema.minItems;
     }
-    if (v.maxItems !== undefined) {
-      tags.push(`@maxItems ${v.maxItems}`);
-      delete v.maxItems;
+    if (schema.maxItems !== undefined) {
+      tags.push(`@maxItems ${schema.maxItems}`);
+      delete schema.maxItems;
     }
-    if (v.uniqueItems !== undefined) {
-      if (v.uniqueItems === true) tags.push(`@uniqueItems`);
-      delete v.uniqueItems;
+    if (schema.uniqueItems !== undefined) {
+      if (schema.uniqueItems === true) tags.push(`@uniqueItems`);
+      delete schema.uniqueItems;
     }
-    v.description = writeTagWithDescription({
-      description: v.description,
+    schema.description = writeTagWithDescription({
+      description: schema.description,
       tags,
     });
-    return v;
+    return schema;
   };
 
   export const shiftNumeric = <
@@ -41,7 +42,7 @@ export namespace OpenApiConstraintShifter {
       | "default"
     >,
   >(
-    v: Schema,
+    schema: Schema,
   ): Omit<
     Schema,
     | "minimum"
@@ -51,38 +52,38 @@ export namespace OpenApiConstraintShifter {
     | "multipleOf"
     | "default"
   > => {
+    Object.assign(OpenApiExclusiveEmender.emend(schema));
+
     const tags: string[] = [];
-    if (v.exclusiveMinimum === undefined && v.minimum !== undefined) {
-      tags.push(`@minimum ${v.minimum}`);
-      delete v.minimum;
+    if (schema.minimum !== undefined) {
+      tags.push(`@minimum ${schema.minimum}`);
+      delete schema.minimum;
     }
-    if (v.exclusiveMaximum === undefined && v.maximum !== undefined) {
-      tags.push(`@maximum ${v.maximum}`);
-      delete v.maximum;
+    if (schema.maximum !== undefined) {
+      tags.push(`@maximum ${schema.maximum}`);
+      delete schema.maximum;
     }
-    if (v.minimum !== undefined && v.exclusiveMinimum === true) {
-      tags.push(`@exclusiveMinimum ${v.minimum}`);
-      delete v.minimum;
-      delete v.exclusiveMinimum;
+    if (schema.exclusiveMinimum !== undefined) {
+      tags.push(`@exclusiveMinimum ${schema.exclusiveMinimum}`);
+      delete schema.exclusiveMinimum;
     }
-    if (v.maximum !== undefined && v.exclusiveMaximum === true) {
-      tags.push(`@exclusiveMaximum ${v.maximum}`);
-      delete v.maximum;
-      delete v.exclusiveMaximum;
+    if (schema.exclusiveMaximum !== undefined) {
+      tags.push(`@exclusiveMaximum ${schema.exclusiveMaximum}`);
+      delete schema.exclusiveMaximum;
     }
-    if (v.multipleOf !== undefined) {
-      tags.push(`@multipleOf ${v.multipleOf}`);
-      delete v.multipleOf;
+    if (schema.multipleOf !== undefined) {
+      tags.push(`@multipleOf ${schema.multipleOf}`);
+      delete schema.multipleOf;
     }
-    v.description = writeTagWithDescription({
-      description: v.description,
+    schema.description = writeTagWithDescription({
+      description: schema.description,
       tags,
     });
-    if (v.default !== undefined) {
-      tags.push(`@default ${v.default}`);
-      delete v.default;
+    if (schema.default !== undefined) {
+      tags.push(`@default ${schema.default}`);
+      delete schema.default;
     }
-    return v;
+    return schema;
   };
 
   export const shiftString = <
@@ -97,7 +98,7 @@ export namespace OpenApiConstraintShifter {
       | "default"
     >,
   >(
-    v: Schema,
+    schema: Schema,
   ): Omit<
     Schema,
     | "minLength"
@@ -108,35 +109,35 @@ export namespace OpenApiConstraintShifter {
     | "default"
   > => {
     const tags: string[] = [];
-    if (v.minLength !== undefined) {
-      tags.push(`@minLength ${v.minLength}`);
-      delete v.minLength;
+    if (schema.minLength !== undefined) {
+      tags.push(`@minLength ${schema.minLength}`);
+      delete schema.minLength;
     }
-    if (v.maxLength !== undefined) {
-      tags.push(`@maxLength ${v.maxLength}`);
-      delete v.maxLength;
+    if (schema.maxLength !== undefined) {
+      tags.push(`@maxLength ${schema.maxLength}`);
+      delete schema.maxLength;
     }
-    if (v.format !== undefined) {
-      tags.push(`@format ${v.format}`);
-      delete v.format;
+    if (schema.format !== undefined) {
+      tags.push(`@format ${schema.format}`);
+      delete schema.format;
     }
-    if (v.pattern !== undefined) {
-      tags.push(`@pattern ${v.pattern}`);
-      delete v.pattern;
+    if (schema.pattern !== undefined) {
+      tags.push(`@pattern ${schema.pattern}`);
+      delete schema.pattern;
     }
-    if (v.contentMediaType !== undefined) {
-      tags.push(`@contentMediaType ${v.contentMediaType}`);
-      delete v.contentMediaType;
+    if (schema.contentMediaType !== undefined) {
+      tags.push(`@contentMediaType ${schema.contentMediaType}`);
+      delete schema.contentMediaType;
     }
-    if (v.default !== undefined) {
-      tags.push(`@default ${v.default}`);
-      delete v.default;
+    if (schema.default !== undefined) {
+      tags.push(`@default ${schema.default}`);
+      delete schema.default;
     }
-    v.description = writeTagWithDescription({
-      description: v.description,
+    schema.description = writeTagWithDescription({
+      description: schema.description,
       tags,
     });
-    return v;
+    return schema;
   };
 }
 

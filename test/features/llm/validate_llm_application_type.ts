@@ -48,7 +48,9 @@ const application = <Model extends ILlmSchema.Model>(model: Model) =>
   });
 
 const document = new Singleton(() =>
-  typia.json.assertParse<OpenApi.IDocument>(
-    fs.readFileSync(`${TestGlobal.ROOT}/examples/v3.1/shopping.json`, "utf8"),
+  OpenApi.convert(
+    JSON.parse(
+      fs.readFileSync(`${TestGlobal.ROOT}/examples/v3.1/shopping.json`, "utf8"),
+    ),
   ),
 );

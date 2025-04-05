@@ -685,25 +685,7 @@ export namespace OpenApiTypeCheckerBase {
   ): boolean => {
     if (isConstant(y))
       return typeof y.const === "number" && Number.isInteger(y.const);
-    return [
-      x.type === y.type,
-      x.minimum === undefined ||
-        (y.minimum !== undefined && x.minimum <= y.minimum),
-      x.maximum === undefined ||
-        (y.maximum !== undefined && x.maximum >= y.maximum),
-      x.exclusiveMinimum !== true ||
-        x.minimum === undefined ||
-        (y.minimum !== undefined &&
-          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      x.exclusiveMaximum !== true ||
-        x.maximum === undefined ||
-        (y.maximum !== undefined &&
-          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      x.multipleOf === undefined ||
-        (y.multipleOf !== undefined &&
-          y.multipleOf / x.multipleOf ===
-            Math.floor(y.multipleOf / x.multipleOf)),
-    ].every((v) => v);
+    return x.type === y.type && coverNumericRange(x, y);
   };
 
   const coverNumber = (
@@ -714,25 +696,10 @@ export namespace OpenApiTypeCheckerBase {
       | OpenApi.IJsonSchema.INumber,
   ): boolean => {
     if (isConstant(y)) return typeof y.const === "number";
-    return [
-      x.type === y.type || (x.type === "number" && y.type === "integer"),
-      x.minimum === undefined ||
-        (y.minimum !== undefined && x.minimum <= y.minimum),
-      x.maximum === undefined ||
-        (y.maximum !== undefined && x.maximum >= y.maximum),
-      x.exclusiveMinimum !== true ||
-        x.minimum === undefined ||
-        (y.minimum !== undefined &&
-          (y.exclusiveMinimum === true || x.minimum < y.minimum)),
-      x.exclusiveMaximum !== true ||
-        x.maximum === undefined ||
-        (y.maximum !== undefined &&
-          (y.exclusiveMaximum === true || x.maximum > y.maximum)),
-      x.multipleOf === undefined ||
-        (y.multipleOf !== undefined &&
-          y.multipleOf / x.multipleOf ===
-            Math.floor(y.multipleOf / x.multipleOf)),
-    ].every((v) => v);
+    return (
+      (x.type === y.type || (x.type === "number" && y.type === "integer")) &&
+      coverNumericRange(x, y)
+    );
   };
 
   const coverString = (
@@ -803,4 +770,43 @@ export namespace OpenApiTypeCheckerBase {
       schema: found,
     });
   };
+
+  export const coverNumericRange = (
+    x: Pick<
+      OpenApi.IJsonSchema.INumber,
+      | "minimum"
+      | "maximum"
+      | "exclusiveMinimum"
+      | "exclusiveMaximum"
+      | "multipleOf"
+    >,
+    y: Pick<
+      OpenApi.IJsonSchema.INumber,
+      | "minimum"
+      | "maximum"
+      | "exclusiveMinimum"
+      | "exclusiveMaximum"
+      | "multipleOf"
+    >,
+  ): boolean =>
+    [
+      x.minimum === undefined ||
+        (y.minimum !== undefined && x.minimum <= y.minimum) ||
+        (y.exclusiveMinimum !== undefined && x.minimum < y.exclusiveMinimum),
+      x.maximum === undefined ||
+        (y.maximum !== undefined && x.maximum >= y.maximum) ||
+        (y.exclusiveMaximum !== undefined && x.maximum > y.exclusiveMaximum),
+      x.exclusiveMinimum === undefined ||
+        (y.minimum !== undefined && x.exclusiveMinimum <= y.minimum) ||
+        (y.exclusiveMinimum !== undefined &&
+          x.exclusiveMinimum <= y.exclusiveMinimum),
+      x.exclusiveMaximum === undefined ||
+        (y.maximum !== undefined && x.exclusiveMaximum >= y.maximum) ||
+        (y.exclusiveMaximum !== undefined &&
+          x.exclusiveMaximum >= y.exclusiveMaximum),
+      x.multipleOf === undefined ||
+        (y.multipleOf !== undefined &&
+          y.multipleOf / x.multipleOf ===
+            Math.floor(y.multipleOf / x.multipleOf)),
+    ].every((v) => v);
 }

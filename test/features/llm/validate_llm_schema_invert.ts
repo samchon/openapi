@@ -58,11 +58,9 @@ const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
     } as any),
   )({
     type: "integer",
-    minimum: 0,
-    maximum: 100,
     multipleOf: 5,
-    exclusiveMinimum: true,
-    exclusiveMaximum: true,
+    exclusiveMinimum: 0,
+    exclusiveMaximum: 100,
   });
 
   TestValidator.equals("number")(
@@ -79,11 +77,9 @@ const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
     } as any),
   )({
     type: "number",
-    minimum: 0,
-    maximum: 100,
     multipleOf: 5,
-    exclusiveMinimum: true,
-    exclusiveMaximum: true,
+    exclusiveMinimum: 0,
+    exclusiveMaximum: 100,
   });
 
   TestValidator.equals("array")(
@@ -119,11 +115,9 @@ const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
     } as any),
   )({
     type: "number",
-    minimum: 0,
-    maximum: 100,
     multipleOf: 5,
-    exclusiveMinimum: true,
-    exclusiveMaximum: true,
+    exclusiveMinimum: 0,
+    exclusiveMaximum: 100,
   });
 
   TestValidator.equals("object")(
