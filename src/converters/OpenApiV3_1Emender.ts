@@ -281,7 +281,7 @@ export namespace OpenApiV3_1Emender {
           ),
         ),
         examples: Array.isArray(input.examples)
-          ? Object.fromEntries(input.examples.map((v, i) => [`e${i}`, v]))
+          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
           : input.examples,
       };
       const nullable: { value: boolean; default?: null } = {
