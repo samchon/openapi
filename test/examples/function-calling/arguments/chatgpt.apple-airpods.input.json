@@ -1,299 +1,128 @@
 {
-  "section_code": "general",
-  "opened_at": null,
-  "closed_at": null,
-  "content": {
-    "title": "Apple AirPods",
-    "format": "md",
-    "body": "Apple AirPods are wireless Bluetooth earbuds designed by Apple, designed to work seamlessly with Apple devices like iPhones and iPads. Enjoy superior sound quality and convenience with automatic on and connection, easy setup for all your Apple devices, and quick access to Siri. They offer a rich and immersive audio experience with a built-in microphone to filter out background noise and focus on the sound of your voice. The AirPods come with a sleek charging case providing long battery life, making them the ultimate choice for on-the-go listening.",
-    "files": [],
-    "thumbnails": [
-      {
-        "name": "apple_airpods",
-        "extension": "jpg",
-        "url": "https://example.com/photos/apple_airpods.jpg"
-      }
-    ]
-  },
-  "channels": [
-    {
-      "code": "samchon",
-      "category_codes": [
-        "electronics",
-        "smart_phones",
-        "accessories",
-        "clothing"
+  "trial": 1,
+  "success": true,
+  "data": {
+    "input": {
+      "section_code": "general",
+      "status": null,
+      "opened_at": null,
+      "closed_at": null,
+      "content": {
+        "title": "Apple AirPods",
+        "format": "md",
+        "body": "Discover the magic of wireless audio with Apple AirPods. Designed for convenience and high-quality sound, these earbuds offer seamless integration with all your Apple devices, ensuring you never miss a beat.",
+        "files": [],
+        "thumbnails": [
+          {
+            "name": "apple_airpods_thumbnail",
+            "extension": "jpg",
+            "url": "https://example.com/image/apple_airpods_thumbnail.jpg"
+          }
+        ]
+      },
+      "channels": [
+        {
+          "code": "samchon",
+          "category_codes": [
+            "electronics",
+            "smart_phones",
+            "accessories"
+          ]
+        }
+      ],
+      "units": [
+        {
+          "options": [
+            {
+              "type": "select",
+              "name": "Model",
+              "variable": true,
+              "candidates": [
+                {
+                  "name": "AirPods (2nd generation)"
+                },
+                {
+                  "name": "AirPods (3rd generation)"
+                },
+                {
+                  "name": "AirPods Pro"
+                },
+                {
+                  "name": "AirPods Max"
+                }
+              ]
+            }
+          ],
+          "stocks": [
+            {
+              "name": "AirPods (2nd generation)",
+              "price": {
+                "nominal": 129,
+                "real": 119
+              },
+              "quantity": 50,
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 0
+                }
+              ]
+            },
+            {
+              "name": "AirPods (3rd generation)",
+              "price": {
+                "nominal": 179,
+                "real": 169
+              },
+              "quantity": 50,
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 1
+                }
+              ]
+            },
+            {
+              "name": "AirPods Pro",
+              "price": {
+                "nominal": 249,
+                "real": 239
+              },
+              "quantity": 30,
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 2
+                }
+              ]
+            },
+            {
+              "name": "AirPods Max",
+              "price": {
+                "nominal": 549,
+                "real": 529
+              },
+              "quantity": 20,
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 3
+                }
+              ]
+            }
+          ],
+          "name": "Apple AirPods",
+          "primary": true,
+          "required": true
+        }
+      ],
+      "tags": [
+        "Apple",
+        "AirPods",
+        "Wireless",
+        "Audio",
+        "Earbuds"
       ]
     }
-  ],
-  "units": [
-    {
-      "options": [
-        {
-          "type": "select",
-          "name": "Model",
-          "variable": true,
-          "candidates": [
-            {
-              "name": "AirPods 2nd Generation"
-            },
-            {
-              "name": "AirPods 3rd Generation"
-            },
-            {
-              "name": "AirPods Pro"
-            },
-            {
-              "name": "AirPods Max"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "name": "Color",
-          "variable": true,
-          "candidates": [
-            {
-              "name": "White"
-            },
-            {
-              "name": "Black"
-            },
-            {
-              "name": "Space Gray"
-            }
-          ]
-        }
-      ],
-      "stocks": [
-        {
-          "name": "AirPods 2nd Generation - White",
-          "price": {
-            "nominal": 159,
-            "real": 159
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            }
-          ]
-        },
-        {
-          "name": "AirPods 2nd Generation - Black",
-          "price": {
-            "nominal": 159,
-            "real": 159
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "name": "AirPods 2nd Generation - Space Gray",
-          "price": {
-            "nominal": 159,
-            "real": 159
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            }
-          ]
-        },
-        {
-          "name": "AirPods 3rd Generation - White",
-          "price": {
-            "nominal": 199,
-            "real": 199
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            }
-          ]
-        },
-        {
-          "name": "AirPods 3rd Generation - Black",
-          "price": {
-            "nominal": 199,
-            "real": 199
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "name": "AirPods 3rd Generation - Space Gray",
-          "price": {
-            "nominal": 199,
-            "real": 199
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            }
-          ]
-        },
-        {
-          "name": "AirPods Pro - White",
-          "price": {
-            "nominal": 249,
-            "real": 249
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            }
-          ]
-        },
-        {
-          "name": "AirPods Pro - Black",
-          "price": {
-            "nominal": 249,
-            "real": 249
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "name": "AirPods Pro - Space Gray",
-          "price": {
-            "nominal": 249,
-            "real": 249
-          },
-          "quantity": 100,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            }
-          ]
-        },
-        {
-          "name": "AirPods Max - White",
-          "price": {
-            "nominal": 549,
-            "real": 549
-          },
-          "quantity": 50,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 3
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            }
-          ]
-        },
-        {
-          "name": "AirPods Max - Black",
-          "price": {
-            "nominal": 549,
-            "real": 549
-          },
-          "quantity": 50,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 3
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "name": "AirPods Max - Space Gray",
-          "price": {
-            "nominal": 549,
-            "real": 549
-          },
-          "quantity": 50,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 3
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            }
-          ]
-        }
-      ],
-      "name": "Apple AirPods",
-      "required": true,
-      "primary": true
-    }
-  ],
-  "tags": [
-    "electronics",
-    "audio",
-    "wireless",
-    "Apple",
-    "AirPods",
-    "Bluetooth"
-  ]
+  }
 }

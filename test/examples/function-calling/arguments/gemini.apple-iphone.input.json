@@ -1,1068 +1,322 @@
 {
-  "opened_at": "2024-01-01T00:00:00Z",
-  "content": {
-    "title": "Apple MacBook Pro",
-    "thumbnails": [
-      {
-        "extension": "jpeg",
-        "url": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-spaceblack-gallery1-202410?wid=4000&hei=3074&fmt=jpeg&qlt=90&.v=1729264981617",
-        "name": "apple-iphone-thumbnail"
-      }
-    ],
-    "body": "MacBook Pro\\n\\n\\n**The Ultimate Tool for Professionals**\\n\\nMacBook Pro is designed to elevate your creativity and productivity to new heights. Combining exceptional performance, elegant design, and the unparalleled experience only Apple can deliver, this is the device that empowers you to tackle any challenge with confidence.\\n\\n- **Remarkable Performance**\\n    \\n    Powered by the next-generation chip, it handles demanding tasks and complex projects effortlessly, delivering unmatched speed and efficiency.\\n    \\n- **Outstanding Display**\\n    \\n    The Retina display offers rich colors and sharp contrast, creating an immersive visual experience. With ProMotion technology, enjoy smooth scrolling and fluid animations like never before.\\n    \\n- **All-Day Battery Life**\\n    \\n    Stay focused and in the flow wherever you go with a battery that lasts all day. This is a laptop that works as hard as you do.\\n    \\n- **Sleek Yet Powerful Design**\\n    \\n    A precision aluminum body that’s lightweight yet durable, paired with a minimalist design that stands out on your desk and on the go.\\n    \\n- **Smart Connectivity**\\n    \\n    Versatile ports for high-speed data transfer and seamless compatibility ensure you're ready for any work environment.\\n    \\n\\nWith MacBook Pro, your potential knows no bounds. **It’s time to rediscover what you’re capable of.**\\n",
-    "files": [],
-    "format": "md"
-  },
-  "section_code": "general",
-  "channels": [
-    {
-      "category_codes": [
-        "electronics",
-        "laptops",
-        "macbooks"
+  "trial": 1,
+  "success": true,
+  "data": {
+    "input": {
+      "section_code": "general",
+      "channels": [
+        {
+          "code": "samchon",
+          "category_codes": [
+            "smart_phones",
+            "gaming_smartphones"
+          ]
+        }
       ],
-      "code": "samchon"
+      "closed_at": null,
+      "content": {
+        "body": "The iPhone 16 takes mobile technology to new heights with its cutting-edge design, enhanced performance, and revolutionary features. With a stunning ProMotion XDR display, an even more powerful A18 Bionic chip, and advanced camera capabilities, the iPhone 16 delivers unparalleled speed, clarity, and creativity. Whether you're capturing cinematic moments or experiencing seamless multitasking, the iPhone 16 ensures every interaction feels extraordinary.\n\n**Tagline:**\n\n\"iPhone 16: The Future in Your Hands.\"",
+        "thumbnails": [
+          {
+            "name": "dbe630a9b7aa7b2757c88476b16680958208286d1a50297b172d53ed4bec4bd7",
+            "extension": "jpeg",
+            "url": "https://serpapi.com/searches/673d45f1bbc18bba240d3d4a/images/dbe630a9b7aa7b2757c88476b16680958208286d1a50297b172d53ed4bec4bd7.jpeg"
+          },
+          {
+            "name": "dbe630a9b7aa7b27d67682ac72cf28e88e98dc5b91a205f6c97946f84d6162a9",
+            "url": "https://serpapi.com/searches/673d45f1bbc18bba240d3d4a/images/dbe630a9b7aa7b27d67682ac72cf28e88e98dc5b91a205f6c97946f84d6162a9.jpeg",
+            "extension": "jpeg"
+          }
+        ],
+        "title": "iPhone 16: Redefining Innovation",
+        "files": [],
+        "format": "md"
+      },
+      "opened_at": null,
+      "units": [
+        {
+          "name": "iPhone Entity",
+          "required": true,
+          "primary": true,
+          "options": [
+            {
+              "type": "select",
+              "candidates": [
+                {
+                  "name": "iPhone 16 Basic"
+                },
+                {
+                  "name": "iPhone 16 Plus"
+                },
+                {
+                  "name": "iPhone 16 Pro"
+                },
+                {
+                  "name": "iPhone 16 Pro Max"
+                }
+              ],
+              "name": "Model",
+              "variable": true
+            },
+            {
+              "type": "select",
+              "name": "Storage",
+              "candidates": [
+                {
+                  "name": "128 GB"
+                },
+                {
+                  "name": "256 GB"
+                },
+                {
+                  "name": "512 GB"
+                },
+                {
+                  "name": "1 TB"
+                }
+              ],
+              "variable": true
+            }
+          ],
+          "stocks": [
+            {
+              "name": "(Basic, 128GB)",
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 0
+                },
+                {
+                  "candidate_index": 0,
+                  "option_index": 1
+                }
+              ],
+              "quantity": 1000,
+              "price": {
+                "real": 1250000,
+                "nominal": 1250000
+              }
+            },
+            {
+              "name": "(Basic, 256GB)",
+              "quantity": 1000,
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 0
+                },
+                {
+                  "candidate_index": 1,
+                  "option_index": 1
+                }
+              ],
+              "price": {
+                "real": 1400000,
+                "nominal": 1400000
+              }
+            },
+            {
+              "name": "(Basic, 512GB)",
+              "choices": [
+                {
+                  "candidate_index": 0,
+                  "option_index": 0
+                },
+                {
+                  "candidate_index": 2,
+                  "option_index": 1
+                }
+              ],
+              "quantity": 1000,
+              "price": {
+                "real": 1700000,
+                "nominal": 1700000
+              }
+            },
+            {
+              "quantity": 1000,
+              "choices": [
+                {
+                  "candidate_index": 1,
+                  "option_index": 0
+                },
+                {
+                  "candidate_index": 0,
+                  "option_index": 1
+                }
+              ],
+              "price": {
+                "nominal": 1350000,
+                "real": 1350000
+              },
+              "name": "(Plus, 128GB)"
+            },
+            {
+              "price": {
+                "nominal": 1500000,
+                "real": 1500000
+              },
+              "name": "(Plus, 256GB)",
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 1
+                },
+                {
+                  "candidate_index": 1,
+                  "option_index": 1
+                }
+              ],
+              "quantity": 1000
+            },
+            {
+              "price": {
+                "nominal": 1800000,
+                "real": 1800000
+              },
+              "quantity": 1000,
+              "choices": [
+                {
+                  "candidate_index": 1,
+                  "option_index": 0
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 2
+                }
+              ],
+              "name": "(Plus, 512GB)"
+            },
+            {
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 2
+                },
+                {
+                  "candidate_index": 0,
+                  "option_index": 1
+                }
+              ],
+              "name": "(Pro, 128GB)",
+              "price": {
+                "real": 1550000,
+                "nominal": 1550000
+              },
+              "quantity": 1000
+            },
+            {
+              "name": "(Pro, 256GB)",
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 2
+                },
+                {
+                  "candidate_index": 1,
+                  "option_index": 1
+                }
+              ],
+              "price": {
+                "real": 1700000,
+                "nominal": 1700000
+              },
+              "quantity": 1000
+            },
+            {
+              "choices": [
+                {
+                  "candidate_index": 2,
+                  "option_index": 0
+                },
+                {
+                  "candidate_index": 2,
+                  "option_index": 1
+                }
+              ],
+              "price": {
+                "nominal": 2000000,
+                "real": 2000000
+              },
+              "quantity": 1000,
+              "name": "(Pro, 512GB)"
+            },
+            {
+              "name": "(Pro, 1TB)",
+              "choices": [
+                {
+                  "candidate_index": 2,
+                  "option_index": 0
+                },
+                {
+                  "candidate_index": 3,
+                  "option_index": 1
+                }
+              ],
+              "quantity": 1000,
+              "price": {
+                "nominal": 2300000,
+                "real": 2300000
+              }
+            },
+            {
+              "choices": [
+                {
+                  "candidate_index": 3,
+                  "option_index": 0
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 1
+                }
+              ],
+              "price": {
+                "nominal": 1900000,
+                "real": 1900000
+              },
+              "quantity": 1000,
+              "name": "(Pro Max, 256GB)"
+            },
+            {
+              "quantity": 1000,
+              "name": "(Pro Max, 512GB)",
+              "price": {
+                "nominal": 2200000,
+                "real": 2200000
+              },
+              "choices": [
+                {
+                  "candidate_index": 3,
+                  "option_index": 0
+                },
+                {
+                  "candidate_index": 2,
+                  "option_index": 1
+                }
+              ]
+            },
+            {
+              "name": "(Pro Max, 1TB)",
+              "price": {
+                "nominal": 2500000,
+                "real": 2500000
+              },
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 3
+                },
+                {
+                  "candidate_index": 3,
+                  "option_index": 1
+                }
+              ],
+              "quantity": 1000
+            }
+          ]
+        }
+      ],
+      "tags": []
     }
-  ],
-  "closed_at": "2024-12-31T23:59:59Z",
-  "units": [
-    {
-      "name": "MacBook M3 Pro 14inch Entity",
-      "required": true,
-      "options": [
-        {
-          "type": "select",
-          "name": "Color",
-          "variable": true,
-          "candidates": [
-            {
-              "name": "Silver"
-            },
-            {
-              "name": "Space Gray"
-            }
-          ]
-        },
-        {
-          "candidates": [
-            {
-              "name": "16GB"
-            },
-            {
-              "name": "32GB"
-            },
-            {
-              "name": "64GB"
-            }
-          ],
-          "type": "select",
-          "name": "RAM",
-          "variable": true
-        },
-        {
-          "candidates": [
-            {
-              "name": "512GB"
-            },
-            {
-              "name": "1TB"
-            },
-            {
-              "name": "2TB"
-            }
-          ],
-          "type": "select",
-          "variable": true,
-          "name": "SSD"
-        },
-        {
-          "candidates": [
-            {
-              "name": "English"
-            },
-            {
-              "name": "Korean"
-            }
-          ],
-          "variable": true,
-          "name": "Keyboard Language",
-          "type": "select"
-        }
-      ],
-      "primary": true,
-      "stocks": [
-        {
-          "quantity": 1000,
-          "name": "Silver/16GB/512GB/English",
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ],
-          "price": {
-            "nominal": 2000000,
-            "real": 1800000
-          }
-        },
-        {
-          "quantity": 1000,
-          "name": "Silver/16GB/512GB/Korean",
-          "price": {
-            "real": 1800000,
-            "nominal": 2000000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "price": {
-            "real": 2070000,
-            "nominal": 2300000
-          },
-          "name": "Silver/16GB/1TB/English",
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ]
-        },
-        {
-          "quantity": 1000,
-          "choices": [
-            {
-              "candidate_index": 0,
-              "option_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 3
-            }
-          ],
-          "name": "Silver/16GB/1TB/Korean",
-          "price": {
-            "real": 2070000,
-            "nominal": 2300000
-          }
-        },
-        {
-          "name": "Silver/16GB/2TB/English",
-          "price": {
-            "nominal": 2900000,
-            "real": 2610000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ],
-          "quantity": 1000
-        },
-        {
-          "choices": [
-            {
-              "candidate_index": 0,
-              "option_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 3
-            }
-          ],
-          "quantity": 1000,
-          "price": {
-            "real": 2610000,
-            "nominal": 2900000
-          },
-          "name": "Silver/16GB/2TB/Korean"
-        },
-        {
-          "price": {
-            "nominal": 2600000,
-            "real": 2340000
-          },
-          "name": "Silver/32GB/512GB/English",
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ]
-        },
-        {
-          "price": {
-            "nominal": 2600000,
-            "real": 2340000
-          },
-          "quantity": 1000,
-          "name": "Silver/32GB/512GB/Korean",
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 3
-            }
-          ]
-        },
-        {
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "price": {
-            "real": 2610000,
-            "nominal": 2900000
-          },
-          "name": "Silver/32GB/1TB/English"
-        },
-        {
-          "quantity": 1000,
-          "name": "Silver/32GB/1TB/Korean",
-          "price": {
-            "real": 2610000,
-            "nominal": 2900000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "name": "Silver/32GB/2TB/English",
-          "quantity": 1000,
-          "price": {
-            "nominal": 3500000,
-            "real": 3150000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ]
-        },
-        {
-          "price": {
-            "real": 3150000,
-            "nominal": 3500000
-          },
-          "name": "Silver/32GB/2TB/Korean",
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 3
-            }
-          ]
-        },
-        {
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "quantity": 1000,
-          "name": "Silver/64GB/512GB/English",
-          "price": {
-            "real": 2880000,
-            "nominal": 3200000
-          }
-        },
-        {
-          "quantity": 1000,
-          "price": {
-            "real": 2880000,
-            "nominal": 3200000
-          },
-          "name": "Silver/64GB/512GB/Korean",
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "quantity": 1000,
-          "price": {
-            "real": 3150000,
-            "nominal": 3500000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "name": "Silver/64GB/1TB/English"
-        },
-        {
-          "choices": [
-            {
-              "candidate_index": 0,
-              "option_index": 0
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "price": {
-            "nominal": 3500000,
-            "real": 3150000
-          },
-          "quantity": 1000,
-          "name": "Silver/64GB/1TB/Korean"
-        },
-        {
-          "name": "Silver/64GB/2TB/English",
-          "price": {
-            "real": 3690000,
-            "nominal": 4100000
-          },
-          "choices": [
-            {
-              "candidate_index": 0,
-              "option_index": 0
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ],
-          "quantity": 1000
-        },
-        {
-          "price": {
-            "nominal": 4100000,
-            "real": 3690000
-          },
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "name": "Silver/64GB/2TB/Korean"
-        },
-        {
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "name": "Space Gray/16GB/512GB/English",
-          "quantity": 1000,
-          "price": {
-            "nominal": 2050000,
-            "real": 1845000
-          }
-        },
-        {
-          "choices": [
-            {
-              "candidate_index": 1,
-              "option_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 3
-            }
-          ],
-          "name": "Space Gray/16GB/512GB/Korean",
-          "quantity": 1000,
-          "price": {
-            "real": 1845000,
-            "nominal": 2050000
-          }
-        },
-        {
-          "price": {
-            "nominal": 2350000,
-            "real": 2115000
-          },
-          "choices": [
-            {
-              "candidate_index": 1,
-              "option_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "name": "Space Gray/16GB/1TB/English",
-          "quantity": 1000
-        },
-        {
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "quantity": 1000,
-          "name": "Space Gray/16GB/1TB/Korean",
-          "price": {
-            "nominal": 2350000,
-            "real": 2115000
-          }
-        },
-        {
-          "quantity": 1000,
-          "price": {
-            "real": 2655000,
-            "nominal": 2950000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ],
-          "name": "Space Gray/16GB/2TB/English"
-        },
-        {
-          "price": {
-            "real": 2655000,
-            "nominal": 2950000
-          },
-          "name": "Space Gray/16GB/2TB/Korean",
-          "quantity": 1000,
-          "choices": [
-            {
-              "candidate_index": 1,
-              "option_index": 0
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ]
-        },
-        {
-          "quantity": 1000,
-          "price": {
-            "real": 2385000,
-            "nominal": 2650000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ],
-          "name": "Space Gray/32GB/512GB/English"
-        },
-        {
-          "quantity": 1000,
-          "price": {
-            "real": 2385000,
-            "nominal": 2650000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "name": "Space Gray/32GB/512GB/Korean"
-        },
-        {
-          "name": "Space Gray/32GB/1TB/English",
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "price": {
-            "real": 2655000,
-            "nominal": 2950000
-          },
-          "quantity": 1000
-        },
-        {
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "name": "Space Gray/32GB/1TB/Korean",
-          "price": {
-            "real": 2655000,
-            "nominal": 2950000
-          }
-        },
-        {
-          "price": {
-            "nominal": 3550000,
-            "real": 3195000
-          },
-          "name": "Space Gray/32GB/2TB/English",
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ],
-          "quantity": 1000
-        },
-        {
-          "price": {
-            "nominal": 3550000,
-            "real": 3195000
-          },
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "name": "Space Gray/32GB/2TB/Korean"
-        },
-        {
-          "price": {
-            "real": 2925000,
-            "nominal": 3250000
-          },
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ],
-          "name": "Space Gray/64GB/512GB/English"
-        },
-        {
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 0
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ],
-          "price": {
-            "real": 2925000,
-            "nominal": 3250000
-          },
-          "quantity": 1000,
-          "name": "Space Gray/64GB/512GB/Korean"
-        },
-        {
-          "name": "Space Gray/64GB/1TB/English",
-          "price": {
-            "nominal": 3550000,
-            "real": 3195000
-          },
-          "quantity": 1000,
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 0
-            }
-          ]
-        },
-        {
-          "name": "Space Gray/64GB/1TB/Korean",
-          "price": {
-            "nominal": 3550000,
-            "real": 3195000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 1,
-              "option_index": 3
-            }
-          ],
-          "quantity": 1000
-        },
-        {
-          "name": "Space Gray/64GB/2TB/English",
-          "quantity": 1000,
-          "price": {
-            "nominal": 4150000,
-            "real": 3735000
-          },
-          "choices": [
-            {
-              "option_index": 0,
-              "candidate_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 1
-            },
-            {
-              "candidate_index": 2,
-              "option_index": 2
-            },
-            {
-              "candidate_index": 0,
-              "option_index": 3
-            }
-          ]
-        },
-        {
-          "price": {
-            "real": 3735000,
-            "nominal": 4150000
-          },
-          "quantity": 1000,
-          "name": "Space Gray/64GB/2TB/Korean",
-          "choices": [
-            {
-              "candidate_index": 1,
-              "option_index": 0
-            },
-            {
-              "option_index": 1,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 2,
-              "candidate_index": 2
-            },
-            {
-              "option_index": 3,
-              "candidate_index": 1
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Warranty Program",
-      "options": [],
-      "stocks": [
-        {
-          "choices": [],
-          "name": "Warranty Program",
-          "quantity": 10000,
-          "price": {
-            "nominal": 100000,
-            "real": 89000
-          }
-        }
-      ],
-      "primary": false,
-      "required": false
-    },
-    {
-      "name": "Magnetic Keyboard",
-      "required": false,
-      "primary": false,
-      "options": [],
-      "stocks": [
-        {
-          "quantity": 8000,
-          "name": "Magnetic Keyboard",
-          "choices": [],
-          "price": {
-            "nominal": 200000,
-            "real": 169000
-          }
-        }
-      ]
-    }
-  ],
-  "tags": []
+  }
 }
