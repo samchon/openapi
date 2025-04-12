@@ -1,41 +1,33 @@
 {
+  "description": "Current Type: {@link IOpeningTime}",
   "type": "object",
   "properties": {
-    "input": {
-      "type": "object",
-      "properties": {
-        "reasons": {
-          "description": "@minItems 1",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+    "reasons": {
+      "description": "@minItems 1",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "temporary": {
+      "type": "boolean"
+    },
+    "time": {
+      "anyOf": [
+        {
+          "type": "null"
         },
-        "temporary": {
-          "type": "boolean"
-        },
-        "time": {
-          "anyOf": [
-            {
-              "type": "null"
-            },
-            {
-              "type": "string",
-              "description": "@format date-time"
-            }
-          ]
+        {
+          "type": "string",
+          "description": "@format date-time"
         }
-      },
-      "required": [
-        "reasons",
-        "temporary",
-        "time"
-      ],
-      "additionalProperties": false
+      ]
     }
   },
   "required": [
-    "input"
+    "reasons",
+    "temporary",
+    "time"
   ],
   "additionalProperties": false,
   "$defs": {}

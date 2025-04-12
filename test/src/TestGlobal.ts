@@ -24,10 +24,7 @@ export class TestGlobal {
 }
 
 interface IEnvironments {
-  CHATGPT_API_KEY?: string;
-  CLAUDE_API_KEY?: string;
-  GEMINI_API_KEY?: string;
-  LLAMA_API_KEY?: string;
+  OPENROUTER_API_KEY?: string;
 }
 
 const environments = new Singleton(() => {

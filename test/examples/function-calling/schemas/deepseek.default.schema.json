@@ -1,27 +1,19 @@
 {
-  "description": "",
+  "description": "Current Type: {@link IPerson}",
   "type": "object",
   "properties": {
-    "input": {
-      "description": "Current Type: {@link IPerson}",
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "@default John Doe",
-          "type": "string"
-        },
-        "age": {
-          "type": "number"
-        }
-      },
-      "required": [
-        "name",
-        "age"
-      ]
+    "name": {
+      "type": "string",
+      "default": "John Doe"
+    },
+    "age": {
+      "type": "number",
+      "default": 42
     }
   },
   "required": [
-    "input"
+    "name",
+    "age"
   ],
   "additionalProperties": false,
   "$defs": {}

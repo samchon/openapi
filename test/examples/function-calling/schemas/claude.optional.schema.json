@@ -1,42 +1,27 @@
 {
+  "description": "Description of the current {@link IMember} type:\n\n> Membership information.",
   "type": "object",
   "properties": {
-    "input": {
-      "$ref": "#/$defs/IMember"
+    "name": {
+      "title": "Name of the member",
+      "description": "Name of the member.",
+      "type": "string"
     },
-    "note": {
+    "age": {
+      "title": "Age of the member",
+      "description": "Age of the member.",
+      "type": "number"
+    },
+    "hobby": {
+      "title": "Hobby of the member",
+      "description": "Hobby of the member.",
       "type": "string"
     }
   },
   "required": [
-    "input"
+    "name",
+    "age"
   ],
   "additionalProperties": false,
-  "$defs": {
-    "IMember": {
-      "description": "Membership information.",
-      "type": "object",
-      "properties": {
-        "name": {
-          "title": "Name of the member",
-          "description": "Name of the member.",
-          "type": "string"
-        },
-        "age": {
-          "title": "Age of the member",
-          "description": "Age of the member.",
-          "type": "number"
-        },
-        "hobby": {
-          "title": "Hobby of the member",
-          "description": "Hobby of the member.",
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "age"
-      ]
-    }
-  }
+  "$defs": {}
 }

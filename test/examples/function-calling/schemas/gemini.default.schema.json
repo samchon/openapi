@@ -1,25 +1,17 @@
 {
   "type": "object",
   "properties": {
-    "input": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "@default John Doe"
-        },
-        "age": {
-          "type": "number"
-        }
-      },
-      "required": [
-        "name",
-        "age"
-      ],
-      "description": "Current Type: {@link IPerson}"
+    "name": {
+      "type": "string",
+      "description": "@default John Doe"
+    },
+    "age": {
+      "type": "number"
     }
   },
   "required": [
-    "input"
-  ]
+    "name",
+    "age"
+  ],
+  "description": "Current Type: {@link IPerson}"
 }

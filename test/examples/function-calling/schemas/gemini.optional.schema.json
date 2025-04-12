@@ -1,33 +1,22 @@
 {
   "type": "object",
   "properties": {
-    "input": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Name of the member."
-        },
-        "age": {
-          "type": "number",
-          "description": "Age of the member."
-        },
-        "hobby": {
-          "type": "string",
-          "description": "Hobby of the member."
-        }
-      },
-      "required": [
-        "name",
-        "age"
-      ],
-      "description": "Description of the current {@link IMember} type:\n\n> Membership information."
+    "name": {
+      "type": "string",
+      "description": "Name of the member."
     },
-    "note": {
-      "type": "string"
+    "age": {
+      "type": "number",
+      "description": "Age of the member."
+    },
+    "hobby": {
+      "type": "string",
+      "description": "Hobby of the member."
     }
   },
   "required": [
-    "input"
-  ]
+    "name",
+    "age"
+  ],
+  "description": "Description of the current {@link IMember} type:\n\n> Membership information."
 }

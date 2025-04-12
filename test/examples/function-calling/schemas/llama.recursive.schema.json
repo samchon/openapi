@@ -1,7 +1,8 @@
 {
+  "description": "Current Type: {@link IComposeProps}",
   "type": "object",
   "properties": {
-    "input": {
+    "categories": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/IShoppingCategory"
@@ -9,7 +10,7 @@
     }
   },
   "required": [
-    "input"
+    "categories"
   ],
   "additionalProperties": false,
   "$defs": {

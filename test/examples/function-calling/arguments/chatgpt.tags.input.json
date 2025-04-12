@@ -1,7 +1,11 @@
 {
-  "reasons": [
-    "marketing sales"
-  ],
-  "temporary": false,
-  "time": null
+  "trial": 2,
+  "success": true,
+  "data": {
+    "reasons": [
+      "marketing sales"
+    ],
+    "temporary": false,
+    "time": "2023-10-03T19:15:00Z"
+  }
 }
