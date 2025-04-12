@@ -16,6 +16,10 @@ export const test_claude_schema_reference_escaped_description_of_name =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_name("claude");
 
+export const test_deepseek_schema_reference_escaped_description_of_name =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_name("deepseek");
+
 export const test_gemini_schema_reference_escaped_description_of_name =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_name("gemini");

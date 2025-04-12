@@ -14,6 +14,9 @@ export const test_chatgpt_schema_mismatch = (): void =>
 export const test_claude_schema_mismatch = (): void =>
   validate_llm_schema_mismatch("claude");
 
+export const test_deepseek_schema_mismatch = (): void =>
+  validate_llm_schema_mismatch("deepseek");
+
 export const test_gemini_schema_mismatch = (): void =>
   validate_llm_schema_mismatch("gemini");
 
@@ -61,7 +64,7 @@ const validate_llm_schema_mismatch = <Model extends ILlmSchema.Model>(
       OpenApi.IJsonSchema.IReference | OpenApi.IJsonSchema.IObject
     >(collection.schemas[0]),
     $defs: {},
-  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  } as any) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals("success")(result.success)(false);
   TestValidator.equals("errors")(
     result.success ? [] : result.error.reasons.map((r) => r.accessor).sort(),

@@ -9,6 +9,9 @@ export const test_chatgpt_type_checker_cover_array = (): void =>
 export const test_claude_type_checker_cover_array = (): void =>
   validate_llm_type_checker_cover_array("claude");
 
+export const test_deepseek_type_checker_cover_array = (): void =>
+  validate_llm_type_checker_cover_array("deepseek");
+
 export const test_gemini_type_checker_cover_array = (): void =>
   validate_llm_type_checker_cover_array("gemini");
 

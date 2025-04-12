@@ -14,6 +14,9 @@ export const test_chatgpt_schema_separate_string = (): void =>
 export const test_claude_schema_separate_string = (): void =>
   validate_llm_schema_separate_string("claude", true);
 
+export const test_deepseek_schema_separate_string = (): void =>
+  validate_llm_schema_separate_string("deepseek", true);
+
 export const test_gemini_schema_separate_string = (): void =>
   validate_llm_schema_separate_string("gemini", false);
 

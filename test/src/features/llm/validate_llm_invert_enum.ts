@@ -9,6 +9,9 @@ export const test_chatgpt_invert_enum = (): void =>
 export const test_claude_invert_enum = (): void =>
   validate_llm_invert_enum("claude");
 
+export const test_deepseek_invert_enum = (): void =>
+  validate_llm_invert_enum("deepseek");
+
 export const test_llama_invert_enum = (): void =>
   validate_llm_invert_enum("llama");
 

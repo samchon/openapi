@@ -43,6 +43,7 @@ export * from "./structures/ILlmFunction";
 // SCHEMAS
 export * from "./structures/IChatGptSchema";
 export * from "./structures/IClaudeSchema";
+export * from "./structures/IDeepSeekSchema";
 export * from "./structures/IGeminiSchema";
 export * from "./structures/ILlamaSchema";
 export * from "./structures/ILlmSchema";
@@ -52,6 +53,7 @@ export * from "./structures/ILlmSchemaV3_1";
 // TYPE CHECKERS
 export * from "./utils/ChatGptTypeChecker";
 export * from "./utils/ClaudeTypeChecker";
+export * from "./utils/DeepSeekTypeChecker";
 export * from "./utils/GeminiTypeChecker";
 export * from "./utils/LlamaTypeChecker";
 export * from "./utils/LlmTypeCheckerV3";

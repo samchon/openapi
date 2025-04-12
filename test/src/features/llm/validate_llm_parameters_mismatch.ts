@@ -14,6 +14,9 @@ export const test_chatgpt_parameters_mismatch = (): void =>
 export const test_claude_parameters_mismatch = (): void =>
   validate_llm_parameters_mismatch("claude");
 
+export const test_deepseek_parameters_mismatch = (): void =>
+  validate_llm_parameters_mismatch("deepseek");
+
 export const test_gemini_parameters_mismatch = (): void =>
   validate_llm_parameters_mismatch("gemini");
 

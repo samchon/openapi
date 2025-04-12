@@ -9,6 +9,9 @@ export const test_chatgpt_schema_nullable = (): void =>
 export const test_claude_schema_nullable = (): void =>
   validate_llm_schema_nullable("claude", "oneOf");
 
+export const test_deepseek_schema_nullable = (): void =>
+  validate_llm_schema_nullable("deepseek", "oneOf");
+
 export const test_gemini_schema_nullable = (): void =>
   validate_llm_schema_nullable("gemini", "nullable");
 
@@ -35,7 +38,7 @@ const validate_llm_schema_nullable = <Model extends ILlmSchema.Model>(
     components: collection.components,
     schema: typia.assert(collection.schemas[0]),
     $defs: {},
-  }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
+  } as any) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals("success")(result.success)(true);
   TestValidator.equals("nullable")(result.success ? result.value : {})(
     expected === "nullable"

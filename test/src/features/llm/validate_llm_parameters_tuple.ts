@@ -14,6 +14,9 @@ export const test_chatgpt_parameters_tuple = (): void =>
 export const test_claude_parameters_tuple = (): void =>
   validate_llm_parameters_tuple("claude");
 
+export const test_deepseek_parameters_tuple = (): void =>
+  validate_llm_parameters_tuple("deepseek");
+
 export const test_gemini_parameters_tuple = (): void =>
   validate_llm_parameters_tuple("gemini");
 
