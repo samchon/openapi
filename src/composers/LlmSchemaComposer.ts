@@ -15,7 +15,7 @@ import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
 import { LlmTypeCheckerV3_1 } from "../utils/LlmTypeCheckerV3_1";
 import { ChatGptSchemaComposer } from "./llm/ChatGptSchemaComposer";
 import { ClaudeSchemaComposer } from "./llm/ClaudeSchemaComposer";
-import { DeepSeekSchemaComposer } from "./llm/DeepSeekSchemaCommposer";
+import { DeepSeekSchemaComposer } from "./llm/DeepSeekSchemaComposer";
 import { GeminiSchemaComposer } from "./llm/GeminiSchemaComposer";
 import { LlamaSchemaComposer } from "./llm/LlamaSchemaComposer";
 import { LlmSchemaV3Composer } from "./llm/LlmSchemaV3Composer";
