@@ -1,77 +1,156 @@
 {
+  "description": "Current Type: {@link IDrawProps}",
   "type": "object",
   "properties": {
-    "input": {
-      "$ref": "#/$defs/Shape"
+    "shape": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "rectangle"
+            },
+            "p1": {
+              "description": "Current Type: {@link IPoint}",
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ]
+            },
+            "p2": {
+              "description": "Current Type: {@link IPoint}",
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "p1",
+            "p2"
+          ],
+          "description": "Current Type: {@link IRectangle}"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "circle"
+            },
+            "radius": {
+              "type": "number"
+            },
+            "center": {
+              "description": "Current Type: {@link IPoint}",
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "radius",
+            "center"
+          ],
+          "description": "Current Type: {@link ICircle}"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "polygon"
+            },
+            "inner": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "description": "Current Type: {@link IPoint}",
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "outer": {
+              "type": "array",
+              "items": {
+                "description": "Current Type: {@link IPoint}",
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ]
+              }
+            }
+          },
+          "required": [
+            "type",
+            "inner",
+            "outer"
+          ],
+          "description": "Current Type: {@link IPolygon}"
+        }
+      ]
     }
   },
   "required": [
-    "input"
+    "shape"
   ],
   "additionalProperties": false,
-  "$defs": {
-    "Shape": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/IRectangle"
-        },
-        {
-          "$ref": "#/$defs/ICircle"
-        }
-      ]
-    },
-    "IRectangle": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "rectangle"
-        },
-        "p1": {
-          "$ref": "#/$defs/IPoint"
-        },
-        "p2": {
-          "$ref": "#/$defs/IPoint"
-        }
-      },
-      "required": [
-        "type",
-        "p1",
-        "p2"
-      ]
-    },
-    "IPoint": {
-      "type": "object",
-      "properties": {
-        "x": {
-          "type": "number"
-        },
-        "y": {
-          "type": "number"
-        }
-      },
-      "required": [
-        "x",
-        "y"
-      ]
-    },
-    "ICircle": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "circle"
-        },
-        "radius": {
-          "type": "number"
-        },
-        "center": {
-          "$ref": "#/$defs/IPoint"
-        }
-      },
-      "required": [
-        "type",
-        "radius",
-        "center"
-      ]
-    }
-  }
+  "$defs": {}
 }

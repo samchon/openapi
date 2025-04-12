@@ -1,8 +1,12 @@
 {
-  "age": 42,
-  "etc": {
-    "hobby": "Soccer",
-    "job": "Scientist"
-  },
-  "name": "John Doe"
+  "trial": 1,
+  "success": true,
+  "data": {
+    "name": "John Doe",
+    "age": 42,
+    "etc": {
+      "hobby": "Soccer",
+      "job": "Scientist"
+    }
+  }
 }

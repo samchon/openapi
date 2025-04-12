@@ -1,11 +1,20 @@
 import fs from "fs";
-import typia from "typia";
 
 import { TestGlobal } from "../TestGlobal";
 import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 import { IShoppingSale } from "../dto/IShoppingSale";
 
 export namespace ShoppingSalePrompt {
+  export interface IApplication {
+    /**
+     * Create a sale and returns the detailed information.
+     */
+    create(props: ICreateProps): void;
+  }
+  export interface ICreateProps {
+    input: IShoppingSale.ICreate;
+  }
+
   export const documents = async (): Promise<string[]> => {
     const directory: string[] = await fs.promises.readdir(
       `${TestGlobal.ROOT}/examples/function-calling/prompts`,
@@ -14,14 +23,6 @@ export namespace ShoppingSalePrompt {
       .filter((file) => file.endsWith(".md"))
       .map((file) => file.substring(0, file.length - 3));
   };
-
-  export const schema = () => ({
-    name: "createSale",
-    description: "Create a sale and returns the detailed information.",
-    collection:
-      typia.json.schemas<[{ input: IShoppingSale.ICreate }, IShoppingSale]>(),
-    validate: typia.createValidate<IShoppingSale.ICreate>(),
-  });
 
   export const texts = async (
     product: string = "microsoft-surface-pro-9",

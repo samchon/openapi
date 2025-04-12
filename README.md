@@ -46,7 +46,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - Supported schemas
     - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
     - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IDeepSeekSchema`](https://samchon.github.io/openapi/api/types/IDeepSeekSchema-1.html)
+    - [`IDeepSeekSchema`](https://samchon.github.io/openapi/api/types/IDeepSeekSchema-1.html): High-Flyer DeepSeek
     - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
     - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
   - Midldle layer schemas
@@ -249,6 +249,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
   - Schemas
     - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
     - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
+    - [`IDeepSeekSchema`](https://samchon.github.io/openapi/api/types/IDeepSeekSchema-1.html): High-Flyer DeepSeek
     - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
     - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
     - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
@@ -431,7 +432,7 @@ Is LLM Function Calling perfect? No, absolutely not.
 
 LLM (Large Language Model) service vendor like OpenAI takes a lot of type level mistakes when composing the arguments of function calling or structured output. Even though target schema is super simple like `Array<string>` type, LLM often fills it just by a `string` typed value.
 
-In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) is taking about 70% of type level mistakes when filling the arguments of function calling to Shopping Mall service. To overcome the imperfection of such LLM function calling, `@samchon/openapi` supports validation feedback strategy.
+In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) is taking about 30% of type level mistakes when filling the arguments of function calling to Shopping Mall service. To overcome the imperfection of such LLM function calling, `@samchon/openapi` supports validation feedback strategy.
 
 The key concept of validation feedback strategy is, let LLM function calling to construct invalid typed arguments first, and informing detailed type errors to the LLM, so that induce LLM to emend the wrong typed arguments at the next turn by using `IHttpLlmFunction<Model>.validate()` function.
 

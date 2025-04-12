@@ -1,26 +1,18 @@
 {
   "type": "object",
   "properties": {
-    "input": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "John Doe"
-        },
-        "age": {
-          "type": "number",
-          "example": 42
-        }
-      },
-      "required": [
-        "name",
-        "age"
-      ],
-      "description": "Current Type: {@link IPerson}"
+    "name": {
+      "type": "string",
+      "example": "John Doe"
+    },
+    "age": {
+      "type": "number",
+      "example": 42
     }
   },
   "required": [
-    "input"
-  ]
+    "name",
+    "age"
+  ],
+  "description": "Current Type: {@link IPerson}"
 }
