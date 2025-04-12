@@ -40,8 +40,8 @@ export namespace JsonDescriptionUtil {
     ].join("\n\n------------------------------\n\n");
   };
 
-  export const take = (o: OpenApi.IJsonSchema.IObject): string | undefined =>
-    [
+  export const take = (o: OpenApi.IJsonSchema.IObject): string | undefined => {
+    const result: string = [
       ...(!!o.description?.length ? [o.description] : []),
       ...Object.entries(o.properties ?? {})
         .filter(
@@ -58,6 +58,8 @@ export namespace JsonDescriptionUtil {
               .join("\n"),
         ),
     ].join("\n\n");
+    return !!result.length ? result : undefined;
+  };
 }
 
 interface IParentReference {

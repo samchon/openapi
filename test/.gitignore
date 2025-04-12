@@ -1,0 +1,4 @@
+bin/
+examples/converted/
+
+.env

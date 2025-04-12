@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build
-        run: pnpm run build:main
+        run: pnpm run build
       - name: Publish to npm
         run: npm publish --provenance
         env:
