@@ -9,7 +9,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * specification; {@link OpenApiV3_1.IJsonSchema}. By the way, as the
  * {@link OpenApiV3_1.IJsonSchema} has too much ambiguous and duplicated expressions,
  * `IDeepSeekSchema` is designed to be clear and simple for the DeepSeek function calling,
- * by utilizng {@link ILlmSchemaV3_1} which has been transformed from the
+ * by utilizing {@link ILlmSchemaV3_1} which has been transformed from the
  * {@link OpenApi.IJsonSchema} for the convenience and clarity.
  *
  * Therefore, `IDeepSeekSchema` does not follow the entire specification of
