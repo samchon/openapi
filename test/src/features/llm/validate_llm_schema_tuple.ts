@@ -14,6 +14,9 @@ export const test_chatgpt_schema_tuple = (): void =>
 export const test_claude_schema_tuple = (): void =>
   validate_llm_schema_tuple("claude");
 
+export const test_deepseek_schema_tuple = (): void =>
+  validate_llm_schema_tuple("deepseek");
+
 export const test_gemini_schema_tuple = (): void =>
   validate_llm_schema_tuple("gemini");
 
@@ -74,7 +77,7 @@ const validate =
       components,
       schema,
       $defs: {},
-    }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+    } as any) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
     TestValidator.equals("success")(result.success)(false);
     TestValidator.equals("errors")(
       result.success ? [] : result.error.reasons.map((r) => r.accessor).sort(),

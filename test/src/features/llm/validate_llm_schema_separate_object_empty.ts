@@ -15,6 +15,9 @@ export const test_chatgpt_schema_separate_object_empty = (): void =>
 export const test_claude_schema_separate_object_empty = (): void =>
   validate_llm_schema_separate_object_empty("claude");
 
+export const test_deepseek_schema_separate_object_empty = (): void =>
+  validate_llm_schema_separate_object_empty("deepseek");
+
 export const test_gemini_schema_separate_object_empty = (): void =>
   validate_llm_schema_separate_object_empty("gemini");
 

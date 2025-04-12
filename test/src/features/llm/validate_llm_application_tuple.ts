@@ -13,6 +13,9 @@ export const test_chatgpt_application_mismatch = (): void =>
 export const test_claude_application_mismatch = (): void =>
   validate_llm_application_tuple("claude");
 
+export const test_deepseek_application_mismatch = (): void =>
+  validate_llm_application_tuple("deepseek");
+
 export const test_gemini_application_mismatch = (): void =>
   validate_llm_application_tuple("gemini");
 

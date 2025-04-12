@@ -9,6 +9,9 @@ export const test_chatgpt_invert_nullable = (): void =>
 export const test_claude_invert_nullable = (): void =>
   validate_llm_invert_nullable("claude");
 
+export const test_deepseek_invert_nullable = (): void =>
+  validate_llm_invert_nullable("deepseek");
+
 export const test_gemini_invert_nullable = (): void =>
   validate_llm_invert_nullable("gemini");
 

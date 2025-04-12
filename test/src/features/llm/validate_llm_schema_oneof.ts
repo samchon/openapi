@@ -9,6 +9,9 @@ export const test_chatgpt_schema_anyof = (): void =>
 export const test_claude_schema_oneof = (): void =>
   validate_llm_schema_oneof("claude", "oneOf", true);
 
+export const test_deepseek_schema_oneof = (): void =>
+  validate_llm_schema_oneof("deepseek", "oneOf", true);
+
 export const test_llama_schema_oneof = (): void =>
   validate_llm_schema_oneof("llama", "oneOf", true);
 

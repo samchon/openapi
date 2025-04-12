@@ -10,9 +10,15 @@ flowchart
     emended --normalizes--> migration[["Migration Schema"]]
     migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling"}}
     lfc --"OpenAI"--> chatgpt("ChatGPT")
-    lfc --"Anthropic"--> claude("Claude")
     lfc --"Google"--> gemini("Gemini")
+    lfc --"Anthropic"--> claude("Claude")
+    lfc --"High-Flyer"--> deepseek("DeepSeek")
     lfc --"Meta"--> llama("Llama")
+    chatgpt --"3.1"--> custom(["Custom JSON Schema"])
+    gemini --"3.0"--> custom(["Custom JSON Schema"])
+    claude --"3.1"--> standard(["Standard JSON Schema"])
+    deepseek --"3.1"--> standard
+    llama --"3.1"--> standard
   end
 ```
 
@@ -40,6 +46,7 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - Supported schemas
     - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
     - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
+    - [`IDeepSeekSchema`](https://samchon.github.io/openapi/api/types/IDeepSeekSchema-1.html)
     - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
     - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
   - Midldle layer schemas
@@ -205,7 +212,7 @@ main().catch(console.error);
 ## LLM Function Calling
 ### Preface
 ```mermaid
-flowchart TD
+flowchart
   subgraph "OpenAPI Specification"
     v20("Swagger v2.0") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
     v30("OpenAPI v3.0") --upgrades--> emended
@@ -213,11 +220,17 @@ flowchart TD
   end
   subgraph "OpenAPI Generator"
     emended --normalizes--> migration[["Migration Schema"]]
-    migration --"Artificial Intelligence"--> lfc{{"<b><u>LLM Function Calling</b></u>"}}
+    migration --"Artificial Intelligence"--> lfc{{"<b><u>LLM Function Calling</u></b>"}}
     lfc --"OpenAI"--> chatgpt("ChatGPT")
-    lfc --"Anthropic"--> claude("Claude")
     lfc --"Google"--> gemini("Gemini")
+    lfc --"Anthropic"--> claude("Claude")
+    lfc --"High-Flyer"--> deepseek("DeepSeek")
     lfc --"Meta"--> llama("Llama")
+    chatgpt --"3.1"--> custom(["Custom JSON Schema"])
+    gemini --"3.0"--> custom(["Custom JSON Schema"])
+    claude --"3.1"--> standard(["Standard JSON Schema"])
+    deepseek --"3.1"--> standard
+    llama --"3.1"--> standard
   end
 ```
 

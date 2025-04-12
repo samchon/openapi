@@ -6,6 +6,12 @@ import typia, { tags } from "typia";
 export const test_chatgpt_schema_invert = () =>
   validate_llm_schema_invert("chatgpt");
 
+export const test_claude_schema_invert = () =>
+  validate_llm_schema_invert("claude");
+
+export const test_deepseek_schema_invert = () =>
+  validate_llm_schema_invert("deepseek");
+
 export const test_gemini_schema_invert = () =>
   validate_llm_schema_invert("gemini");
 

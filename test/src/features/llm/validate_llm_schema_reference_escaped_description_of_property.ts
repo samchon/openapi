@@ -11,6 +11,10 @@ export const test_claude_schema_reference_escaped_description_of_property =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_property("claude");
 
+export const test_deepseek_schema_reference_escaped_description_of_property =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_property("deepseek");
+
 export const test_gemini_schema_reference_escaped_description_of_property =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_property("gemini");

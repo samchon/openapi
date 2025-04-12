@@ -16,6 +16,10 @@ export const test_claude_schema_reference_escaped_description_of_namespace =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_namespace("claude");
 
+export const test_deepseek_schema_reference_escaped_description_of_namespace =
+  (): void =>
+    validate_llm_schema_reference_escaped_description_of_namespace("deepseek");
+
 export const test_gemini_schema_reference_escaped_description_of_namespace =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_namespace("gemini");

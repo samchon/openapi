@@ -1,5 +1,6 @@
 import { IChatGptSchema } from "./IChatGptSchema";
 import { IClaudeSchema } from "./IClaudeSchema";
+import { IDeepSeekSchema } from "./IDeepSeekSchema";
 import { IGeminiSchema } from "./IGeminiSchema";
 import { ILlamaSchema } from "./ILlamaSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
@@ -22,10 +23,18 @@ export type ILlmSchema<Model extends ILlmSchema.Model = ILlmSchema.Model> =
   ILlmSchema.ModelSchema[Model];
 
 export namespace ILlmSchema {
-  export type Model = "chatgpt" | "claude" | "gemini" | "llama" | "3.0" | "3.1";
+  export type Model =
+    | "chatgpt"
+    | "claude"
+    | "deepseek"
+    | "gemini"
+    | "llama"
+    | "3.0"
+    | "3.1";
   export interface ModelConfig {
     chatgpt: IChatGptSchema.IConfig;
     claude: IClaudeSchema.IConfig;
+    deepseek: IDeepSeekSchema.IConfig;
     gemini: IGeminiSchema.IConfig;
     llama: ILlamaSchema.IConfig;
     "3.0": ILlmSchemaV3.IConfig;
@@ -34,6 +43,7 @@ export namespace ILlmSchema {
   export interface ModelParameters {
     chatgpt: IChatGptSchema.IParameters;
     claude: IClaudeSchema.IParameters;
+    deepseek: IDeepSeekSchema.IParameters;
     gemini: IGeminiSchema.IParameters;
     llama: ILlamaSchema.IParameters;
     "3.0": ILlmSchemaV3.IParameters;
@@ -42,6 +52,7 @@ export namespace ILlmSchema {
   export interface ModelSchema {
     chatgpt: IChatGptSchema;
     claude: IClaudeSchema;
+    deepseek: IDeepSeekSchema;
     gemini: IGeminiSchema;
     llama: ILlamaSchema;
     "3.0": ILlmSchemaV3;

@@ -9,6 +9,9 @@ export const test_chatgpt_invert_ref = (): void =>
 export const test_claude_invert_ref = (): void =>
   validate_llm_invert_ref("claude");
 
+export const test_deepseek_invert_ref = (): void =>
+  validate_llm_invert_ref("deepseek");
+
 export const test_llama_invert_ref = (): void =>
   validate_llm_invert_ref("llama");
 

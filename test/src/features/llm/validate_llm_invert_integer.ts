@@ -9,6 +9,9 @@ export const test_chatgpt_invert_integer = (): void =>
 export const test_claude_invert_integer = (): void =>
   validate_llm_invert_integer("claude");
 
+export const test_deepseek_invert_integer = (): void =>
+  validate_llm_invert_integer("deepseek");
+
 export const test_llama_invert_integer = (): void =>
   validate_llm_invert_integer("llama");
 
