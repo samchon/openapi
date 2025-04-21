@@ -670,8 +670,7 @@ https://github.com/wrtnlabs/agentica
 
 `agentica` is the simplest **Agentic AI** library, specialized in **LLM Function Calling** with `@samchon/openapi`.
 
-With it, you don't need to compose complicate agent graph or workflow. Instead, just deliver **Swagger/OpenAPI/MCP** documents or **TypeScript class** types linearly to the `agentica`. Then `agentica` will do everything with the function calling.
-
+With it, you don't need to compose a complex agent graph or workflow. Instead, just deliver **Swagger/OpenAPI/MCP** documents or **TypeScript class** types linearly to the `agentica`. Then `agentica` will do everything with the function calling.
 Look at the below demonstration, and feel how `agentica` is easy and powerful combining with `@samchon/openapi`.
 
 ```typescript
