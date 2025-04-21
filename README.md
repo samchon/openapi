@@ -620,16 +620,15 @@ LLM function calling schema from MCP document.
 
 As MCP (Model Context Protocol) contains function caller itself, it is possible to execute MCP server's functions without any extra dedication just by using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property of LLM API. However, due to [JSON schema model specification](https://wrtnlabs.io/agentica/docs/core/vendor/), [validation feedback](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#validation-feedback) and [selector agent](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)'s filtering for context reducing, `@samchon/openapi` recommends to use function calling instead of using the [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers).
 
-For example, if you bring a Github MCP server to Claude Desktop and request it to do something, you will often see the AI ​​agent crash immediately. This is because there are 30 functions in the Github MCP server, and if you put them all by using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers), the context will be huge and hallucination will occur.
+For example, if you bring a GitHub MCP server to Claude Desktop and request it to do something, you will often see the AI ​​agent crash immediately. This is because there are 30 functions in the GitHub MCP server, and if you put them all by using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers), the context will be huge and hallucination will occur.
 
 > https://github.com/user-attachments/assets/72390cb4-d9b1-4d31-a6dd-d866da5a433b
 >
-> Github MCP server to [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) often breaks down AI agent.
+> GitHub MCP server to [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) often breaks down AI agent.
 >
-> However, if call the function of Github MCP server by function calling with [`@agentica`](https://github.com/wrtnlabs/agentica), it works properly without any problem.
+> However, if call the function of GitHub MCP server by function calling with [`@agentica`](https://github.com/wrtnlabs/agentica), it works properly without any problem.
 > 
-> - Function calling to Github MCP: https://www.youtube.com/watch?v=rLlHkc24cJs
-
+> - Function calling to GitHub MCP: https://www.youtube.com/watch?v=rLlHkc24cJs
 To make function calling schemas, call [`McpLlm.application()`](#validation-feedback) function. [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html) typed application instance would be returned, and it will contain the [`IMcpLlmFunction.validate()`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html#validate) function utilized for the [validation feedback](#validation-feedback) strategy.
 
 Don't worry about the JSON schema specification. As MCP (Model Context Protocol) does not restrict any JSON schema specification, the [`McpLlm.application()`](#validation-feedback) function has been designed to support every JSON schema specifications.
