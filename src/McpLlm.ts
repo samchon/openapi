@@ -20,7 +20,7 @@ import { OpenApiValidator } from "./utils/OpenApiValidator";
  * feature instead of directly using the `mcpServers` property of LLM API are:
  *
  * - Model Specification: {@link ILlmSchema}
- * - Validation Feedbacak: {@link IMcpLlmFunction.validate}
+ * - Validation Feedback: {@link IMcpLlmFunction.validate}
  * - Selector agent for reducing context: [Agentica > Orchestration Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
  *
  * @author Jeongho Nam - https://github.com/samchon
