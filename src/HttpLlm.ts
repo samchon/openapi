@@ -88,8 +88,7 @@ export namespace HttpLlm {
    * first parameter type is always {@link ILlmSchemaV3.IObject}. I recommend this option
    * because LLM can understand the keyword arguments more easily.
    *
-   * @param document Target OpenAPI document to convert (or migrate application)
-   * @param options Options for the LLM function calling application conversion
+   * @param props Properties for composition
    * @returns LLM function calling application
    */
   export const application = <Model extends ILlmSchema.Model>(

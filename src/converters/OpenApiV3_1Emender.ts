@@ -257,7 +257,7 @@ export namespace OpenApiV3_1Emender {
   /* -----------------------------------------------------------
     DEFINITIONS
   ----------------------------------------------------------- */
-  const convertComponents = (
+  export const convertComponents = (
     input: OpenApiV3_1.IComponents,
   ): OpenApi.IComponents => ({
     schemas: Object.fromEntries(
@@ -268,7 +268,7 @@ export namespace OpenApiV3_1Emender {
     securitySchemes: input.securitySchemes,
   });
 
-  const convertSchema =
+  export const convertSchema =
     (components: OpenApiV3_1.IComponents) =>
     (input: OpenApiV3_1.IJsonSchema): OpenApi.IJsonSchema => {
       const union: OpenApi.IJsonSchema[] = [];
@@ -544,11 +544,18 @@ export namespace OpenApiV3_1Emender {
               required: schema.required ?? [],
             },
           });
+        else if (TypeChecker.isReference(schema))
+          union.push({
+            ...schema,
+            ...{
+              $ref: `#/components/schemas/${schema.$ref.split("/").pop()}`,
+            },
+          });
         else if (TypeChecker.isRecursiveReference(schema))
           union.push({
             ...schema,
             ...{
-              $ref: schema.$recursiveRef,
+              $ref: `#/components/schemas/${schema.$recursiveRef.split("/").pop()}`,
               $recursiveRef: undefined,
             },
           });
@@ -567,12 +574,25 @@ export namespace OpenApiV3_1Emender {
         });
       return {
         ...(union.length === 0
-          ? { type: undefined }
+          ? {
+              type: undefined,
+            }
           : union.length === 1
-            ? { ...union[0] }
-            : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
+            ? {
+                ...union[0],
+              }
+            : {
+                oneOf: union.map((u) => ({
+                  ...u,
+                  nullable: undefined,
+                  $defs: undefined,
+                })),
+              }),
         ...attribute,
-        ...{ nullable: undefined },
+        ...{
+          nullable: undefined,
+          $defs: undefined,
+        },
       };
     };
 
