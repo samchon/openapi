@@ -593,7 +593,7 @@ main().catch(console.error);
 
 
 
-## Model Contexnt Protocol
+## Model Context Protocol
 ```mermaid
 flowchart
   subgraph "JSON Schema Specification"
