@@ -422,7 +422,7 @@ export const correctFunctionCall = (p: {
   if (result.success === false) {
     // 1st trial: 70% (gpt-4o-mini in shopping mall chatbot)
     // 2nd trial with validation feedback: 98%
-    // 3nd trial with validation feedback again: never have failed
+    // 3rd trial with validation feedback again: never have failed
     return p.retry(
       "Type errors are detected. Correct it through validation errors",
       {
