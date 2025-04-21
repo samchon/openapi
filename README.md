@@ -442,7 +442,7 @@ In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) is taking about 70% of 
 
 The key concept of validation feedback strategy is, let LLM function calling to construct invalid typed arguments first, and informing detailed type errors to the LLM, so that induce LLM to emend the wrong typed arguments at the next turn by using `IHttpLlmFunction<Model>.validate()` function.
 
-Embedded validator function in `IHttpLlmFunction<Model>.validate()` is exactly same with [`typia.validate<T>()`](https://typia.io/docs/validators/validate) function, so that detailed and accurate than any other validators like below. By such validation feedback strategy, 70% success rate of the 1st function calling trial has been increased to 98% success rate of the 2nd function calling trial. And have never failed from the 3rd trial.
+Embedded validator function in `IHttpLlmFunction<Model>.validate()` is exactly the same as [`typia.validate<T>()`](https://typia.io/docs/validators/validate) and is more detailed and accurate than other validators. By using this validation feedback strategy, the 70% success rate of the first function calling trial increased to 98% on the second trial and has never failed from the third trial onward.
 
 Components               | `typia` | `TypeBox` | `ajv` | `io-ts` | `zod` | `C.V.`
 -------------------------|--------|-----------|-------|---------|-------|------------------
