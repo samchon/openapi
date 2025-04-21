@@ -6,8 +6,9 @@ import { IValidation } from "./IValidation";
  *
  * `IMcpLlmFunction` is an interface representing a function metadata
  * of MCP (Model Context Protocol), which has been designed for the LLM
- * (Language Large Model) function calling, instead of providing `mcpServers`
- * to the LLM vendor API.
+ * (Language Large Model) function calling, instead of providing
+ * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
+ * property to the LLM vendor API.
  *
  * It contains the target function's metadata {@link name}, {@link parameters}
  * and {@link description}. You can put these properties to the LLM vendor API
@@ -21,9 +22,10 @@ import { IValidation } from "./IValidation";
  * fills it just by a `string` typed value.
  *
  * > This is the reason why `@samchon/openapi` recommends not to use the
- * > `mcpServers` property of LLM API directly, but to use the function
- * > calling feature instead. You have to make the AI agent to correct the
- * > type level mistakes by using the `validate` function.
+ * > [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
+ * > property of LLM API directly, but to use the function calling feature
+ * > instead. You have to make the AI agent to correct the type level mistakes
+ * > by using the `validate` function.
  *
  * @author Jeongho Nam - https://github.com/samchon
  * @author Byeongjin Oh - https://github.com/sunrabbit123

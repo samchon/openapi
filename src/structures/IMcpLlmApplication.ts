@@ -19,9 +19,11 @@ import { IMcpLlmFunction } from "./IMcpLlmFunction";
  * instead of {@link functions}.
  *
  * Also, each function has its own {@link IMcpLlmFunction.validate}
- * functi0on for correcting AI agent's mistakes, and this is the reason why
- * `@samchon/openapi` recommends not to use the `mcpServers` property of
- * LLM API directly, but to use the function calling feature instead.
+ * function for correcting AI agent's mistakes, and this is the reason why
+ * `@samchon/openapi` recommends not to use the
+ * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
+ * property of LLM API directly, but to use the function calling feature
+ * instead.
  *
  * @author Jeongho Nam - https://github.com/samchon
  * @author Byeongjin Oh - https://github.com/sunrabbit123

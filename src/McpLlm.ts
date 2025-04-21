@@ -17,7 +17,9 @@ import { OpenApiValidator } from "./utils/OpenApiValidator";
  * calling application from MCP (Model Context Protocol) document.
  *
  * The reasons why `@samchon/openapi` recommends to use the function calling
- * feature instead of directly using the `mcpServers` property of LLM API are:
+ * feature instead of directly using the
+ * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
+ * property of LLM API are:
  *
  * - Model Specification: {@link ILlmSchema}
  * - Validation Feedback: {@link IMcpLlmFunction.validate}
@@ -32,6 +34,9 @@ export namespace McpLlm {
    * @template Model Target LLM model
    */
   export interface IApplicationProps<Model extends ILlmSchema.Model> {
+    /**
+     * Target LLM model.
+     */
     model: Model;
 
     /**
@@ -58,10 +63,12 @@ export namespace McpLlm {
    * function calling application.
    *
    * The reasons why `@samchon/openapi` recommends to use the function calling
-   * feature instead of directly using the `mcpServers` property of LLM API are:
+   * feature instead of directly using the
+   * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
+   * property of LLM API are:
    *
    * - Model Specification: {@link ILlmSchema}
-   * - Validation Feedbacak: {@link IMcpLlmFunction.validate}
+   * - Validation Feedback: {@link IMcpLlmFunction.validate}
    * - Selector agent for reducing context: [Agentica > Orchestration Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
    *
    * @param props Properties for composition

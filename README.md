@@ -53,9 +53,15 @@ OpenAPI definitions, converters and LLM function calling application composer.
     - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
 
+Additionally, `@samchon/openapi` supports MCP (Model Context Protocol) function calling. Due to [model specification](https://wrtnlabs.io/agentica/docs/core/vendor/), [validation feedback](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#validation-feedback), and [selector agent](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy) reasons, function calling to MCP server is much better than directly using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property of LLM API.
+
+  - [`McpLlm.application()`](https://samchon.github.io/openapi/api/functions/McpLlm.application.html)
+  - [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html)
+  - [`IMcpLlmFunction`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html)
+
 > https://github.com/user-attachments/assets/e1faf30b-c703-4451-b68b-2e7a8170bce5
 >
-> Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`agentica`](https://github.com/wrtnlabs/agentica)
+> Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`@agentica`](https://github.com/wrtnlabs/agentica)
 >
 > - Shopping A.I. Chatbot Application: https://nestia.io/chat/shopping
 > - Shopping Backend Repository: https://github.com/samchon/shopping-backend
@@ -414,9 +420,9 @@ export const correctFunctionCall = (p: {
   // VALIDATE
   const result: IValidation<unknown> = func.validate(p.call.arguments);
   if (result.success === false) {
-    // 1st trial: 30% (gpt-4o-mini in shopping mall chatbot)
-    // 2nd trial with validation feedback: 99%
-    // 3nd trial with validation feedback again: never have failed
+    // 1st trial: 70% (gpt-4o-mini in shopping mall chatbot)
+    // 2nd trial with validation feedback: 98%
+    // 3rd trial with validation feedback again: never have failed
     return p.retry(
       "Type errors are detected. Correct it through validation errors",
       {
@@ -432,11 +438,11 @@ Is LLM Function Calling perfect? No, absolutely not.
 
 LLM (Large Language Model) service vendor like OpenAI takes a lot of type level mistakes when composing the arguments of function calling or structured output. Even though target schema is super simple like `Array<string>` type, LLM often fills it just by a `string` typed value.
 
-In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) is taking about 30% of type level mistakes when filling the arguments of function calling to Shopping Mall service. To overcome the imperfection of such LLM function calling, `@samchon/openapi` supports validation feedback strategy.
+In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) is taking about 70% of type level mistakes when filling the arguments of function calling to Shopping Mall service. To overcome the imperfection of such LLM function calling, `@samchon/openapi` supports validation feedback strategy.
 
 The key concept of validation feedback strategy is, let LLM function calling to construct invalid typed arguments first, and informing detailed type errors to the LLM, so that induce LLM to emend the wrong typed arguments at the next turn by using `IHttpLlmFunction<Model>.validate()` function.
 
-Embedded validator function in `IHttpLlmFunction<Model>.validate()` is exactly same with [`typia.validate<T>()`](https://typia.io/docs/validators/validate) function, so that detailed and accurate than any other validators like below. By such validation feedback strategy, 30% success rate of the 1st function calling trial has been increased to 99% success rate of the 2nd function calling trial. And have never failed from the 3rd trial.
+Embedded validator function in `IHttpLlmFunction<Model>.validate()` is exactly the same as [`typia.validate<T>()`](https://typia.io/docs/validators/validate) and is more detailed and accurate than other validators. By using this validation feedback strategy, the 70% success rate of the first function calling trial increased to 98% on the second trial and has never failed from the third trial onward.
 
 Components               | `typia` | `TypeBox` | `ajv` | `io-ts` | `zod` | `C.V.`
 -------------------------|--------|-----------|-------|---------|-------|------------------
@@ -587,15 +593,84 @@ main().catch(console.error);
 
 
 
+## Model Context Protocol
+```mermaid
+flowchart
+  subgraph "JSON Schema Specification"
+    schemav4("JSON Schema v4") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
+    schemav7("JSON Schema v7") --upgrades--> emended
+    schema2020("JSON Schema 2020-12") --emends--> emended
+  end
+  subgraph "Model Context Protocol"
+    emended --"Artificial Intelligence"--> lfc{{"LLM Function Calling"}}
+    lfc --"OpenAI"--> chatgpt("ChatGPT")
+    lfc --"Google"--> gemini("Gemini")
+    lfc --"Anthropic"--> claude("Claude")
+    lfc --"High-Flyer"--> deepseek("DeepSeek")
+    lfc --"Meta"--> llama("Llama")
+    chatgpt --"3.1"--> custom(["Custom JSON Schema"])
+    gemini --"3.0"--> custom(["Custom JSON Schema"])
+    claude --"3.1"--> standard(["Standard JSON Schema"])
+    deepseek --"3.1"--> standard
+    llama --"3.1"--> standard
+  end
+```
+
+LLM function calling schema from MCP document.
+
+As MCP (Model Context Protocol) contains function caller itself, it is possible to execute MCP server's functions without any extra dedication just by using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property of LLM API. However, due to [JSON schema model specification](https://wrtnlabs.io/agentica/docs/core/vendor/), [validation feedback](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#validation-feedback) and [selector agent](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)'s filtering for context reducing, `@samchon/openapi` recommends to use function calling instead of using the [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers).
+
+For example, if you bring a GitHub MCP server to Claude Desktop and request it to do something, you will often see the AI ​​agent crash immediately. This is because there are 30 functions in the GitHub MCP server, and if you put them all by using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers), the context will be huge and hallucination will occur.
+
+> https://github.com/user-attachments/assets/72390cb4-d9b1-4d31-a6dd-d866da5a433b
+>
+> GitHub MCP server to [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) often breaks down AI agent.
+>
+> However, if call the function of GitHub MCP server by function calling with [`@agentica`](https://github.com/wrtnlabs/agentica), it works properly without any problem.
+> 
+> - Function calling to GitHub MCP: https://www.youtube.com/watch?v=rLlHkc24cJs
+To make function calling schemas, call [`McpLlm.application()`](#validation-feedback) function. [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html) typed application instance would be returned, and it will contain the [`IMcpLlmFunction.validate()`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html#validate) function utilized for the [validation feedback](#validation-feedback) strategy.
+
+Don't worry about the JSON schema specification. As MCP (Model Context Protocol) does not restrict any JSON schema specification, the [`McpLlm.application()`](#validation-feedback) function has been designed to support every JSON schema specifications.
+
+  - JSON Schema v4, v5, v6, v7
+  - JSON Schema 2019-03
+  - JSON Schema 2020-12
+
+```typescript
+import {
+  IMcpApplication,
+  IMcpFunction,
+  IValidation,
+  McpLlm,
+} from "@samchon/openapi";
+
+const application: IMcpLlmApplication<"chatgpt"> = McpLlm.application({
+  model: "chatgpt",
+  tools: [...],
+});
+const func: IMcpLlmFunction<"chatgpt"> = application.functions.find(
+  (f) => f.name === "create",
+);
+const result: IValidation<unknown> = func.validate({
+  title: "Hello World",
+  body: "Nice to meet you AI developers",
+  thumbnail: "https://wrtnlabs.io/agentica/thumbnail.jpg",
+});
+console.log(result);
+```
+
+
+
+
 ## Agentica
-![agentica-conceptual-diagram](https://github.com/user-attachments/assets/d7ebbd1f-04d3-4b0d-9e2a-234e29dd6c57)
+![agentica-conceptual-diagram](https://wrtnlabs.io/agentica/og.jpg)
 
 https://github.com/wrtnlabs/agentica
 
 `agentica` is the simplest **Agentic AI** library, specialized in **LLM Function Calling** with `@samchon/openapi`.
 
-With it, you don't need to compose complicate agent graph or workflow. Instead, just deliver **Swagger/OpenAPI** documents or **TypeScript class** types linearly to the `agentica`. Then `agentica` will do everything with the function calling.
-
+With it, you don't need to compose a complex agent graph or workflow. Instead, just deliver **Swagger/OpenAPI/MCP** documents or **TypeScript class** types linearly to the `agentica`. Then `agentica` will do everything with the function calling.
 Look at the below demonstration, and feel how `agentica` is easy and powerful combining with `@samchon/openapi`.
 
 ```typescript
