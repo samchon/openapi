@@ -48,7 +48,7 @@ export namespace McpLlm {
     /**
      * Options for the LLM function calling schema conversion.
      */
-    options?: IMcpLlmApplication.IOptions<Model>;
+    options?: Partial<IMcpLlmApplication.IOptions<Model>>;
   }
 
   /**
