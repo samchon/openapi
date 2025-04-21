@@ -111,7 +111,7 @@ export namespace HttpLlm {
           ),
         ),
         separate: props.options?.separate ?? null,
-        maxLength: props.options?.maxLength ?? null,
+        maxLength: props.options?.maxLength ?? 64,
       } as any as IHttpLlmApplication.IOptions<Model>,
     });
   };

@@ -77,7 +77,7 @@ export namespace McpLlm {
             [key, (props.options as any)?.[key] ?? value] as const,
         ),
       ),
-      maxLength: props.options?.maxLength ?? null,
+      maxLength: props.options?.maxLength ?? 64,
     } as IMcpLlmApplication.IOptions<Model>;
     const functions: IMcpLlmFunction<Model>[] = [];
     const errors: IMcpLlmApplication.IError[] = [];
