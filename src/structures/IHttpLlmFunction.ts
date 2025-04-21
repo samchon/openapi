@@ -160,7 +160,7 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    * used to explain the function to the user. Therefore, the `description`
    * property has the highest priority, and you have to consider it.
    */
-  description?: string;
+  description?: string | undefined;
 
   /**
    * Whether the function is deprecated or not.

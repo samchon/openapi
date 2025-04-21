@@ -47,7 +47,7 @@ export interface IMcpLlmFunction<Model extends ILlmSchema.Model> {
    * used to explain the function to the user. Therefore, the `description`
    * property has the highest priority, and you have to consider it.
    */
-  description?: string;
+  description?: string | undefined;
 
   /**
    * Parameters of the function.
