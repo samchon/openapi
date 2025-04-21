@@ -61,3 +61,13 @@ export * from "./utils/LlmTypeCheckerV3_1";
 
 // FACADE
 export * from "./HttpLlm";
+
+//----
+// MCP
+//----
+export * from "./McpLlm";
+
+export * from "./structures/IMcpLlmApplication";
+export * from "./structures/IMcpLlmFunction";
+
+export * from "./structures/IMcpTool";

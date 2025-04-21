@@ -38,6 +38,8 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
 
   /**
    * Collection of separated parameters.
+   *
+   * Filled only when {@link ILlmApplication.IOptions.separate} is configured.
    */
   separated?: ILlmFunction.ISeparated<Model>;
 
