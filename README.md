@@ -597,8 +597,8 @@ main().catch(console.error);
 ```mermaid
 flowchart
   subgraph "JSON Schema Specification"
-    schemav4("JSON Schema v4") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
-    schemav7("JSON Schema v7") --upgrades--> emended
+    schemav4("JSON Schema v4 ~ v7") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
+    schema2910("JSON Schema 2019-03") --upgrades--> emended
     schema2020("JSON Schema 2020-12") --emends--> emended
   end
   subgraph "Model Context Protocol"
