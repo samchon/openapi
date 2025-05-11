@@ -62,7 +62,7 @@ import { ILlmSchema } from "./ILlmSchema";
  */
 export interface IHttpLlmController<Model extends ILlmSchema.Model> {
   /**
-   * Protocol discrminator.
+   * Protocol discriminator.
    */
   protocol: "http";
 
