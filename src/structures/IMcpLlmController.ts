@@ -62,7 +62,7 @@ import { IMcpLlmApplication } from "./IMcpLlmApplication";
  */
 export interface IMcpLlmController<Model extends ILlmSchema.Model> {
   /**
-   * Protocol discrminator.
+   * Protocol discriminator.
    */
   protocol: "mcp";
 
