@@ -1,0 +1,83 @@
+import { ILlmSchema } from "./ILlmSchema";
+import { IMcpLlmApplication } from "./IMcpLlmApplication";
+
+/**
+ * Controller of MCP function calling.
+ *
+ * `IMcpLlmController` is a controller of MCP function calling,
+ * containing not only the {@link IMcpLlmApplication application} of
+ * {@link IMcpLlmFunction function calling schemas}, but also
+ * {@link name identifier name} of the application and
+ * {@link execute executor} of MCP functions.
+ *
+ * Here is an example of using `IMcpLlmController` type for AI agent
+ * development of performing AI function calling to e-commerce API
+ * functions through `@agentica`.
+ *
+ * ```typescript
+ * import { Agentica, assertMcpController } from "@wrtnlabs/agentica";
+ * import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+ * import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+ *
+ * const client = new Client({
+ *   name: "calculator",
+ *   version: "1.0.0",
+ * });
+ * await client.connect(new StdioClientTransport({
+ *   command: "npx",
+ *   args: ["-y", "@modelcontextprotocol/server-github"],
+ *   env: {
+ *     GITHUB_PERSONAL_ACCESS_TOKEN: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
+ *     // Add other environment variables as needed
+ *   }
+ * }));
+ *
+ * const agent = new Agentica({
+ *   model: "chatgpt",
+ *   vendor: {
+ *     api: new OpenAI({ apiKey: "*****"})
+ *     model: "gpt-4o-mini"
+ *   },
+ *   controllers: [
+ *     await assertMcpController({
+ *       name: "calculator",
+ *       model: "chatgpt",
+ *       client,
+ *     }),
+ *   ],
+ * });
+ * await agent.conversate("What can you do?");
+ * ```
+ *
+ * For reference, this `IMcpLlmController` type is designed for
+ * MCP servers. If you want to make a controller of another
+ * {@link protocol} like HTTP or TypeScript, use below types instead:
+ *
+ * - {@link IHttpLlmController} for HTTP
+ * - {@link ILlmController} for TypeScript
+ *
+ * @reference https://wrtnlabs.io/agentica/docs/core/controller/mcp/
+ * @author Jeongho Nam - https://github.com/samchon
+ * @author Byeongjin Oh - https://github.com/sunrabbit123
+ */
+export interface IMcpLlmController<Model extends ILlmSchema.Model> {
+  /**
+   * Protocol discrminator.
+   */
+  protocol: "mcp";
+
+  /**
+   * Identifier name of the controller.
+   */
+  name: string;
+
+  /**
+   * Application schema of function calling.
+   */
+  application: IMcpLlmApplication<Model>;
+
+  /**
+   * MCP client for connection.
+   */
+  client: import("@modelcontextprotocol/sdk/client/index.d.ts").Client;
+}
