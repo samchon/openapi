@@ -58,7 +58,7 @@ export interface ILlmController<
   Class extends object = any,
 > {
   /**
-   * Protocol discrminator.
+   * Protocol discriminator.
    */
   protocol: "class";
 
