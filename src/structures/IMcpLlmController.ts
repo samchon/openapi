@@ -78,6 +78,11 @@ export interface IMcpLlmController<Model extends ILlmSchema.Model> {
 
   /**
    * MCP client for connection.
+   *
+   * @warning You have to install `@modelcontextprotocol/sdk` package
+   *          to use this type properly. If not, this type would work
+   *          as an `any` type, so that you can't validate it.
    */
+  // @ts-ignore
   client: import("@modelcontextprotocol/sdk/client/index.d.ts").Client;
 }
