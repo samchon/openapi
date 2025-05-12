@@ -76,18 +76,82 @@ export namespace IDeepSeekSchema {
     reference: boolean;
   }
 
-  export import IParameters = ILlmSchemaV3_1.IParameters;
+  /**
+   * Type of the function parameters.
+   *
+   * `IDeepSeekSchema.IParameters` is a type defining a function's parameters
+   * as a keyworded object type.
+   *
+   * It also can be utilized for the structured output metadata.
+   *
+   * @reference https://platform.openai.com/docs/guides/structured-outputs
+   */
+  export type IParameters = ILlmSchemaV3_1.IParameters;
 
-  export import IConstant = ILlmSchemaV3_1.IConstant;
-  export import IBoolean = ILlmSchemaV3_1.IBoolean;
-  export import IInteger = ILlmSchemaV3_1.IInteger;
-  export import INumber = ILlmSchemaV3_1.INumber;
-  export import IString = ILlmSchemaV3_1.IString;
+  /**
+   * Constant value type.
+   */
+  export type IConstant = ILlmSchemaV3_1.IConstant;
 
-  export import IObject = ILlmSchemaV3_1.IObject;
-  export import IArray = ILlmSchemaV3_1.IArray;
-  export import IReference = ILlmSchemaV3_1.IReference;
-  export import IOneOf = ILlmSchemaV3_1.IOneOf;
-  export import INull = ILlmSchemaV3_1.INull;
-  export import IUnknown = ILlmSchemaV3_1.IUnknown;
+  /**
+   * Boolean type info.
+   */
+  export type IBoolean = ILlmSchemaV3_1.IBoolean;
+
+  /**
+   * Integer type info.
+   */
+  export type IInteger = ILlmSchemaV3_1.IInteger;
+
+  /**
+   * Number (double) type info.
+   */
+  export type INumber = ILlmSchemaV3_1.INumber;
+
+  /**
+   * String type info.
+   */
+  export type IString = ILlmSchemaV3_1.IString;
+
+  /**
+   * Array type info.
+   */
+  export type IArray = ILlmSchemaV3_1.IArray;
+
+  /**
+   * Object type info.
+   */
+  export type IObject = ILlmSchemaV3_1.IObject;
+
+  /**
+   * Reference type directing named schema.
+   */
+  export type IReference = ILlmSchemaV3_1.IReference;
+
+  /**
+   * Union type.
+   *
+   * `IOneOf` represents an union type of the TypeScript (`A | B | C`).
+   *
+   * For reference, even though your Swagger (or OpenAPI) document has
+   * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
+   * converts it to `oneOf` type.
+   */
+  export type IOneOf = ILlmSchemaV3_1.IOneOf;
+  export namespace IOneOf {
+    /**
+     * Discriminator info of the union type.
+     */
+    export type IDiscriminator = ILlmSchemaV3_1.IOneOf.IDiscriminator;
+  }
+
+  /**
+   * Null type.
+   */
+  export type INull = ILlmSchemaV3_1.INull;
+
+  /**
+   * Unknown, the `any` type.
+   */
+  export type IUnknown = ILlmSchemaV3_1.IUnknown;
 }
