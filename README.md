@@ -629,6 +629,7 @@ For example, if you bring a GitHub MCP server to Claude Desktop and request it t
 > However, if call the function of GitHub MCP server by function calling with [`@agentica`](https://github.com/wrtnlabs/agentica), it works properly without any problem.
 > 
 > - Function calling to GitHub MCP: https://www.youtube.com/watch?v=rLlHkc24cJs
+
 To make function calling schemas, call [`McpLlm.application()`](#validation-feedback) function. [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html) typed application instance would be returned, and it will contain the [`IMcpLlmFunction.validate()`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html#validate) function utilized for the [validation feedback](#validation-feedback) strategy.
 
 Don't worry about the JSON schema specification. As MCP (Model Context Protocol) does not restrict any JSON schema specification, the [`McpLlm.application()`](#validation-feedback) function has been designed to support every JSON schema specifications.
