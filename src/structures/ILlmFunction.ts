@@ -20,6 +20,7 @@ import { IValidation } from "./IValidation";
  * I recommend you to validate the arguments before execution by using
  * [`typia`](https://github.com/samchon/typia) library.
  *
+ * @template Model Type of the LLM model
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
  */

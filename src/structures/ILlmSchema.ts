@@ -14,7 +14,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *
  * Select a proper schema type according to the LLM provider you're using.
  *
- * @template Model Name of the target LLM model
+ * @template Model Type of the LLM model
  * @reference https://platform.openai.com/docs/guides/function-calling
  * @reference https://platform.openai.com/docs/guides/structured-outputs
  * @author Jeongho Nam - https://github.com/samchon

@@ -34,6 +34,11 @@ export * from "./structures/IOpenApiSchemaError";
 export * from "./structures/IResult";
 export * from "./structures/IValidation";
 
+// CONTROLLERS
+export * from "./structures/IHttpLlmController";
+export * from "./structures/ILlmController";
+export * from "./structures/IMcpLlmController";
+
 // APPLICATIONS
 export * from "./structures/IHttpLlmApplication";
 export * from "./structures/IHttpLlmFunction";
