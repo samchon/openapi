@@ -133,7 +133,7 @@ export namespace IClaudeSchema {
   /**
    * Union type.
    *
-   * IOneOf` represents an union type of the TypeScript (`A | B | C`).
+   * `IOneOf` represents an union type of the TypeScript (`A | B | C`).
    *
    * For reference, even though your Swagger (or OpenAPI) document has
    * defined `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly
