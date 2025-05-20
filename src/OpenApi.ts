@@ -962,11 +962,11 @@ export namespace OpenApi {
        *
        * If the value is `true`, it means that the additional properties are not
        * restricted. They can be any type. Otherwise, if the value is
-       * {@link IOpenAiSchema} type, it means that the additional properties must
+       * {@link IJsonSchema} type, it means that the additional properties must
        * follow the type schema info.
        *
        * - `true`: `Record<string, any>`
-       * - `IOpenAiSchema`: `Record<string, T>`
+       * - `IJsonSchema`: `Record<string, T>`
        */
       additionalProperties?: boolean | IJsonSchema;
 

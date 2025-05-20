@@ -9,17 +9,20 @@ importers:
   .:
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.11.1
-        version: 1.11.1
+        specifier: ^1.11.4
+        version: 1.11.4
       '@rollup/plugin-terser':
         specifier: ^0.4.4
         version: 0.4.4(rollup@4.40.0)
       '@rollup/plugin-typescript':
         specifier: ^12.1.2
-        version: 12.1.2(rollup@4.40.0)(tslib@2.8.1)(typescript@5.7.3)
+        version: 12.1.2(rollup@4.40.0)(tslib@2.8.1)(typescript@5.8.3)
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2
         version: 5.2.2(prettier@3.5.3)
+      '@types/node':
+        specifier: ^20.12.7
+        version: 20.17.30
       gh-pages:
         specifier: ^6.3.0
         version: 6.3.0
@@ -38,18 +41,21 @@ importers:
       tinyglobby:
         specifier: ^0.2.10
         version: 0.2.12
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@20.17.30)(typescript@5.8.3)
       ts-patch:
         specifier: ^3.3.0
         version: 3.3.0
       typedoc:
         specifier: ^0.27.6
-        version: 0.27.9(typescript@5.7.3)
+        version: 0.27.9(typescript@5.8.3)
       typedoc-github-theme:
         specifier: ^0.2.1
-        version: 0.2.1(typedoc@0.27.9(typescript@5.7.3))
+        version: 0.2.1(typedoc@0.27.9(typescript@5.8.3))
       typescript:
-        specifier: ~5.7.2
-        version: 5.7.3
+        specifier: ~5.8.3
+        version: 5.8.3
 
   test:
     dependencies:
@@ -223,8 +229,8 @@ packages:
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
     engines: {node: '>=8'}
 
-  '@modelcontextprotocol/sdk@1.11.1':
-    resolution: {integrity: sha512-9LfmxKTb1v+vUS1/emSk1f5ePmTLkb9Le9AxOB5T0XM59EUumwcS45z05h7aiZx3GI0Bl7mjb3FMEglYj+acuQ==}
+  '@modelcontextprotocol/sdk@1.11.4':
+    resolution: {integrity: sha512-OTbhe5slIjiOtLxXhKalkKGhIQrwvhgCDs/C2r8kcBTy5HR/g43aDQU0l7r8O0VGbJPTNJvDc7ZdQMdQDJXmbw==}
     engines: {node: '>=18'}
 
   '@nestia/core@6.0.1':
@@ -574,6 +580,9 @@ packages:
     resolution: {integrity: sha512-kja8j7PjmncONqaTsB8fQ+wE2mSU2DJ9D4XKoJ5PFWIdRMa6SLSN1ff4mOr4jCbfRSsxR4keIiySJU0N9T5hIQ==}
     engines: {node: '>= 8.0.0'}
 
+  ajv@8.17.1:
+    resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
+
   ansi-escapes@4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
     engines: {node: '>=8'}
@@ -899,12 +908,18 @@ packages:
     resolution: {integrity: sha512-hMQ4CX1p1izmuLYyZqLMO/qGNw10wSv9QDCPfzXfyFrOaCSSoRfqE1Kf1s5an66J5JZC62NewG+mK49jOCtQew==}
     engines: {node: '>=4'}
 
+  fast-deep-equal@3.1.3:
+    resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
     engines: {node: '>=8.6.0'}
 
   fast-safe-stringify@2.1.1:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
+
+  fast-uri@3.0.6:
+    resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
@@ -1173,6 +1188,9 @@ packages:
 
   json-parse-better-errors@1.0.2:
     resolution: {integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==}
+
+  json-schema-traverse@1.0.0:
+    resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
 
   json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
@@ -1513,6 +1531,10 @@ packages:
     resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
     engines: {node: '>=0.10'}
 
+  require-from-string@2.0.2:
+    resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
+    engines: {node: '>=0.10.0'}
+
   resolve@1.22.10:
     resolution: {integrity: sha512-NPRy+/ncIMeDlTAsuqwKIiferiawhefFJtkNSW0qZJEqMEb+qBt/77B/jGeeek+F0uOeN05CDa6HXbbIgtVX4w==}
     engines: {node: '>= 0.4'}
@@ -1815,11 +1837,6 @@ packages:
     peerDependencies:
       typescript: 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x
 
-  typescript@5.7.3:
-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
@@ -2054,8 +2071,9 @@ snapshots:
 
   '@lukeed/csprng@1.1.0': {}
 
-  '@modelcontextprotocol/sdk@1.11.1':
+  '@modelcontextprotocol/sdk@1.11.4':
     dependencies:
+      ajv: 8.17.1
       content-type: 1.0.5
       cors: 2.8.5
       cross-spawn: 7.0.6
@@ -2180,11 +2198,11 @@ snapshots:
     optionalDependencies:
       rollup: 4.40.0
 
-  '@rollup/plugin-typescript@12.1.2(rollup@4.40.0)(tslib@2.8.1)(typescript@5.7.3)':
+  '@rollup/plugin-typescript@12.1.2(rollup@4.40.0)(tslib@2.8.1)(typescript@5.8.3)':
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       resolve: 1.22.10
-      typescript: 5.7.3
+      typescript: 5.8.3
     optionalDependencies:
       rollup: 4.40.0
       tslib: 2.8.1
@@ -2395,6 +2413,13 @@ snapshots:
   agentkeepalive@4.6.0:
     dependencies:
       humanize-ms: 1.2.1
+
+  ajv@8.17.1:
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-uri: 3.0.6
+      json-schema-traverse: 1.0.0
+      require-from-string: 2.0.2
 
   ansi-escapes@4.3.2:
     dependencies:
@@ -2701,6 +2726,8 @@ snapshots:
       iconv-lite: 0.4.24
       tmp: 0.0.33
 
+  fast-deep-equal@3.1.3: {}
+
   fast-glob@3.3.3:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -2710,6 +2737,8 @@ snapshots:
       micromatch: 4.0.8
 
   fast-safe-stringify@2.1.1: {}
+
+  fast-uri@3.0.6: {}
 
   fastq@1.19.1:
     dependencies:
@@ -2997,6 +3026,8 @@ snapshots:
   jsesc@3.1.0: {}
 
   json-parse-better-errors@1.0.2: {}
+
+  json-schema-traverse@1.0.0: {}
 
   json5@2.2.3: {}
 
@@ -3312,6 +3343,8 @@ snapshots:
   reflect-metadata@0.2.2: {}
 
   repeat-string@1.6.1: {}
+
+  require-from-string@2.0.2: {}
 
   resolve@1.22.10:
     dependencies:
@@ -3650,20 +3683,18 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typedoc-github-theme@0.2.1(typedoc@0.27.9(typescript@5.7.3)):
+  typedoc-github-theme@0.2.1(typedoc@0.27.9(typescript@5.8.3)):
     dependencies:
-      typedoc: 0.27.9(typescript@5.7.3)
+      typedoc: 0.27.9(typescript@5.8.3)
 
-  typedoc@0.27.9(typescript@5.7.3):
+  typedoc@0.27.9(typescript@5.8.3):
     dependencies:
       '@gerrit0/mini-shiki': 1.27.2
       lunr: 2.3.9
       markdown-it: 14.1.0
       minimatch: 9.0.5
-      typescript: 5.7.3
+      typescript: 5.8.3
       yaml: 2.7.1
-
-  typescript@5.7.3: {}
 
   typescript@5.8.3: {}
 
