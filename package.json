@@ -1,13 +1,13 @@
 {
   "name": "@samchon/openapi",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "OpenAPI definitions and converters for 'typia' and 'nestia'.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
   "typings": "./lib/index.d.ts",
   "scripts": {
     "prepare": "ts-patch install",
-    "build": "rimraf lib && tsc && rollup -c",
+    "build": "rimraf lib && tsc && rollup -c && ts-node build/post.ts",
     "dev": "rimraf lib && tsc --watch",
     "typedoc": "typedoc --plugin typedoc-github-theme --theme typedoc-github-theme"
   },
@@ -40,20 +40,22 @@
   },
   "homepage": "https://samchon.github.io/openapi/api",
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.11.1",
+    "@modelcontextprotocol/sdk": "^1.11.4",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^20.12.7",
     "gh-pages": "^6.3.0",
     "prettier": "^3.5.3",
     "rimraf": "^5.0.5",
     "rollup": "^4.18.1",
     "rollup-plugin-auto-external": "^2.0.0",
     "tinyglobby": "^0.2.10",
+    "ts-node": "^10.9.2",
     "ts-patch": "^3.3.0",
     "typedoc": "^0.27.6",
     "typedoc-github-theme": "^0.2.1",
-    "typescript": "~5.7.2"
+    "typescript": "~5.8.3"
   },
   "sideEffects": false,
   "files": [
