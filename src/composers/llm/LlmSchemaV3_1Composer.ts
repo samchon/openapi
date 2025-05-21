@@ -640,7 +640,12 @@ export namespace LlmSchemaV3_1Composer {
         ...props.schema,
         $ref: `#/components/schemas/${key}`,
       };
-    } else if (
+    } else if (LlmTypeCheckerV3_1.isOneOf(props.schema))
+      return {
+        ...props.schema,
+        oneOf: props.schema.oneOf.map(next),
+      };
+    else if (
       LlmTypeCheckerV3_1.isInteger(props.schema) ||
       LlmTypeCheckerV3_1.isNumber(props.schema)
     )
