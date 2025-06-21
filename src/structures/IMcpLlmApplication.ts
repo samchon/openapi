@@ -5,22 +5,21 @@ import { IMcpLlmFunction } from "./IMcpLlmFunction";
  * Application of LLM function call from MCP document.
  *
  * `IMcpLlmApplication` is an interface representing a collection of
- * {@link IMcpLlmFunction LLM function calling schemas} composed from the
- * MCP (Model Context Protocol) document. It contains
+ * {@link IMcpLlmFunction LLM function calling schemas} composed from the MCP
+ * (Model Context Protocol) document. It contains
  * {@link IMcpLlmApplication.errors failed functions}, and adjusted
  * {@link IMcpLlmApplication.options options} during the `IMcpLlmApplication`
  * construction.
  *
- * About each function of MCP server, there can be {@link errors} during
- * the composition, if the target {@link model} does not support the
- * function's {@link IMcpLlmFunction.parameters} type. For example,
- * Google Gemini model does not support union type, so that the function
- * containing the union type would be placed into the {@link errors} list
- * instead of {@link functions}.
+ * About each function of MCP server, there can be {@link errors} during the
+ * composition, if the target {@link model} does not support the function's
+ * {@link IMcpLlmFunction.parameters} type. For example, Google Gemini model does
+ * not support union type, so that the function containing the union type would
+ * be placed into the {@link errors} list instead of {@link functions}.
  *
- * Also, each function has its own {@link IMcpLlmFunction.validate}
- * function for correcting AI agent's mistakes, and this is the reason why
- * `@samchon/openapi` recommends not to use the
+ * Also, each function has its own {@link IMcpLlmFunction.validate} function for
+ * correcting AI agent's mistakes, and this is the reason why `@samchon/openapi`
+ * recommends not to use the
  * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
  * property of LLM API directly, but to use the function calling feature
  * instead.
@@ -29,9 +28,7 @@ import { IMcpLlmFunction } from "./IMcpLlmFunction";
  * @author Byeongjin Oh - https://github.com/sunrabbit123
  */
 export interface IMcpLlmApplication<Model extends ILlmSchema.Model> {
-  /**
-   * Model of the target LLM.
-   */
+  /** Model of the target LLM. */
   model: Model;
 
   /**
@@ -41,20 +38,14 @@ export interface IMcpLlmApplication<Model extends ILlmSchema.Model> {
    */
   functions: IMcpLlmFunction<Model>[];
 
-  /**
-   * List of errors occurred during the composition.
-   */
+  /** List of errors occurred during the composition. */
   errors: IMcpLlmApplication.IError[];
 
-  /**
-   * Configuration for the application.
-   */
+  /** Configuration for the application. */
   options: IMcpLlmApplication.IOptions<Model>;
 }
 export namespace IMcpLlmApplication {
-  /**
-   * Options for the HTTP LLM application schema composition.
-   */
+  /** Options for the HTTP LLM application schema composition. */
   export type IOptions<Model extends ILlmSchema.Model> =
     ILlmSchema.ModelConfig[Model] & {
       /**
@@ -70,23 +61,15 @@ export namespace IMcpLlmApplication {
       maxLength?: number;
     };
 
-  /**
-   * Error occurred in the composition.
-   */
+  /** Error occurred in the composition. */
   export interface IError {
-    /**
-     * Name of the failed function.
-     */
+    /** Name of the failed function. */
     name: string;
 
-    /**
-     * Description of the failed function.
-     */
+    /** Description of the failed function. */
     description?: string | undefined;
 
-    /**
-     * Parameters of the function.
-     */
+    /** Parameters of the function. */
     parameters: object;
 
     /**

@@ -5,9 +5,7 @@ import { AccessorUtil } from "../AccessorUtil";
 import { MapUtil } from "../MapUtil";
 import { JsonDescriptionUtil } from "./JsonDescriptionUtil";
 
-/**
- * @internal
- */
+/** @internal */
 export namespace OpenApiTypeCheckerBase {
   /* -----------------------------------------------------------
     TYPE CHECKERS

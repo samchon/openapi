@@ -41,9 +41,7 @@ export namespace LlmSchemaComposer {
   export const invert = <Model extends ILlmSchema.Model>(model: Model) =>
     INVERTS[model];
 
-  /**
-   * @internal
-   */
+  /** @internal */
   export const isDefs = <Model extends ILlmSchema.Model>(
     model: Model,
   ): boolean => IS_DEFS[model]();

@@ -13,9 +13,7 @@ import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3_1Composer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = true;
 
   /* -----------------------------------------------------------

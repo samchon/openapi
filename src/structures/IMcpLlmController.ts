@@ -4,15 +4,15 @@ import { IMcpLlmApplication } from "./IMcpLlmApplication";
 /**
  * Controller of MCP function calling.
  *
- * `IMcpLlmController` is a controller of MCP function calling,
- * containing not only the {@link IMcpLlmApplication application} of
+ * `IMcpLlmController` is a controller of MCP function calling, containing not
+ * only the {@link IMcpLlmApplication application} of
  * {@link IMcpLlmFunction function calling schemas}, but also
- * {@link name identifier name} of the application and
- * {@link execute executor} of MCP functions.
+ * {@link name identifier name} of the application and {@link execute executor} of
+ * MCP functions.
  *
- * Here is an example of using `IMcpLlmController` type for AI agent
- * development of performing AI function calling to e-commerce API
- * functions through `@agentica`.
+ * Here is an example of using `IMcpLlmController` type for AI agent development
+ * of performing AI function calling to e-commerce API functions through
+ * `@agentica`.
  *
  * ```typescript
  * import { Agentica, assertMcpController } from "@wrtnlabs/agentica";
@@ -49,31 +49,25 @@ import { IMcpLlmApplication } from "./IMcpLlmApplication";
  * await agent.conversate("What can you do?");
  * ```
  *
- * For reference, this `IMcpLlmController` type is designed for
- * MCP servers. If you want to make a controller of another
- * {@link protocol} like HTTP or TypeScript, use below types instead:
+ * For reference, this `IMcpLlmController` type is designed for MCP servers. If
+ * you want to make a controller of another {@link protocol} like HTTP or
+ * TypeScript, use below types instead:
  *
  * - {@link IHttpLlmController} for HTTP
  * - {@link ILlmController} for TypeScript
  *
- * @reference https://wrtnlabs.io/agentica/docs/core/controller/mcp/
  * @author Jeongho Nam - https://github.com/samchon
  * @author Byeongjin Oh - https://github.com/sunrabbit123
+ * @reference https://wrtnlabs.io/agentica/docs/core/controller/mcp/
  */
 export interface IMcpLlmController<Model extends ILlmSchema.Model> {
-  /**
-   * Protocol discriminator.
-   */
+  /** Protocol discriminator. */
   protocol: "mcp";
 
-  /**
-   * Identifier name of the controller.
-   */
+  /** Identifier name of the controller. */
   name: string;
 
-  /**
-   * Application schema of function calling.
-   */
+  /** Application schema of function calling. */
   application: IMcpLlmApplication<Model>;
 
   /**

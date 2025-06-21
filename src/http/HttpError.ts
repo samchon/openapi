@@ -1,14 +1,13 @@
 /**
  * HTTP Error.
  *
- * `HttpError` is a type of error class who've been thrown by the remote HTTP server.
+ * `HttpError` is a type of error class who've been thrown by the remote HTTP
+ * server.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
 export class HttpError extends Error {
-  /**
-   * @internal
-   */
+  /** @internal */
   private body_: any = NOT_YET;
 
   /**
@@ -70,9 +69,7 @@ export class HttpError extends Error {
   }
 }
 export namespace HttpError {
-  /**
-   * Returned type of {@link HttpError.toJSON} method.
-   */
+  /** Returned type of {@link HttpError.toJSON} method. */
   export interface IProps<T> {
     method: "GET" | "DELETE" | "POST" | "PUT" | "PATCH" | "HEAD";
     path: string;

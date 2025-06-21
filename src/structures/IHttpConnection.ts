@@ -3,44 +3,37 @@
 /**
  * Connection information.
  *
- * `IConnection` is an interface ttype who represents connection information of the
- * remote HTTP server. You can target the remote HTTP server by wring the
- * {@link IHttpConnection.host} variable down. Also, you can configure special header values
- * by specializing the {@link IHttpConnection.headers} variable.
+ * `IConnection` is an interface ttype who represents connection information of
+ * the remote HTTP server. You can target the remote HTTP server by wring the
+ * {@link IHttpConnection.host} variable down. Also, you can configure special
+ * header values by specializing the {@link IHttpConnection.headers} variable.
  *
- * If the remote HTTP server encrypts or decrypts its body data through the AES-128/256
- * algorithm, specify the {@link IHttpConnection.encryption} with {@link IEncryptionPassword}
- * or {@link IEncryptionPassword.Closure} variable.
+ * If the remote HTTP server encrypts or decrypts its body data through the
+ * AES-128/256 algorithm, specify the {@link IHttpConnection.encryption} with
+ * {@link IEncryptionPassword} or {@link IEncryptionPassword.Closure} variable.
  *
  * @author Jenogho Nam - https://github.com/samchon
  * @author Seungjun We - https://github.com/SeungjunWe
  */
 export interface IHttpConnection {
-  /**
-   * Host address of the remote HTTP server.
-   */
+  /** Host address of the remote HTTP server. */
   host: string;
 
-  /**
-   * Header values delivered to the remote HTTP server.
-   */
+  /** Header values delivered to the remote HTTP server. */
   headers?: Record<string, IHttpConnection.HeaderValue>;
 
-  /**
-   * Additional options for the `fetch` function.
-   */
+  /** Additional options for the `fetch` function. */
   options?: IHttpConnection.IOptions;
 
   /**
    * Custom fetch function.
    *
-   * If you want to use custom `fetch` function instead of built-in,
-   * assign your custom `fetch` function into this property.
+   * If you want to use custom `fetch` function instead of built-in, assign your
+   * custom `fetch` function into this property.
    *
-   * For reference, the `fetch` function has started to be supported
-   * since version 20 of NodeJS. Therefore, if you are using NodeJS
-   * version 19 or lower, you have to assign the `node-fetch` module
-   * into this property.
+   * For reference, the `fetch` function has started to be supported since
+   * version 20 of NodeJS. Therefore, if you are using NodeJS version 19 or
+   * lower, you have to assign the `node-fetch` module into this property.
    */
   fetch?: typeof fetch;
 }
@@ -48,12 +41,12 @@ export namespace IHttpConnection {
   /**
    * Additional options for the `fetch` function.
    *
-   * Almost same with {@link RequestInit} type of the {@link fetch} function,
-   * but `body`, `headers` and `method` properties are omitted.
+   * Almost same with {@link RequestInit} type of the {@link fetch} function, but
+   * `body`, `headers` and `method` properties are omitted.
    *
-   * The reason why defining duplicated definition of {@link RequestInit}
-   * is for legacy NodeJS environments, which does not have the {@link fetch}
-   * function type.
+   * The reason why defining duplicated definition of {@link RequestInit} is for
+   * legacy NodeJS environments, which does not have the {@link fetch} function
+   * type.
    */
   export interface IOptions {
     /**
@@ -82,9 +75,7 @@ export namespace IHttpConnection {
      */
     integrity?: string;
 
-    /**
-     * A boolean to set request's keepalive.
-     */
+    /** A boolean to set request's keepalive. */
     keepalive?: boolean;
 
     /**
@@ -96,23 +87,21 @@ export namespace IHttpConnection {
     mode?: "cors" | "navigate" | "no-cors" | "same-origin";
 
     /**
-     * A string indicating whether request follows redirects, results in
-     * an error upon encountering a redirect, or returns the redirect
-     * (in an opaque fashion).
+     * A string indicating whether request follows redirects, results in an
+     * error upon encountering a redirect, or returns the redirect (in an opaque
+     * fashion).
      *
      * Sets request's redirect.
      */
     redirect?: "error" | "follow" | "manual";
 
     /**
-     * A string whose value is a same-origin URL, "about:client", or the
-     * empty string, to set request's referrer.
+     * A string whose value is a same-origin URL, "about:client", or the empty
+     * string, to set request's referrer.
      */
     referrer?: string;
 
-    /**
-     * A referrer policy to set request's referrerPolicy.
-     */
+    /** A referrer policy to set request's referrerPolicy. */
     referrerPolicy?:
       | ""
       | "no-referrer"
@@ -124,9 +113,7 @@ export namespace IHttpConnection {
       | "strict-origin-when-cross-origin"
       | "unsafe-url";
 
-    /**
-     * An AbortSignal to set request's signal.
-     */
+    /** An AbortSignal to set request's signal. */
     signal?: AbortSignal | null;
   }
 

@@ -123,7 +123,8 @@ export namespace ChatGptTypeChecker {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   * Visit every nested schemas of the target, and apply the `props.closure`
+   * function.
    *
    * Here is the list of occurring nested visitings:
    *

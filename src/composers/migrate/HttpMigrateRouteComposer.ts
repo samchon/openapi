@@ -337,6 +337,7 @@ export namespace HttpMigrateRouteComposer {
       .map((s) => s.trim())
       .join("\n");
 
+    add("@param connection");
     for (const p of props.parameters ?? []) {
       const param = p.parameter();
       if (param.description || param.title) {

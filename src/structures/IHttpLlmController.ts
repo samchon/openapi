@@ -7,15 +7,15 @@ import { ILlmSchema } from "./ILlmSchema";
 /**
  * Controller of HTTP LLM function calling.
  *
- * `IHttpLlmController` is a controller of HTTP LLM function calling,
- * containing not only the {@link IHttpLlmApplication application} of
+ * `IHttpLlmController` is a controller of HTTP LLM function calling, containing
+ * not only the {@link IHttpLlmApplication application} of
  * {@link IHttpLlmFunction function calling schemas}, but also
- * {@link name identifier name} of the application and
- * {@link execute executor} of its HTTP functions.
+ * {@link name identifier name} of the application and {@link execute executor} of
+ * its HTTP functions.
  *
  * Here is an example of using `IHttpLlmController` type for AI agent
- * development of performing AI function calling to e-commerce API
- * functions through `@agentica`.
+ * development of performing AI function calling to e-commerce API functions
+ * through `@agentica`.
  *
  * ```typescript
  * import { Agentica } from "@agentica/core";
@@ -49,31 +49,25 @@ import { ILlmSchema } from "./ILlmSchema";
  * await agentica.conversate("I wanna buy a new phone.");
  * ```
  *
- * For reference, this `IHttpLlmController` type is designed for
- * HTTP API servers. If you want to make a controller of another
- * {@link protocol} like MCP or TypeScript, use below types instead:
+ * For reference, this `IHttpLlmController` type is designed for HTTP API
+ * servers. If you want to make a controller of another {@link protocol} like MCP
+ * or TypeScript, use below types instead:
  *
  * - {@link IMcpLlmController} for MCP
  * - {@link ILlmController} for TypeScript
  *
+ * @author Jeongho Nam - https://github.com/samchon
  * @template Model Type of the LLM model
  * @reference https://wrtnlabs.io/agentica/docs/core/controller/swagger/
- * @author Jeongho Nam - https://github.com/samchon
  */
 export interface IHttpLlmController<Model extends ILlmSchema.Model> {
-  /**
-   * Protocol discriminator.
-   */
+  /** Protocol discriminator. */
   protocol: "http";
 
-  /**
-   * Identifier name of the controller.
-   */
+  /** Identifier name of the controller. */
   name: string;
 
-  /**
-   * Application schema of function calling.
-   */
+  /** Application schema of function calling. */
   application: IHttpLlmApplication<Model>;
 
   /**
@@ -86,8 +80,8 @@ export interface IHttpLlmController<Model extends ILlmSchema.Model> {
   /**
    * Executor of the API function.
    *
-   * Default executor is {@link HttpLlm.execute} function, and you can
-   * override it with your own function.
+   * Default executor is {@link HttpLlm.execute} function, and you can override
+   * it with your own function.
    *
    * @param props Properties of the API function call
    * @returns HTTP response of the API function call
@@ -95,19 +89,13 @@ export interface IHttpLlmController<Model extends ILlmSchema.Model> {
   execute?:
     | undefined
     | ((props: {
-        /**
-         * Connection to the server.
-         */
+        /** Connection to the server. */
         connection: IHttpConnection;
 
-        /**
-         * Application schema.
-         */
+        /** Application schema. */
         application: IHttpLlmApplication<Model>;
 
-        /**
-         * Function schema.
-         */
+        /** Function schema. */
         function: IHttpLlmFunction<Model>;
 
         /**
@@ -116,9 +104,9 @@ export interface IHttpLlmController<Model extends ILlmSchema.Model> {
          * It is an object of key-value pairs of the API function's parameters.
          * The property keys are composed by below rules:
          *
-         * - parameter names
-         * - query parameter as an object type if exists
-         * - body parameter if exists
+         * - Parameter names
+         * - Query parameter as an object type if exists
+         * - Body parameter if exists
          */
         arguments: object;
       }) => Promise<IHttpResponse>);
