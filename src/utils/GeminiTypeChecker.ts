@@ -14,7 +14,8 @@ export namespace GeminiTypeChecker {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   * Visit every nested schemas of the target, and apply the `props.closure`
+   * function.
    *
    * Here is the list of occurring nested visitings:
    *
@@ -72,9 +73,7 @@ export namespace GeminiTypeChecker {
     return false;
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverBoolean = (
     x: IGeminiSchema.IBoolean,
     y: IGeminiSchema.IBoolean,
@@ -82,9 +81,7 @@ export namespace GeminiTypeChecker {
     x.enum === undefined ||
     (y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v)));
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverInteger = (
     x: IGeminiSchema.IInteger,
     y: IGeminiSchema.IInteger,
@@ -94,9 +91,7 @@ export namespace GeminiTypeChecker {
     return x.type === y.type;
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverNumber = (
     x: IGeminiSchema.INumber,
     y: IGeminiSchema.INumber | IGeminiSchema.IInteger,
@@ -106,9 +101,7 @@ export namespace GeminiTypeChecker {
     return x.type === y.type;
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const covertString = (
     x: IGeminiSchema.IString,
     y: IGeminiSchema.IString,
@@ -118,17 +111,13 @@ export namespace GeminiTypeChecker {
     return x.type === y.type;
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverArray = (
     x: IGeminiSchema.IArray,
     y: IGeminiSchema.IArray,
   ): boolean => covers(x.items, y.items);
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverObject = (
     x: IGeminiSchema.IObject,
     y: IGeminiSchema.IObject,

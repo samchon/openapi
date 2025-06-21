@@ -12,9 +12,7 @@ import { LlmParametersFinder } from "./LlmParametersComposer";
 import { LlmSchemaV3Composer } from "./LlmSchemaV3Composer";
 
 export namespace GeminiSchemaComposer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = false;
 
   export const parameters = (props: {

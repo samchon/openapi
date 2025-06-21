@@ -172,16 +172,17 @@ export namespace OpenApiTypeChecker {
    * Escape from the {@link OpenApi.IJsonSchema.IReference} type.
    *
    * Escape from the {@link OpenApi.IJsonSchema.IReference} type, replacing the
-   * every references to the actual schemas. If the escape is successful, the returned
-   * schema never contains any {@link OpenApi.IJsonSchema.IReference} type in its
-   * structure.
+   * every references to the actual schemas. If the escape is successful, the
+   * returned schema never contains any {@link OpenApi.IJsonSchema.IReference}
+   * type in its structure.
    *
-   * If the schema has a recursive reference, the recursive reference would be repeated
-   * as much as the `props.recursive` depth. If you've configured the `props.recursive`
-   * as `false` or `0`, it would be failed and return an {@link IOpenApiSchemaError}.
-   * Also, if there's a {@link OpenApi.IJsonSchema.IReference} type which cannot find
-   * the matched type in the {@link OpenApi.IComponents.schemas}, it would also be failed
-   * and return an {@link IOpenApiSchemaError} either.
+   * If the schema has a recursive reference, the recursive reference would be
+   * repeated as much as the `props.recursive` depth. If you've configured the
+   * `props.recursive` as `false` or `0`, it would be failed and return an
+   * {@link IOpenApiSchemaError}. Also, if there's a
+   * {@link OpenApi.IJsonSchema.IReference} type which cannot find the matched
+   * type in the {@link OpenApi.IComponents.schemas}, it would also be failed and
+   * return an {@link IOpenApiSchemaError} either.
    *
    * @param props Properties for escaping
    * @returns Escaped schema, or error with reason
@@ -202,14 +203,15 @@ export namespace OpenApiTypeChecker {
   /**
    * Unreference the schema.
    *
-   * Unreference the schema, replacing the {@link OpenApi.IJsonSchema.IReference} type
-   * to the actual schema. Different with {@link escape} is, the `unreference` function
-   * does not resolve every references in the schema, but resolve only one time.
+   * Unreference the schema, replacing the {@link OpenApi.IJsonSchema.IReference}
+   * type to the actual schema. Different with {@link escape} is, the
+   * `unreference` function does not resolve every references in the schema, but
+   * resolve only one time.
    *
    * If there's a {@link OpenApi.IJsonSchema.IReference} type which cannot find
-   * the matched type in the {@link OpenApi.IComponents.schemas}, and you've called this
-   * `unreference()` function with the reference, it would also be failed and return an
-   * {@link IOpenApiSchemaError} value.
+   * the matched type in the {@link OpenApi.IComponents.schemas}, and you've
+   * called this `unreference()` function with the reference, it would also be
+   * failed and return an {@link IOpenApiSchemaError} value.
    *
    * @param props Properties of unreference
    * @returns Unreferenced schema
@@ -229,7 +231,8 @@ export namespace OpenApiTypeChecker {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   * Visit every nested schemas of the target, and apply the `props.closure`
+   * function.
    *
    * Here is the list of occurring nested visitings:
    *

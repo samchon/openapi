@@ -6,9 +6,7 @@ import { IJsonSchemaAttribute } from "./structures/IJsonSchemaAttribute";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace OpenApiV3_1 {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const is = (input: any): input is IDocument =>
     typeof input === "object" &&
     input !== null &&

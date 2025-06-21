@@ -4,12 +4,12 @@ import { OpenApi } from "../OpenApi";
  * Route information for migration.
  *
  * The `IHttpMigrateRoute` is a structure representing a route information for
- * OpenAPI generator libraries, which composes an RPC (Remote Procedure Call) function
- * from the {@link OpenApi.IOperation OpenAPI operation}.
+ * OpenAPI generator libraries, which composes an RPC (Remote Procedure Call)
+ * function from the {@link OpenApi.IOperation OpenAPI operation}.
  *
- * As the `IHttpMigrateRoute` has a lot of special stories, when you're developing
- * OpenAPI generator library, please read its description carefully including
- * the description of its properties.
+ * As the `IHttpMigrateRoute` has a lot of special stories, when you're
+ * developing OpenAPI generator library, please read its description carefully
+ * including the description of its properties.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
@@ -17,15 +17,13 @@ export interface IHttpMigrateRoute {
   /**
    * Method of the route.
    *
-   * If the {@link OpenApi.IOperation.method} is not one of below type
-   * values, the operation would be ignored in the migration process for
-   * the RPC (Remote Procedure Call) function.
+   * If the {@link OpenApi.IOperation.method} is not one of below type values,
+   * the operation would be ignored in the migration process for the RPC (Remote
+   * Procedure Call) function.
    */
   method: "head" | "get" | "post" | "put" | "patch" | "delete";
 
-  /**
-   * Original path from the OpenAPI document.
-   */
+  /** Original path from the OpenAPI document. */
   path: string;
 
   /**
@@ -50,22 +48,26 @@ export interface IHttpMigrateRoute {
    * symbols represented by `:param` or `{param}` cannot be a part of the
    * namespace.
    *
-   * Instead, they would be a part of the function name. The function
-   * name is composed with the {@link method HTTP method} and parametric symbols
-   * like `getByParam` or `postByParam`. If there are multiple path parameters,
-   * they would be concatenated by `And` like `getByParam1AndParam2`.
+   * Instead, they would be a part of the function name. The function name is
+   * composed with the {@link method HTTP method} and parametric symbols like
+   * `getByParam` or `postByParam`. If there are multiple path parameters, they
+   * would be concatenated by `And` like `getByParam1AndParam2`.
    *
    * For refefence, if the {@link operation}'s {@link method} is `delete`, the
-   * function name would be replaced to `erase` instead of `delete`. It is
-   * the reason why the `delete` is a reserved keyword in many programming
+   * function name would be replaced to `erase` instead of `delete`. It is the
+   * reason why the `delete` is a reserved keyword in many programming
    * languages.
    *
    * - Example 1
-   *   - path: `POST /shopping/sellers/sales`
-   *   - accessor: `shopping.sellers.sales.post`
+   *
+   *   - Path: `POST /shopping/sellers/sales`
+   *   - Accessor: `shopping.sellers.sales.post`
    * - Example 2
-   *   - endpoint: `GET /shoppings/sellers/sales/:saleId/reviews/:reviewId/comments/:id
-   *   - accessor: `shoppings.sellers.sales.reviews.getBySaleIdAndReviewIdAndCommentId`
+   *
+   *   - Endpoint: `GET
+   *       /shoppings/sellers/sales/:saleId/reviews/:reviewId/comments/:id
+   *   - Accessor:
+   *       `shoppings.sellers.sales.reviews.getBySaleIdAndReviewIdAndCommentId`
    */
   accessor: string[];
 
@@ -79,16 +81,17 @@ export interface IHttpMigrateRoute {
   /**
    * Metadata of headers.
    *
-   * The `headers` property is a metadata of HTTP request headers for RPC function,
-   * including the parameter variable name and schema.
+   * The `headers` property is a metadata of HTTP request headers for RPC
+   * function, including the parameter variable name and schema.
    *
-   * Also, its {@link IHttpMigrateRoute.IHeaders.schema} is always object or reference
-   * to object. Even though the original {@link OpenApi.IOperation OpenAPI operation}'s
-   * headers are separated to atomic typed properties, the `headers` property forcibly
-   * combines them into a single object type.
+   * Also, its {@link IHttpMigrateRoute.IHeaders.schema} is always object or
+   * reference to object. Even though the original
+   * {@link OpenApi.IOperation OpenAPI operation}'s headers are separated to
+   * atomic typed properties, the `headers` property forcibly combines them into
+   * a single object type.
    *
-   * For reference, if the `headers` property has been converted to an object type
-   * forcibly, its property {@link IHttpMigrateRoute.IHeaders.name name} and
+   * For reference, if the `headers` property has been converted to an object
+   * type forcibly, its property {@link IHttpMigrateRoute.IHeaders.name name} and
    * {@link IHttpMigrateRoute.IHeaders.key key} are always "headers".
    */
   headers: IHttpMigrateRoute.IHeaders | null;
@@ -96,13 +99,14 @@ export interface IHttpMigrateRoute {
   /**
    * Metadata of query values.
    *
-   * The `query` property is a metadata of HTTP request query values for RPC function,
-   * including the parameter variable name and schema.
+   * The `query` property is a metadata of HTTP request query values for RPC
+   * function, including the parameter variable name and schema.
    *
-   * Also, its {@link IHttpMigrateRoute.IQuery.schema} is always object or reference
-   * to object. Even though the original {@link OpenApi.IOperation OpenAPI operation}'s
-   * query parameters are separated to atomic typed properties, the `query` property
-   * forcibly combines them into a single object type.
+   * Also, its {@link IHttpMigrateRoute.IQuery.schema} is always object or
+   * reference to object. Even though the original
+   * {@link OpenApi.IOperation OpenAPI operation}'s query parameters are
+   * separated to atomic typed properties, the `query` property forcibly
+   * combines them into a single object type.
    *
    * For reference, if the `query` property has been converted to an object type
    * forcibly, its property {@link IHttpMigrateRoute.IQuery.name name} and
@@ -124,11 +128,13 @@ export interface IHttpMigrateRoute {
   /**
    * Metadata of response body for success case.
    *
-   * The `success` property is a metadata of HTTP response body for RPC function,
-   * including content type, and schema when status code is `200` or `201`.
+   * The `success` property is a metadata of HTTP response body for RPC
+   * function, including content type, and schema when status code is `200` or
+   * `201`.
    *
    * If the `success` property is `null`, it means the operation does not have
-   * the response body data. In other words, the RPC function would return `void`.
+   * the response body data. In other words, the RPC function would return
+   * `void`.
    */
   success: IHttpMigrateRoute.ISuccess | null;
 
@@ -148,9 +154,9 @@ export interface IHttpMigrateRoute {
   /**
    * Description comment for the route function.
    *
-   * The `comment` is a function returning description comment for the
-   * RPC function of OpenAPI generated. The comment is composed with the
-   * following rules:
+   * The `comment` is a function returning description comment for the RPC
+   * function of OpenAPI generated. The comment is composed with the following
+   * rules:
    *
    * 1. Starts from the {@link OpenApi.IOperation.summary} paragraph.
    * 2. The next paragraphs are filled with {@link OpenApi.IOperation.description}.
@@ -170,23 +176,15 @@ export interface IHttpMigrateRoute {
   operation: () => OpenApi.IOperation;
 }
 export namespace IHttpMigrateRoute {
-  /**
-   * Metadata of path parameter.
-   */
+  /** Metadata of path parameter. */
   export interface IParameter {
-    /**
-     * Name of the path parameter.
-     */
+    /** Name of the path parameter. */
     name: string;
 
-    /**
-     * Key of the path parameter.
-     */
+    /** Key of the path parameter. */
     key: string;
 
-    /**
-     * Metadata of path parameter data type.
-     */
+    /** Metadata of path parameter data type. */
     schema: OpenApi.IJsonSchema;
 
     /**
@@ -198,23 +196,15 @@ export namespace IHttpMigrateRoute {
     parameter: () => OpenApi.IOperation.IParameter;
   }
 
-  /**
-   * Metadata of headers.
-   */
+  /** Metadata of headers. */
   export interface IHeaders {
-    /**
-     * Name of the headers parameter.
-     */
+    /** Name of the headers parameter. */
     name: string;
 
-    /**
-     * Key of the headers parameter.
-     */
+    /** Key of the headers parameter. */
     key: string;
 
-    /**
-     * Metadata of headers data type.
-     */
+    /** Metadata of headers data type. */
     schema: OpenApi.IJsonSchema;
     title: () => string | undefined;
     description: () => string | undefined;
@@ -222,9 +212,7 @@ export namespace IHttpMigrateRoute {
     examples: () => Record<string, any> | undefined;
   }
 
-  /**
-   * Metadata of query values.
-   */
+  /** Metadata of query values. */
   export interface IQuery {
     name: string;
     key: string;
@@ -235,77 +223,49 @@ export namespace IHttpMigrateRoute {
     examples: () => Record<string, any> | undefined;
   }
 
-  /**
-   * Metadata of request body.
-   */
+  /** Metadata of request body. */
   export interface IBody {
-    /**
-     * Name of the body parameter.
-     */
+    /** Name of the body parameter. */
     name: string;
 
-    /**
-     * Key of the body parameter.
-     */
+    /** Key of the body parameter. */
     key: string;
 
-    /**
-     * Content type of the body.
-     */
+    /** Content type of the body. */
     type:
       | "text/plain"
       | "application/json"
       | "application/x-www-form-urlencoded"
       | "multipart/form-data";
 
-    /**
-     * Metadata of response body data type.
-     */
+    /** Metadata of response body data type. */
     schema: OpenApi.IJsonSchema;
 
-    /**
-     * Description comment for the request/response body.
-     */
+    /** Description comment for the request/response body. */
     description: () => string | undefined;
 
-    /**
-     * Media type of the request/response body.
-     */
+    /** Media type of the request/response body. */
     media: () => OpenApi.IOperation.IMediaType;
 
-    /**
-     * Whether the body is encrypted or not.
-     */
+    /** Whether the body is encrypted or not. */
     "x-nestia-encrypted"?: boolean;
   }
 
-  /**
-   * Metadata of response body.
-   */
+  /** Metadata of response body. */
   export interface ISuccess extends IBody {
-    /**
-     * Status code of the response.
-     */
+    /** Status code of the response. */
     status: string;
   }
 
-  /**
-   * Metadata of response body for exceptional status cases.
-   */
+  /** Metadata of response body for exceptional status cases. */
   export interface IException {
-    /**
-     * Metadata of response body data type.
-     */
+    /** Metadata of response body data type. */
     schema: OpenApi.IJsonSchema;
 
-    /**
-     * Description comment for the exception.
-     */
+    /** Description comment for the exception. */
     response: () => OpenApi.IOperation.IResponse;
 
-    /**
-     * Media type of the response body.
-     */
+    /** Media type of the response body. */
     media: () => OpenApi.IOperation.IMediaType;
   }
 }

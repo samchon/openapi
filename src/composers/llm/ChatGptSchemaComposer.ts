@@ -14,9 +14,7 @@ import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ChatGptSchemaComposer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = true;
 
   /* -----------------------------------------------------------
