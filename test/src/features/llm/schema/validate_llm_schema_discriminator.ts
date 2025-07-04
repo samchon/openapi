@@ -10,8 +10,17 @@ import {
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaUnit } from "typia";
 
+export const test_claude_schema_discriminator = (): void =>
+  validate_llm_schema_discriminator("claude");
+
+export const test_deepseek_schema_discriminator = (): void =>
+  validate_llm_schema_discriminator("deepseek");
+
 export const test_llama_schema_discriminator = (): void =>
   validate_llm_schema_discriminator("llama");
+
+export const test_llama_v31_schema_discriminator = (): void =>
+  validate_llm_schema_discriminator("3.1");
 
 const validate_llm_schema_discriminator = (
   vendor: "claude" | "deepseek" | "llama" | "3.1",
@@ -32,7 +41,11 @@ const validate_llm_schema_discriminator = (
   TestValidator.predicate("discriminator")(
     () =>
       LlmTypeCheckerV3_1.isOneOf(result.value) &&
-      result.value.discriminator !== undefined,
+      result.value.discriminator !== undefined &&
+      result.value.discriminator.mapping !== undefined &&
+      Object.values(result.value.discriminator.mapping).every((k) =>
+        k.startsWith("#/$defs/"),
+      ),
   );
 
   const invert: OpenApi.IJsonSchema = LlmSchemaComposer.invert(vendor)({
@@ -42,7 +55,12 @@ const validate_llm_schema_discriminator = (
   });
   TestValidator.predicate("invert")(
     () =>
-      OpenApiTypeChecker.isOneOf(invert) && invert.discriminator !== undefined,
+      OpenApiTypeChecker.isOneOf(invert) &&
+      invert.discriminator !== undefined &&
+      invert.discriminator.mapping !== undefined &&
+      Object.values(invert.discriminator.mapping).every((k) =>
+        k.startsWith("#/components/schemas/"),
+      ),
   );
 };
 

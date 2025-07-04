@@ -601,9 +601,24 @@ export namespace ChatGptSchemaComposer {
           ? { ...union[0] }
           : {
               oneOf: union.map((u) => ({ ...u, nullable: undefined })),
-              discriminator: ChatGptTypeChecker.isAnyOf(props.schema)
-                ? props.schema["x-discriminator"]
-                : undefined,
+              discriminator:
+                ChatGptTypeChecker.isAnyOf(props.schema) &&
+                props.schema["x-discriminator"] !== undefined
+                  ? {
+                      property: props.schema["x-discriminator"],
+                      mapping:
+                        props.schema["x-discriminator"].mapping !== undefined
+                          ? Object.fromEntries(
+                              Object.entries(
+                                props.schema["x-discriminator"].mapping,
+                              ).map(([key, value]) => [
+                                key,
+                                `#/components/schemas/${value.split("/").at(-1)}`,
+                              ]),
+                            )
+                          : undefined,
+                    }
+                  : undefined,
             }),
     };
   };
