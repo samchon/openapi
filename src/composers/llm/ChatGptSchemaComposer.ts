@@ -218,6 +218,16 @@ export namespace ChatGptSchemaComposer {
           ? undefined
           : u.description,
       })),
+      "x-discriminator":
+        LlmTypeCheckerV3_1.isOneOf(props.schema) &&
+        props.schema.discriminator !== undefined &&
+        props.schema.oneOf.length === union.length &&
+        union.every(
+          (e) =>
+            ChatGptTypeChecker.isReference(e) || ChatGptTypeChecker.isNull(e),
+        )
+          ? props.schema.discriminator
+          : undefined,
     };
   };
 
@@ -589,7 +599,12 @@ export namespace ChatGptSchemaComposer {
         ? { type: undefined }
         : union.length === 1
           ? { ...union[0] }
-          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
+          : {
+              oneOf: union.map((u) => ({ ...u, nullable: undefined })),
+              discriminator: ChatGptTypeChecker.isAnyOf(props.schema)
+                ? props.schema["x-discriminator"]
+                : undefined,
+            }),
     };
   };
 }

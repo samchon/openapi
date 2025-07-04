@@ -326,6 +326,9 @@ export namespace LlmSchemaV3_1Composer {
       value: {
         ...attribute,
         oneOf: union.filter((u) => u !== null),
+        discriminator: OpenApiTypeChecker.isOneOf(props.schema)
+          ? props.schema.discriminator
+          : undefined,
       },
     };
   };
