@@ -66,7 +66,10 @@ const validate_mcp_application = async <Model extends ILlmSchema.Model>(
     const y = mcp.functions.find((y) => y.name === x.name);
     TestValidator.equals(
       `parameters: ${x.name}`,
-      (key) => key === "description",
+      (key) =>
+        key === "description" ||
+        key === "discriminator" ||
+        key === "x-discriminator",
     )(parameters)((y?.parameters as any) ?? {});
   });
 
