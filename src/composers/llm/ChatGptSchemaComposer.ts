@@ -598,7 +598,12 @@ export namespace ChatGptSchemaComposer {
         ? { type: undefined }
         : union.length === 1
           ? { ...union[0] }
-          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
+          : {
+              oneOf: union.map((u) => ({ ...u, nullable: undefined })),
+              discriminator: ChatGptTypeChecker.isAnyOf(props.schema)
+                ? props.schema["x-discriminator"]
+                : undefined,
+            }),
     };
   };
 }
