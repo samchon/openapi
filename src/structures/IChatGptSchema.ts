@@ -250,6 +250,26 @@ export namespace IChatGptSchema {
   export interface IAnyOf extends IJsonSchemaAttribute {
     /** List of the union types. */
     anyOf: Exclude<IChatGptSchema, IChatGptSchema.IAnyOf>[];
+
+    /** Discriminator info of the union type. */
+    "x-discriminator"?: IAnyOf.IDiscriminator;
+  }
+  export namespace IAnyOf {
+    /** Discriminator info of the union type. */
+    export interface IDiscriminator {
+      /** Property name for the discriminator. */
+      propertyName: string;
+
+      /**
+       * Mapping of the discriminator value to the schema name.
+       *
+       * This property is valid only for {@link IReference} typed
+       * {@link IAnyOf.oneof} elements. Therefore, `key` of `mapping` is the
+       * discriminator value, and `value` of `mapping` is the schema name like
+       * `#/components/schemas/SomeObject`.
+       */
+      mapping?: Record<string, string>;
+    }
   }
 
   /** Null type. */

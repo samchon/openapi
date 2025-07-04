@@ -218,6 +218,15 @@ export namespace ChatGptSchemaComposer {
           ? undefined
           : u.description,
       })),
+      "x-discriminator":
+        LlmTypeCheckerV3_1.isOneOf(props.schema) &&
+        props.schema.discriminator !== undefined &&
+        props.schema.oneOf.length === union.length &&
+        union.every((e) =>
+          ChatGptTypeChecker.isReference(e || ChatGptTypeChecker.isNull(e)),
+        )
+          ? props.schema.discriminator
+          : undefined,
     };
   };
 
