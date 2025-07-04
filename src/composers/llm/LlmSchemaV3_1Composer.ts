@@ -326,9 +326,31 @@ export namespace LlmSchemaV3_1Composer {
       value: {
         ...attribute,
         oneOf: union.filter((u) => u !== null),
-        discriminator: OpenApiTypeChecker.isOneOf(props.schema)
-          ? props.schema.discriminator
-          : undefined,
+        discriminator:
+          OpenApiTypeChecker.isOneOf(props.schema) &&
+          props.schema.discriminator !== undefined &&
+          union
+            .filter((u) => u !== null)
+            .every(
+              (e) =>
+                LlmTypeCheckerV3_1.isReference(e) ||
+                LlmTypeCheckerV3_1.isNull(e),
+            )
+            ? {
+                propertyName: props.schema.discriminator.propertyName,
+                mapping:
+                  props.schema.discriminator.mapping !== undefined
+                    ? Object.fromEntries(
+                        Object.entries(props.schema.discriminator.mapping).map(
+                          ([key, value]) => [
+                            key,
+                            `#/$defs/${value.split("/").at(-1)}`,
+                          ],
+                        ),
+                      )
+                    : undefined,
+              }
+            : undefined,
       },
     };
   };
@@ -645,6 +667,23 @@ export namespace LlmSchemaV3_1Composer {
       return {
         ...props.schema,
         oneOf: props.schema.oneOf.map(next),
+        discriminator:
+          props.schema.discriminator !== undefined
+            ? {
+                propertyName: props.schema.discriminator.propertyName,
+                mapping:
+                  props.schema.discriminator.mapping !== undefined
+                    ? Object.fromEntries(
+                        Object.entries(props.schema.discriminator.mapping).map(
+                          ([key, value]) => [
+                            key,
+                            `#/components/schemas/${value.split("/").at(-1)}`,
+                          ],
+                        ),
+                      )
+                    : undefined,
+              }
+            : undefined,
       };
     else if (
       LlmTypeCheckerV3_1.isInteger(props.schema) ||

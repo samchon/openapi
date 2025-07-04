@@ -26,7 +26,11 @@ export const test_chatgpt_schema_discriminator = (): void => {
   TestValidator.predicate("discriminator")(
     () =>
       ChatGptTypeChecker.isAnyOf(result.value) &&
-      result.value["x-discriminator"] !== undefined,
+      result.value["x-discriminator"] !== undefined &&
+      result.value["x-discriminator"].mapping !== undefined &&
+      Object.values(result.value["x-discriminator"].mapping).every((k) =>
+        k.startsWith("#/$defs/"),
+      ),
   );
 
   const invert: OpenApi.IJsonSchema = ChatGptSchemaComposer.invert({
@@ -36,7 +40,12 @@ export const test_chatgpt_schema_discriminator = (): void => {
   });
   TestValidator.predicate("invert")(
     () =>
-      OpenApiTypeChecker.isOneOf(invert) && invert.discriminator !== undefined,
+      OpenApiTypeChecker.isOneOf(invert) &&
+      invert.discriminator !== undefined &&
+      invert.discriminator.mapping !== undefined &&
+      Object.values(invert.discriminator.mapping).every((k) =>
+        k.startsWith("#/components/schemas/"),
+      ),
   );
 };
 
