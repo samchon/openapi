@@ -138,6 +138,6 @@ export namespace IValidation {
     expected: string;
 
     /** The actual value that caused the validation failure */
-    value: any;
+    value: unknown;
   }
 }
