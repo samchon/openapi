@@ -78,7 +78,7 @@ export namespace IClaudeSchema {
      * LLM model, and want to reduce the LLM token cost, you can configure this
      * property to `true`.
      *
-     * @default false
+     * @default true
      */
     reference: boolean;
   }

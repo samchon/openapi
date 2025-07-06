@@ -17,6 +17,11 @@ export namespace ChatGptSchemaComposer {
   /** @internal */
   export const IS_DEFS = true;
 
+  export const DEFAULT_CONFIG: IChatGptSchema.IConfig = {
+    reference: true,
+    strict: false,
+  };
+
   /* -----------------------------------------------------------
     CONVERTERS
   ----------------------------------------------------------- */

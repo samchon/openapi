@@ -9,6 +9,10 @@ export namespace ClaudeSchemaComposer {
   /** @internal */
   export const IS_DEFS = true;
 
+  export const DEFAULT_CONFIG: IClaudeSchema.IConfig = {
+    reference: true,
+  };
+
   export const parameters = (props: {
     config: IClaudeSchema.IConfig;
     components: OpenApi.IComponents;

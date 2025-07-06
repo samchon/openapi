@@ -52,7 +52,10 @@ const validate_llm_schema_enum_reference = <
   > = LlmSchemaComposer.schema(model)({
     components,
     schema,
-    config: LlmSchemaComposer.defaultConfig(model) as any,
+    config: {
+      ...LlmSchemaComposer.defaultConfig(model),
+      reference: false,
+    } as any,
     $defs: {},
   }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals(
