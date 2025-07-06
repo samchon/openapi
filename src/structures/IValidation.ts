@@ -102,42 +102,71 @@ export namespace IValidation {
    *
    * This error format is particularly valuable for AI function calling
    * scenarios, where LLMs need to understand exactly what went wrong to
-   * generate correct parameters. The combination of path, expected type, and
-   * actual value provides the AI with sufficient context to make accurate
-   * corrections, which is why ILlmFunction.validate() can achieve such high
-   * success rates in validation feedback loops.
+   * generate correct parameters. The combination of path, expected type name,
+   * actual value, and optional human-readable description provides the AI with
+   * comprehensive context to make accurate corrections, which is why
+   * ILlmFunction.validate() can achieve such high success rates in validation
+   * feedback loops.
    *
    * Real-world examples from AI function calling:
    *
    *     {
-   *       path: "input.member.age",
-   *       expected: "number & Format<'uint32'>",
+   *       path: "$input.member.age",
+   *       expected: "number",
+   *       value: "25"  // AI provided string instead of number
+   *     }
+   *
+   *     {
+   *       path: "$input.count",
+   *       expected: "number & Type<'uint32'>",
    *       value: 20.75  // AI provided float instead of uint32
    *     }
    *
    *     {
-   *       path: "input.categories",
+   *       path: "$input.categories",
    *       expected: "Array<string>",
    *       value: "technology"  // AI provided string instead of array
    *     }
    *
    *     {
-   *       path: "input.id",
+   *       path: "$input.id",
    *       expected: "string & Format<'uuid'>",
    *       value: "invalid-uuid-format"  // AI provided malformed UUID
    *     }
    */
   export interface IError {
     /**
-     * The path to the property that failed validation (e.g.,
-     * "input.member.age")
+     * The path to the property that failed validation
+     *
+     * Dot-notation path using $input prefix indicating the exact location of
+     * the validation failure within the input object structure. Examples
+     * include "$input.member.age", "$input.categories[0]",
+     * "$input.user.profile.email"
      */
     path: string;
 
-    /** Description of the expected type or format */
+    /**
+     * The expected type name or type expression
+     *
+     * Technical type specification that describes what type was expected at
+     * this path. This follows TypeScript-like syntax with embedded constraint
+     * information, such as "string", "number & Type<'uint32'>",
+     * "Array<string>", "string & Format<'uuid'> & MinLength<8>", etc.
+     */
     expected: string;
 
     /** The actual value that caused the validation failure */
     value: any;
+
+    /**
+     * Optional human-readable description of the validation error
+     *
+     * This field is rarely populated in standard typia validation and is
+     * primarily intended for specialized AI agent libraries or custom
+     * validation scenarios that require additional context beyond the technical
+     * type information. Most validation errors rely solely on the path,
+     * expected, and value fields for comprehensive error reporting.
+     */
+    description?: string;
   }
 }
