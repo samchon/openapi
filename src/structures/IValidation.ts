@@ -108,6 +108,12 @@ export namespace IValidation {
    * ILlmFunction.validate() can achieve such high success rates in validation
    * feedback loops.
    *
+   * The value field can contain any type of data, including `undefined` when
+   * dealing with missing required properties or null/undefined validation
+   * scenarios. This allows for precise error reporting in cases where the AI
+   * agent omits required fields or provides null/undefined values
+   * inappropriately.
+   *
    * Real-world examples from AI function calling:
    *
    *     {
@@ -133,6 +139,12 @@ export namespace IValidation {
    *       expected: "string & Format<'uuid'>",
    *       value: "invalid-uuid-format"  // AI provided malformed UUID
    *     }
+   *
+   *     {
+   *       path: "$input.user.name",
+   *       expected: "string",
+   *       value: undefined  // AI omitted required property
+   *     }
    */
   export interface IError {
     /**
@@ -155,8 +167,15 @@ export namespace IValidation {
      */
     expected: string;
 
-    /** The actual value that caused the validation failure */
-    value: any;
+    /**
+     * The actual value that caused the validation failure
+     *
+     * This field contains the actual value that was provided but failed
+     * validation. Note that this value can be `undefined` in cases where a
+     * required property is missing or when validating against undefined
+     * values.
+     */
+    value: unknown;
 
     /**
      * Optional human-readable description of the validation error

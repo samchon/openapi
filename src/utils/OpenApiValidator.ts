@@ -55,7 +55,6 @@ export namespace OpenApiValidator {
           path: error.path,
           expected: error.expected,
           value: error.value,
-          description: error.description,
         });
       return false;
     };
