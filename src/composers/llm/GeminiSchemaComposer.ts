@@ -15,6 +15,10 @@ export namespace GeminiSchemaComposer {
   /** @internal */
   export const IS_DEFS = false;
 
+  export const DEFAULT_CONFIG: IGeminiSchema.IConfig = {
+    recursive: 3,
+  };
+
   export const parameters = (props: {
     config: IGeminiSchema.IConfig;
     components: OpenApi.IComponents;

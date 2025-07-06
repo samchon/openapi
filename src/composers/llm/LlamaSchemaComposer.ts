@@ -9,6 +9,10 @@ export namespace LlamaSchemaComposer {
   /** @internal */
   export const IS_DEFS = true;
 
+  export const DEFAULT_CONFIG: ILlamaSchema.IConfig = {
+    reference: true,
+  };
+
   export const parameters = (props: {
     config: ILlamaSchema.IConfig;
     components: OpenApi.IComponents;

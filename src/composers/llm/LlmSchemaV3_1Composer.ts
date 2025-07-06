@@ -16,6 +16,11 @@ export namespace LlmSchemaV3_1Composer {
   /** @internal */
   export const IS_DEFS = true;
 
+  export const DEFAULT_CONFIG: ILlmSchemaV3_1.IConfig = {
+    reference: true,
+    constraint: true,
+  };
+
   /* -----------------------------------------------------------
     CONVERTERS
   ----------------------------------------------------------- */

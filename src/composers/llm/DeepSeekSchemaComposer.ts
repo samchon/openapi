@@ -9,6 +9,10 @@ export namespace DeepSeekSchemaComposer {
   /** @internal */
   export const IS_DEFS = true;
 
+  export const DEFAULT_CONFIG: IDeepSeekSchema.IConfig = {
+    reference: true,
+  };
+
   export const parameters = (props: {
     config: IDeepSeekSchema.IConfig;
     components: OpenApi.IComponents;

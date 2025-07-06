@@ -27,7 +27,10 @@ const validate_llm_schema_enum = <Model extends "chatgpt" | "gemini" | "3.0">(
   > = LlmSchemaComposer.schema(model)({
     components: collection.components,
     schema: collection.schemas[0],
-    config: LlmSchemaComposer.defaultConfig(model) as any,
+    config: {
+      ...LlmSchemaComposer.defaultConfig(model),
+      reference: false,
+    } as any,
     $defs: {},
   }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>;
   TestValidator.equals("success")(result.success);
