@@ -84,15 +84,9 @@ export namespace GeminiSchemaComposer {
       schema: result.value,
       closure: (v) => {
         if (v.title !== undefined) {
-          if (v.description === undefined) v.description = v.title;
-          else {
-            const title: string = v.title.endsWith(".")
-              ? v.title.substring(0, v.title.length - 1)
-              : v.title;
-            v.description = v.description.startsWith(title)
-              ? v.description
-              : `${title}.\n\n${v.description}`;
-          }
+          v.description = !!v.description?.length
+            ? `${v.description}\n\n@title ${v.title}`
+            : `@title ${v.title}`;
           delete v.title;
         }
         if (
