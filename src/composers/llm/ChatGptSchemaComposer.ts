@@ -243,6 +243,7 @@ export namespace ChatGptSchemaComposer {
     parameters: IChatGptSchema.IParameters;
     predicate: (schema: IChatGptSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"chatgpt"> => {
     const convention =
       props.convention ??
@@ -297,6 +298,7 @@ export namespace ChatGptSchemaComposer {
           $defs: output.llm.$defs,
         }),
         required: true,
+        equals: props.equals,
       });
     }
     return output;

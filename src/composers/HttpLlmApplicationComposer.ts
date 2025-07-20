@@ -244,6 +244,7 @@ export namespace HttpLlmComposer {
         components: props.components,
         schema: parameters,
         required: true,
+        equals: props.config.equals ?? false,
       }),
       route: () => props.route as any,
       operation: () => props.route.operation(),

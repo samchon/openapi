@@ -59,6 +59,9 @@ export namespace IMcpLlmApplication {
        * @default 64
        */
       maxLength?: number;
+
+      /** Whether to disallow superfluous properties or not. */
+      equals?: boolean;
     };
 
   /** Error occurred in the composition. */
