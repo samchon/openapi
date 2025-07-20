@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ArrayHierarchical = (): void =>
   _test_validate<ArrayHierarchical>({
-    collection: typia.json.schemas<[ArrayHierarchical]>(),
+    ...typia.json.schema<ArrayHierarchical>(),
     factory: ArrayHierarchical,
     name: "ArrayHierarchical",
   });

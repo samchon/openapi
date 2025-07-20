@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ArrayRecursiveUnionImplicit = (): void =>
   _test_validate<ArrayRecursiveUnionImplicit>({
-    collection: typia.json.schemas<[ArrayRecursiveUnionImplicit]>(),
+    ...typia.json.schema<ArrayRecursiveUnionImplicit>(),
     factory: ArrayRecursiveUnionImplicit,
     name: "ArrayRecursiveUnionImplicit",
   });

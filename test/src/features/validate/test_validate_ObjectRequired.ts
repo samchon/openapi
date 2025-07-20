@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectRequired = (): void =>
   _test_validate<ObjectRequired>({
-    collection: typia.json.schemas<[ObjectRequired]>(),
+    ...typia.json.schema<ObjectRequired>(),
     factory: ObjectRequired,
     name: "ObjectRequired",
   });

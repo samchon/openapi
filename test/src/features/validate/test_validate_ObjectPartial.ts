@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectPartial = (): void =>
   _test_validate<ObjectPartial>({
-    collection: typia.json.schemas<[ObjectPartial]>(),
+    ...typia.json.schema<ObjectPartial>(),
     factory: ObjectPartial,
     name: "ObjectPartial",
   });

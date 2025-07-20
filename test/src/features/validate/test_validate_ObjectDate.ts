@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectDate = (): void =>
   _test_validate<ObjectDate>({
-    collection: typia.json.schemas<[ObjectDate]>(),
+    ...typia.json.schema<ObjectDate>(),
     factory: ObjectDate,
     name: "ObjectDate",
   });

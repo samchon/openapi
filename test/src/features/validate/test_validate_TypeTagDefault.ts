@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_TypeTagDefault = (): void =>
   _test_validate<TypeTagDefault>({
-    collection: typia.json.schemas<[TypeTagDefault]>(),
+    ...typia.json.schema<TypeTagDefault>(),
     factory: TypeTagDefault,
     name: "TypeTagDefault",
   });

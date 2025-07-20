@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectUnionNonPredictable = (): void =>
   _test_validate<ObjectUnionNonPredictable>({
-    collection: typia.json.schemas<[ObjectUnionNonPredictable]>(),
+    ...typia.json.schema<ObjectUnionNonPredictable>(),
     factory: ObjectUnionNonPredictable,
     name: "ObjectUnionNonPredictable",
   });
