@@ -55,7 +55,7 @@ export namespace OpenApiObjectValidator {
   const validateEquals = (
     ctx: IOpenApiValidatorContext<OpenApi.IJsonSchema.IObject>,
   ): boolean => {
-    const regular: Set<String> = new Set(
+    const regular: Set<string> = new Set(
       Object.keys(ctx.schema.properties ?? {}),
     );
     return Object.entries(ctx.value as object)
