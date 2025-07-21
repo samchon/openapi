@@ -112,6 +112,7 @@ export namespace GeminiSchemaComposer {
         props as {
           predicate: (schema: ILlmSchemaV3) => boolean;
           parameters: ILlmSchemaV3.IParameters;
+          equals?: boolean;
         },
       );
     return separated as any as ILlmFunction.ISeparated<"gemini">;
