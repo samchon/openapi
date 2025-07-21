@@ -234,6 +234,7 @@ export namespace HttpLlmComposer {
             predicate: props.config.separate as any,
             parameters:
               llmParameters.value satisfies ILlmSchema.ModelParameters[Model] as any,
+            equals: props.config.equals ?? false,
           }) as ILlmFunction.ISeparated<Model>)
         : undefined,
       output: output?.value,
