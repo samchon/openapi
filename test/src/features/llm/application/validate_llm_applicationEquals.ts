@@ -45,13 +45,13 @@ const validate_llm_applicationEquals = <Model extends ILlmSchema.Model>(
   const result: IValidation<unknown> = func.validate({
     body: {
       value: 1,
-      superflous: "property",
+      superfluous: "property",
     },
   });
   TestValidator.predicate("result")(
     result.success === false &&
       result.errors.length === 1 &&
-      result.errors[0].path === "$input.body.superflous" &&
+      result.errors[0].path === "$input.body.superfluous" &&
       result.errors[0].expected === "undefined",
   );
 };
