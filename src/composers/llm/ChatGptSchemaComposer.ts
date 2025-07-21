@@ -463,6 +463,8 @@ export namespace ChatGptSchemaComposer {
       $defs: props.$defs,
       schema,
     });
+    if (llm !== null) Object.assign(props.$defs[llmKey], llm);
+    if (human !== null) Object.assign(props.$defs[humanKey], human);
 
     // ONLY ONE
     if (llm === null || human === null) {
