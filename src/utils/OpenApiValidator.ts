@@ -64,7 +64,7 @@ export namespace OpenApiValidator {
           info.description ??= [
             "The value at this path is `undefined`.",
             "",
-            `Please fill the \`${error.expected}\` typed value at the next time.`,
+            `Please fill the \`${error.expected}\` typed value next time.`,
           ].join("\n");
         array.push(info);
       }
