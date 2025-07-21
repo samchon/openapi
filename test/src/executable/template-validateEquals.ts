@@ -12,6 +12,12 @@ const main = async (): Promise<void> => {
 
   const structures: string[] = (await fs.promises.readdir(STRUCTURES))
     .filter((file) => file.endsWith(".ts"))
+    .filter(
+      (file) =>
+        fs
+          .readFileSync(`${STRUCTURES}/${file}`, "utf8")
+          .includes("export const ADDABLE = false") === false,
+    )
     .map((file) => file.substring(0, file.length - 3));
   for (const s of structures) {
     await fs.promises.writeFile(
