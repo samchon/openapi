@@ -73,7 +73,7 @@ export namespace OpenApiObjectValidator {
           description: [
             `The property \`${key}\` is not defined in the object type.`,
             "",
-            "Please remove the property at the next time.",
+            "Please remove the property next time.",
           ].join("\n"),
         });
       })
