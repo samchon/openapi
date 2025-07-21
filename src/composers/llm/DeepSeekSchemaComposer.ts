@@ -48,6 +48,7 @@ export namespace DeepSeekSchemaComposer {
     parameters: IDeepSeekSchema.IParameters;
     predicate: (schema: IDeepSeekSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"deepseek"> => {
     const separated: ILlmFunction.ISeparated<"3.1"> =
       LlmSchemaV3_1Composer.separateParameters(props);
