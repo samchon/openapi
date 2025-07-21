@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectLiteralType = (): void =>
   _test_validate<ObjectLiteralType>({
-    collection: typia.json.schemas<[ObjectLiteralType]>(),
+    ...typia.json.schema<ObjectLiteralType>(),
     factory: ObjectLiteralType,
     name: "ObjectLiteralType",
   });

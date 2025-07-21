@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_AtomicSimple = (): void =>
   _test_validate<AtomicSimple>({
-    collection: typia.json.schemas<[AtomicSimple]>(),
+    ...typia.json.schema<AtomicSimple>(),
     factory: AtomicSimple,
     name: "AtomicSimple",
   });

@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectUnionComposite = (): void =>
   _test_validate<ObjectUnionComposite>({
-    collection: typia.json.schemas<[ObjectUnionComposite]>(),
+    ...typia.json.schema<ObjectUnionComposite>(),
     factory: ObjectUnionComposite,
     name: "ObjectUnionComposite",
   });

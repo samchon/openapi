@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_DynamicSimple = (): void =>
   _test_validate<DynamicSimple>({
-    collection: typia.json.schemas<[DynamicSimple]>(),
+    ...typia.json.schema<DynamicSimple>(),
     factory: DynamicSimple,
     name: "DynamicSimple",
   });

@@ -134,6 +134,7 @@ export namespace McpLlm {
             components,
             schema,
             required: true,
+            equals: options.equals,
           }),
         });
       else

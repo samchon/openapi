@@ -13,5 +13,6 @@ export interface IOpenApiValidatorContext<Schema extends OpenApi.IJsonSchema> {
   ) => false;
   exceptionable: boolean;
   expected: string;
+  equals: boolean;
   required: boolean;
 }

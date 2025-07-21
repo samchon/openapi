@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectPropertyNullable = (): void =>
   _test_validate<ObjectPropertyNullable>({
-    collection: typia.json.schemas<[ObjectPropertyNullable]>(),
+    ...typia.json.schema<ObjectPropertyNullable>(),
     factory: ObjectPropertyNullable,
     name: "ObjectPropertyNullable",
   });

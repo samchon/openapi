@@ -174,6 +174,7 @@ export namespace LlmSchemaV3Composer {
   export const separateParameters = (props: {
     predicate: (schema: ILlmSchemaV3) => boolean;
     parameters: ILlmSchemaV3.IParameters;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"3.0"> => {
     const [llm, human] = separateObject({
       predicate: props.predicate,
@@ -192,6 +193,7 @@ export namespace LlmSchemaV3Composer {
             components: {},
             schema: invert({ schema: llm }),
             required: true,
+            equals: props.equals,
           })
         : undefined,
     };

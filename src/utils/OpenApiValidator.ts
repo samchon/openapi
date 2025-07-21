@@ -8,6 +8,7 @@ export namespace OpenApiValidator {
       components: OpenApi.IComponents;
       schema: OpenApi.IJsonSchema;
       required: boolean;
+      equals?: boolean;
     }) =>
     (value: unknown): IValidation<unknown> =>
       validate({ ...prop, value });
@@ -17,6 +18,7 @@ export namespace OpenApiValidator {
     schema: OpenApi.IJsonSchema;
     value: unknown;
     required: boolean;
+    equals?: boolean;
   }): IValidation<unknown> => {
     const errors: IValidation.IError[] = [];
     OpenApiStationValidator.validate({
@@ -24,6 +26,7 @@ export namespace OpenApiValidator {
       path: "$input",
       exceptionable: true,
       report: createReporter(errors),
+      equals: props.equals ?? false,
     });
     return errors.length === 0
       ? {

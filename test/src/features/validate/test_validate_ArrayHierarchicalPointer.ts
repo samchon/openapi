@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ArrayHierarchicalPointer = (): void =>
   _test_validate<ArrayHierarchicalPointer>({
-    collection: typia.json.schemas<[ArrayHierarchicalPointer]>(),
+    ...typia.json.schema<ArrayHierarchicalPointer>(),
     factory: ArrayHierarchicalPointer,
     name: "ArrayHierarchicalPointer",
   });

@@ -367,6 +367,7 @@ export namespace LlmSchemaV3_1Composer {
     parameters: ILlmSchemaV3_1.IParameters;
     predicate: (schema: ILlmSchemaV3_1) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"3.1"> => {
     const convention =
       props.convention ??
@@ -421,6 +422,7 @@ export namespace LlmSchemaV3_1Composer {
           $defs: output.llm.$defs,
         }),
         required: true,
+        equals: props.equals,
       });
     }
     return output;

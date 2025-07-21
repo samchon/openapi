@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ObjectInternal = (): void =>
   _test_validate<ObjectInternal>({
-    collection: typia.json.schemas<[ObjectInternal]>(),
+    ...typia.json.schema<ObjectInternal>(),
     factory: ObjectInternal,
     name: "ObjectInternal",
   });

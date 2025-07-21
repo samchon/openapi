@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ArrayUnion = (): void =>
   _test_validate<ArrayUnion>({
-    collection: typia.json.schemas<[ArrayUnion]>(),
+    ...typia.json.schema<ArrayUnion>(),
     factory: ArrayUnion,
     name: "ArrayUnion",
   });
