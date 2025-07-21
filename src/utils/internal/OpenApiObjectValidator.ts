@@ -70,6 +70,11 @@ export namespace OpenApiObjectValidator {
               : `[${JSON.stringify(key)}]`),
           value,
           expected: "undefined",
+          description: [
+            `The property \`${key}\` is not defined in the object type.`,
+            "",
+            "Please remove the property next time.",
+          ].join("\n"),
         });
       })
       .every((v) => v);

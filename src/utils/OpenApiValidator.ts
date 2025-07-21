@@ -53,12 +53,21 @@ export namespace OpenApiValidator {
         exceptionable: boolean;
       },
     ): false => {
-      if (error.exceptionable && reportable(error.path))
-        array.push({
+      if (error.exceptionable && reportable(error.path)) {
+        const info: IValidation.IError = {
           path: error.path,
           expected: error.expected,
           value: error.value,
-        });
+          description: error.description,
+        };
+        if (error.value === undefined)
+          info.description ??= [
+            "The value at this path is `undefined`.",
+            "",
+            `Please fill the \`${error.expected}\` typed value next time.`,
+          ].join("\n");
+        array.push(info);
+      }
       return false;
     };
   };
