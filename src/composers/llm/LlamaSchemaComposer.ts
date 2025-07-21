@@ -44,6 +44,7 @@ export namespace LlamaSchemaComposer {
     parameters: ILlamaSchema.IParameters;
     predicate: (schema: ILlamaSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"llama"> =>
     LlmSchemaV3_1Composer.separateParameters(
       props,

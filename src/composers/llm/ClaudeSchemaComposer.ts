@@ -48,6 +48,7 @@ export namespace ClaudeSchemaComposer {
     parameters: IClaudeSchema.IParameters;
     predicate: (schema: IClaudeSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"claude"> => {
     const separated: ILlmFunction.ISeparated<"3.1"> =
       LlmSchemaV3_1Composer.separateParameters(props);

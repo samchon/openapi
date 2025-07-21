@@ -54,11 +54,10 @@ const validate_llm_application_separateEquals = <
     },
   });
   TestValidator.predicate("result")(
-    result.success === false,
-    //  &&
-    //   result.errors.length === 1 &&
-    //   result.errors[0].path === "$input.body.age" &&
-    //   result.errors[0].expected === "undefined",
+    result.success === false &&
+      result.errors.length === 1 &&
+      result.errors[0].path === "$input.body.age" &&
+      result.errors[0].expected === "undefined",
   );
 };
 

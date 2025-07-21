@@ -105,6 +105,7 @@ export namespace GeminiSchemaComposer {
   export const separateParameters = (props: {
     predicate: (schema: IGeminiSchema) => boolean;
     parameters: IGeminiSchema.IParameters;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"gemini"> => {
     const separated: ILlmFunction.ISeparated<"3.0"> =
       LlmSchemaV3Composer.separateParameters(
