@@ -30,7 +30,7 @@ export const _test_validateEquals = <T>(props: {
   const actual: string[] = result.success
     ? []
     : result.errors.map((e) => e.path).sort();
-  TestValidator.equals("superflouous")(expected)(actual);
+  TestValidator.equals("superfluous")(expected)(actual);
 };
 
 function spoil(accessors: string[], path: string, input: any): void {

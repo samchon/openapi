@@ -22,15 +22,16 @@ export namespace OpenApiOneOfValidator {
           oneOf: discriminator.remainders,
         },
       });
-    const matched = discriminator.remainders.find(
-      (schema) =>
-        OpenApiStationValidator.validate({
-          ...ctx,
-          schema,
-          exceptionable: false,
-          equals: false,
-        }) === true,
-    );
+    const matched: OpenApi.IJsonSchema | undefined =
+      discriminator.remainders.find(
+        (schema) =>
+          OpenApiStationValidator.validate({
+            ...ctx,
+            schema,
+            exceptionable: false,
+            equals: false,
+          }) === true,
+      );
     if (matched === undefined) return ctx.report(ctx);
     return ctx.equals === true
       ? OpenApiStationValidator.validate({
