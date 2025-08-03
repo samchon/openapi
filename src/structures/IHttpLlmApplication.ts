@@ -55,7 +55,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  *
  * Additionally, if you've configured
  * {@link IHttpLlmApplication.IOptions.separate}, so that the parameters are
- * separated to Human and LLM sides, you can merge these humand and LLM sides'
+ * separated to Human and LLM sides, you can merge these human and LLM sides'
  * parameters into one through {@link HttpLlm.mergeParameters} before the actual
  * LLM function call execution.
  *

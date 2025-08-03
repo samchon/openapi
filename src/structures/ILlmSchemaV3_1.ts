@@ -3,18 +3,18 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 /**
  * Type schema based on OpenAPI v3.1 for LLM function calling.
  *
- * `ILlmSchemaV3_1` is a type metadata for LLM (Large Language Model) function
- * calling, based on the OpenAPI v3.1 speicification. This type is not the final
- * type for the LLM function calling, but the intermediate structure for the
- * conversion to the final type of below:
+ * `ILlmSchemaV3_1` is type metadata for LLM (Large Language Model) function
+ * calling, based on the OpenAPI v3.1 specification. This type is not the final
+ * type for LLM function calling, but an intermediate structure for
+ * conversion to the final types:
  *
  * - {@link IChatGptSchema}
  * - {@link IClaudeSchema}
  * - {@link ILlamaSchema}
  *
- * However, the `ILlmSchemaV3_1` does not follow the entire specification of the
- * OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
- * list of how `ILlmSchemaV3_1` is different with the OpenAPI v3.1 JSON schema.
+ * However, `ILlmSchemaV3_1` does not follow the entire OpenAPI v3.1 specification.
+ * It has specific restrictions and definitions. Here are the differences between
+ * `ILlmSchemaV3_1` and the OpenAPI v3.1 JSON schema:
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:
@@ -26,8 +26,8 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  *   {@link ILlmSchemaV3_1.IReference}
  * - Do not support {@link OpenApiV3_1.IJsonSchema.ITuple} type
  *
- * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema
- * specification,
+ * Compared to {@link OpenApi.IJsonSchema}, the emended JSON schema
+ * specification:
  *
  * - {@link ILlmSchemaV3_1.IParameters.$defs} instead of the
  *   {@link OpenApi.IJsonSchema.schemas}

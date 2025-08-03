@@ -6,7 +6,7 @@ export namespace ChatGptTypeChecker {
     TYPE CHECKERS
   ----------------------------------------------------------- */
   /**
-   * Test whether the schema is a nul type.
+   * Test whether the schema is a null type.
    *
    * @param schema Target schema
    * @returns Whether null type or not
