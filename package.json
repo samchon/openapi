@@ -54,6 +54,7 @@
     "tinyglobby": "^0.2.10",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.3.0",
+    "tslib": "^2.8.1",
     "typedoc": "^0.27.6",
     "typedoc-github-theme": "^0.2.1",
     "typescript": "~5.8.3"
@@ -73,8 +74,5 @@
     "onlyBuiltDependencies": [
       "@nestjs/core"
     ]
-  },
-  "dependencies": {
-    "tslib": "^2.8.1"
   }
 }

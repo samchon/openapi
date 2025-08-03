@@ -28,20 +28,13 @@ import { IHttpResponse } from "./structures/IHttpResponse";
  * HTTP server. The {@link HttpMigration.execute} function returns the response
  * body from the API endpoint when the status code is `200` or `201`. Otherwise,
  * it throws an {@link HttpError} when the status code is not `200` or `201`. The
- * {@link HttpMigration.propagate} function always returns the response from the
- * API endpoint regardless of the status code.
+ * {@link HttpMigration.propagate} function returns the response information from
+ * the API endpoint, including the status code, headers, and response body.
  *
- * @author Jeongho Nam - https://github.com/samchon
- */
- * - **HTTP execution**: {@link HttpMigration.execute} and
- *   {@link HttpMigration.propagate} execute HTTP requests to the HTTP server.
- *   - `execute`: Returns response body for 200/201 status codes, throws {@link HttpError} otherwise
- *   - `propagate`: Returns complete response information including status code, headers, and body
- *
- * **Usage example**: The {@link HttpLlm} module utilizes this `HttpMigration`
- * module for composing RPC function calling applications. It composes LLM
- * (Large Language Model) function calling applications from OpenAPI documents
- * by passing through the {@link IHttpLlmApplication} type.
+ * The {@link HttpLlm} module is a good example utilizing this `HttpMigration`
+ * module for composing RPC function calling application. The {@link HttpLlm}
+ * module composes LLM (Large Language Model) function calling application from
+ * the OpenAPI document bypassing through the {@link IHttpLlmApplication} type.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
