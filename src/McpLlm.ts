@@ -11,19 +11,19 @@ import { OpenApiTypeChecker } from "./utils/OpenApiTypeChecker";
 import { OpenApiValidator } from "./utils/OpenApiValidator";
 
 /**
- * Application of LLM function calling from MCP document.
+ * LLM function calling application from MCP documents.
  *
- * `McpLlm` is a module for composing LLM (Large Language Model) function
- * calling application from MCP (Model Context Protocol) document.
+ * `McpLlm` is a module for converting MCP (Model Context Protocol) documents
+ * into LLM (Large Language Model) function calling applications.
  *
- * The reasons why `@samchon/openapi` recommends to use the function calling
+ * The reasons why `@samchon/openapi` recommends using the function calling
  * feature instead of directly using the
  * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
  * property of LLM API are:
  *
- * - Model Specification: {@link ILlmSchema}
- * - Validation Feedback: {@link IMcpLlmFunction.validate}
- * - Selector agent for reducing context: [Agentica > Orchestration
+ * - **Model Specification**: {@link ILlmSchema}
+ * - **Validation Feedback**: {@link IMcpLlmFunction.validate}
+ * - **Selector agent for reducing context**: [Agentica > Orchestration
  *   Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
  *
  * @author Jeongho Nam - https://github.com/samchon
@@ -43,9 +43,9 @@ export namespace McpLlm {
      *
      * A list of tools defined in the MCP (Model Context Protocol) document.
      *
-     * It would better to validate the tools by
+     * It is better to validate the tools using the
      * [`typia.assert<T>()`](https://typia.io/docs/validate/assert) function for
-     * the type safety.
+     * type safety.
      */
     tools: Array<IMcpTool>;
 
@@ -59,14 +59,14 @@ export namespace McpLlm {
    * Converts MCP (Model Context Protocol) to LLM (Large Language Model)
    * function calling application.
    *
-   * The reasons why `@samchon/openapi` recommends to use the function calling
+   * The reasons why `@samchon/openapi` recommends using the function calling
    * feature instead of directly using the
    * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
    * property of LLM API are:
    *
-   * - Model Specification: {@link ILlmSchema}
-   * - Validation Feedback: {@link IMcpLlmFunction.validate}
-   * - Selector agent for reducing context: [Agentica > Orchestration
+   * - **Model Specification**: {@link ILlmSchema}
+   * - **Validation Feedback**: {@link IMcpLlmFunction.validate}
+   * - **Selector agent for reducing context**: [Agentica > Orchestration
    *   Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
    *
    * @param props Properties for composition
