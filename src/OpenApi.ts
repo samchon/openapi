@@ -12,22 +12,22 @@ import { IJsonSchemaAttribute } from "./structures/IJsonSchemaAttribute";
  * Emended OpenAPI v3.1 definition used by `typia` and `nestia`.
  *
  * `OpenApi` is a namespace containing functions and interfaces for emended
- * OpenAPI v3.1 specification. The term "emended" means that `OpenApi` is not
- * a direct OpenAPI v3.1 specification ({@link OpenApiV3_1}), but a refined
- * version that removes ambiguous and duplicated expressions from OpenAPI v3.1
- * for the convenience of `typia` and `nestia`.
+ * OpenAPI v3.1 specification. The keyword "emended" means that `OpenApi` is not
+ * a direct OpenAPI v3.1 specification ({@link OpenApiV3_1}), but a little bit
+ * shrunk to remove ambiguous and duplicated expressions of OpenAPI v3.1 for the
+ * convenience of `typia` and `nestia`.
  *
- * For example, when representing nullable types, OpenAPI v3.1 supports three
- * ways. In that case, `OpenApi` retains only the third way, making
- * `typia` and `nestia` (especially `@nestia/editor`) simpler and easier to
+ * For example, when representing nullable type, OpenAPI v3.1 supports three
+ * ways. In that case, `OpenApi` remains only the third way, so that makes
+ * `typia` and `nestia` (especially `@nestia/editor`) to be simple and easy to
  * implement.
  *
  * 1. `{ type: ["string", "null"] }`
  * 2. `{ type: "string", nullable: true }`
  * 3. `{ oneOf: [{ type: "string" }, { type: "null" }] }`
  *
- * Here is the complete list of differences between OpenAPI v3.1 and emended
- * `OpenApi`:
+ * Here is the entire list of differences between OpenAPI v3.1 and emended
+ * `OpenApi`.
  *
  * - Operation
  *
@@ -67,13 +67,8 @@ export namespace OpenApi {
   /**
    * Convert Swagger or OpenAPI document into emended OpenAPI v3.1 document.
    *
-   * Transforms any supported OpenAPI/Swagger document format into the emended
-   * OpenAPI v3.1 format used by this library. Automatically detects the input
-   * format and applies the appropriate conversion.
-   *
    * @param input Swagger or OpenAPI document to convert
    * @returns Emended OpenAPI v3.1 document
-   * @throws TypeError when input format is not recognized
    */
   export function convert(
     input:
@@ -94,10 +89,10 @@ export namespace OpenApi {
   /**
    * Downgrade to Swagger v2.0 document.
    *
-   * Downgrades the given emended OpenAPI v3.1 document to Swagger v2.0 format.
+   * Downgrade the given document (emended OpenAPI v3.1) into Swagger v2.0.
    *
    * @param document Emended OpenAPI v3.1 document to downgrade
-   * @param version Version to downgrade to ("2.0")
+   * @param version Version to downgrade
    * @returns Swagger v2.0 document
    */
   export function downgrade(
@@ -108,10 +103,10 @@ export namespace OpenApi {
   /**
    * Downgrade to OpenAPI v3.0 document.
    *
-   * Downgrades the given emended OpenAPI v3.1 document to OpenAPI v3.0 format.
+   * Downgrade the given document (emended OpenAPI v3.1) into OpenAPI v3.0.
    *
    * @param document Emended OpenAPI v3.1 document to downgrade
-   * @param version Version to downgrade to ("3.0")
+   * @param version Version to downgrade
    * @returns OpenAPI v3.0 document
    */
   export function downgrade(
@@ -137,9 +132,9 @@ export namespace OpenApi {
    *
    * `OpenApi.IDocument` represents an OpenAPI document of emended OpenAPI v3.1.
    *
-   * In other words, `OpenApi.IDocument` is a structure representing the
-   * `swagger.json` file of OpenAPI v3.1 specification, but refined to remove
-   * ambiguous and duplicated expressions of OpenAPI v3.1 for convenience and
+   * In other words, `OpenApi.IDocument` is a structure of `swagger.json` file
+   * of OpenAPI v3.1 specification, but a little bit shrunk to remove ambiguous
+   * and duplicated expressions of OpenAPI v3.1 for the convenience and
    * clarity.
    */
   export interface IDocument {
@@ -157,8 +152,8 @@ export namespace OpenApi {
      *
      * It stores both DTO schemas and security schemes.
      *
-     * For reference, `nestia` defines all object and alias types as reusable
-     * DTO schemas. The alias type refers to types defined by the `type` keyword in
+     * For reference, `nestia` defines every object and alias types as reusable
+     * DTO schemas. The alias type means that defined by `type` keyword in
      * TypeScript.
      */
     components: IComponents;
@@ -166,7 +161,7 @@ export namespace OpenApi {
     /**
      * The available paths and operations for the API.
      *
-     * The first key is the path, and the second key is the HTTP method.
+     * The 1st key is the path, and the 2nd key is the HTTP method.
      */
     paths?: Record<string, IPath>;
 
