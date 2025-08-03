@@ -11,19 +11,19 @@ import { OpenApiTypeChecker } from "./utils/OpenApiTypeChecker";
 import { OpenApiValidator } from "./utils/OpenApiValidator";
 
 /**
- * LLM function calling application from MCP documents.
+ * Application of LLM function calling from MCP document.
  *
- * `McpLlm` is a module for converting MCP (Model Context Protocol) documents
- * into LLM (Large Language Model) function calling applications.
+ * `McpLlm` is a module for composing LLM (Large Language Model) function
+ * calling application from MCP (Model Context Protocol) document.
  *
- * The reasons why `@samchon/openapi` recommends using the function calling
+ * The reasons why `@samchon/openapi` recommends to use the function calling
  * feature instead of directly using the
  * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
  * property of LLM API are:
  *
- * - **Model Specification**: {@link ILlmSchema}
- * - **Validation Feedback**: {@link IMcpLlmFunction.validate}
- * - **Selector agent for reducing context**: [Agentica > Orchestration
+ * - Model Specification: {@link ILlmSchema}
+ * - Validation Feedback: {@link IMcpLlmFunction.validate}
+ * - Selector agent for reducing context: [Agentica > Orchestration
  *   Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
  *
  * @author Jeongho Nam - https://github.com/samchon

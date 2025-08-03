@@ -1,15 +1,16 @@
 import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 
 /**
- * Type schema for ChatGPT function calling.
+ * Type schema info of the ChatGPT.
  *
- * `IChatGptSchema` defines the type schema format for ChatGPT function calling,
- * following the JSON schema definition of OpenAPI v3.1 specification with
- * specific restrictions and modifications.
+ * `IChatGptSchema` is a type schema info of the ChatGPT function calling.
  *
- * However, `IChatGptSchema` does not follow the entire OpenAPI v3.1 specification.
- * It has specific restrictions and definitions. Here are the key differences
- * from OpenAPI v3.1 JSON schema:
+ * `IChatGptSchema` basically follows the JSON schema definition of the OpenAPI
+ * v3.1 specification; {@link OpenApiV3_1.IJsonSchema}.
+ *
+ * However, the `IChatGptSchema` does not follow the entire specification of the
+ * OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
+ * list of how `IChatGptSchema` is different with the OpenAPI v3.1 JSON schema.
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:

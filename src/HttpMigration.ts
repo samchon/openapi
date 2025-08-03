@@ -10,18 +10,29 @@ import { IHttpMigrateRoute } from "./structures/IHttpMigrateRoute";
 import { IHttpResponse } from "./structures/IHttpResponse";
 
 /**
- * HTTP migration application composer from OpenAPI documents.
+ * HTTP migration application composer from OpenAPI document.
  *
- * `HttpMigration` is a module for converting OpenAPI documents into HTTP migration
- * applications. It is designed to help OpenAPI generator libraries convert
- * {@link OpenApi.IOperation OpenAPI operations} to RPC (Remote Procedure
- * Call) functions.
+ * `HttpMigration` is a module for composing HTTP migration application from the
+ * {@link OpenApi.IDocument OpenAPI document}. It is designed for helping the
+ * OpenAPI generator libraries, which converts
+ * {@link OpenApi.IOperation OpenAPI operations} to an RPC (Remote Procedure
+ * Call) function.
  *
- * **Key features:**
- * - **Application conversion**: {@link HttpMigration.application} converts
- *   {@link OpenApi.IOperation OpenAPI operations} to
- *   {@link IHttpMigrateRoute HTTP migration routes}, normalizing OpenAPI
- *   operations into RPC function calling suitable route structures.
+ * The key feature of the `HttpModule` is the {@link HttpMigration.application}
+ * function. It converts the {@link OpenApi.IOperation OpenAPI operations} to the
+ * {@link IHttpMigrateRoute HTTP migration route}, and it normalizes the OpenAPI
+ * operations to the RPC function calling suitable route structure.
+ *
+ * The other functions, {@link HttpMigration.execute} and
+ * {@link HttpMigration.propagate}, are for executing the HTTP request to the
+ * HTTP server. The {@link HttpMigration.execute} function returns the response
+ * body from the API endpoint when the status code is `200` or `201`. Otherwise,
+ * it throws an {@link HttpError} when the status code is not `200` or `201`. The
+ * {@link HttpMigration.propagate} function always returns the response from the
+ * API endpoint regardless of the status code.
+ *
+ * @author Jeongho Nam - https://github.com/samchon
+ */
  * - **HTTP execution**: {@link HttpMigration.execute} and
  *   {@link HttpMigration.propagate} execute HTTP requests to the HTTP server.
  *   - `execute`: Returns response body for 200/201 status codes, throws {@link HttpError} otherwise
