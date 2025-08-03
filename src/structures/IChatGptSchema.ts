@@ -7,7 +7,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * following the JSON schema definition of OpenAPI v3.1 specification with
  * specific restrictions and modifications.
  *
- * `IChatGptSchema` does not follow the entire OpenAPI v3.1 specification.
+ * However, `IChatGptSchema` does not follow the entire OpenAPI v3.1 specification.
  * It has specific restrictions and definitions. Here are the key differences
  * from OpenAPI v3.1 JSON schema:
  *
@@ -21,7 +21,6 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to
  *   {@link IChatGptSchema.IReference}
  * - When {@link IChatGptSchema.IConfig.strict} mode:
- *
  *   - Every object properties must be required
  *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
@@ -36,7 +35,6 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link IChatGptSchema.additionalProperties} is fixed to `false`
  * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
  * - When {@link IChatGptSchema.IConfig.strict} mode:
- *
  *   - Every object properties must be required
  *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *

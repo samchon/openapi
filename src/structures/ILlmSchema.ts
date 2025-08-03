@@ -13,8 +13,8 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * function calling across different AI providers.
  *
  * Select the appropriate schema type based on your LLM provider:
- * - `chatgpt`: OpenAI ChatGPT models
- * - `claude`: Anthropic Claude models  
+ * - `chatgpt`: OpenAI GPT models
+ * - `claude`: Anthropic Claude models
  * - `gemini`: Google Gemini models
  * - `llama`: Meta Llama models
  * - `deepseek`: DeepSeek models
