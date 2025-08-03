@@ -1,21 +1,20 @@
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
- * Type schema info of the Claude.
+ * Type schema for Claude function calling.
  *
- * `IClaudeSchema` is a type schema info of the Claude function calling.
+ * `IClaudeSchema` defines the type schema format for Claude function calling.
  *
- * `IClaudeSchema` seems fully supporting the JSON schema definition of the
- * OpenAPI v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. By the way, as
- * the {@link OpenApiV3_1.IJsonSchema} has too much ambiguous and duplicated
- * expressions, `IClaudeSchema` is designed to be clear and simple for the
- * Claude function calling, by utilizng {@link ILlmSchemaV3_1} which has been
- * transformed from the {@link OpenApi.IJsonSchema} for the convenience and
- * clarity.
+ * `IClaudeSchema` appears to fully support the JSON schema definition of the
+ * OpenAPI v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. However, since
+ * {@link OpenApiV3_1.IJsonSchema} has many ambiguous and duplicated
+ * expressions, `IClaudeSchema` is designed to be clear and simple for Claude
+ * function calling by utilizing {@link ILlmSchemaV3_1}, which has been
+ * transformed from {@link OpenApi.IJsonSchema} for convenience and clarity.
  *
- * Therefore, `IClaudeSchema` does not follow the entire specification of the
- * OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
- * list of how `ILlmSchemaV3_1` is different with the OpenAPI v3.1 JSON schema.
+ * Therefore, `IClaudeSchema` does not follow the entire OpenAPI v3.1 specification.
+ * It has specific restrictions and definitions. Here are the differences between
+ * `ILlmSchemaV3_1` and the OpenAPI v3.1 JSON schema:
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:
@@ -28,19 +27,18 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *   {@link IClaudeSchema.IReference}
  * - Do not support {@link OpenApiV3_1.IJsonSchema.ITuple} type
  *
- * If compare with the {@link OpenApi.IJsonSchema}, the emended JSON schema
- * specification,
+ * Compared to {@link OpenApi.IJsonSchema}, the emended JSON schema specification:
  *
- * - {@link IClaudeSchema.IParameters.$defs} instead of the
+ * - {@link IClaudeSchema.IParameters.$defs} instead of
  *   {@link OpenApi.IJsonSchema.schemas}
  * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
  * - {@link IClaudeSchema.properties} and {@link IClaudeSchema.required} are always
  *   defined
  *
- * For reference, if you've composed the `IClaudeSchema` type with the
+ * For reference, if you compose the `IClaudeSchema` type with the
  * {@link IClaudeSchema.IConfig.reference} `false` option (default is `false`),
- * only the recursive named types would be archived into the
- * {@link IClaudeSchema.IParameters.$defs}, and the others would be escaped from
+ * only recursively named types will be archived into the
+ * {@link IClaudeSchema.IParameters.$defs}, and others will be escaped from
  * the {@link IClaudeSchema.IReference} type.
  *
  * @author Jeongho Nam - https://github.com/samchon
@@ -63,20 +61,19 @@ export namespace IClaudeSchema {
   /** Configuration for Claude schema composition. */
   export interface IConfig {
     /**
-     * Whether to allow reference type in everywhere.
+     * Whether to allow reference types everywhere.
      *
-     * If you configure this property to `false`, most of reference types
-     * represented by {@link IClaudeSchema.IReference} would be escaped to a
-     * plain type unless recursive type case.
+     * If you configure this property to `false`, most reference types
+     * represented by {@link IClaudeSchema.IReference} will be escaped to
+     * plain types unless in recursive type cases.
      *
-     * This is because some low sized LLM models does not understand the
-     * reference type well, and even the large size LLM models sometimes occur
-     * the hallucination.
+     * This is because some smaller LLM models do not understand reference
+     * types well, and even large LLM models sometimes experience
+     * hallucinations.
      *
-     * However, the reference type makes the schema size smaller, so that
-     * reduces the LLM token cost. Therefore, if you're using the large size of
-     * LLM model, and want to reduce the LLM token cost, you can configure this
-     * property to `true`.
+     * However, reference types make the schema size smaller, reducing
+     * LLM token costs. Therefore, if you're using a large LLM model
+     * and want to reduce token costs, you can configure this property to `true`.
      *
      * @default true
      */
@@ -84,12 +81,12 @@ export namespace IClaudeSchema {
   }
 
   /**
-   * Type of the function parameters.
+   * Type for function parameters.
    *
-   * `IClaudeSchema.IParameters` is a type defining a function's parameters as a
-   * keyworded object type.
+   * `IClaudeSchema.IParameters` defines a function's parameters as a
+   * keyword object type.
    *
-   * It also can be utilized for the structured output metadata.
+   * It can also be used for structured output metadata.
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
@@ -116,21 +113,21 @@ export namespace IClaudeSchema {
   /** Object type info. */
   export type IObject = ILlmSchemaV3_1.IObject;
 
-  /** Reference type directing named schema. */
+  /** Reference type directing to named schema. */
   export type IReference = ILlmSchemaV3_1.IReference;
 
   /**
    * Union type.
    *
-   * `IOneOf` represents an union type of the TypeScript (`A | B | C`).
+   * `IOneOf` represents a union type in TypeScript (`A | B | C`).
    *
-   * For reference, even though your Swagger (or OpenAPI) document has defined
-   * `anyOf` instead of the `oneOf`, {@link OpenApi} forcibly converts it to
+   * For reference, even if your Swagger (or OpenAPI) document defines
+   * `anyOf` instead of `oneOf`, {@link OpenApi} forcibly converts it to
    * `oneOf` type.
    */
   export type IOneOf = ILlmSchemaV3_1.IOneOf;
   export namespace IOneOf {
-    /** Discriminator info of the union type. */
+    /** Discriminator information of the union type. */
     export type IDiscriminator = ILlmSchemaV3_1.IOneOf.IDiscriminator;
   }
 

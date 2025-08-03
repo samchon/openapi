@@ -2,11 +2,11 @@ import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
 /**
- * Type checker for LLM type schema.
+ * Type checker for LLM type schema v3.
  *
- * `LlmSchemaTypeChecker` is a type checker of {@link ILlmSchemaV3}.
+ * `LlmTypeCheckerV3` is a type checker of {@link ILlmSchemaV3}.
  *
- * @author Samchon
+ * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace LlmTypeCheckerV3 {
   /* -----------------------------------------------------------

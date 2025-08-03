@@ -5,7 +5,7 @@ import { IGeminiSchema } from "../structures/IGeminiSchema";
  *
  * `GeminiTypeChecker` is a type checker of {@link IGeminiSchema}.
  *
- * @author Samchon
+ * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace GeminiTypeChecker {
   /* -----------------------------------------------------------

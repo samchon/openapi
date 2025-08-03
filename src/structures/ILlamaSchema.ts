@@ -9,7 +9,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * OpenAPI v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. By the way, as
  * the {@link OpenApiV3_1.IJsonSchema} has too much ambiguous and duplicated
  * expressions, `ILlamaSchema` is designed to be clear and simple for the Llama
- * function calling, by utilizng {@link ILlmSchemaV3_1} which has been
+ * function calling, by utilizing {@link ILlmSchemaV3_1} which has been
  * transformed from the {@link OpenApi.IJsonSchema} for the convenience and
  * clarity.
  *

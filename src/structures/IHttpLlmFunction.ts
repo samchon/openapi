@@ -52,7 +52,7 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
   /**
    * Representative name of the function.
    *
-   * The `name` is a repsentative name identifying the function in the
+   * The `name` is a representative name identifying the function in the
    * {@link IHttpLlmApplication}. The `name` value is just composed by joining
    * the {@link IHttpMigrateRoute.accessor} by underscore `_` character.
    *
@@ -68,7 +68,7 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    * > `getByParam` or `postByParam`. If there are multiple path parameters, they
    * > would be concatenated by `And` like `getByParam1AndParam2`.
    *
-   * > For refefence, if the {@link operation}'s {@link method} is `delete`, the
+   * > For reference, if the {@link operation}'s {@link method} is `delete`, the
    * > function name would be replaced to `erase` instead of `delete`. It is the
    * > reason why the `delete` is a reserved keyword in many programming
    * > languages.
@@ -80,7 +80,7 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    * > - Example 2
    *
    * >   - Endpoint: `GET
-   * >       /shoppings/sellers/sales/:saleId/reviews/:reviewId/comments/:id
+   * >       /shoppings/sellers/sales/:saleId/reviews/:reviewId/comments/:id`
    * >   - Accessor:
    * >       `shoppings.sellers.sales.reviews.getBySaleIdAndReviewIdAndCommentId`
    *
@@ -140,26 +140,26 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
   /**
    * Description of the function.
    *
-   * `IHttpLlmFunction.description` is composed by below rule:
+   * `IHttpLlmFunction.description` is composed using the following rules:
    *
-   * 1. Starts from the {@link OpenApi.IOperation.summary} paragraph.
+   * 1. Starts with the {@link OpenApi.IOperation.summary} paragraph
    * 2. The next paragraphs are filled with the
-   *    {@link OpenApi.IOperation.description}. By the way, if the first
-   *    paragraph of {@link OpenApi.IOperation.description} is same with the
-   *    {@link OpenApi.IOperation.summary}, it would not be duplicated.
-   * 3. Parameters' descriptions are added with `@param` tag.
+   *    {@link OpenApi.IOperation.description}. If the first
+   *    paragraph of {@link OpenApi.IOperation.description} matches the
+   *    {@link OpenApi.IOperation.summary}, it is not duplicated
+   * 3. Parameter descriptions are added with `@param` tags
    * 4. {@link OpenApi.IOperation.security Security requirements} are added with
-   *    `@security` tag.
-   * 5. Tag names are added with `@tag` tag.
-   * 6. If {@link OpenApi.IOperation.deprecated}, `@deprecated` tag is added.
+   *    `@security` tags
+   * 5. Tag names are added with `@tag` tags
+   * 6. If {@link OpenApi.IOperation.deprecated}, a `@deprecated` tag is added
    *
-   * For reference, the `description` is very important property to teach the
-   * purpose of the function to the LLM (Language Large Model), and LLM actually
-   * determines which function to call by the description.
+   * For reference, the `description` is a critical property for teaching the
+   * purpose of the function to LLMs (Large Language Models). LLMs use this
+   * description to determine which function to call.
    *
-   * Also, when the LLM conversates with the user, the `description` is used to
-   * explain the function to the user. Therefore, the `description` property has
-   * the highest priority, and you have to consider it.
+   * Also, when the LLM converses with users, the `description` explains the
+   * function to the user. Therefore, the `description` property has the
+   * highest priority and should be carefully considered.
    */
   description?: string | undefined;
 
@@ -181,32 +181,32 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
   tags?: string[];
 
   /**
-   * Validate function of the arguments.
+   * Validate function for the arguments.
    *
-   * You know what? LLM (Large Language Model) like OpenAI takes a lot of
-   * mistakes when composing arguments in function calling. Even though `number`
-   * like simple type is defined in the {@link parameters} schema, LLM often
-   * fills it just by a `string` typed value.
+   * You know what? LLMs (Large Language Models) like OpenAI frequently make
+   * mistakes when composing arguments for function calling. Even with simple
+   * types like `number` defined in the {@link parameters} schema, LLMs often
+   * provide a `string` typed value instead.
    *
-   * In that case, you have to give a validation feedback to the LLM by using
-   * this `validate` function. The `validate` function will return detailed
-   * information about every type errors about the arguments.
+   * In such cases, you should provide validation feedback to the LLM using
+   * this `validate` function. The `validate` function returns detailed
+   * information about type errors in the arguments.
    *
-   * And in my experience, OpenAI's `gpt-4o-mini` model tends to construct an
-   * invalid function calling arguments at the first trial about 50% of the
-   * time. However, if correct it through this `validate` function, the success
-   * rate soars to 99% at the second trial, and I've never failed at the third
-   * trial.
+   * Based on my experience, OpenAI's `gpt-4o-mini` model tends to construct
+   * invalid function calling arguments about 50% of the time on the first attempt.
+   * However, when corrected through this `validate` function, the success
+   * rate jumps to 99% on the second attempt, and I've never seen a failure
+   * on the third attempt.
    *
-   * > If you've {@link separated} parameters, use the
+   * > If you have {@link separated} parameters, use the
    * > {@link IHttpLlmFunction.ISeparated.validate} function instead when
-   * > validating the LLM composed arguments.
+   * > validating LLM-composed arguments.
    *
-   * > In that case, This `validate` function would be meaningful only when you've
-   * > merged the LLM and human composed arguments by
+   * > In that case, this `validate` function is meaningful only after you've
+   * > merged the LLM and human composed arguments using the
    * > {@link HttpLlm.mergeParameters} function.
    *
-   * @param args Arguments to validate.
+   * @param args Arguments to validate
    * @returns Validation result
    */
   validate: (args: unknown) => IValidation<unknown>;
@@ -244,28 +244,28 @@ export namespace IHttpLlmFunction {
     human: ILlmSchema.ModelParameters[Model] | null;
 
     /**
-     * Validate function of the separated arguments.
+     * Validate function for separated arguments.
      *
-     * If LLM part of separated parameters has some properties, this `validate`
-     * function will be filled for the {@link llm} type validation.
+     * If the LLM part of separated parameters has properties, this `validate`
+     * function validates the {@link llm} type.
      *
-     * > You know what? LLM (Large Language Model) like OpenAI takes a lot of
-     * > mistakes when composing arguments in function calling. Even though
-     * > `number` like simple type is defined in the {@link parameters} schema, LLM
-     * > often fills it just by a `string` typed value.
+     * > You know what? LLMs (Large Language Models) like OpenAI frequently make
+     * > mistakes when composing arguments for function calling. Even with simple
+     * > types like `number` defined in the {@link parameters} schema, LLMs often
+     * > provide a `string` typed value instead.
      *
-     * > In that case, you have to give a validation feedback to the LLM by using
-     * > this `validate` function. The `validate` function will return detailed
-     * > information about every type errors about the arguments.
+     * > In such cases, you should provide validation feedback to the LLM using
+     * > this `validate` function. The `validate` function returns detailed
+     * > information about type errors in the arguments.
      *
-     * > And in my experience, OpenAI's `gpt-4o-mini` model tends to construct an
-     * > invalid function calling arguments at the first trial about 50% of the
-     * > time. However, if correct it through this `validate` function, the
-     * > success rate soars to 99% at the second trial, and I've never failed at
-     * > the third trial.
+     * > Based on my experience, OpenAI's `gpt-4o-mini` model tends to construct
+     * > invalid function calling arguments about 50% of the time on the first attempt.
+     * > However, when corrected through this `validate` function, the success
+     * > rate jumps to 99% on the second attempt, and I've never seen a failure
+     * > on the third attempt.
      *
      * @param args Arguments to validate
-     * @returns Validate result
+     * @returns Validation result
      */
     validate?: ((args: unknown) => IValidation<unknown>) | undefined;
   }

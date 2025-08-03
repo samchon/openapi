@@ -4,7 +4,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * Type schema based on OpenAPI v3.0 for LLM function calling.
  *
  * `ILlmSchemaV3` is a type metadata for LLM (Large Language Model) function
- * calling, based on the OpenAPI v3.0 speicification. This type is not the final
+ * calling, based on the OpenAPI v3.0 specification. This type is not the final
  * type for the LLM function calling, but the intermediate structure for the
  * conversion to the final type like {@link IGeminiSchema}.
  *

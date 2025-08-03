@@ -53,13 +53,13 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
   /**
    * Description of the function.
    *
-   * For reference, the `description` is very important property to teach the
-   * purpose of the function to the LLM (Language Large Model), and LLM actually
-   * determines which function to call by the description.
+   * For reference, the `description` is a critical property for teaching the
+   * purpose of the function to LLMs (Large Language Models). LLMs use this
+   * description to determine which function to call.
    *
-   * Also, when the LLM conversates with the user, the `description` is used to
-   * explain the function to the user. Therefore, the `description` property has
-   * the highest priority, and you have to consider it.
+   * Also, when the LLM converses with the user, the `description` explains
+   * the function to the user. Therefore, the `description` property has the
+   * highest priority and should be carefully considered.
    */
   description?: string | undefined;
 

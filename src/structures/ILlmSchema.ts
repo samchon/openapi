@@ -9,7 +9,7 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 /**
  * The schemas for the LLM function calling.
  *
- * `ILlmSchema` is an union type collecting every the schemas for the LLM
+ * `ILlmSchema` is a union type collecting every the schemas for the LLM
  * function calling.
  *
  * Select a proper schema type according to the LLM provider you're using.
@@ -62,7 +62,7 @@ export namespace ILlmSchema {
   /**
    * Type of function parameters.
    *
-   * `ILlmSchema.IParameters` is a type defining a function's pamameters as a
+   * `ILlmSchema.IParameters` is a type defining a function's parameters as a
    * keyworded object type.
    *
    * It also can be utilized for the structured output metadata.

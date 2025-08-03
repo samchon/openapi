@@ -89,7 +89,7 @@ export namespace OpenApi {
   /**
    * Downgrade to Swagger v2.0 document.
    *
-   * Downgrade the given document (emeneded OpenAPI v3.1) into Swagger v2.0.
+   * Downgrade the given document (emended OpenAPI v3.1) into Swagger v2.0.
    *
    * @param document Emended OpenAPI v3.1 document to downgrade
    * @param version Version to downgrade
@@ -103,7 +103,7 @@ export namespace OpenApi {
   /**
    * Downgrade to OpenAPI v3.0 document.
    *
-   * Downgrade the given document (emeneded OpenAPI v3.1) into OpenAPI v3.0.
+   * Downgrade the given document (emended OpenAPI v3.1) into OpenAPI v3.0.
    *
    * @param document Emended OpenAPI v3.1 document to downgrade
    * @param version Version to downgrade
@@ -168,29 +168,29 @@ export namespace OpenApi {
     /**
      * An object to hold Webhooks.
      *
-     * Its structure is same with {@link paths}, so that the 1st key is the path,
-     * and the 2nd key is the HTTP method.
+     * Its structure is the same as {@link paths}, so the first key is the path,
+     * and the second key is the HTTP method.
      */
     webhooks?: Record<string, IPath>;
 
     /**
      * A declaration of which security mechanisms can be used across the API.
      *
-     * When this property be configured, it would be overwritten in every API
-     * routes.
+     * When this property is configured, it will be overwritten in every API
+     * route.
      *
-     * For reference, key means the name of security scheme and value means the
-     * `scopes`. The `scopes` can be used only when target security scheme is
+     * For reference, the key means the name of the security scheme and the value means the
+     * `scopes`. The `scopes` can be used only when the target security scheme is
      * `oauth2` type, especially for
      * {@link ISwaggerSecurityScheme.IOAuth2.IFlow.scopes} property.
      */
     security?: Record<string, string[]>[];
 
     /**
-     * List of tag names with description.
+     * List of tag names with descriptions.
      *
-     * It is possible to omit this property or skip some tag name even if the
-     * tag name is used in the API routes. In that case, the tag name would be
+     * It is possible to omit this property or skip some tag names even if the
+     * tag name is used in the API routes. In that case, the tag name will be
      * displayed (in Swagger-UI) without description.
      */
     tags?: IDocument.ITag[];
@@ -228,7 +228,7 @@ export namespace OpenApi {
      *
      * It is possible to skip composing this structure, even if some tag names
      * are registered in the API routes ({@link OpenApi.IOperation.tags}). In
-     * that case, the tag name would be displayed in Swagger-UI without
+     * that case, the tag name will be displayed in Swagger-UI without
      * description.
      *
      * However, if you want to describe the tag name, you can compose this
@@ -286,7 +286,7 @@ export namespace OpenApi {
     /**
      * A map between a variable name and its value.
      *
-     * When the server {@link url} is a type of template, this property would be
+     * When the server {@link url} is a template type, this property will be
      * utilized to fill the template with actual values.
      */
     variables?: Record<string, IServer.IVariable>;
@@ -312,7 +312,7 @@ export namespace OpenApi {
    * Path item.
    *
    * `OpenApi.IPath` represents a path item of emended OpenAPI v3.1, collecting
-   * multiple method operations in a single path.
+   * multiple method operations under a single path.
    */
   export interface IPath extends Partial<Record<Method, IOperation>> {
     /** Servers that provide the path operations. */
@@ -326,9 +326,9 @@ export namespace OpenApi {
   }
 
   /**
-   * Remote operation info.
+   * Remote operation information.
    *
-   * `OpenApi.IOperation` represents an Restful API operation provided by the
+   * `OpenApi.IOperation` represents a RESTful API operation provided by the
    * remote server.
    */
   export interface IOperation {
@@ -360,14 +360,14 @@ export namespace OpenApi {
     /**
      * List of securities and their scopes that are required for execution.
      *
-     * When this property be configured, the Restful API operation requires the
-     * matched security value for execution. Its key means security key matched
-     * with {@link OpenApi.IDocument.security}.
+     * When this property is configured, the RESTful API operation requires the
+     * matching security value for execution. Its key means the security key matching
+     * {@link OpenApi.IDocument.security}.
      *
      * The value means scopes required for the security key when the security
-     * type is {@link OpenApi.ISecurityScheme.IOAuth2}. Otherwise the target
+     * type is {@link OpenApi.ISecurityScheme.IOAuth2}. Otherwise, if the target
      * security type is not {@link OpenApi.ISecurityScheme.IOAuth2}, the value
-     * would be empty array.
+     * will be an empty array.
      */
     security?: Record<string, string[]>[];
 
@@ -380,7 +380,7 @@ export namespace OpenApi {
     /**
      * Flag for indicating this operation is human-only.
      *
-     * If this property value is `true`, {@link HttpLlm.application} function
+     * If this property value is `true`, the {@link HttpLlm.application} function
      * will not convert this operation schema into the LLM function calling
      * schema that is represented by the {@link IHttpLlmFunction} interface.
      */
@@ -389,14 +389,14 @@ export namespace OpenApi {
     /**
      * Accessor of the operation.
      *
-     * If you configure this property, the assigned value would be used as
-     * {@link IHttpMigrateRoute.accessor}. Also, it also can be used as the
-     * {@link IHttpLlmFunction.name} by joininig with `.` character in the LLM
+     * If you configure this property, the assigned value will be used as
+     * {@link IHttpMigrateRoute.accessor}. Also, it can be used as the
+     * {@link IHttpLlmFunction.name} by joining with `.` character in the LLM
      * function calling application.
      *
-     * Note that, the `x-samchon-accessor` value must be unique in the entire
-     * OpenAPI document operations. If there're duplicated `x-samchon-accessor`
-     * values, {@link IHttpMigrateRoute.accessor} will ignore every duplicated
+     * Note that the `x-samchon-accessor` value must be unique in the entire
+     * OpenAPI document operations. If there are duplicated `x-samchon-accessor`
+     * values, {@link IHttpMigrateRoute.accessor} will ignore all duplicated
      * `x-samchon-accessor` values and generate the
      * {@link IHttpMigrateRoute.accessor} by itself.
      */
@@ -405,13 +405,13 @@ export namespace OpenApi {
     /**
      * Controller of the operation.
      *
-     * If you configure this property, the assigned value would be utilized as
+     * If you configure this property, the assigned value will be utilized as
      * the controller name in the OpenAPI generator library like
      * [`@nestia/editor`](https://nestia.io/docs/editor/) and
      * [`@nestia/migrate`](https://nestia.io/docs/migrate/).
      *
      * Also, if {@link x-samchon-accessor} has been configured, its last element
-     * would be used as the controller method (function) name. Of course, the
+     * will be used as the controller method (function) name. Of course, the
      * OpenAPI document generator `@nestia/sdk` fills both of them.
      */
     "x-samchon-controller"?: string;
@@ -422,13 +422,13 @@ export namespace OpenApi {
       /**
        * Representative name of the parameter.
        *
-       * In the most case, the `name` is equivalent to parameter variable name.
+       * In most cases, the `name` is equivalent to the parameter variable name.
        * Therefore, the `name` must be filled with the significant variable name
        * of the parameter.
        *
-       * By the way, only when the {@link in} property is `path`, the `name` can
+       * Note: Only when the {@link in} property is `path`, the `name` can
        * be omitted. In that case, the `name` is automatically deduced from the
-       * URL path's positional template argument analyzing.
+       * URL path's positional template argument analysis.
        */
       name?: string;
 
@@ -452,11 +452,11 @@ export namespace OpenApi {
        * Whether the parameter is required for execution or not.
        *
        * If the parameter is required, the value must be filled. Otherwise, it
-       * is possible to skip the parameter when executing the APi operation.
+       * is possible to skip the parameter when executing the API operation.
        *
-       * For reference, the `required` property must be always `true` when the
+       * For reference, the `required` property must always be `true` when the
        * {@link in} property is `path`. Otherwise, the `required` property can be
-       * anything of them; `true`, `false` and `undefined`.
+       * any of these values: `true`, `false`, or `undefined`.
        */
       required?: boolean;
 
@@ -545,13 +545,13 @@ export namespace OpenApi {
   }
 
   /**
-   * Type schema info.
+   * Type schema information.
    *
-   * `OpenApi.IJsonSchema` is a type schema info of the OpenAPI.
+   * `OpenApi.IJsonSchema` is a type schema info for OpenAPI.
    *
    * `OpenApi.IJsonSchema` basically follows the JSON schema definition of
-   * OpenAPI v3.1, but a little bit shrunk to remove ambiguous and duplicated
-   * expressions of OpenAPI v3.1 for the convenience and clarity.
+   * OpenAPI v3.1, but is refined to remove ambiguous and duplicated
+   * expressions of OpenAPI v3.1 for convenience and clarity.
    *
    * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
    * - Resolve nullable property:
