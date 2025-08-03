@@ -16,20 +16,25 @@ import { ILlmSchema } from "./structures/ILlmSchema";
 import { LlmDataMerger } from "./utils/LlmDataMerger";
 
 /**
- * LLM function calling application composer from OpenAPI documents.
+ * LLM function calling application composer from OpenAPI document.
  *
- * `HttpLlm` is a module for converting OpenAPI documents into LLM (Large Language Model) 
- * function calling applications. It handles schema conversion, function execution, and 
- * parameter merging for AI-powered API interactions.
+ * `HttpLlm` is a module for composing LLM (Large Language Model) function
+ * calling application from the {@link OpenApi.IDocument OpenAPI document}, and
+ * also for LLM function call execution and parameter merging.
  *
- * **Core workflow:**
- * 1. Convert OpenAPI document to LLM application using {@link HttpLlm.application}
- * 2. LLM selects and composes arguments for a {@link IHttpLlmFunction function}
- * 3. Execute the function using {@link HttpLlm.execute} or {@link HttpLlm.propagate}
+ * At first, you can construct the LLM function calling application by the
+ * {@link HttpLlm.application HttpLlm.application()} function. And then the LLM
+ * has selected a {@link IHttpLlmFunction function} to call and composes its
+ * arguments, you can execute the function by
+ * {@link HttpLlm.execute HttpLlm.execute()} or
+ * {@link HttpLlm.propagate HttpLlm.propagate()}.
  *
- * **Parameter separation:** If you configure {@link IHttpLlmApplication.IOptions.separate} 
- * to separate parameters between human and LLM sides, use {@link HttpLlm.mergeParameters} 
- * to combine them before execution.
+ * By the way, if you have configured the
+ * {@link IHttpLlmApplication.IOptions.separate} option to separate the
+ * parameters into human and LLM sides, you can merge these human and LLM sides'
+ * parameters into one through
+ * {@link HttpLlm.mergeParameters HttpLlm.mergeParameters()} before the actual
+ * LLM function call execution.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
@@ -60,20 +65,27 @@ export namespace HttpLlm {
   /**
    * Convert OpenAPI document to LLM function calling application.
    *
-   * Transforms OpenAPI documents into LLM-compatible function calling applications.
-   * Each {@link OpenApi.IOperation API operation} becomes an {@link IHttpLlmFunction LLM function}
-   * that AI models can understand and invoke.
+   * Converts {@link OpenApi.IDocument OpenAPI document} or
+   * {@link IHttpMigrateApplication migrated application} to the
+   * {@link IHttpLlmApplication LLM function calling application}. Every
+   * {@link OpenApi.IOperation API operations} in the OpenAPI document are
+   * converted to the {@link IHttpLlmFunction LLM function} type, and they would
+   * be used for the LLM function calling.
    *
-   * **Parameter handling:**
-   * - **Separated mode:** When {@link IHttpLlmApplication.IOptions.separate} is enabled,
-   *   parameters split between human and LLM sides. Use {@link HttpLlm.mergeParameters} 
-   *   to combine them before execution.
-   * - **Keyword mode:** When {@link IHttpLlmApplication.IOptions.keyword} is `true`,
-   *   all parameters become a single {@link ILlmSchemaV3.IObject}. Recommended for 
-   *   better LLM understanding.
+   * If you have configured the {@link IHttpLlmApplication.IOptions.separate}
+   * option, every parameters in the {@link IHttpLlmFunction} would be separated
+   * into both human and LLM sides. In that case, you can merge these human and
+   * LLM sides' parameters into one through {@link HttpLlm.mergeParameters}
+   * before the actual LLM function call execution.
    *
-   * @param props Configuration properties for the conversion
-   * @returns LLM function calling application ready for AI interaction
+   * Additionally, if you have configured the
+   * {@link IHttpLlmApplication.IOptions.keyword} as `true`, the number of
+   * {@link IHttpLlmFunction.parameters} are always 1 and the first parameter
+   * type is always {@link ILlmSchemaV3.IObject}. I recommend this option because
+   * LLM can understand the keyword arguments more easily.
+   *
+   * @param props Properties for composition
+   * @returns LLM function calling application
    */
   export const application = <Model extends ILlmSchema.Model>(
     props: IApplicationProps<Model>,
@@ -122,21 +134,29 @@ export namespace HttpLlm {
   /**
    * Execute the LLM function call.
    *
-   * Executes an {@link OpenApi.IOperation API endpoint} using connection information
-   * and arguments composed by an LLM (with optional human input).
+   * `HttpLlm.execute()` is a function executing the target
+   * {@link OpenApi.IOperation API endpoint} with the connection information
+   * and arguments composed by Large Language Model like OpenAI (+human
+   * sometimes).
    *
-   * **Parameter handling:**
-   * - **Separated parameters:** If {@link IHttpLlmApplication.IOptions.separate} is enabled,
-   *   merge human and LLM parameters using {@link HttpLlm.mergeParameters} first.
-   * - **Keyword arguments:** Automatically handles {@link IHttpLlmApplication.IOptions.keyword}
-   *   format conversion.
+   * By the way, if you've configured the
+   * {@link IHttpLlmApplication.IOptions.separate}, so that the parameters are
+   * separated to human and LLM sides, you have to merge these human and LLM
+   * sides' parameters into one through {@link HttpLlm.mergeParameters}
+   * function.
    *
-   * **Error handling:** Throws {@link HttpError} for non-200/201 status responses.
-   * For custom error handling, use {@link HttpLlm.propagate} instead.
+   * About the {@link IHttpLlmApplication.IOptions.keyword} option, don't worry
+   * anything. This `HttpLlm.execute()` function will automatically recognize
+   * the keyword arguments and convert them to the proper sequence.
    *
-   * @param props Properties containing application, function, connection, and input
-   * @returns API response body on successful execution
-   * @throws HttpError when API returns non-200/201 status
+   * For reference, if the target API endpoint responds non 200/201 status,
+   * this would be considered as an error and the {@link HttpError} would be
+   * thrown. Otherwise you don't want such rule, you can use the
+   * {@link HttpLlm.propagate} function instead.
+   *
+   * @param props Properties for the LLM function call
+   * @returns Return value (response body) from the API endpoint
+   * @throws HttpError when the API endpoint responds non 200/201 status
    */
   export const execute = <Model extends ILlmSchema.Model>(
     props: IFetchProps<Model>,
@@ -145,22 +165,28 @@ export namespace HttpLlm {
   /**
    * Propagate the LLM function call.
    *
-   * Executes an {@link OpenApi.IOperation API endpoint} and returns the raw response
-   * regardless of HTTP status code. Unlike {@link HttpLlm.execute}, this method
-   * does not throw errors for non-200/201 responses.
+   * `HttpLlm.propagate()` is a function propagating the target
+   * {@link OpenApi.IOperation API endpoint} with the connection information
+   * and arguments composed by Large Language Model like OpenAI (+human
+   * sometimes).
    *
-   * **Parameter handling:**
-   * - **Separated parameters:** If {@link IHttpLlmApplication.IOptions.separate} is enabled,
-   *   merge human and LLM parameters using {@link HttpLlm.mergeParameters} first.
-   * - **Keyword arguments:** Automatically handles {@link IHttpLlmApplication.IOptions.keyword}
-   *   format conversion.
+   * By the way, if you've configured the
+   * {@link IHttpLlmApplication.IOptions.separate}, so that the parameters are
+   * separated to human and LLM sides, you have to merge these human and LLM
+   * sides' parameters into one through {@link HttpLlm.mergeParameters}
+   * function.
    *
-   * **Use case:** Ideal when you need custom error handling or want to process
-   * all HTTP status codes manually.
+   * About the {@link IHttpLlmApplication.IOptions.keyword} option, don't worry
+   * anything. This `HttpLlm.propagate()` function will automatically recognize
+   * the keyword arguments and convert them to the proper sequence.
    *
-   * @param props Properties containing application, function, connection, and input
-   * @returns Complete HTTP response including status and headers
-   * @throws Error only when network connection fails
+   * For reference, the propagation means always returning the response from the
+   * API endpoint, even if the status is not 200/201. This is useful when you
+   * want to handle the response by yourself.
+   *
+   * @param props Properties for the LLM function call
+   * @returns Response from the API endpoint
+   * @throws Error only when the connection is failed
    */
   export const propagate = <Model extends ILlmSchema.Model>(
     props: IFetchProps<Model>,
@@ -182,36 +208,39 @@ export namespace HttpLlm {
   }
 
   /**
-   * Merge separated parameters.
+   * Merge the parameters.
    *
-   * Combines human and LLM composed parameters into a single object when
-   * {@link IHttpLlmApplication.IOptions.separate} mode is enabled.
+   * If you've configured the {@link IHttpLlmApplication.IOptions.separate}
+   * option, so that the parameters are separated to human and LLM sides, you
+   * can merge these human and LLM sides' parameters into one through this
+   * `HttpLlm.mergeParameters()` function before the actual LLM function call
+   * execution.
    *
-   * **Usage scenario:** When parameters are separated between human and LLM sides,
-   * use this function before calling {@link HttpLlm.execute} or {@link HttpLlm.propagate}.
+   * On contrary, if you've not configured the
+   * {@link IHttpLlmApplication.IOptions.separate} option, this function would
+   * throw an error.
    *
-   * **Error condition:** Throws an error if {@link IHttpLlmApplication.IOptions.separate}
-   * was not configured during application creation.
-   *
-   * @param props Configuration with function metadata and separated parameters
-   * @returns Merged parameter object ready for function execution
-   * @throws Error when separation mode was not enabled
+   * @param props Properties for the parameters' merging
+   * @returns Merged parameter values
    */
   export const mergeParameters = <Model extends ILlmSchema.Model>(
     props: IMergeProps<Model>,
   ): object => LlmDataMerger.parameters(props);
 
   /**
-   * Merge two values intelligently.
+   * Merge two values.
    *
-   * Combines two values using intelligent merging logic:
-   * - **Objects:** Merges properties recursively
-   * - **Other types:** Returns the latter value if not null, otherwise the former
+   * If both values are objects, then combines them in the properties level.
    *
-   * **Logic:** `return (y ?? x)`
+   * Otherwise, returns the latter value if it's not null, otherwise the former
+   * value.
    *
-   * @param x First value to merge
-   * @param y Second value to merge (takes precedence when not null)
+   * - `return (y ?? x)`
+   *
+   * @param x Value X to merge
+   * @param y Value Y to merge
+   * @returns Merged value
+   */
    * @returns Intelligently merged result
    */
   export const mergeValue = (x: unknown, y: unknown): unknown =>

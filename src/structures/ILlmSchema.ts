@@ -7,19 +7,12 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
 
 /**
- * Schemas for LLM function calling.
+ * The schemas for the LLM function calling.
  *
- * `ILlmSchema` is a union type that collects all schemas supported for LLM
- * function calling across different AI providers.
+ * `ILlmSchema` is a union type collecting every the schemas for the LLM
+ * function calling.
  *
- * Select the appropriate schema type based on your LLM provider:
- * - `chatgpt`: OpenAI GPT models
- * - `claude`: Anthropic Claude models
- * - `gemini`: Google Gemini models
- * - `llama`: Meta Llama models
- * - `deepseek`: DeepSeek models
- * - `3.0`: Generic OpenAPI 3.0 schema
- * - `3.1`: Generic OpenAPI 3.1 schema
+ * Select a proper schema type according to the LLM provider you're using.
  *
  * @author Jeongho Nam - https://github.com/samchon
  * @template Model Type of the LLM model
@@ -67,13 +60,12 @@ export namespace ILlmSchema {
   }
 
   /**
-   * Type for function parameters.
+   * Type of function parameters.
    *
-   * `ILlmSchema.IParameters` defines a function's parameters as a
-   * keyword object type, where each property represents a named parameter.
+   * `ILlmSchema.IParameters` is a type defining a function's parameters as a
+   * keyworded object type.
    *
-   * It can also be used for structured output metadata to define the
-   * expected format of LLM responses.
+   * It also can be utilized for the structured output metadata.
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */

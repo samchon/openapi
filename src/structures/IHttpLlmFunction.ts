@@ -53,24 +53,25 @@ export interface IHttpLlmFunction<Model extends ILlmSchema.Model> {
    * Representative name of the function.
    *
    * The `name` is a representative name identifying the function in the
-   * {@link IHttpLlmApplication}. The `name` value is composed by joining
-   * the {@link IHttpMigrateRoute.accessor} elements with underscore `_` characters.
+   * {@link IHttpLlmApplication}. The `name` value is just composed by joining
+   * the {@link IHttpMigrateRoute.accessor} by underscore `_` character.
    *
-   * Here is the composition rule for {@link IHttpMigrateRoute.accessor}:
+   * Here is the composition rule of the {@link IHttpMigrateRoute.accessor}:
    *
-   * > The `accessor` is composed with the following rules. First, namespaces
-   * > are formed from static directory names in the {@link path}. Parametric
-   * > symbols represented by `:param` or `{param}` cannot be part of the
+   * > The `accessor` is composed with the following rules. At first, namespaces
+   * > are composed by static directory names in the {@link path}. Parametric
+   * > symbols represented by `:param` or `{param}` cannot be a part of the
    * > namespace.
    *
-   * > Instead, they become part of the function name. The function name combines
-   * > the {@link method HTTP method} with parametric symbols like
-   * > `getByParam` or `postByParam`. Multiple path parameters are
-   * > concatenated with `And` like `getByParam1AndParam2`.
+   * > Instead, they would be a part of the function name. The function name is
+   * > composed with the {@link method HTTP method} and parametric symbols like
+   * > `getByParam` or `postByParam`. If there are multiple path parameters, they
+   * > would be concatenated by `And` like `getByParam1AndParam2`.
    *
    * > For reference, if the {@link operation}'s {@link method} is `delete`, the
-   * > function name is replaced with `erase` instead of `delete` because
-   * > `delete` is a reserved keyword in many programming languages.
+   * > function name would be replaced to `erase` instead of `delete`. It is the
+   * > reason why the `delete` is a reserved keyword in many programming
+   * > languages.
    *
    * > - Example 1
    *
