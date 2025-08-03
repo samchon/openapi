@@ -4,7 +4,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * Type schema info for the Gemini function calling.
  *
  * `IGeminiSchema` is a type metadata for the LLM (Large Language Model)
- * function calling in the Geminimi.
+ * function calling in the Gemini.
  *
  * `IGeminiSchema` basically follows the JSON schema definition of the OpenAPI
  * v3.0 specification; {@link OpenApiV3.IJsonSchema}. However, `IGeminiSchema`

@@ -3,8 +3,8 @@
 /**
  * Connection information.
  *
- * `IConnection` is an interface ttype who represents connection information of
- * the remote HTTP server. You can target the remote HTTP server by wring the
+ * `IHttpConnection` is an interface type that represents connection information of
+ * the remote HTTP server. You can target the remote HTTP server by writing the
  * {@link IHttpConnection.host} variable down. Also, you can configure special
  * header values by specializing the {@link IHttpConnection.headers} variable.
  *
@@ -12,7 +12,7 @@
  * AES-128/256 algorithm, specify the {@link IHttpConnection.encryption} with
  * {@link IEncryptionPassword} or {@link IEncryptionPassword.Closure} variable.
  *
- * @author Jenogho Nam - https://github.com/samchon
+ * @author Jeongho Nam - https://github.com/samchon
  * @author Seungjun We - https://github.com/SeungjunWe
  */
 export interface IHttpConnection {
