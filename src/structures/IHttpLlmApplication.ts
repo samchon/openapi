@@ -1,7 +1,6 @@
 import { OpenApi } from "../OpenApi";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
-import { ILlmApplication } from "./ILlmApplication";
 import { ILlmSchema } from "./ILlmSchema";
 import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 
@@ -84,7 +83,37 @@ export interface IHttpLlmApplication<Model extends ILlmSchema.Model> {
 export namespace IHttpLlmApplication {
   /** Options for the HTTP LLM application schema composition. */
   export type IOptions<Model extends ILlmSchema.Model> =
-    ILlmApplication.IOptions<Model> & {
+    ILlmSchema.ModelConfig[Model] & {
+      /**
+       * Separator function for the parameters.
+       *
+       * When composing parameter arguments through LLM function call, there can
+       * be a case that some parameters must be composed by human, or LLM cannot
+       * understand the parameter.
+       *
+       * For example, if the parameter type has configured
+       * {@link IGeminiSchema.IString.contentMediaType} which indicates file
+       * uploading, it must be composed by human, not by LLM (Large Language
+       * Model).
+       *
+       * In that case, if you configure this property with a function that
+       * predicating whether the schema value must be composed by human or not,
+       * the parameters would be separated into two parts.
+       *
+       * - {@link ILlmFunction.separated.llm}
+       * - {@link ILlmFunction.separated.human}
+       *
+       * When writing the function, note that returning value `true` means to be
+       * a human composing the value, and `false` means to LLM composing the
+       * value. Also, when predicating the schema, it would better to utilize
+       * the {@link GeminiTypeChecker} like features.
+       *
+       * @default null
+       * @param schema Schema to be separated.
+       * @returns Whether the schema value must be composed by human or not.
+       */
+      separate?: null | ((schema: ILlmSchema.ModelSchema[Model]) => boolean);
+
       /**
        * Maximum length of function name.
        *
