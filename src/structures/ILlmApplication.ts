@@ -140,7 +140,7 @@ export namespace ILlmApplication {
    */
   export type IValidationHook<Class extends object> = {
     [K in keyof Class]?: Class[K] extends (args: infer Argument) => unknown
-      ? (input: Argument) => IValidation<unknown>
+      ? (input: unknown) => IValidation<Argument>
       : never;
   };
 }
