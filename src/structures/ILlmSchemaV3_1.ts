@@ -74,6 +74,7 @@ export type ILlmSchemaV3_1 =
   | ILlmSchemaV3_1.IObject
   | ILlmSchemaV3_1.IReference
   | ILlmSchemaV3_1.IOneOf
+  | ILlmSchemaV3_1.INot
   | ILlmSchemaV3_1.INull
   | ILlmSchemaV3_1.IUnknown;
 export namespace ILlmSchemaV3_1 {
@@ -437,6 +438,12 @@ export namespace ILlmSchemaV3_1 {
        */
       mapping?: Record<string, string>;
     }
+  }
+
+  /** Negation type schema. */
+  export interface INot extends IJsonSchemaAttribute {
+    /** Schema that must not match. */
+    not: Exclude<ILlmSchemaV3_1, ILlmSchemaV3_1.INot>;
   }
 
   /** Null type. */
