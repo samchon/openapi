@@ -576,6 +576,7 @@ export namespace OpenApi {
     | IJsonSchema.IObject
     | IJsonSchema.IReference
     | IJsonSchema.IOneOf
+    | IJsonSchema.INot
     | IJsonSchema.INull
     | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
@@ -928,6 +929,12 @@ export namespace OpenApi {
          */
         mapping?: Record<string, string>;
       }
+    }
+
+    /** Negation type schema. */
+    export interface INot extends IJsonSchemaAttribute {
+      /** Schema that must not match. */
+      not: Exclude<IJsonSchema, IJsonSchema.INot>;
     }
 
     /** Null type. */

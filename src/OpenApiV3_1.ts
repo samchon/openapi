@@ -186,6 +186,7 @@ export namespace OpenApiV3_1 {
     | IJsonSchema.IAllOf
     | IJsonSchema.IAnyOf
     | IJsonSchema.IOneOf
+    | IJsonSchema.INot
     | IJsonSchema.INull
     | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
@@ -332,6 +333,9 @@ export namespace OpenApiV3_1 {
         propertyName: string;
         mapping?: Record<string, string>;
       }
+    }
+    export interface INot extends __IAttribute {
+      not: IJsonSchema;
     }
 
     export interface INull

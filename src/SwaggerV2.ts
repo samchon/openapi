@@ -127,6 +127,7 @@ export namespace SwaggerV2 {
     | IJsonSchema.IReference
     | IJsonSchema.IAnyOf
     | IJsonSchema.IOneOf
+    | IJsonSchema.INot
     | IJsonSchema.INullOnly
     | IJsonSchema.IUnknown;
   export namespace IJsonSchema {
@@ -226,6 +227,9 @@ export namespace SwaggerV2 {
     }
     export interface IOneOf extends __IAttribute {
       "x-oneOf": IJsonSchema[];
+    }
+    export interface INot extends __IAttribute {
+      "x-not": IJsonSchema;
     }
 
     export interface INullOnly extends __IAttribute {
