@@ -460,9 +460,6 @@ export namespace OpenApi {
        */
       required?: boolean;
 
-      /** Short title of the parameter. */
-      title?: string;
-
       /** Verbose explanation of the parameter. */
       description?: string;
 
