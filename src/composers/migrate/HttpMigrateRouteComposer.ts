@@ -244,7 +244,7 @@ export namespace HttpMigrateRouteComposer {
     )
       .filter((p) => p.in === "path")
       .map((p, i) => ({
-        // FILL KEY NAME IF NOT EXISTsS
+        // FILL KEY NAME IF NOT EXISTS
         name: parameterNames[i],
         key: (() => {
           let key: string = EndpointUtil.normalize(parameterNames[i]);
@@ -265,7 +265,7 @@ export namespace HttpMigrateRouteComposer {
       parameters: (props.operation.parameters ?? [])
         .filter((p) => p.in === "path")
         .map((p, i) => ({
-          // FILL KEY NAME IF NOT EXISTsS
+          // FILL KEY NAME IF NOT EXISTS
           name: parameterNames[i],
           key: (() => {
             let key: string = EndpointUtil.normalize(parameterNames[i]);
