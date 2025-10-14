@@ -29,7 +29,7 @@ export interface IMcpTool {
    *
    * The input schema, parameters of the tool.
    *
-   * As MCP (Model Context Protocol) does not restict the JSON schema
+   * As MCP (Model Context Protocol) does not restrict the JSON schema
    * specification, `@samchon/openapi` has defined it to be universal structure
    * {@link OpenApiV3_1.IJsonSchema} which can cover every JSON schema
    * specification.
@@ -42,7 +42,7 @@ export namespace IMcpTool {
    *
    * The input schema, parameters of the tool.
    *
-   * As MCP (Model Context Protocol) does not restict the JSON schema
+   * As MCP (Model Context Protocol) does not restrict the JSON schema
    * specification, `@samchon/openapi` has defined it to be universal structure
    * {@link OpenApiV3_1.IJsonSchema} which can cover every JSON schema
    * specification.
