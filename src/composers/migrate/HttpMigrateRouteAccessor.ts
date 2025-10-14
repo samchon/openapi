@@ -44,6 +44,21 @@ export namespace HttpMigrateRouteAccessor {
           entry.route.accessor = accessor;
         else entry.route.accessor = [...props.namespace, entry.alias];
       });
+
+    for (const x of routes) {
+      while (true) {
+        const neighbor: IHttpMigrateRoute | undefined = routes.find(
+          (y) =>
+            y.accessor.length < x.accessor.length &&
+            x.accessor
+              .slice(0, y.accessor.length)
+              .every((v, i) => v === y.accessor[i]),
+        );
+        if (neighbor === undefined) break;
+        x.accessor[neighbor.accessor.length - 1] =
+          `_${x.accessor[neighbor.accessor.length - 1]}`;
+      }
+    }
   };
 
   const collect =
