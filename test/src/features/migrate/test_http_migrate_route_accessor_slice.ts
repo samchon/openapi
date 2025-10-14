@@ -13,10 +13,14 @@ export const test_http_migrate_route_accessor_slice = (): void => {
     components: {},
     paths: {
       "/auth/logout": {
-        post: {},
+        post: {
+          "x-samchon-accessor": ["auth", "logout"],
+        },
       },
       "/auto/logout/all": {
-        post: {},
+        post: {
+          "x-samchon-accessor": ["auth", "logout", "all"],
+        },
       },
     },
   };
@@ -24,8 +28,7 @@ export const test_http_migrate_route_accessor_slice = (): void => {
   const actual: string[] = migrate.routes
     .map((r) => r.accessor.join("."))
     .sort();
-  TestValidator.equals("accessors")(actual)([
-    "auth.logout",
-    "auth._logout.all",
-  ]);
+  TestValidator.equals("accessors")(actual)(
+    ["auth.logout", "auth._logout.all"].sort(),
+  );
 };
