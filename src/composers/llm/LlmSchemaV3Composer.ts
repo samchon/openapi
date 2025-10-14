@@ -13,10 +13,13 @@ import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3Composer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = false;
+
+  export const DEFAULT_CONFIG: ILlmSchemaV3.IConfig = {
+    recursive: 3,
+    constraint: true,
+  };
 
   /* -----------------------------------------------------------
     CONVERTERS
@@ -171,6 +174,7 @@ export namespace LlmSchemaV3Composer {
   export const separateParameters = (props: {
     predicate: (schema: ILlmSchemaV3) => boolean;
     parameters: ILlmSchemaV3.IParameters;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"3.0"> => {
     const [llm, human] = separateObject({
       predicate: props.predicate,
@@ -189,6 +193,7 @@ export namespace LlmSchemaV3Composer {
             components: {},
             schema: invert({ schema: llm }),
             required: true,
+            equals: props.equals,
           })
         : undefined,
     };

@@ -16,9 +16,7 @@ export namespace SwaggerV2 {
     | "patch"
     | "trace";
 
-  /**
-   * @internal
-   */
+  /** @internal */
   export const is = (input: any): input is IDocument =>
     typeof input === "object" &&
     input !== null &&

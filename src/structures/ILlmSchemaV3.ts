@@ -3,23 +3,23 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 /**
  * Type schema based on OpenAPI v3.0 for LLM function calling.
  *
- * `ILlmSchemaV3` is a type metadata for LLM (Large Language Model)
- * function calling, based on the OpenAPI v3.0 speicification. This type
- * is not the final type for the LLM function calling, but the intermediate
- * structure for the conversion to the final type like {@link IGeminiSchema}.
+ * `ILlmSchemaV3` is a type metadata for LLM (Large Language Model) function
+ * calling, based on the OpenAPI v3.0 specification. This type is not the final
+ * type for the LLM function calling, but the intermediate structure for the
+ * conversion to the final type like {@link IGeminiSchema}.
  *
- * `ILlmSchemaV3` basically follows the JSON schema definition of OpenAPI
- * v3.0 specification; {@link OpenApiV3.IJsonSchema}. However, `ILlmSchemaV3`
- * does not have the reference type; {@link OpenApiV3.IJsonSchema.IReference}.
- * It's because the LLM cannot compose the reference typed arguments. If
- * recursive type comes, its type would be repeated in
- * {@link ILlmSchemaV3.IConfig.recursive} times. Otherwise you've configured
- * it to `false`, the recursive types are not allowed.
+ * `ILlmSchemaV3` basically follows the JSON schema definition of OpenAPI v3.0
+ * specification; {@link OpenApiV3.IJsonSchema}. However, `ILlmSchemaV3` does not
+ * have the reference type; {@link OpenApiV3.IJsonSchema.IReference}. It's
+ * because the LLM cannot compose the reference typed arguments. If recursive
+ * type comes, its type would be repeated in
+ * {@link ILlmSchemaV3.IConfig.recursive} times. Otherwise you've configured it
+ * to `false`, the recursive types are not allowed.
  *
- * For reference, the OpenAPI v3.0 based JSON schema definition can't
- * express the tuple array type. It has been supported since OpenAPI v3.1;
- * {@link OpenApi.IJsonSchema.ITuple}. Therefore, it would better to avoid
- * using the tuple array type in the LLM function calling.
+ * For reference, the OpenAPI v3.0 based JSON schema definition can't express
+ * the tuple array type. It has been supported since OpenAPI v3.1;
+ * {@link OpenApi.IJsonSchema.ITuple}. Therefore, it would better to avoid using
+ * the tuple array type in the LLM function calling.
  *
  * Also, if you configure {@link ILlmSchemaV3.IConfig.constraint} to `false`,
  * these properties would be banned and written to the
@@ -38,8 +38,8 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link ILlmSchemaV3.IArray.maxItems}
  * - {@link ILlmSchemaV3.IArray.unique}
  *
- * @reference https://platform.openai.com/docs/guides/function-calling
  * @author Jeongho Nam - https://github.com/samchon
+ * @reference https://platform.openai.com/docs/guides/function-calling
  */
 export type ILlmSchemaV3 =
   | ILlmSchemaV3.IBoolean
@@ -52,25 +52,23 @@ export type ILlmSchemaV3 =
   | ILlmSchemaV3.INullOnly
   | ILlmSchemaV3.IOneOf;
 export namespace ILlmSchemaV3 {
-  /**
-   * Configuration for OpenAPI v3.0 based LLM schema composition.
-   */
+  /** Configuration for OpenAPI v3.0 based LLM schema composition. */
   export interface IConfig {
     /**
      * Whether to allow constraint properties or not.
      *
-     * If you configure this property to `false`, the schemas do not contain
-     * the constraint properties of below. Instead, below properties would be
-     * written to the {@link ILlmSchemaV3.__IAttribute.description} property
-     * as a comment string like `"@format uuid"`.
+     * If you configure this property to `false`, the schemas do not contain the
+     * constraint properties of below. Instead, below properties would be
+     * written to the {@link ILlmSchemaV3.__IAttribute.description} property as a
+     * comment string like `"@format uuid"`.
      *
-     * This is because some LLM schema model like {@link IGeminiSchema}
-     * has banned such constraint, because their LLM cannot understand the
+     * This is because some LLM schema model like {@link IGeminiSchema} has
+     * banned such constraint, because their LLM cannot understand the
      * constraint properties and occur the hallucination.
      *
-     * Therefore, considering your LLM model's performance, capability,
-     * and the complexity of your parameter types, determine which is better,
-     * to allow the constraint properties or not.
+     * Therefore, considering your LLM model's performance, capability, and the
+     * complexity of your parameter types, determine which is better, to allow
+     * the constraint properties or not.
      *
      * - {@link ILlmSchemaV3.INumber.minimum}
      * - {@link ILlmSchemaV3.INumber.maximum}
@@ -105,8 +103,8 @@ export namespace ILlmSchemaV3 {
   /**
    * Type of the function parameters.
    *
-   * `ILlmSchemaV3.IParameters` is a type defining a function's parameters
-   * as a keyworded object type.
+   * `ILlmSchemaV3.IParameters` is a type defining a function's parameters as a
+   * keyworded object type.
    *
    * It also can be utilized for the structured output metadata.
    *
@@ -124,33 +122,21 @@ export namespace ILlmSchemaV3 {
     additionalProperties: false;
   }
 
-  /**
-   * Boolean type schema info.
-   */
+  /** Boolean type schema info. */
   export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
-    /**
-     * Default value.
-     */
+    /** Default value. */
     default?: boolean | null;
 
-    /**
-     * Enumeration values.
-     */
+    /** Enumeration values. */
     enum?: Array<boolean | null>;
   }
 
-  /**
-   * Integer type schema info.
-   */
+  /** Integer type schema info. */
   export interface IInteger extends IJsonSchemaAttribute.IInteger {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
     /**
@@ -181,14 +167,10 @@ export namespace ILlmSchemaV3 {
      */
     maximum?: number;
 
-    /**
-     * Exclusive minimum value restriction.
-     */
+    /** Exclusive minimum value restriction. */
     exclusiveMinimum?: number;
 
-    /**
-     * Exclusive maximum value restriction.
-     */
+    /** Exclusive maximum value restriction. */
     exclusiveMaximum?: number;
 
     /**
@@ -200,43 +182,27 @@ export namespace ILlmSchemaV3 {
     multipleOf?: number;
   }
 
-  /**
-   * Number type schema info.
-   */
+  /** Number type schema info. */
   export interface INumber extends IJsonSchemaAttribute.INumber {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
-    /**
-     * Default value.
-     */
+    /** Default value. */
     default?: number | null;
 
-    /**
-     * Enumeration values.
-     */
+    /** Enumeration values. */
     enum?: Array<number | null>;
 
-    /**
-     * Minimum value restriction.
-     */
+    /** Minimum value restriction. */
     minimum?: number;
 
-    /**
-     * Maximum value restriction.
-     */
+    /** Maximum value restriction. */
     maximum?: number;
 
-    /**
-     * Exclusive minimum value restriction.
-     */
+    /** Exclusive minimum value restriction. */
     exclusiveMinimum?: number;
 
-    /**
-     * Exclusive maximum value restriction.
-     */
+    /** Exclusive maximum value restriction. */
     exclusiveMaximum?: number;
 
     /**
@@ -247,28 +213,18 @@ export namespace ILlmSchemaV3 {
     multipleOf?: number;
   }
 
-  /**
-   * String type schema info.
-   */
+  /** String type schema info. */
   export interface IString extends IJsonSchemaAttribute.IString {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
-    /**
-     * Default value.
-     */
+    /** Default value. */
     default?: string | null;
 
-    /**
-     * Enumeration values.
-     */
+    /** Enumeration values. */
     enum?: Array<string | null>;
 
-    /**
-     * Format restriction.
-     */
+    /** Format restriction. */
     format?:
       | "binary"
       | "byte"
@@ -295,9 +251,7 @@ export namespace ILlmSchemaV3 {
       | "relative-json-pointer"
       | (string & {});
 
-    /**
-     * Pattern restriction.
-     */
+    /** Pattern restriction. */
     pattern?: string;
 
     /**
@@ -314,19 +268,13 @@ export namespace ILlmSchemaV3 {
      */
     maxLength?: number;
 
-    /**
-     * Content media type restriction.
-     */
+    /** Content media type restriction. */
     contentMediaType?: string;
   }
 
-  /**
-   * Array type schema info.
-   */
+  /** Array type schema info. */
   export interface IArray extends IJsonSchemaAttribute.IArray {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
     /**
@@ -363,24 +311,20 @@ export namespace ILlmSchemaV3 {
     maxItems?: number;
   }
 
-  /**
-   * Object type schema info.
-   */
+  /** Object type schema info. */
   export interface IObject extends IJsonSchemaAttribute.IObject {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
     /**
      * Properties of the object.
      *
-     * The `properties` means a list of key-value pairs of the object's
-     * regular properties. The key is the name of the regular property,
-     * and the value is the type schema info.
+     * The `properties` means a list of key-value pairs of the object's regular
+     * properties. The key is the name of the regular property, and the value is
+     * the type schema info.
      *
-     * If you need additional properties that is represented by dynamic key,
-     * you can use the {@link additionalProperties} instead.
+     * If you need additional properties that is represented by dynamic key, you
+     * can use the {@link additionalProperties} instead.
      */
     properties: Record<string, ILlmSchemaV3>;
 
@@ -390,7 +334,8 @@ export namespace ILlmSchemaV3 {
      * The `required` means a list of the key values of the required
      * {@link properties}. If some property key is not listed in the `required`
      * list, it means that property is optional. Otherwise some property key
-     * exists in the `required` list, it means that the property must be filled.
+     * exists in the `required` list, it means that the property must be
+     * filled.
      *
      * Below is an example of the {@link properties} and `required`.
      *
@@ -441,24 +386,18 @@ export namespace ILlmSchemaV3 {
    *
    * `IOneOf` represents an union type of the TypeScript (`A | B | C`).
    *
-   * For reference, even though your Swagger (or OpenAPI) document has
-   * defined `anyOf` instead of the `oneOf`, it has been forcibly converted
-   * to `oneOf` type by {@link OpenApi.convert OpenAPI conversion}.
+   * For reference, even though your Swagger (or OpenAPI) document has defined
+   * `anyOf` instead of the `oneOf`, it has been forcibly converted to `oneOf`
+   * type by {@link OpenApi.convert OpenAPI conversion}.
    */
   export interface IOneOf extends IJsonSchemaAttribute {
-    /**
-     * List of the union types.
-     */
+    /** List of the union types. */
     oneOf: Exclude<ILlmSchemaV3, ILlmSchemaV3.IOneOf>[];
   }
 
-  /**
-   * Null only type schema info.
-   */
+  /** Null only type schema info. */
   export interface INullOnly extends IJsonSchemaAttribute.INull {
-    /**
-     * Default value.
-     */
+    /** Default value. */
     default?: null;
   }
 
@@ -472,26 +411,22 @@ export namespace ILlmSchemaV3 {
   /**
    * Significant attributes that can be applied to the most types.
    *
+   * @ignore
    * @deprecated
-   * @hidden
    */
   export interface __ISignificant<Type extends string> extends __IAttribute {
-    /**
-     * Discriminator value of the type.
-     */
+    /** Discriminator value of the type. */
     type: Type;
 
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
   }
 
   /**
    * Common attributes that can be applied to all types.
    *
+   * @ignore
    * @deprecated
-   * @hidden
    */
   export type __IAttribute = IJsonSchemaAttribute;
 }

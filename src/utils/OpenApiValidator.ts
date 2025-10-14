@@ -8,6 +8,7 @@ export namespace OpenApiValidator {
       components: OpenApi.IComponents;
       schema: OpenApi.IJsonSchema;
       required: boolean;
+      equals?: boolean;
     }) =>
     (value: unknown): IValidation<unknown> =>
       validate({ ...prop, value });
@@ -17,6 +18,7 @@ export namespace OpenApiValidator {
     schema: OpenApi.IJsonSchema;
     value: unknown;
     required: boolean;
+    equals?: boolean;
   }): IValidation<unknown> => {
     const errors: IValidation.IError[] = [];
     OpenApiStationValidator.validate({
@@ -24,6 +26,7 @@ export namespace OpenApiValidator {
       path: "$input",
       exceptionable: true,
       report: createReporter(errors),
+      equals: props.equals ?? false,
     });
     return errors.length === 0
       ? {
@@ -50,12 +53,21 @@ export namespace OpenApiValidator {
         exceptionable: boolean;
       },
     ): false => {
-      if (error.exceptionable && reportable(error.path))
-        array.push({
+      if (error.exceptionable && reportable(error.path)) {
+        const info: IValidation.IError = {
           path: error.path,
           expected: error.expected,
           value: error.value,
-        });
+          description: error.description,
+        };
+        if (error.value === undefined)
+          info.description ??= [
+            "The value at this path is `undefined`.",
+            "",
+            `Please fill the \`${error.expected}\` typed value next time.`,
+          ].join("\n");
+        array.push(info);
+      }
       return false;
     };
   };

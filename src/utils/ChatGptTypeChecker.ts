@@ -1,12 +1,19 @@
 import { IChatGptSchema } from "../structures/IChatGptSchema";
 import { MapUtil } from "./MapUtil";
 
+/**
+ * Type checker for ChatGPT type schema.
+ *
+ * `ChatGptTypeChecker` is a type checker of {@link IChatGptSchema}.
+ *
+ * @author Jeongho Nam - https://github.com/samchon
+ */
 export namespace ChatGptTypeChecker {
   /* -----------------------------------------------------------
     TYPE CHECKERS
   ----------------------------------------------------------- */
   /**
-   * Test whether the schema is a nul type.
+   * Test whether the schema is a null type.
    *
    * @param schema Target schema
    * @returns Whether null type or not
@@ -123,7 +130,8 @@ export namespace ChatGptTypeChecker {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   * Visit every nested schemas of the target, and apply the `props.closure`
+   * function.
    *
    * Here is the list of occurring nested visitings:
    *

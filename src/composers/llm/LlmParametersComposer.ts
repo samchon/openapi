@@ -3,9 +3,7 @@ import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
 import { IResult } from "../../structures/IResult";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 
-/**
- * @internal
- */
+/** @internal */
 export namespace LlmParametersFinder {
   export const parameters = (props: {
     components: OpenApi.IComponents;

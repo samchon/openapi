@@ -12,10 +12,12 @@ import { LlmParametersFinder } from "./LlmParametersComposer";
 import { LlmSchemaV3Composer } from "./LlmSchemaV3Composer";
 
 export namespace GeminiSchemaComposer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = false;
+
+  export const DEFAULT_CONFIG: IGeminiSchema.IConfig = {
+    recursive: 3,
+  };
 
   export const parameters = (props: {
     config: IGeminiSchema.IConfig;
@@ -82,15 +84,9 @@ export namespace GeminiSchemaComposer {
       schema: result.value,
       closure: (v) => {
         if (v.title !== undefined) {
-          if (v.description === undefined) v.description = v.title;
-          else {
-            const title: string = v.title.endsWith(".")
-              ? v.title.substring(0, v.title.length - 1)
-              : v.title;
-            v.description = v.description.startsWith(title)
-              ? v.description
-              : `${title}.\n\n${v.description}`;
-          }
+          v.description = !!v.description?.length
+            ? `${v.description}\n\n@title ${v.title}`
+            : `@title ${v.title}`;
           delete v.title;
         }
         if (
@@ -109,12 +105,14 @@ export namespace GeminiSchemaComposer {
   export const separateParameters = (props: {
     predicate: (schema: IGeminiSchema) => boolean;
     parameters: IGeminiSchema.IParameters;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"gemini"> => {
     const separated: ILlmFunction.ISeparated<"3.0"> =
       LlmSchemaV3Composer.separateParameters(
         props as {
           predicate: (schema: ILlmSchemaV3) => boolean;
           parameters: ILlmSchemaV3.IParameters;
+          equals?: boolean;
         },
       );
     return separated as any as ILlmFunction.ISeparated<"gemini">;

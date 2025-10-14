@@ -14,10 +14,13 @@ import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ChatGptSchemaComposer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = true;
+
+  export const DEFAULT_CONFIG: IChatGptSchema.IConfig = {
+    reference: true,
+    strict: false,
+  };
 
   /* -----------------------------------------------------------
     CONVERTERS
@@ -220,6 +223,16 @@ export namespace ChatGptSchemaComposer {
           ? undefined
           : u.description,
       })),
+      "x-discriminator":
+        LlmTypeCheckerV3_1.isOneOf(props.schema) &&
+        props.schema.discriminator !== undefined &&
+        props.schema.oneOf.length === union.length &&
+        union.every(
+          (e) =>
+            ChatGptTypeChecker.isReference(e) || ChatGptTypeChecker.isNull(e),
+        )
+          ? props.schema.discriminator
+          : undefined,
     };
   };
 
@@ -230,6 +243,7 @@ export namespace ChatGptSchemaComposer {
     parameters: IChatGptSchema.IParameters;
     predicate: (schema: IChatGptSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"chatgpt"> => {
     const convention =
       props.convention ??
@@ -284,6 +298,7 @@ export namespace ChatGptSchemaComposer {
           $defs: output.llm.$defs,
         }),
         required: true,
+        equals: props.equals,
       });
     }
     return output;
@@ -448,6 +463,8 @@ export namespace ChatGptSchemaComposer {
       $defs: props.$defs,
       schema,
     });
+    if (llm !== null) Object.assign(props.$defs[llmKey], llm);
+    if (human !== null) Object.assign(props.$defs[humanKey], human);
 
     // ONLY ONE
     if (llm === null || human === null) {
@@ -591,7 +608,27 @@ export namespace ChatGptSchemaComposer {
         ? { type: undefined }
         : union.length === 1
           ? { ...union[0] }
-          : { oneOf: union.map((u) => ({ ...u, nullable: undefined })) }),
+          : {
+              oneOf: union.map((u) => ({ ...u, nullable: undefined })),
+              discriminator:
+                ChatGptTypeChecker.isAnyOf(props.schema) &&
+                props.schema["x-discriminator"] !== undefined
+                  ? {
+                      property: props.schema["x-discriminator"],
+                      mapping:
+                        props.schema["x-discriminator"].mapping !== undefined
+                          ? Object.fromEntries(
+                              Object.entries(
+                                props.schema["x-discriminator"].mapping,
+                              ).map(([key, value]) => [
+                                key,
+                                `#/components/schemas/${value.split("/").at(-1)}`,
+                              ]),
+                            )
+                          : undefined,
+                    }
+                  : undefined,
+            }),
     };
   };
 }

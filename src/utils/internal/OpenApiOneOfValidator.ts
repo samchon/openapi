@@ -15,22 +15,30 @@ export namespace OpenApiOneOfValidator {
           ...ctx,
           schema: item.schema,
         });
-    return discriminator.branches.length === 0
-      ? discriminator.remainders
-          .map((schema) =>
-            OpenApiStationValidator.validate({
-              ...ctx,
-              schema,
-              exceptionable: false,
-            }),
-          )
-          .some((v) => v) || ctx.report(ctx)
-      : validate({
+    if (discriminator.branches.length !== 0)
+      return validate({
+        ...ctx,
+        schema: {
+          oneOf: discriminator.remainders,
+        },
+      });
+    const matched: OpenApi.IJsonSchema | undefined =
+      discriminator.remainders.find(
+        (schema) =>
+          OpenApiStationValidator.validate({
+            ...ctx,
+            schema,
+            exceptionable: false,
+            equals: false,
+          }) === true,
+      );
+    if (matched === undefined) return ctx.report(ctx);
+    return ctx.equals === true
+      ? OpenApiStationValidator.validate({
           ...ctx,
-          schema: {
-            oneOf: discriminator.remainders,
-          },
-        });
+          schema: matched,
+        })
+      : true;
   };
 
   const getDiscriminator = (
@@ -125,11 +133,11 @@ export namespace OpenApiOneOfValidator {
         array.every(
           (item, j) =>
             i === j ||
-            !OpenApiTypeChecker.covers({
+            OpenApiTypeChecker.covers({
               components: ctx.components,
               x: item.escaped.items,
               y: flat.escaped.items,
-            }),
+            }) === false,
         ),
       )
       .map(
@@ -145,6 +153,7 @@ export namespace OpenApiOneOfValidator {
                   value: value[0]!,
                   path: `${ctx.path}[0]`,
                   exceptionable: false,
+                  equals: false,
                 })),
           }) satisfies IDiscriminatorBranch,
       );

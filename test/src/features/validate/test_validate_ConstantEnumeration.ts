@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_ConstantEnumeration = (): void =>
   _test_validate<ConstantEnumeration>({
-    collection: typia.json.schemas<[ConstantEnumeration]>(),
+    ...typia.json.schema<ConstantEnumeration>(),
     factory: ConstantEnumeration,
     name: "ConstantEnumeration",
   });

@@ -2,11 +2,11 @@ import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
 import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
 /**
- * Type checker for LLM type schema.
+ * Type checker for LLM type schema v3.
  *
- * `LlmSchemaTypeChecker` is a type checker of {@link ILlmSchemaV3}.
+ * `LlmTypeCheckerV3` is a type checker of {@link ILlmSchemaV3}.
  *
- * @author Samchon
+ * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace LlmTypeCheckerV3 {
   /* -----------------------------------------------------------
@@ -15,7 +15,8 @@ export namespace LlmTypeCheckerV3 {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   * Visit every nested schemas of the target, and apply the `props.closure`
+   * function.
    *
    * Here is the list of occurring nested visitings:
    *
@@ -92,9 +93,7 @@ export namespace LlmTypeCheckerV3 {
     );
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverBoolean = (
     x: ILlmSchemaV3.IBoolean,
     y: ILlmSchemaV3.IBoolean,
@@ -102,9 +101,7 @@ export namespace LlmTypeCheckerV3 {
     x.enum === undefined ||
     (y.enum !== undefined && x.enum.every((v) => y.enum!.includes(v)));
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverInteger = (
     x: ILlmSchemaV3.IInteger,
     y: ILlmSchemaV3.IInteger,
@@ -114,9 +111,7 @@ export namespace LlmTypeCheckerV3 {
     return x.type === y.type && OpenApiTypeCheckerBase.coverNumericRange(x, y);
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverNumber = (
     x: ILlmSchemaV3.INumber,
     y: ILlmSchemaV3.INumber | ILlmSchemaV3.IInteger,
@@ -129,9 +124,7 @@ export namespace LlmTypeCheckerV3 {
     );
   };
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const covertString = (
     x: ILlmSchemaV3.IString,
     y: ILlmSchemaV3.IString,
@@ -161,9 +154,7 @@ export namespace LlmTypeCheckerV3 {
     (x === "iri" && y === "uri") ||
     (x === "iri-reference" && y === "uri-reference");
 
-  /**
-   * @internal
-   */
+  /** @internal */
   const coverArray = (
     x: ILlmSchemaV3.IArray,
     y: ILlmSchemaV3.IArray,

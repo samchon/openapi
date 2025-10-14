@@ -1,6 +1,13 @@
 import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { OpenApiTypeCheckerBase } from "./internal/OpenApiTypeCheckerBase";
 
+/**
+ * Type checker for LLM type schema v3.1.
+ *
+ * `LlmTypeCheckerV3_1` is a type checker of {@link ILlmSchemaV3_1}.
+ *
+ * @author Jeongho Nam - https://github.com/samchon
+ */
 export namespace LlmTypeCheckerV3_1 {
   /* -----------------------------------------------------------
     TYPE CHECKERS
@@ -170,7 +177,8 @@ export namespace LlmTypeCheckerV3_1 {
   /**
    * Visit every nested schemas.
    *
-   * Visit every nested schemas of the target, and apply the `props.closure` function.
+   * Visit every nested schemas of the target, and apply the `props.closure`
+   * function.
    *
    * Here is the list of occurring nested visitings:
    *

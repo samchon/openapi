@@ -4,16 +4,16 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * Type schema info for the Gemini function calling.
  *
  * `IGeminiSchema` is a type metadata for the LLM (Large Language Model)
- * function calling in the Geminimi.
+ * function calling in the Gemini.
  *
- * `IGeminiSchema` basically follows the JSON schema definition of the
- * OpenAPI v3.0 specification; {@link OpenApiV3.IJsonSchema}. However,
- * `IGeminiSchema` cannot understand union and reference types, represented
- * by the `oneOf` and `$ref` properties. Also, as OpenAPI v3.0 specification
- * does not support the tuple type, `IGeminiSchema` does not support the
- * tuple type either.
+ * `IGeminiSchema` basically follows the JSON schema definition of the OpenAPI
+ * v3.0 specification; {@link OpenApiV3.IJsonSchema}. However, `IGeminiSchema`
+ * cannot understand union and reference types, represented by the `oneOf` and
+ * `$ref` properties. Also, as OpenAPI v3.0 specification does not support the
+ * tuple type, `IGeminiSchema` does not support the tuple type either.
  *
  * - Does not support
+ *
  *   - {@link OpenApiV3.IJsonSchema.IReference}
  *   - {@link OpenApiV3.IJsonSchema.IAllOf}
  *   - {@link OpenApiV3.IJsonSchema.IAnyOf}
@@ -22,19 +22,19 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  *   - {@link OpenApiV3.IJsonSchema.__IAttribute.title}
  *
  * If compare with {@link OpenApi.IJsonSchema}, the emended JSON schema type,
- * these are not supported in the Gemini schema. One thing interesting is,
- * the Gemini does not support the `title` property, so it would be revealed
- * in the {@link IGeminiSchema.__IAttribute.description} property instead.
+ * these are not supported in the Gemini schema. One thing interesting is, the
+ * Gemini does not support the `title` property, so it would be revealed in the
+ * {@link IGeminiSchema.__IAttribute.description} property instead.
  *
- *   - {@link OpenApi.IJsonSchema.IReference}
- *   - {@link OpenApi.IJsonSchema.IOneOf}
- *   - {@link OpenApi.IJsonSchema.ITuple}
- *   - {@link OpenApi.IJsonSchema.IObject.additionalProperties}
- *   - {@link OpenApi.IJsonSchema.__IAttribute.title}
+ * - {@link OpenApi.IJsonSchema.IReference}
+ * - {@link OpenApi.IJsonSchema.IOneOf}
+ * - {@link OpenApi.IJsonSchema.ITuple}
+ * - {@link OpenApi.IJsonSchema.IObject.additionalProperties}
+ * - {@link OpenApi.IJsonSchema.__IAttribute.title}
  *
- * Also, Gemini has banned below constraint properties. Instead, I'll will
- * fill the {@link IGeminiSchema.__IAttribute.description} property with
- * the comment text like `"@format uuid"`.
+ * Also, Gemini has banned below constraint properties. Instead, I'll will fill
+ * the {@link IGeminiSchema.__IAttribute.description} property with the comment
+ * text like `"@format uuid"`.
  *
  * - {@link OpenApi.IJsonSchema.INumber.minimum}
  * - {@link OpenApi.IJsonSchema.INumber.maximum}
@@ -49,6 +49,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link OpenApi.IJsonSchema.IArray.maxItems}
  * - {@link OpenApi.IJsonSchema.IArray.uniqueItems}
  *
+ * @author Jeongho Nam - https://github.com/samchon
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/function-calling
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
  * @reference https://ai.google.dev/gemini-api/docs/structured-output
@@ -57,7 +58,6 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  *          changed in the future. If you find any wrong or outdated definitions,
  *          please let me know by issue.
  * @issue https://github.com/samchon/openapi/issues
- * @author Jeongho Nam - https://github.com/samchon
  */
 export type IGeminiSchema =
   | IGeminiSchema.IBoolean
@@ -69,9 +69,7 @@ export type IGeminiSchema =
   | IGeminiSchema.IUnknown
   | IGeminiSchema.INullOnly;
 export namespace IGeminiSchema {
-  /**
-   * Configuration for the Gemini schema composition.
-   */
+  /** Configuration for the Gemini schema composition. */
   export interface IConfig {
     /**
      * Whether to allow recursive types or not.
@@ -89,8 +87,8 @@ export namespace IGeminiSchema {
   /**
    * Type of the function parameters.
    *
-   * `IGeminiSchema.IParameters` is a type defining a function's parameters
-   * as a keyworded object type.
+   * `IGeminiSchema.IParameters` is a type defining a function's parameters as a
+   * keyworded object type.
    *
    * It also can be utilized for the structured output metadata.
    *
@@ -98,28 +96,18 @@ export namespace IGeminiSchema {
    */
   export type IParameters = IObject;
 
-  /**
-   * Boolean type schema info.
-   */
+  /** Boolean type schema info. */
   export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
-    /**
-     * Enumeration values.
-     */
+    /** Enumeration values. */
     enum?: Array<boolean | null>;
   }
 
-  /**
-   * Integer type schema info.
-   */
+  /** Integer type schema info. */
   export interface IInteger extends IJsonSchemaAttribute.IInteger {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
     /**
@@ -130,43 +118,27 @@ export namespace IGeminiSchema {
     enum?: Array<number | null>;
   }
 
-  /**
-   * Number type schema info.
-   */
+  /** Number type schema info. */
   export interface INumber extends IJsonSchemaAttribute.INumber {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
-    /**
-     * Enumeration values.
-     */
+    /** Enumeration values. */
     enum?: Array<number | null>;
   }
 
-  /**
-   * String type schema info.
-   */
+  /** String type schema info. */
   export interface IString extends IJsonSchemaAttribute.IString {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
-    /**
-     * Enumeration values.
-     */
+    /** Enumeration values. */
     enum?: Array<string | null>;
   }
 
-  /**
-   * Array type schema info.
-   */
+  /** Array type schema info. */
   export interface IArray extends IJsonSchemaAttribute.IArray {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
     /**
@@ -178,24 +150,20 @@ export namespace IGeminiSchema {
     items: IGeminiSchema;
   }
 
-  /**
-   * Object type schema info.
-   */
+  /** Object type schema info. */
   export interface IObject extends IJsonSchemaAttribute.IObject {
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
 
     /**
      * Properties of the object.
      *
-     * The `properties` means a list of key-value pairs of the object's
-     * regular properties. The key is the name of the regular property,
-     * and the value is the type schema info.
+     * The `properties` means a list of key-value pairs of the object's regular
+     * properties. The key is the name of the regular property, and the value is
+     * the type schema info.
      *
-     * If you need additional properties that is represented by dynamic key,
-     * it is not possible to compose because the Gemini does not support it.
+     * If you need additional properties that is represented by dynamic key, it
+     * is not possible to compose because the Gemini does not support it.
      */
     properties: Record<string, IGeminiSchema>;
 
@@ -205,7 +173,8 @@ export namespace IGeminiSchema {
      * The `required` means a list of the key values of the required
      * {@link properties}. If some property key is not listed in the `required`
      * list, it means that property is optional. Otherwise some property key
-     * exists in the `required` list, it means that the property must be filled.
+     * exists in the `required` list, it means that the property must be
+     * filled.
      *
      * Below is an example of the {@link properties} and `required`.
      *
@@ -235,9 +204,7 @@ export namespace IGeminiSchema {
     required: string[];
   }
 
-  /**
-   * Null only type schema info.
-   */
+  /** Null only type schema info. */
   export interface INullOnly extends IJsonSchemaAttribute.INull {}
 
   /**
@@ -250,26 +217,22 @@ export namespace IGeminiSchema {
   /**
    * Significant attributes that can be applied to the most types.
    *
+   * @ignore
    * @deprecated
-   * @hidden
    */
   export interface __ISignificant<Type extends string> extends __IAttribute {
-    /**
-     * Discriminator value of the type.
-     */
+    /** Discriminator value of the type. */
     type: Type;
 
-    /**
-     * Whether to allow `null` value or not.
-     */
+    /** Whether to allow `null` value or not. */
     nullable?: boolean;
   }
 
   /**
    * Common attributes that can be applied to all types.
    *
+   * @ignore
    * @deprecated
-   * @hidden
    */
   export type __IAttribute = IJsonSchemaAttribute;
 }

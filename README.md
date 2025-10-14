@@ -629,6 +629,7 @@ For example, if you bring a GitHub MCP server to Claude Desktop and request it t
 > However, if call the function of GitHub MCP server by function calling with [`@agentica`](https://github.com/wrtnlabs/agentica), it works properly without any problem.
 > 
 > - Function calling to GitHub MCP: https://www.youtube.com/watch?v=rLlHkc24cJs
+
 To make function calling schemas, call [`McpLlm.application()`](#validation-feedback) function. [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html) typed application instance would be returned, and it will contain the [`IMcpLlmFunction.validate()`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html#validate) function utilized for the [validation feedback](#validation-feedback) strategy.
 
 Don't worry about the JSON schema specification. As MCP (Model Context Protocol) does not restrict any JSON schema specification, the [`McpLlm.application()`](#validation-feedback) function has been designed to support every JSON schema specifications.
@@ -668,23 +669,48 @@ console.log(result);
 
 https://github.com/wrtnlabs/agentica
 
-`agentica` is the simplest **Agentic AI** library, specialized in **LLM Function Calling** with `@samchon/openapi`.
+Agentic AI framework specialized in AI Function Calling using `@samchon/openapi`.
 
-With it, you don't need to compose a complex agent graph or workflow. Instead, just deliver **Swagger/OpenAPI/MCP** documents or **TypeScript class** types linearly to the `agentica`. Then `agentica` will do everything with the function calling.
-Look at the below demonstration, and feel how `agentica` is easy and powerful combining with `@samchon/openapi`.
+Don't be afraid of AI agent development. Just list functions from three protocols below. This is everything you should do for AI agent development.
+
+- TypeScript Class
+- Swagger/OpenAPI Document
+- MCP (Model Context Protocol) Server
+
+Wanna make an e-commerce agent? Bring in e-commerce functions. Need a newspaper agent? Get API functions from the newspaper company. Just prepare any functions that you need, then it becomes an AI agent.
+
+Are you a TypeScript developer? Then you're already an AI developer. Familiar with backend development? You're already well-versed in AI development. Anyone who can make functions can make AI agents.
 
 ```typescript
-import { Agentica } from "@agentica/core";
+import { Agentica, assertHttpController } from "@agentica/core";
+import OpenAI from "openai";
 import typia from "typia";
 
+import { MobileFileSystem } from "./services/MobileFileSystem";
+
 const agent = new Agentica({
+  vendor: {
+    api: new OpenAI({ apiKey: "********" }),
+    model: "gpt-4o-mini",
+  },
   controllers: [
-    await fetch(
-      "https://shopping-be.wrtn.ai/editor/swagger.json",
-    ).then(r => r.json()),
-    typia.llm.application<ShoppingCounselor>(),
-    typia.llm.application<ShoppingPolicy>(),
-    typia.llm.application<ShoppingSearchRag>(),
+    // functions from TypeScript class
+    typia.llm.controller<MobileFileSystem, "chatgpt">(
+      "filesystem",
+      new MobileFileSystem(),
+    ),
+    // functions from Swagger/OpenAPI
+    assertHttpController({
+      name: "shopping",
+      model: "chatgpt",
+      document: await fetch(
+        "https://shopping-be.wrtn.ai/editor/swagger.json",
+      ).then(r => r.json()),
+      connection: {
+        host: "https://shopping-be.wrtn.ai",
+        headers: { Authorization: "Bearer ********" },
+      },
+    }),
   ],
 });
 await agent.conversate("I wanna buy MacBook Pro");

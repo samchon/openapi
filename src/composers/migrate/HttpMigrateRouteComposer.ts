@@ -322,21 +322,22 @@ export namespace HttpMigrateRouteComposer {
     };
 
     let description: string = props.operation.description ?? "";
-    if (props.operation.summary) {
-      const emended: string = props.operation.summary.endsWith(".")
+    if (!!props.operation.summary?.length) {
+      const summary: string = props.operation.summary.endsWith(".")
         ? props.operation.summary
         : props.operation.summary + ".";
       if (
         !!description.length &&
         !description.startsWith(props.operation.summary)
       )
-        description = `${emended}\n${description}`;
+        description = `${summary}\n\n${description}`;
     }
     description = description
       .split("\n")
       .map((s) => s.trim())
       .join("\n");
 
+    add("@param connection");
     for (const p of props.parameters ?? []) {
       const param = p.parameter();
       if (param.description || param.title) {

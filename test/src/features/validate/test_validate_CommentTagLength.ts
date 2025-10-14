@@ -5,7 +5,7 @@ import { _test_validate } from "../internal/_test_validate";
 
 export const test_validate_CommentTagLength = (): void =>
   _test_validate<CommentTagLength>({
-    collection: typia.json.schemas<[CommentTagLength]>(),
+    ...typia.json.schema<CommentTagLength>(),
     factory: CommentTagLength,
     name: "CommentTagLength",
   });

@@ -166,9 +166,6 @@ const point = (): ObjectUnionImplicit.IPoint => ({
   x: TestRandomGenerator.integer(),
   y: TestRandomGenerator.integer(),
   slope: scalar(),
-  ...{
-    __cache: undefined,
-  },
 });
 
 const scalar = (): number | null | undefined =>

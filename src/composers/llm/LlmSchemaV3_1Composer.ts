@@ -13,10 +13,13 @@ import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaV3_1Composer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = true;
+
+  export const DEFAULT_CONFIG: ILlmSchemaV3_1.IConfig = {
+    reference: true,
+    constraint: true,
+  };
 
   /* -----------------------------------------------------------
     CONVERTERS
@@ -328,6 +331,31 @@ export namespace LlmSchemaV3_1Composer {
       value: {
         ...attribute,
         oneOf: union.filter((u) => u !== null),
+        discriminator:
+          OpenApiTypeChecker.isOneOf(props.schema) &&
+          props.schema.discriminator !== undefined &&
+          union
+            .filter((u) => u !== null)
+            .every(
+              (e) =>
+                LlmTypeCheckerV3_1.isReference(e) ||
+                LlmTypeCheckerV3_1.isNull(e),
+            )
+            ? {
+                propertyName: props.schema.discriminator.propertyName,
+                mapping:
+                  props.schema.discriminator.mapping !== undefined
+                    ? Object.fromEntries(
+                        Object.entries(props.schema.discriminator.mapping).map(
+                          ([key, value]) => [
+                            key,
+                            `#/$defs/${value.split("/").at(-1)}`,
+                          ],
+                        ),
+                      )
+                    : undefined,
+              }
+            : undefined,
       },
     };
   };
@@ -339,6 +367,7 @@ export namespace LlmSchemaV3_1Composer {
     parameters: ILlmSchemaV3_1.IParameters;
     predicate: (schema: ILlmSchemaV3_1) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"3.1"> => {
     const convention =
       props.convention ??
@@ -393,6 +422,7 @@ export namespace LlmSchemaV3_1Composer {
           $defs: output.llm.$defs,
         }),
         required: true,
+        equals: props.equals,
       });
     }
     return output;
@@ -557,6 +587,8 @@ export namespace LlmSchemaV3_1Composer {
       $defs: props.$defs,
       schema,
     });
+    if (llm !== null) Object.assign(props.$defs[llmKey], llm);
+    if (human !== null) Object.assign(props.$defs[humanKey], human);
 
     // ONLY ONE
     if (llm === null || human === null) {
@@ -640,7 +672,29 @@ export namespace LlmSchemaV3_1Composer {
         ...props.schema,
         $ref: `#/components/schemas/${key}`,
       };
-    } else if (
+    } else if (LlmTypeCheckerV3_1.isOneOf(props.schema))
+      return {
+        ...props.schema,
+        oneOf: props.schema.oneOf.map(next),
+        discriminator:
+          props.schema.discriminator !== undefined
+            ? {
+                propertyName: props.schema.discriminator.propertyName,
+                mapping:
+                  props.schema.discriminator.mapping !== undefined
+                    ? Object.fromEntries(
+                        Object.entries(props.schema.discriminator.mapping).map(
+                          ([key, value]) => [
+                            key,
+                            `#/components/schemas/${value.split("/").at(-1)}`,
+                          ],
+                        ),
+                      )
+                    : undefined,
+              }
+            : undefined,
+      };
+    else if (
       LlmTypeCheckerV3_1.isInteger(props.schema) ||
       LlmTypeCheckerV3_1.isNumber(props.schema)
     )

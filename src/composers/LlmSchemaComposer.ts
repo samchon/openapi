@@ -1,11 +1,4 @@
-import { IChatGptSchema } from "../structures/IChatGptSchema";
-import { IClaudeSchema } from "../structures/IClaudeSchema";
-import { IDeepSeekSchema } from "../structures/IDeepSeekSchema";
-import { IGeminiSchema } from "../structures/IGeminiSchema";
-import { ILlamaSchema } from "../structures/ILlamaSchema";
 import { ILlmSchema } from "../structures/ILlmSchema";
-import { ILlmSchemaV3 } from "../structures/ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "../structures/ILlmSchemaV3_1";
 import { ChatGptTypeChecker } from "../utils/ChatGptTypeChecker";
 import { ClaudeTypeChecker } from "../utils/ClaudeTypeChecker";
 import { DeepSeekTypeChecker } from "../utils/DeepSeekTypeChecker";
@@ -41,9 +34,7 @@ export namespace LlmSchemaComposer {
   export const invert = <Model extends ILlmSchema.Model>(model: Model) =>
     INVERTS[model];
 
-  /**
-   * @internal
-   */
+  /** @internal */
   export const isDefs = <Model extends ILlmSchema.Model>(
     model: Model,
   ): boolean => IS_DEFS[model]();
@@ -90,30 +81,13 @@ const INVERTS = {
 };
 
 const DEFAULT_CONFIGS = {
-  chatgpt: {
-    reference: false,
-    strict: false,
-  } satisfies IChatGptSchema.IConfig,
-  claude: {
-    reference: false,
-  } satisfies IClaudeSchema.IConfig,
-  deepseek: {
-    reference: false,
-  } satisfies IDeepSeekSchema.IConfig,
-  gemini: {
-    recursive: 3,
-  } satisfies IGeminiSchema.IConfig,
-  llama: {
-    reference: false,
-  } satisfies ILlamaSchema.IConfig,
-  "3.0": {
-    constraint: true,
-    recursive: 3,
-  } satisfies ILlmSchemaV3.IConfig,
-  "3.1": {
-    constraint: true,
-    reference: false,
-  } satisfies ILlmSchemaV3_1.IConfig,
+  chatgpt: ChatGptSchemaComposer.DEFAULT_CONFIG,
+  claude: ClaudeSchemaComposer.DEFAULT_CONFIG,
+  deepseek: DeepSeekSchemaComposer.DEFAULT_CONFIG,
+  gemini: GeminiSchemaComposer.DEFAULT_CONFIG,
+  llama: LlamaSchemaComposer.DEFAULT_CONFIG,
+  "3.0": LlmSchemaV3Composer.DEFAULT_CONFIG,
+  "3.1": LlmSchemaV3_1Composer.DEFAULT_CONFIG,
 };
 
 const TYPE_CHECKERS = {

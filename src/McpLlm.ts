@@ -23,7 +23,8 @@ import { OpenApiValidator } from "./utils/OpenApiValidator";
  *
  * - Model Specification: {@link ILlmSchema}
  * - Validation Feedback: {@link IMcpLlmFunction.validate}
- * - Selector agent for reducing context: [Agentica > Orchestration Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
+ * - Selector agent for reducing context: [Agentica > Orchestration
+ *   Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
@@ -34,9 +35,7 @@ export namespace McpLlm {
    * @template Model Target LLM model
    */
   export interface IApplicationProps<Model extends ILlmSchema.Model> {
-    /**
-     * Target LLM model.
-     */
+    /** Target LLM model. */
     model: Model;
 
     /**
@@ -44,15 +43,13 @@ export namespace McpLlm {
      *
      * A list of tools defined in the MCP (Model Context Protocol) document.
      *
-     * It would better to validate the tools by
-     * [`typia.assert<T>()`](https://typia.io/docs/validate/assert) function
-     * for the type safety.
+     * It is better to validate the tools using the
+     * [`typia.assert<T>()`](https://typia.io/docs/validate/assert) function for
+     * type safety.
      */
     tools: Array<IMcpTool>;
 
-    /**
-     * Options for the LLM function calling schema conversion.
-     */
+    /** Options for the LLM function calling schema conversion. */
     options?: Partial<IMcpLlmApplication.IOptions<Model>>;
   }
 
@@ -62,14 +59,15 @@ export namespace McpLlm {
    * Converts MCP (Model Context Protocol) to LLM (Large Language Model)
    * function calling application.
    *
-   * The reasons why `@samchon/openapi` recommends to use the function calling
+   * The reasons why `@samchon/openapi` recommends using the function calling
    * feature instead of directly using the
    * [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers)
    * property of LLM API are:
    *
-   * - Model Specification: {@link ILlmSchema}
-   * - Validation Feedback: {@link IMcpLlmFunction.validate}
-   * - Selector agent for reducing context: [Agentica > Orchestration Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
+   * - **Model Specification**: {@link ILlmSchema}
+   * - **Validation Feedback**: {@link IMcpLlmFunction.validate}
+   * - **Selector agent for reducing context**: [Agentica > Orchestration
+   *   Strategy](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy)
    *
    * @param props Properties for composition
    * @returns LLM function calling application
@@ -136,6 +134,7 @@ export namespace McpLlm {
             components,
             schema,
             required: true,
+            equals: options.equals,
           }),
         });
       else

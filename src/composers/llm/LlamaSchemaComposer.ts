@@ -6,10 +6,12 @@ import { IResult } from "../../structures/IResult";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace LlamaSchemaComposer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = true;
+
+  export const DEFAULT_CONFIG: ILlamaSchema.IConfig = {
+    reference: true,
+  };
 
   export const parameters = (props: {
     config: ILlamaSchema.IConfig;
@@ -42,6 +44,7 @@ export namespace LlamaSchemaComposer {
     parameters: ILlamaSchema.IParameters;
     predicate: (schema: ILlamaSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"llama"> =>
     LlmSchemaV3_1Composer.separateParameters(
       props,

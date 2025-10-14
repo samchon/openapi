@@ -1,11 +1,12 @@
-import { IValidation } from "@samchon/openapi";
+import { IValidation, OpenApi } from "@samchon/openapi";
 import { OpenApiValidator } from "@samchon/openapi/lib/utils/OpenApiValidator";
-import typia, { IJsonSchemaCollection } from "typia";
+import typia from "typia";
 
 import { Spoiler } from "../../helpers/Spoiler";
 
 export const _test_validate = <T>(props: {
-  collection: IJsonSchemaCollection;
+  schema: OpenApi.IJsonSchema;
+  components: OpenApi.IComponents;
   factory: {
     generate: () => T;
     SPOILERS?: Spoiler<T>[];
@@ -14,8 +15,8 @@ export const _test_validate = <T>(props: {
 }): void => {
   const input: T = props.factory.generate();
   const validate = OpenApiValidator.create({
-    components: props.collection.components,
-    schema: props.collection.schemas[0],
+    components: props.components,
+    schema: props.schema,
     required: true,
   });
   const result: IValidation<unknown> = validate(input);

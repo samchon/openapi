@@ -6,10 +6,12 @@ import { IResult } from "../../structures/IResult";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ClaudeSchemaComposer {
-  /**
-   * @internal
-   */
+  /** @internal */
   export const IS_DEFS = true;
+
+  export const DEFAULT_CONFIG: IClaudeSchema.IConfig = {
+    reference: true,
+  };
 
   export const parameters = (props: {
     config: IClaudeSchema.IConfig;
@@ -46,6 +48,7 @@ export namespace ClaudeSchemaComposer {
     parameters: IClaudeSchema.IParameters;
     predicate: (schema: IClaudeSchema) => boolean;
     convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
   }): ILlmFunction.ISeparated<"claude"> => {
     const separated: ILlmFunction.ISeparated<"3.1"> =
       LlmSchemaV3_1Composer.separateParameters(props);
