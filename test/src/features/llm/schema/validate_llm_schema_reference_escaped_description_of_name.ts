@@ -16,17 +16,9 @@ export const test_claude_schema_reference_escaped_description_of_name =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_name("claude");
 
-export const test_deepseek_schema_reference_escaped_description_of_name =
-  (): void =>
-    validate_llm_schema_reference_escaped_description_of_name("deepseek");
-
 export const test_gemini_schema_reference_escaped_description_of_name =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_name("gemini");
-
-export const test_llama_schema_reference_escaped_description_of_name =
-  (): void =>
-    validate_llm_schema_reference_escaped_description_of_name("llama");
 
 export const test_llm_v30_schema_reference_escaped_description_of_name =
   (): void => validate_llm_schema_reference_escaped_description_of_name("3.0");

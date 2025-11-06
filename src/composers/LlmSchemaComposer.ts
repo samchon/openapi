@@ -8,9 +8,7 @@ import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
 import { LlmTypeCheckerV3_1 } from "../utils/LlmTypeCheckerV3_1";
 import { ChatGptSchemaComposer } from "./llm/ChatGptSchemaComposer";
 import { ClaudeSchemaComposer } from "./llm/ClaudeSchemaComposer";
-import { DeepSeekSchemaComposer } from "./llm/DeepSeekSchemaComposer";
 import { GeminiSchemaComposer } from "./llm/GeminiSchemaComposer";
-import { LlamaSchemaComposer } from "./llm/LlamaSchemaComposer";
 import { LlmSchemaV3Composer } from "./llm/LlmSchemaV3Composer";
 import { LlmSchemaV3_1Composer } from "./llm/LlmSchemaV3_1Composer";
 
@@ -43,9 +41,7 @@ export namespace LlmSchemaComposer {
 const PARAMETERS_CASTERS = {
   chatgpt: ChatGptSchemaComposer.parameters,
   claude: ClaudeSchemaComposer.parameters,
-  deepseek: DeepSeekSchemaComposer.parameters,
   gemini: GeminiSchemaComposer.parameters,
-  llama: LlamaSchemaComposer.parameters,
   "3.0": LlmSchemaV3Composer.parameters,
   "3.1": LlmSchemaV3_1Composer.parameters,
 };
@@ -53,9 +49,7 @@ const PARAMETERS_CASTERS = {
 const SCHEMA_CASTERS = {
   chatgpt: ChatGptSchemaComposer.schema,
   claude: ClaudeSchemaComposer.schema,
-  deepseek: DeepSeekSchemaComposer.schema,
   gemini: GeminiSchemaComposer.schema,
-  llama: LlamaSchemaComposer.schema,
   "3.0": LlmSchemaV3Composer.schema,
   "3.1": LlmSchemaV3_1Composer.schema,
 };
@@ -63,9 +57,7 @@ const SCHEMA_CASTERS = {
 const SEPARATE_PARAMETERS = {
   chatgpt: ChatGptSchemaComposer.separateParameters,
   claude: ClaudeSchemaComposer.separateParameters,
-  deepseek: DeepSeekSchemaComposer.separateParameters,
   gemini: GeminiSchemaComposer.separateParameters,
-  llama: LlamaSchemaComposer.separateParameters,
   "3.0": LlmSchemaV3Composer.separateParameters,
   "3.1": LlmSchemaV3_1Composer.separateParameters,
 };
@@ -73,9 +65,7 @@ const SEPARATE_PARAMETERS = {
 const INVERTS = {
   chatgpt: ChatGptSchemaComposer.invert,
   claude: ClaudeSchemaComposer.invert,
-  deepseek: DeepSeekSchemaComposer.invert,
   gemini: GeminiSchemaComposer.invert,
-  llama: LlamaSchemaComposer.invert,
   "3.0": LlmSchemaV3Composer.invert,
   "3.1": LlmSchemaV3_1Composer.invert,
 };
@@ -83,9 +73,7 @@ const INVERTS = {
 const DEFAULT_CONFIGS = {
   chatgpt: ChatGptSchemaComposer.DEFAULT_CONFIG,
   claude: ClaudeSchemaComposer.DEFAULT_CONFIG,
-  deepseek: DeepSeekSchemaComposer.DEFAULT_CONFIG,
   gemini: GeminiSchemaComposer.DEFAULT_CONFIG,
-  llama: LlamaSchemaComposer.DEFAULT_CONFIG,
   "3.0": LlmSchemaV3Composer.DEFAULT_CONFIG,
   "3.1": LlmSchemaV3_1Composer.DEFAULT_CONFIG,
 };
@@ -103,9 +91,7 @@ const TYPE_CHECKERS = {
 const IS_DEFS = {
   chatgpt: () => ChatGptSchemaComposer.IS_DEFS,
   claude: () => ClaudeSchemaComposer.IS_DEFS,
-  deepseek: () => DeepSeekSchemaComposer.IS_DEFS,
   gemini: () => GeminiSchemaComposer.IS_DEFS,
-  llama: () => LlamaSchemaComposer.IS_DEFS,
   "3.0": () => LlmSchemaV3Composer.IS_DEFS,
   "3.1": () => LlmSchemaV3_1Composer.IS_DEFS,
 };

@@ -15,14 +15,8 @@ export const test_chatgpt_schema_separate_object_empty = (): void =>
 export const test_claude_schema_separate_object_empty = (): void =>
   validate_llm_schema_separate_object_empty("claude");
 
-export const test_deepseek_schema_separate_object_empty = (): void =>
-  validate_llm_schema_separate_object_empty("deepseek");
-
 export const test_gemini_schema_separate_object_empty = (): void =>
   validate_llm_schema_separate_object_empty("gemini");
-
-export const test_llama_schema_separate_object_empty = (): void =>
-  validate_llm_schema_separate_object_empty("llama");
 
 export const test_llm_v30_schema_separate_object_empty = (): void =>
   validate_llm_schema_separate_object_empty("3.0");

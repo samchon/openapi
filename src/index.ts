@@ -48,9 +48,7 @@ export * from "./structures/ILlmFunction";
 // SCHEMAS
 export * from "./structures/IChatGptSchema";
 export * from "./structures/IClaudeSchema";
-export * from "./structures/IDeepSeekSchema";
 export * from "./structures/IGeminiSchema";
-export * from "./structures/ILlamaSchema";
 export * from "./structures/ILlmSchema";
 export * from "./structures/ILlmSchemaV3";
 export * from "./structures/ILlmSchemaV3_1";

@@ -11,17 +11,9 @@ export const test_claude_schema_reference_escaped_description_of_property =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_property("claude");
 
-export const test_deepseek_schema_reference_escaped_description_of_property =
-  (): void =>
-    validate_llm_schema_reference_escaped_description_of_property("deepseek");
-
 export const test_gemini_schema_reference_escaped_description_of_property =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_property("gemini");
-
-export const test_llama_schema_reference_escaped_description_of_property =
-  (): void =>
-    validate_llm_schema_reference_escaped_description_of_property("llama");
 
 export const test_llm_v30_schema_reference_escaped_description_of_property =
   (): void =>
@@ -67,9 +59,7 @@ interface IMember {
   hobby: IHobby;
 }
 
-/**
- * The hobby type.
- */
+/** The hobby type. */
 interface IHobby {
   name: string;
 }

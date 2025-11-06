@@ -9,14 +9,8 @@ export const test_chatgpt_schema_nullable = (): void =>
 export const test_claude_schema_nullable = (): void =>
   validate_llm_schema_nullable("claude", "oneOf");
 
-export const test_deepseek_schema_nullable = (): void =>
-  validate_llm_schema_nullable("deepseek", "oneOf");
-
 export const test_gemini_schema_nullable = (): void =>
   validate_llm_schema_nullable("gemini", "nullable");
-
-export const test_llama_schema_nullable = (): void =>
-  validate_llm_schema_nullable("llama", "oneOf");
 
 export const test_llm_v30_schema_nullable = (): void =>
   validate_llm_schema_nullable("3.0", "nullable");

@@ -8,12 +8,6 @@ export const test_chatgpt_schema_recursive_ref = (): void =>
 export const test_claude_schema_recursive_ref = (): void =>
   validate_llm_schema_recursive_ref("claude");
 
-export const test_deepseek_schema_recursive_ref = (): void =>
-  validate_llm_schema_recursive_ref("deepseek");
-
-export const test_llama_schema_recursive_ref = (): void =>
-  validate_llm_schema_recursive_ref("llama");
-
 export const test_llm_v31_schema_recursive_ref = (): void =>
   validate_llm_schema_recursive_ref("3.1");
 

@@ -15,14 +15,8 @@ export const test_chatgpt_applicationEquals = () =>
 export const test_claude_applicationEquals = () =>
   validate_llm_applicationEquals("claude");
 
-export const test_deepseek_applicationEquals = () =>
-  validate_llm_applicationEquals("deepseek");
-
 export const test_gemini_applicationEquals = () =>
   validate_llm_applicationEquals("gemini");
-
-export const test_llama_applicationEquals = () =>
-  validate_llm_applicationEquals("llama");
 
 export const test_llm_v30_applicationEquals = () =>
   validate_llm_applicationEquals("3.0");

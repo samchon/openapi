@@ -9,14 +9,8 @@ export const test_chatgpt_type_checker_cover_any = (): void =>
 export const test_claude_type_checker_cover_any = (): void =>
   validate_llm_type_checker_cover_any("claude");
 
-export const test_deepseek_type_checker_cover_any = (): void =>
-  validate_llm_type_checker_cover_any("deepseek");
-
 export const test_gemini_type_checker_cover_any = (): void =>
   validate_llm_type_checker_cover_any("gemini");
-
-export const test_llama_type_checker_cover_any = (): void =>
-  validate_llm_type_checker_cover_any("llama");
 
 export const test_llm_v30_type_checker_cover_any = (): void =>
   validate_llm_type_checker_cover_any("3.0");

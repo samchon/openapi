@@ -17,22 +17,10 @@ export const test_claude_function_calling_tags = () =>
     application: typia.llm.application<IApplication, "claude">(),
   });
 
-export const test_deepseek_function_calling_tags = () =>
-  validate_llm_function_calling_tags({
-    vendor: "deepseek/deepseek-chat-v3",
-    application: typia.llm.application<IApplication, "deepseek">(),
-  });
-
 export const test_gemini_function_calling_tags = () =>
   validate_llm_function_calling_tags({
     vendor: "google/gemini-pro-1.5",
     application: typia.llm.application<IApplication, "gemini">(),
-  });
-
-export const test_llama_function_calling_tags = () =>
-  validate_llm_function_calling_tags({
-    vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "llama">(),
   });
 
 const validate_llm_function_calling_tags = <
@@ -74,9 +62,7 @@ const validate_llm_function_calling_tags = <
   });
 
 interface IApplication {
-  /**
-   * Reserve some opening time.
-   */
+  /** Reserve some opening time. */
   reserve(time: IOpeningTime): void;
 }
 

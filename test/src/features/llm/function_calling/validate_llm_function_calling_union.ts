@@ -30,7 +30,7 @@ export const test_deepseek_function_calling_union = () =>
     vendor: "deepseek/deepseek-chat-v3",
     application: typia.llm.application<
       IApplication,
-      "deepseek",
+      "claude",
       { reference: true }
     >(),
   });
@@ -40,7 +40,7 @@ export const test_llama_function_calling_union = () =>
     vendor: "meta-llama/llama-3.3-70b-instruct",
     application: typia.llm.application<
       IApplication,
-      "llama",
+      "claude",
       { reference: true }
     >(),
   });
@@ -84,9 +84,7 @@ const validate_llm_function_calling_union = <
   });
 
 interface IApplication {
-  /**
-   * Draw a shape with following geometry.
-   */
+  /** Draw a shape with following geometry. */
   draw(props: IDrawProps): void;
 }
 interface IDrawProps {

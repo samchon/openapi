@@ -20,7 +20,7 @@ export const test_claude_function_calling_default = () =>
 export const test_deepseek_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "deepseek/deepseek-chat-v3",
-    application: typia.llm.application<IApplication, "deepseek">(),
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_gemini_function_calling_default = () =>
@@ -32,7 +32,7 @@ export const test_gemini_function_calling_default = () =>
 export const test_llama_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "llama">(),
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 const validate_llm_function_calling_default = <
@@ -74,9 +74,7 @@ const validate_llm_function_calling_default = <
   });
 
 interface IApplication {
-  /**
-   * Enroll a person to the restaurant reservation list.
-   */
+  /** Enroll a person to the restaurant reservation list. */
   enroll(person: IPerson): void;
 }
 interface IPerson {

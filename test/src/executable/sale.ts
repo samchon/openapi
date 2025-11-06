@@ -27,7 +27,7 @@ const VENDORS = [
     "deepseek/deepseek-chat-v3",
     typia.llm.application<
       ShoppingSalePrompt.IApplication,
-      "deepseek",
+      "claude",
       { reference: true }
     >(),
   ],
@@ -39,7 +39,7 @@ const VENDORS = [
     "meta-llama/llama-3.3-70b-instruct",
     typia.llm.application<
       ShoppingSalePrompt.IApplication,
-      "llama",
+      "claude",
       { reference: true }
     >(),
   ],

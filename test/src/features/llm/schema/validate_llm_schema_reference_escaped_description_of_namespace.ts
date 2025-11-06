@@ -16,17 +16,9 @@ export const test_claude_schema_reference_escaped_description_of_namespace =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_namespace("claude");
 
-export const test_deepseek_schema_reference_escaped_description_of_namespace =
-  (): void =>
-    validate_llm_schema_reference_escaped_description_of_namespace("deepseek");
-
 export const test_gemini_schema_reference_escaped_description_of_namespace =
   (): void =>
     validate_llm_schema_reference_escaped_description_of_namespace("gemini");
-
-export const test_llama_schema_reference_escaped_description_of_namespace =
-  (): void =>
-    validate_llm_schema_reference_escaped_description_of_namespace("llama");
 
 export const test_llm_v30_schema_reference_escaped_description_of_namespace =
   (): void =>
@@ -62,23 +54,17 @@ const validate_llm_schema_reference_escaped_description_of_namespace = <
   );
 };
 
-/**
- * Something interface.
- */
+/** Something interface. */
 interface Something {
   x: number;
 }
 namespace Something {
-  /**
-   * Something nested interface.
-   */
+  /** Something nested interface. */
   export interface INested {
     y: number;
   }
   export namespace INested {
-    /**
-     * Something nested and deep interface.
-     */
+    /** Something nested and deep interface. */
     export interface IDeep {
       z: number;
     }

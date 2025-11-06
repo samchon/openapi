@@ -14,14 +14,8 @@ export const test_chatgpt_parameters_separate_array = (): void =>
 export const test_claude_parameters_separate_array = (): void =>
   validate_llm_parameters_separate_array("claude", true);
 
-export const test_deepseek_parameters_separate_array = (): void =>
-  validate_llm_parameters_separate_array("deepseek", true);
-
 export const test_gemini_parameters_separate_array = (): void =>
   validate_llm_parameters_separate_array("gemini", false);
-
-export const test_llama_parameters_separate_array = (): void =>
-  validate_llm_parameters_separate_array("llama", true);
 
 export const test_llm_v30_parameters_separate_array = (): void => {
   validate_llm_parameters_separate_array("3.0", false);

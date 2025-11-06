@@ -13,18 +13,10 @@ import typia, { IJsonSchemaUnit } from "typia";
 export const test_claude_schema_discriminator = (): void =>
   validate_llm_schema_discriminator("claude");
 
-export const test_deepseek_schema_discriminator = (): void =>
-  validate_llm_schema_discriminator("deepseek");
-
-export const test_llama_schema_discriminator = (): void =>
-  validate_llm_schema_discriminator("llama");
-
 export const test_llama_v31_schema_discriminator = (): void =>
   validate_llm_schema_discriminator("3.1");
 
-const validate_llm_schema_discriminator = (
-  vendor: "claude" | "deepseek" | "llama" | "3.1",
-): void => {
+const validate_llm_schema_discriminator = (vendor: "claude" | "3.1"): void => {
   const $defs: Record<string, ILlmSchemaV3_1> = {};
   const unit: IJsonSchemaUnit = typia.json.schema<ICat | IAnt>();
   const result: IResult<ILlmSchemaV3_1, IOpenApiSchemaError> =

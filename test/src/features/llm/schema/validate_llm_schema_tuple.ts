@@ -14,14 +14,8 @@ export const test_chatgpt_schema_tuple = (): void =>
 export const test_claude_schema_tuple = (): void =>
   validate_llm_schema_tuple("claude");
 
-export const test_deepseek_schema_tuple = (): void =>
-  validate_llm_schema_tuple("deepseek");
-
 export const test_gemini_schema_tuple = (): void =>
   validate_llm_schema_tuple("gemini");
-
-export const test_llama_schema_tuple = (): void =>
-  validate_llm_schema_tuple("llama");
 
 export const test_llm_v30_schema_tuple = (): void =>
   validate_llm_schema_tuple("3.0");

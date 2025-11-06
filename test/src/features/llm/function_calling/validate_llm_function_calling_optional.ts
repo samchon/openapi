@@ -20,7 +20,7 @@ export const test_claude_function_calling_optional = () =>
 export const test_deepseek_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "deepseek/deepseek-chat-v3",
-    application: typia.llm.application<IApplication, "deepseek">(),
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_gemini_function_calling_optional = () =>
@@ -32,7 +32,7 @@ export const test_gemini_function_calling_optional = () =>
 export const test_llama_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "llama">(),
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 const validate_chatgpt_function_calling_optional = <
@@ -74,29 +74,19 @@ const validate_chatgpt_function_calling_optional = <
   });
 
 interface IApplication {
-  /**
-   * Register a membership.
-   */
+  /** Register a membership. */
   register(member: IMember): void;
 }
 
-/**
- * Membership information.
- */
+/** Membership information. */
 interface IMember {
-  /**
-   * Name of the member.
-   */
+  /** Name of the member. */
   name: string;
 
-  /**
-   * Age of the member.
-   */
+  /** Age of the member. */
   age: number;
 
-  /**
-   * Hobby of the member.
-   */
+  /** Hobby of the member. */
   hobby?: string;
 }
 

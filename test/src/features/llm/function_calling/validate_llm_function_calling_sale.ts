@@ -31,7 +31,7 @@ export const test_deepseek_function_calling_sale = () =>
     vendor: "deepseek/deepseek-chat-v3",
     application: typia.llm.application<
       ShoppingSalePrompt.IApplication,
-      "deepseek",
+      "claude",
       { reference: true }
     >(),
   });
@@ -50,7 +50,7 @@ export const test_llama_function_calling_sale = () =>
     vendor: "meta-llama/llama-3.3-70b-instruct",
     application: typia.llm.application<
       ShoppingSalePrompt.IApplication,
-      "llama",
+      "claude",
       { reference: true }
     >(),
   });
