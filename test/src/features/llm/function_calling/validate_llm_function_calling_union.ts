@@ -7,7 +7,7 @@ import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 
 export const test_chatgpt_function_calling_union = () =>
   validate_llm_function_calling_union({
-    vendor: "openai/gpt-4o",
+    vendor: "openai/gpt-4.1",
     application: typia.llm.application<
       IApplication,
       "chatgpt",
@@ -17,7 +17,7 @@ export const test_chatgpt_function_calling_union = () =>
 
 export const test_claude_function_calling_union = () =>
   validate_llm_function_calling_union({
-    vendor: "anthropic/claude-3.5-sonnet",
+    vendor: "anthropic/claude-sonnet-4.5",
     application: typia.llm.application<
       IApplication,
       "claude",
@@ -27,7 +27,17 @@ export const test_claude_function_calling_union = () =>
 
 export const test_deepseek_function_calling_union = () =>
   validate_llm_function_calling_union({
-    vendor: "deepseek/deepseek-chat-v3",
+    vendor: "deepseek/deepseek-v3.1-terminus:exacto",
+    application: typia.llm.application<
+      IApplication,
+      "claude",
+      { reference: true }
+    >(),
+  });
+
+export const test_gemini_function_calling_union = () =>
+  validate_llm_function_calling_union({
+    vendor: "google/gemini-2.5-pro",
     application: typia.llm.application<
       IApplication,
       "claude",

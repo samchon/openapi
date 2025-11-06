@@ -8,7 +8,7 @@ import { StopWatch } from "../utils/StopWatch";
 
 const VENDORS = [
   [
-    "openai/gpt-4o",
+    "openai/gpt-4.1",
     typia.llm.application<
       ShoppingSalePrompt.IApplication,
       "chatgpt",
@@ -16,7 +16,7 @@ const VENDORS = [
     >(),
   ],
   [
-    "anthropic/claude-3.5-sonnet",
+    "anthropic/claude-sonnet-4.5",
     typia.llm.application<
       ShoppingSalePrompt.IApplication,
       "claude",
@@ -24,7 +24,7 @@ const VENDORS = [
     >(),
   ],
   [
-    "deepseek/deepseek-chat-v3",
+    "deepseek/deepseek-v3.1-terminus:exacto",
     typia.llm.application<
       ShoppingSalePrompt.IApplication,
       "claude",
@@ -32,7 +32,7 @@ const VENDORS = [
     >(),
   ],
   [
-    "google/gemini-pro-1.5",
+    "google/gemini-2.5-pro",
     typia.llm.application<ShoppingSalePrompt.IApplication, "gemini">(),
   ],
   [
