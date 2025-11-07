@@ -139,7 +139,6 @@ export namespace LlmSchemaV3Composer {
         else if (LlmTypeCheckerV3.isObject(next)) {
           next.properties ??= {};
           next.required ??= [];
-          next.additionalProperties ??= false;
         }
         if (props.config.constraint === false) {
           if (

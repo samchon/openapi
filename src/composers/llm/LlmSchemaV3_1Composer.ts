@@ -220,7 +220,11 @@ export namespace LlmSchemaV3_1Composer {
           );
         if (Object.values(properties).some((v) => v === null))
           return union.push(null);
-        const additionalProperties: ILlmSchemaV3_1 | boolean | null = (() => {
+        const additionalProperties:
+          | ILlmSchemaV3_1
+          | boolean
+          | null
+          | undefined = (() => {
           if (
             typeof input.additionalProperties === "object" &&
             input.additionalProperties !== null
@@ -240,7 +244,7 @@ export namespace LlmSchemaV3_1Composer {
             }
             return converted.value;
           }
-          return input.additionalProperties ?? false;
+          return input.additionalProperties;
         })();
         if (additionalProperties === null) return union.push(null);
         return union.push({
