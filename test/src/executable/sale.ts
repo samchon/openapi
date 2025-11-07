@@ -53,7 +53,7 @@ const main = async (): Promise<void> => {
           LlmFunctionCaller.test({
             vendor,
             model: application.model,
-            function: application.functions[0],
+            function: application.functions[0] as any,
             texts: await ShoppingSalePrompt.texts(title),
             handleCompletion: async (input) => {
               await fs.promises.writeFile(

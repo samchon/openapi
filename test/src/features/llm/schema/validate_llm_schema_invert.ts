@@ -21,22 +21,6 @@ export const test_llm_v31_schema_invert = () =>
 const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
   model: Model,
 ) => {
-  if (model === "gemini")
-    console.log(
-      LlmSchemaComposer.invert(model)({
-        components: {},
-        $defs: {},
-        schema: typia.llm.schema<
-          string &
-            tags.Format<"uri"> &
-            tags.ContentMediaType<"image/*"> &
-            tags.MinLength<0> &
-            tags.MaxLength<128>,
-          "chatgpt"
-        >({}),
-      } as any),
-    );
-
   TestValidator.equals("string")(
     LlmSchemaComposer.invert(model)({
       components: {},

@@ -11,6 +11,7 @@ import { NamingConvention } from "../../utils/NamingConvention";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { OpenApiValidator } from "../../utils/OpenApiValidator";
 import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
+import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace GeminiSchemaComposer {
@@ -490,6 +491,7 @@ export namespace GeminiSchemaComposer {
       if (GeminiTypeChecker.isArray(schema))
         union.push({
           ...schema,
+          ...LlmDescriptionInverter.array(schema.description),
           items: next(schema.items),
         });
       else if (GeminiTypeChecker.isObject(schema))
@@ -540,6 +542,7 @@ export namespace GeminiSchemaComposer {
         else
           union.push({
             ...schema,
+            ...LlmDescriptionInverter.numeric(schema.description),
             ...{ enum: undefined },
           });
       else if (GeminiTypeChecker.isString(schema))
@@ -552,6 +555,7 @@ export namespace GeminiSchemaComposer {
         else
           union.push({
             ...schema,
+            ...LlmDescriptionInverter.string(schema.description),
             ...{ enum: undefined },
           });
       else
@@ -561,7 +565,7 @@ export namespace GeminiSchemaComposer {
     };
     visit(props.schema);
 
-    return {
+    const result = {
       ...attribute,
       ...(union.length === 0
         ? { type: undefined }
@@ -589,5 +593,7 @@ export namespace GeminiSchemaComposer {
                   : undefined,
             }),
     };
+    console.log("result", props.schema, result);
+    return result;
   };
 }
