@@ -41,7 +41,7 @@ const validate_mcp_application = async <Model extends ILlmSchema.Model>(
 
   llm.functions.forEach((x) => {
     const parameters = { ...x.parameters };
-    if (model !== "3.0" && model !== "gemini") {
+    if (model !== "3.0") {
       const visited: Set<string> = new Set<string>();
       LlmSchemaComposer.typeChecker(model).visit({
         closure: (schema: any) => {

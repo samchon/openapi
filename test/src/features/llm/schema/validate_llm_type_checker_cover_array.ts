@@ -42,7 +42,7 @@ const validate_llm_type_checker_cover_array = <Model extends ILlmSchema.Model>(
         throw new Error(`Failed to compose ${model} schema.`);
       return result.value;
     });
-    return model === "3.0" || model === "gemini"
+    return model === "3.0"
       ? (LlmSchemaComposer.typeChecker(model).covers as any)(a, b)
       : (LlmSchemaComposer.typeChecker(model).covers as any)({
           x: a,
