@@ -13,12 +13,29 @@ export const test_chatgpt_schema_reference_description = () => {
     components: collection.components,
     schema: collection.schemas[0]! as OpenApi.IJsonSchema.IReference,
   });
-  TestValidator.predicate("description")(
+  TestValidator.predicate("type description")(
     result.success === true &&
       !!result.value.description?.includes("@link hobby") &&
       !!result.value.description?.includes("> A hobby") &&
       !!result.value.description?.includes("> The main hobby") &&
       !result.value.description?.includes("The hobby type"),
+  );
+  TestValidator.equals("$ref description")(
+    result.success === true &&
+      result.value.properties.hobby.description === undefined,
+  );
+
+  const nonStrict = LlmSchemaComposer.parameters("chatgpt")({
+    config: {
+      reference: true,
+      strict: false,
+    },
+    components: collection.components,
+    schema: collection.schemas[0]! as OpenApi.IJsonSchema.IReference,
+  });
+  TestValidator.equals("non-strict $ref description")(
+    nonStrict.success === true &&
+      nonStrict.value.properties.hobby.description === "The hobby type.",
   );
 };
 

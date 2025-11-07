@@ -9,8 +9,8 @@
     }
   ],
   "data": {
-    "etc": "{\"hobby\": \"Soccer\", \"job\": \"Scientist\"}",
+    "name": "John Doe",
     "age": 42,
-    "name": "John Doe"
+    "etc": "{\"hobby\": \"Soccer\", \"job\": \"Scientist\"}"
   }
 }

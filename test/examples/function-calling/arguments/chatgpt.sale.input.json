@@ -8,6 +8,21 @@
       "value": null
     },
     {
+      "path": "$input.input.content.thumbnails[0].name",
+      "expected": "(string & MaxLength<255>)",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `(string & MaxLength<255>)` typed value next time."
+    },
+    {
+      "path": "$input.input.content.thumbnails[1].name",
+      "expected": "(string & MaxLength<255>)",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `(string & MaxLength<255>)` typed value next time."
+    },
+    {
+      "path": "$input.input.content.thumbnails[2].name",
+      "expected": "(string & MaxLength<255>)",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `(string & MaxLength<255>)` typed value next time."
+    },
+    {
       "path": "$input.input.units[0].options[0].type",
       "expected": "\"select\"",
       "description": "The value at this path is `undefined`.\n\nPlease fill the `\"select\"` typed value next time."
@@ -16,21 +31,6 @@
       "path": "$input.input.units[0].options[0].variable",
       "expected": "boolean",
       "description": "The value at this path is `undefined`.\n\nPlease fill the `boolean` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[0].candidates[0].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[0].candidates[1].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[0].candidates[2].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
     },
     {
       "path": "$input.input.units[0].options[1].type",
@@ -43,21 +43,6 @@
       "description": "The value at this path is `undefined`.\n\nPlease fill the `boolean` typed value next time."
     },
     {
-      "path": "$input.input.units[0].options[1].candidates[0].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[1].candidates[1].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[1].candidates[2].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
       "path": "$input.input.units[0].options[2].type",
       "expected": "\"select\"",
       "description": "The value at this path is `undefined`.\n\nPlease fill the `\"select\"` typed value next time."
@@ -68,21 +53,6 @@
       "description": "The value at this path is `undefined`.\n\nPlease fill the `boolean` typed value next time."
     },
     {
-      "path": "$input.input.units[0].options[2].candidates[0].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[2].candidates[1].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
-      "path": "$input.input.units[0].options[2].candidates[2].name",
-      "expected": "string",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
-    },
-    {
       "path": "$input.input.units[0].stocks[0].name",
       "expected": "string",
       "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
@@ -90,12 +60,7 @@
     {
       "path": "$input.input.units[0].stocks[0].price",
       "expected": "IShoppingPrice",
-      "value": 1000000
-    },
-    {
-      "path": "$input.input.units[0].stocks[0].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[0].stocks[1].name",
@@ -105,12 +70,7 @@
     {
       "path": "$input.input.units[0].stocks[1].price",
       "expected": "IShoppingPrice",
-      "value": 1200000
-    },
-    {
-      "path": "$input.input.units[0].stocks[1].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[0].stocks[2].name",
@@ -120,12 +80,7 @@
     {
       "path": "$input.input.units[0].stocks[2].price",
       "expected": "IShoppingPrice",
-      "value": 1400000
-    },
-    {
-      "path": "$input.input.units[0].stocks[2].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[0].stocks[3].name",
@@ -135,12 +90,7 @@
     {
       "path": "$input.input.units[0].stocks[3].price",
       "expected": "IShoppingPrice",
-      "value": 1500000
-    },
-    {
-      "path": "$input.input.units[0].stocks[3].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[0].stocks[4].name",
@@ -150,12 +100,7 @@
     {
       "path": "$input.input.units[0].stocks[4].price",
       "expected": "IShoppingPrice",
-      "value": 1800000
-    },
-    {
-      "path": "$input.input.units[0].stocks[4].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[0].stocks[5].name",
@@ -165,12 +110,7 @@
     {
       "path": "$input.input.units[0].stocks[5].price",
       "expected": "IShoppingPrice",
-      "value": 1800000
-    },
-    {
-      "path": "$input.input.units[0].stocks[5].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[0].stocks[6].name",
@@ -180,12 +120,7 @@
     {
       "path": "$input.input.units[0].stocks[6].price",
       "expected": "IShoppingPrice",
-      "value": 2000000
-    },
-    {
-      "path": "$input.input.units[0].stocks[6].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[1].stocks[0].name",
@@ -195,12 +130,7 @@
     {
       "path": "$input.input.units[1].stocks[0].price",
       "expected": "IShoppingPrice",
-      "value": 100000
-    },
-    {
-      "path": "$input.input.units[1].stocks[0].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     },
     {
       "path": "$input.input.units[2].stocks[0].name",
@@ -210,17 +140,13 @@
     {
       "path": "$input.input.units[2].stocks[0].price",
       "expected": "IShoppingPrice",
-      "value": 200000
-    },
-    {
-      "path": "$input.input.units[2].stocks[0].choices",
-      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
-      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `IShoppingPrice` typed value next time."
     }
   ],
   "data": {
     "input": {
       "section_code": "general",
+      "status": null,
       "opened_at": null,
       "closed_at": null,
       "content": {
@@ -231,17 +157,14 @@
         "thumbnails": [
           {
             "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg",
-            "name": "microsoft-surface-pro-9-thumbnail-1.jpeg",
             "extension": "jpeg"
           },
           {
             "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg",
-            "name": "microsoft-surface-pro-9-thumbnail-2.jpeg",
             "extension": "jpeg"
           },
           {
             "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg",
-            "name": "microsoft-surface-pro-9-thumbnail-3.jpeg",
             "extension": "jpeg"
           }
         ]
@@ -264,13 +187,13 @@
               "name": "CPU",
               "candidates": [
                 {
-                  "value": "Intel Core i3"
+                  "name": "Intel Core i3"
                 },
                 {
-                  "value": "Intel Core i5"
+                  "name": "Intel Core i5"
                 },
                 {
-                  "value": "Intel Core i7"
+                  "name": "Intel Core i7"
                 }
               ]
             },
@@ -278,13 +201,13 @@
               "name": "RAM",
               "candidates": [
                 {
-                  "value": "8 GB"
+                  "name": "8 GB"
                 },
                 {
-                  "value": "16 GB"
+                  "name": "16 GB"
                 },
                 {
-                  "value": "32 GB"
+                  "name": "32 GB"
                 }
               ]
             },
@@ -292,85 +215,148 @@
               "name": "Storage",
               "candidates": [
                 {
-                  "value": "128 GB"
+                  "name": "128 GB"
                 },
                 {
-                  "value": "256 GB"
+                  "name": "256 GB"
                 },
                 {
-                  "value": "512 GB"
+                  "name": "512 GB"
                 }
               ]
             }
           ],
           "stocks": [
             {
-              "options": [
-                "Intel Core i3",
-                "8 GB",
-                "128 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 0
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 0
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 0
+                }
               ],
-              "price": 1000000,
+              "nominal_price": 1000000,
               "real_price": 899000,
               "quantity": 1000
             },
             {
-              "options": [
-                "Intel Core i3",
-                "16 GB",
-                "256 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 0
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 1
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 1
+                }
               ],
-              "price": 1200000,
+              "nominal_price": 1200000,
               "real_price": 1099000,
               "quantity": 1000
             },
             {
-              "options": [
-                "Intel Core i3",
-                "16 GB",
-                "512 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 0
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 1
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 2
+                }
               ],
-              "price": 1400000,
+              "nominal_price": 1400000,
               "real_price": 1299000,
               "quantity": 1000
             },
             {
-              "options": [
-                "Intel Core i5",
-                "16 GB",
-                "256 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 1
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 1
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 1
+                }
               ],
-              "price": 1500000,
+              "nominal_price": 1500000,
               "real_price": 1399000,
               "quantity": 1000
             },
             {
-              "options": [
-                "Intel Core i5",
-                "32 GB",
-                "512 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 1
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 2
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 2
+                }
               ],
-              "price": 1800000,
+              "nominal_price": 1800000,
               "real_price": 1699000,
               "quantity": 1000
             },
             {
-              "options": [
-                "Intel Core i7",
-                "16 GB",
-                "512 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 2
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 1
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 2
+                }
               ],
-              "price": 1800000,
+              "nominal_price": 1800000,
               "real_price": 1699000,
               "quantity": 1000
             },
             {
-              "options": [
-                "Intel Core i7",
-                "32 GB",
-                "512 GB"
+              "choices": [
+                {
+                  "option_index": 0,
+                  "candidate_index": 2
+                },
+                {
+                  "option_index": 1,
+                  "candidate_index": 2
+                },
+                {
+                  "option_index": 2,
+                  "candidate_index": 2
+                }
               ],
-              "price": 2000000,
+              "nominal_price": 2000000,
               "real_price": 1899000,
               "quantity": 1000
             }
@@ -383,10 +369,10 @@
           "options": [],
           "stocks": [
             {
-              "options": [],
-              "price": 100000,
+              "nominal_price": 100000,
               "real_price": 89000,
-              "quantity": 10000
+              "quantity": 10000,
+              "choices": []
             }
           ]
         },
@@ -397,21 +383,22 @@
           "options": [],
           "stocks": [
             {
-              "options": [],
-              "price": 200000,
+              "nominal_price": 200000,
               "real_price": 169000,
-              "quantity": 8000
+              "quantity": 8000,
+              "choices": []
             }
           ]
         }
       ],
       "tags": [
         "Surface Pro 9",
-        "2-in-1 Laptop",
-        "Tablet",
+        "2-in-1",
+        "Tablet PC",
         "Laptop",
-        "Microsoft",
-        "Sale"
+        "Convertible",
+        "Windows",
+        "Microsoft"
       ]
     }
   }

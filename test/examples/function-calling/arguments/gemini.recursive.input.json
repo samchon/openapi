@@ -10,20 +10,135 @@
     {
       "path": "$input.categories[1]",
       "expected": "IShoppingCategory",
-      "value": "furnitures"
+      "value": "desktops"
     },
     {
       "path": "$input.categories[2]",
       "expected": "IShoppingCategory",
-      "value": "accessories"
+      "value": "laptops"
     },
     {
       "path": "$input.categories[3]",
       "expected": "IShoppingCategory",
-      "value": "clothes"
+      "value": "ultrabooks"
     },
     {
       "path": "$input.categories[4]",
+      "expected": "IShoppingCategory",
+      "value": "macbooks"
+    },
+    {
+      "path": "$input.categories[5]",
+      "expected": "IShoppingCategory",
+      "value": "desknotes"
+    },
+    {
+      "path": "$input.categories[6]",
+      "expected": "IShoppingCategory",
+      "value": "2 in 1 laptops"
+    },
+    {
+      "path": "$input.categories[7]",
+      "expected": "IShoppingCategory",
+      "value": "tablets"
+    },
+    {
+      "path": "$input.categories[8]",
+      "expected": "IShoppingCategory",
+      "value": "ipads"
+    },
+    {
+      "path": "$input.categories[9]",
+      "expected": "IShoppingCategory",
+      "value": "android tablets"
+    },
+    {
+      "path": "$input.categories[10]",
+      "expected": "IShoppingCategory",
+      "value": "windows tablets"
+    },
+    {
+      "path": "$input.categories[11]",
+      "expected": "IShoppingCategory",
+      "value": "smart phones"
+    },
+    {
+      "path": "$input.categories[12]",
+      "expected": "IShoppingCategory",
+      "value": "mini smartphones"
+    },
+    {
+      "path": "$input.categories[13]",
+      "expected": "IShoppingCategory",
+      "value": "phablets"
+    },
+    {
+      "path": "$input.categories[14]",
+      "expected": "IShoppingCategory",
+      "value": "gaming smartphones"
+    },
+    {
+      "path": "$input.categories[15]",
+      "expected": "IShoppingCategory",
+      "value": "rugged smartphones"
+    },
+    {
+      "path": "$input.categories[16]",
+      "expected": "IShoppingCategory",
+      "value": "foldable smartphones"
+    },
+    {
+      "path": "$input.categories[17]",
+      "expected": "IShoppingCategory",
+      "value": "smart watches"
+    },
+    {
+      "path": "$input.categories[18]",
+      "expected": "IShoppingCategory",
+      "value": "smart glasses"
+    },
+    {
+      "path": "$input.categories[19]",
+      "expected": "IShoppingCategory",
+      "value": "cameras"
+    },
+    {
+      "path": "$input.categories[20]",
+      "expected": "IShoppingCategory",
+      "value": "televisions"
+    },
+    {
+      "path": "$input.categories[21]",
+      "expected": "IShoppingCategory",
+      "value": "furnitures"
+    },
+    {
+      "path": "$input.categories[22]",
+      "expected": "IShoppingCategory",
+      "value": "accessories"
+    },
+    {
+      "path": "$input.categories[23]",
+      "expected": "IShoppingCategory",
+      "value": "jewelry"
+    },
+    {
+      "path": "$input.categories[24]",
+      "expected": "IShoppingCategory",
+      "value": "clothing"
+    },
+    {
+      "path": "$input.categories[25]",
+      "expected": "IShoppingCategory",
+      "value": "shoes"
+    },
+    {
+      "path": "$input.categories[26]",
+      "expected": "IShoppingCategory",
+      "value": "clothes"
+    },
+    {
+      "path": "$input.categories[27]",
       "expected": "IShoppingCategory",
       "value": "others"
     }
@@ -31,8 +146,31 @@
   "data": {
     "categories": [
       "electronics",
+      "desktops",
+      "laptops",
+      "ultrabooks",
+      "macbooks",
+      "desknotes",
+      "2 in 1 laptops",
+      "tablets",
+      "ipads",
+      "android tablets",
+      "windows tablets",
+      "smart phones",
+      "mini smartphones",
+      "phablets",
+      "gaming smartphones",
+      "rugged smartphones",
+      "foldable smartphones",
+      "smart watches",
+      "smart glasses",
+      "cameras",
+      "televisions",
       "furnitures",
       "accessories",
+      "jewelry",
+      "clothing",
+      "shoes",
       "clothes",
       "others"
     ]

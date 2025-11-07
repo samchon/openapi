@@ -174,18 +174,11 @@ export namespace GeminiSchemaComposer {
       return {
         ...attribute,
         ...union[0],
-        description: GeminiTypeChecker.isReference(union[0]!)
-          ? undefined
-          : (union[0].description ?? attribute.description),
+        description: union[0].description ?? attribute.description,
       };
     return {
       ...attribute,
-      anyOf: union.map((u) => ({
-        ...u,
-        description: GeminiTypeChecker.isReference(u)
-          ? undefined
-          : u.description,
-      })),
+      anyOf: union,
       "x-discriminator":
         LlmTypeCheckerV3_1.isOneOf(props.schema) &&
         props.schema.discriminator !== undefined &&

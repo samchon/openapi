@@ -27,117 +27,71 @@ flowchart
 [![API Documents](https://img.shields.io/badge/API-Documents-forestgreen)](https://samchon.github.io/openapi/api/)
 [![Discord Badge](https://img.shields.io/badge/discord-samchon-d91965?style=flat&labelColor=5866f2&logo=discord&logoColor=white&link=https://discord.gg/E94XhzrUCZ)](https://discord.gg/E94XhzrUCZ)
 
-OpenAPI definitions, converters and LLM function calling application composer.
+Transform OpenAPI documents into type-safe LLM function calling applications.
 
-`@samchon/openapi` is a collection of OpenAPI types for every versions, and converters for them. In the OpenAPI types, there is an "emended" OpenAPI v3.1 specification, which has removed ambiguous and duplicated expressions for the clarity. Every conversions are based on the emended OpenAPI v3.1 specification.
+`@samchon/openapi` converts any version of OpenAPI/Swagger documents into LLM function calling schemas for OpenAI GPT, Claude, and Gemini. It supports every OpenAPI version (Swagger 2.0, OpenAPI 3.0, and OpenAPI 3.1) with full TypeScript type definitions. The library also works with MCP (Model Context Protocol) servers, enabling seamless AI agent development.
 
-  1. [Swagger v2.0](https://github.com/samchon/openapi/blob/master/src/SwaggerV2.ts)
-  2. [OpenAPI v3.0](https://github.com/samchon/openapi/blob/master/src/OpenApiV3.ts)
-  3. [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
-  4. [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
+**Key Features:**
+- **Universal OpenAPI Support**: Works with Swagger 2.0, OpenAPI 3.0, and OpenAPI 3.1
+- **LLM Function Calling**: Auto-generates function schemas for OpenAI, Claude, and Gemini
+- **Type-Safe Validation**: Built-in validation with detailed error feedback for LLM responses
+- **MCP Integration**: Compose function calling schemas from MCP servers
+- **Emended Specification**: Standardized OpenAPI v3.1 format that removes ambiguities
 
-`@samchon/openapi` also provides LLM (Large Language Model) function calling application composer from the OpenAPI document with many strategies. With the [`HttpLlm`](https://samchon.github.io/openapi/api/modules/HttpLlm.html) module, you can perform the LLM function calling extremely easily just by delivering the OpenAPI (Swagger) document.
-
-  - [`HttpLlm.application()`](https://samchon.github.io/openapi/api/functions/HttpLlm.application.html)
-  - [`IHttpLlmApplication<Model>`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmApplication-1.html)
-  - [`IHttpLlmFunction<Model>`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmFunction-1.html)
-  - Supported schemas
-    - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
-  - Middle layer schemas
-    - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
-    - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
-
-Additionally, `@samchon/openapi` supports MCP (Model Context Protocol) function calling. Due to [model specification](https://wrtnlabs.io/agentica/docs/core/vendor/), [validation feedback](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#validation-feedback), and [selector agent](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy) reasons, function calling to MCP server is much better than directly using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property of LLM API.
-
-  - [`McpLlm.application()`](https://samchon.github.io/openapi/api/functions/McpLlm.application.html)
-  - [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html)
-  - [`IMcpLlmFunction`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html)
-
+**Live Demo:**
 > https://github.com/user-attachments/assets/e1faf30b-c703-4451-b68b-2e7a8170bce5
 >
-> Demonstration video composing A.I. chatbot with `@samchon/openapi` and [`@agentica`](https://github.com/wrtnlabs/agentica)
+> Watch how `@samchon/openapi` powers an AI shopping chatbot with [`@agentica`](https://github.com/wrtnlabs/agentica)
 >
-> - Shopping A.I. Chatbot Application: https://nestia.io/chat/shopping
-> - Shopping Backend Repository: https://github.com/samchon/shopping-backend
-> - Shopping Swagger Document (`@nestia/editor`): [https://nestia.io/editor/?url=...](https://nestia.io/editor/?simulate=true&e2e=true&url=https%3A%2F%2Fraw.githubusercontent.com%2Fsamchon%2Fshopping-backend%2Frefs%2Fheads%2Fmaster%2Fpackages%2Fapi%2Fswagger.json)
+> - [View Backend Repository](https://github.com/samchon/shopping-backend)
+> - [Explore OpenAPI Document](https://nestia.io/editor/?simulate=true&e2e=true&url=https%3A%2F%2Fraw.githubusercontent.com%2Fsamchon%2Fshopping-backend%2Frefs%2Fheads%2Fmaster%2Fpackages%2Fapi%2Fswagger.json)
 
 
 
 
-## Setup
+## Quick Start
+
 ```bash
 npm install @samchon/openapi
 ```
 
-Here is an example code utilizing `@samchon/openapi` for LLM function calling purposes. 
+Transform your OpenAPI document into an LLM function calling application in just a few lines:
 
 ```typescript
-import {
-  HttpLlm,
-  IChatGptSchema,
-  IHttpLlmApplication,
-  IHttpLlmFunction,
-  OpenApi,
-  OpenApiV3,
-  OpenApiV3_1,
-  SwaggerV2,
-} from "@samchon/openapi";
-import fs from "fs";
-import typia from "typia";
+import { HttpLlm, OpenApi } from "@samchon/openapi";
 
-const main = async (): Promise<void> => {
-  // read swagger document and validate it
-  const swagger:
-    | SwaggerV2.IDocument
-    | OpenApiV3.IDocument
-    | OpenApiV3_1.IDocument = JSON.parse(
-    await fs.promises.readFile("swagger.json", "utf8"),
-  );
-  typia.assert(swagger); // recommended
+// Load and convert your OpenAPI document
+const document: OpenApi.IDocument = OpenApi.convert(swagger);
 
-  // convert to emended OpenAPI document,
-  // and compose LLM function calling application
-  const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
-    model: "chatgpt",
-    document,
-  });
+// Generate LLM function calling schemas
+const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
+  model: "chatgpt", // "chatgpt" | "claude" | "gemini"
+  document,
+});
 
-  // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<"chatgpt"> | undefined = 
-    application.functions.find(
-      // (f) => f.name === "llm_selected_function_name"
-      (f) => f.path === "/bbs/articles" && f.method === "post",
-    );
-  if (func === undefined) throw new Error("No matched function exists.");
+// Find a function by path and method
+const func: IHttpLlmFunction<"chatgpt"> | undefined = application.functions.find(
+  (f) => f.path === "/bbs/articles" && f.method === "post"
+);
 
-  // actual execution is by yourself
-  const article = await HttpLlm.execute({
-    connection: {
-      host: "http://localhost:3000",
-    },
-    application,
-    function: func,
-    arguments: {
-      // arguments composed by LLM 
-      body: {
-        title: "Hello, world!",
-        body: "Let's imagine that this argument is composed by LLM.",
-        thumbnail: null,
-      },
-    },
-  });
-  console.log("article", article);
-};
-main().catch(console.error);
+// Execute the function with LLM-composed arguments
+const result: unknown = await HttpLlm.execute({
+  connection: { host: "http://localhost:3000" },
+  application,
+  function: func,
+  arguments: llmGeneratedArgs, // from OpenAI/Claude/Gemini
+});
 ```
+
+That's it! Your HTTP backend is now callable by AI.
 
 
 
 
 ## OpenAPI Definitions
+
+`@samchon/openapi` provides complete TypeScript definitions for all OpenAPI versions and introduces an "emended" OpenAPI v3.1 specification that serves as a universal intermediate format.
+
 ```mermaid
 flowchart
   v20(Swagger v2.0) --upgrades--> emended[["<b><u>OpenAPI v3.1 (emended)</u></b>"]]
@@ -147,70 +101,62 @@ flowchart
   emended --downgrades--> v30d(Swagger v3.0)
 ```
 
-`@samchon/openapi` supports every version of OpenAPI specifications with detailed TypeScript types.
+**Supported Specifications:**
+- [Swagger v2.0](https://github.com/samchon/openapi/blob/master/src/SwaggerV2.ts)
+- [OpenAPI v3.0](https://github.com/samchon/openapi/blob/master/src/OpenApiV3.ts)
+- [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
+- [**OpenAPI v3.1 (emended)**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts) - Standardized format
 
-  - [Swagger v2.0](https://github.com/samchon/openapi/blob/master/src/SwaggerV2.ts)
-  - [OpenAPI v3.0](https://github.com/samchon/openapi/blob/master/src/OpenApiV3.ts)
-  - [OpenAPI v3.1](https://github.com/samchon/openapi/blob/master/src/OpenApiV3_1.ts)
-  - [**OpenAPI v3.1 emended**](https://github.com/samchon/openapi/blob/master/src/OpenApi.ts)
+### What is "Emended" OpenAPI?
 
-Additionally, `@samchon/openapi` provides an "emended OpenAPI v3.1 definition" which removes ambiguous and duplicated expressions for clarity. It emends the original OpenAPI v3.1 specification as shown above. You can compose an "emended OpenAPI v3.1 document" by calling the `OpenApi.convert()` function. 
+The emended specification removes ambiguities and duplications from OpenAPI v3.1, creating a cleaner, more consistent format. All conversions flow through this intermediate format. 
 
-  - Operation
-    - Merge `OpenApiV3_1.IPathItem.parameters` to `OpenApi.IOperation.parameters`
-    - Resolve references of `OpenApiV3_1.IOperation` members
-    - Escape references of `OpenApiV3_1.IComponents.examples`
-  - JSON Schema
-    - Decompose mixed type: `OpenApiV3_1.IJsonSchema.IMixed`
-    - Resolve nullable property: `OpenApiV3_1.IJsonSchema.__ISignificant.nullable`
-    - Array type utilizes only single `OpenAPI.IJsonSchema.IArray.items`
-    - Tuple type utilizes only `OpenApi.IJsonSchema.ITuple.prefixItems`
-    - Merge `OpenApiV3_1.IJsonSchema.IAnyOf` to `OpenApi.IJsonSchema.IOneOf`
-    - Merge `OpenApiV3_1.IJsonSchema.IRecursiveReference` to `OpenApi.IJsonSchema.IReference`
-    - Merge `OpenApiV3_1.IJsonSchema.IAllOf` to `OpenApi.IJsonSchema.IObject`
+**Key Improvements:**
+- **Operations**: Merges parameters from path and operation levels, resolves all references
+- **JSON Schema**: Eliminates mixed types, unifies nullable handling, standardizes array/tuple representations
+- **Schema Composition**: Consolidates `anyOf`, `oneOf`, `allOf` patterns into simpler structures
 
-Conversions to other OpenAPI document versions are also based on the "emended OpenAPI v3.1 specification" as shown in the diagram above. You can perform conversions through the `OpenApi.downgrade()` function. Therefore, to convert a Swagger v2.0 document to OpenAPI v3.0, you need to call two functions: `OpenApi.convert()` followed by `OpenApi.downgrade()`.
+### Converting Between Versions
 
-Finally, if you use the `typia` library with `@samchon/openapi` types, you can validate whether your OpenAPI document follows the standard specification. Simply visit one of the playground links below and paste your OpenAPI document URL. This validation strategy is superior to any other OpenAPI validator library.
+```typescript
+import { OpenApi } from "@samchon/openapi";
 
-  - Playground Links
-    - [💻 Type assertion](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgWGYzCqLRqvWQnWmTmA7CewV+MAq73YUGyqTOcAAPoRqKQyIwnr0BkyWYCzZaqMRaHiHU7WRgYK64GwuDw+Px7Y7mb7-SVchFGZHATTXCVJcM1SQlXUasg4FUJp0BlUBtN6fA0L7smhsnF3TRwz7ATta7hgRp0rwYHGG36k3SPBAsU9fKIIBFy5hK9kk0JjN5fNFgexjqoIvSB0LeBIoDSgA)
-    - [💻 Detailed validation](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgJCwABlegMsDVeshOtN6Xylu8MfBAk5gOwnul2BicuwAakznAAD6EaikMiMJ7KpkswG2h1UYi0PHu5msjAwb1wNhcHh8fhugYe4Ohkq5CKMoOAmnTYCiSL8vVA+TvZTKJbyAL+QKic0pKKIW30iBYp6+UQQCK5-VPXgSKDyDMlEqLGDvKAYWnCVwlSXDDUkKotOo1ZBwKoTToDKoDLUeeBoYPZNDZOK+mix+OAnbH3DAjTpXgwFNnkN9mYeBtC5ut3eYffZDNCYzeL40TAlaJz1o2XbQDSQA)
+// Convert any version to emended format
+const emended: OpenApi.IDocument = OpenApi.convert(swagger); // Swagger 2.0/3.0/3.1
+
+// Downgrade to older versions if needed
+const v30: OpenApiV3.IDocument = OpenApi.downgrade(emended, "3.0");
+const v20: SwaggerV2.IDocument = OpenApi.downgrade(emended, "2.0");
+```
+
+### Validating OpenAPI Documents
+
+Use `typia` for runtime validation with detailed type checking - far more accurate than other validators:
 
 ```typescript
 import { OpenApi, OpenApiV3, OpenApiV3_1, SwaggerV2 } from "@samchon/openapi";
 import typia from "typia";
- 
-const main = async (): Promise<void> => {
-  // GET YOUR OPENAPI DOCUMENT
-  const response: Response = await fetch(
-    "https://raw.githubusercontent.com/samchon/openapi/master/examples/v3.0/openai.json"
-  );
-  const document: any = await response.json();
- 
-  // TYPE VALIDATION
-  const result = typia.validate<
-    | OpenApiV3_1.IDocument
-    | OpenApiV3.IDocument
-    | SwaggerV2.IDocument
-  >(document);
-  if (result.success === false) {
-    console.error(result.errors);
-    return;
-  }
- 
-  // CONVERT TO EMENDED
-  const emended: OpenApi.IDocument = OpenApi.convert(document);
-  console.info(emended);
-};
-main().catch(console.error);
+
+const document: any = await fetch("swagger.json").then(r => r.json());
+
+// Validate with detailed error messages
+const result: typia.IValidation<SwaggerV2.IDocument | OpenApiV3.IDocument | OpenApiV3_1.IDocument> =
+  typia.validate<SwaggerV2.IDocument | OpenApiV3.IDocument | OpenApiV3_1.IDocument>(document);
+
+if (result.success) {
+  const emended: OpenApi.IDocument = OpenApi.convert(result.data);
+} else {
+  console.error(result.errors); // Detailed validation errors
+}
 ```
+
+Try it in the playground: [Type assertion](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgWGYzCqLRqvWQnWmTmA7CewV+MAq73YUGyqTOcAAPoRqKQyIwnr0BkyWYCzZaqMRaHiHU7WRgYK64GwuDw+Px7Y7mb7-SVchFGZHATTXCVJcM1SQlXUasg4FUJp0BlUBtN6fA0L7smhsnF3TRwz7ATta7hgRp0rwYHGG36k3SPBAsU9fKIIBFy5hK9kk0JjN5fNFgexjqoIvSB0LeBIoDSgA) | [Detailed validation](https://typia.io/playground/?script=JYWwDg9gTgLgBAbzgeTAUwHYEEzADQrra4BqAzAapjsOQPoCMBAygO4CGA5p2lCQExwAvnABmUCCDgAiAAIBndiADGACwgYA9BCLtc0gNwAoUJFhwYAT1zsxEqdKs3DRo8o3z4IdsAxwAvHDs8pYYynAAFACUAFxwAAr2wPJoADwAbhDAACYAfAH5CEZwcJqacADiAKIAKnAAmsgAqgBKKPFVAHJY8QCScAAiyADCTQCyXTXFcO4YnnBQaPKQc2hxLUsrKQFBHMDwomgwahHTJdKqMDBg8jFlUOysAHSc+6oArgBG7ylQszCYGBPdwgTSKFTqLQ6TB6YCabyeXiaNAADyUYAANktNOkyE8AAzaXTAJ4AK3kGmk0yixhKs3m2QgyneIEBcXYGEsO0ePngi2WHjQZIpGGixmmZTgNXqHTgJCwABlegMsDVeshOtN6Xylu8MfBAk5gOwnul2BicuwAakznAAD6EaikMiMJ7KpkswG2h1UYi0PHu5msjAwb1wNhcHh8fhugYe4Ohkq5CKMoOAmnTYCiSL8vVA+TvZTKJbyAL+QKic0pKKIW30iBYp6+UQQCK5-VPXgSKDyDMlEqLGDvKAYWnCVwlSXDDUkKotOo1ZBwKoTToDKoDLUeeBoYPZNDZOK+mix+OAnbH3DAjTpXgwFNnkN9mYeBtC5ut3eYffZDNCYzeL40TAlaJz1o2XbQDSQA)
 
 
 
 
 ## LLM Function Calling
-### Preface
+
 ```mermaid
 flowchart
   subgraph "OpenAPI Specification"
@@ -232,45 +178,29 @@ flowchart
   end
 ```
 
-LLM function calling application from OpenAPI documents.
+Turn your HTTP backend into an AI-callable service. `@samchon/openapi` converts your OpenAPI document into function schemas that OpenAI, Claude, and Gemini can understand and call.
 
-`@samchon/openapi` provides LLM (Large Language Model) function calling applications from "emended OpenAPI v3.1 documents". Therefore, if you have an HTTP backend server and have successfully built an OpenAPI document, you can easily create an AI chatbot application.
+### Supported AI Models
 
-In the AI chatbot, LLM will select the proper function to remotely call based on conversations with the user and fill the function arguments automatically. When you actually execute the function call through the [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) function, this is called "LLM function calling".
+**[`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html)** - For OpenAI GPT
+- Fully compatible with OpenAI's strict mode
+  - strict mode is not recommended
+  - [validation feedback strategy](#validation-feedback---fixing-llm-mistakes) is much powerful
+- Uses JSDoc tags in `description` to bypass OpenAI's schema limitations
 
-Enjoy the fantastic LLM function calling feature easily with `@samchon/openapi`.
+**[`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html)** - For Anthropic Claude ⭐ **Recommended**
+- Follows JSON Schema standard most closely
+- No artificial restrictions - cleanest type definitions
+- Ideal default choice when you're unsure which model to use
+  - working on every models unless OpenAI's strict mode or legacy Gemini
 
-  - Application
-    - [`HttpLlm.application()`](https://samchon.github.io/openapi/api/functions/HttpLlm.application.html)
-    - [`IHttpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmApplication-1.html)
-    - [`IHttpLlmFunction`](https://samchon.github.io/openapi/api/interfaces/IHttpLlmFunction-1.html)
-  - Schemas
-    - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
-    - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
-    - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
-    - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
-
-`@samchon/openapi` supports three major LLM function calling schemas.
-
-[`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html) is designed for OpenAI models. It is fully compatible with OpenAI's strict mode, elegantly handling its restrictions by utilizing JSDoc tags within the `description` property to support full JSON schema specifications despite OpenAI's constraints.
-
-[`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html) is the most recommended option as it most closely follows the JSON schema standard with the most concise types and accurate expressions. Claude imposes no JSON schema specification restrictions, making it the ideal choice when you're unsure about your AI model's requirements or when no explicit specification is provided.
-
-[`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html) is implemented according to the Gemini guide documentation specification. Prior to November 2024, Gemini had virtually blocked all JSON schema specifications (such as `anyOf`, `$ref`, `format`, `maxItems`), making function calling practically impossible. However, these limitations have been removed in recent updates, and it now supports nearly all JSON schema specifications.
-
-Additionally, [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html) and [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html) serve as middle layer schemas for advanced users who need direct control over OpenAPI v3.0 or v3.1 specifications.
-
-  - Type Checkers
-    - [`ChatGptTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ChatGptTypeChecker.ts)
-    - [`ClaudeTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ClaudeTypeChecker.ts)
-    - [`GeminiTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/GeminiTypeChecker.ts)
-    - [`LlmTypeCheckerV3`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeCheckerV3.ts)
-    - [`LlmTypeCheckerV3_1`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeCheckerV3_1.ts)
+**[`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html)** - For Google Gemini
+- Supports nearly all JSON Schema specifications (as of Nov 2025)
+- Previous versions had severe restrictions, but these are now removed
 
 > [!NOTE]
 >
-> You also can compose [`ILlmApplication`](https://samchon.github.io/openapi/api/interfaces/ILlmApplication-1.html) from a class type with `typia`.
+> You can also compose [`ILlmApplication`](https://samchon.github.io/openapi/api/interfaces/ILlmApplication-1.html) from a TypeScript class using `typia`.
 >
 > https://typia.io/docs/llm/application
 >
@@ -282,167 +212,107 @@ Additionally, [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmS
 >   typia.llm.application<YourClassType, "chatgpt">();
 > ```
 
-> [!TIP]
->
-> LLM selects proper function and fill arguments.
-> 
-> In nowadays, most LLM (Large Language Model) like OpenAI are supporting "function calling" feature. The "LLM function calling" means that LLM automatically selects a proper function and fills parameter values from conversation with the user (may by chatting text).
-> 
-> https://platform.openai.com/docs/guides/function-calling
+### Complete Example
 
-### Execution
-Actual function call execution is your responsibility.
+Here's a full example showing how OpenAI GPT selects a function, fills arguments, and you execute it:
 
-LLM (Large Language Model) providers like OpenAI select the proper function to call from conversations with users and fill its arguments. However, the function calling feature supported by LLM providers does not perform the actual function call execution. The execution responsibility lies with you.
-
-In `@samchon/openapi`, you can execute LLM function calling via the [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) (or [`HttpLlm.propagate()`](https://samchon.github.io/openapi/api/functions/HttpLlm.propagate.html)) function. Here is an example code executing LLM function calling through the [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) function. As you can see, to execute the LLM function call, you need to provide the following information:
-
-  - Connection info to the HTTP server
-  - Application of the LLM function calling
-  - LLM function schema to call
-  - Arguments for the function call (maybe composed by LLM)
-
-Here is the example code executing the LLM function call with `@samchon/openapi`.
-
-  - Example Code: [`test/examples/chatgpt-function-call-to-sale-create.ts`](https://github.com/samchon/openapi/blob/master/test/examples/chatgpt-function-call-to-sale-create.ts)
-  - Prompt describing the product to create: [`Microsoft Surface Pro 9`](https://github.com/samchon/openapi/blob/master/examples/function-calling/prompts/microsoft-surface-pro-9.md)
-  - Result of the Function Calling: [`examples/arguments/chatgpt.microsoft-surface-pro-9.input.json`](https://github.com/samchon/openapi/blob/master/examples/function-calling/arguments/chatgpt.microsoft-surface-pro-9.input.json)
+**Resources:**
+- [Full Example Code](https://github.com/samchon/openapi/blob/master/test/src/examples/chatgpt-function-call-to-sale-create.ts)
+- [User Prompt Example](https://github.com/samchon/openapi/blob/master/test/examples/function-calling/prompts/microsoft-surface-pro-9.md)
+- [LLM-Generated Arguments](https://github.com/samchon/openapi/blob/master/test/examples/function-calling/arguments/chatgpt.microsoft-surface-pro-9.input.json)
+- [Function Calling Schema](https://github.com/samchon/openapi/blob/master/test/examples/function-calling/schemas/chatgpt.sale.schema.json)
 
 ```typescript
-import {
-  HttpLlm,
-  IChatGptSchema,
-  IHttpLlmApplication,
-  IHttpLlmFunction,
-  OpenApi,
-  OpenApiV3,
-  OpenApiV3_1,
-  SwaggerV2,
-} from "@samchon/openapi";
+import { HttpLlm, OpenApi, IHttpLlmApplication, IHttpLlmFunction } from "@samchon/openapi";
 import OpenAI from "openai";
-import typia from "typia";
 
-const main = async (): Promise<void> => {
-  // Read swagger document and validate it
-  const swagger:
-    | SwaggerV2.IDocument
-    | OpenApiV3.IDocument
-    | OpenApiV3_1.IDocument = JSON.parse(
-    await fetch(
-      "https://github.com/samchon/shopping-backend/blob/master/packages/api/swagger.json",
-    ).then((r) => r.json()),
-  );
-  typia.assert(swagger); // recommended
-
-  // convert to emended OpenAPI document,
-  // and compose LLM function calling application
-  const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
+// 1. Convert OpenAPI to LLM function calling application
+const document: OpenApi.IDocument = OpenApi.convert(swagger);
+const application: IHttpLlmApplication<"chatgpt"> =
+  HttpLlm.application({
     model: "chatgpt",
     document,
   });
 
-  // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<"chatgpt"> | undefined =
-    application.functions.find(
-      // (f) => f.name === "llm_selected_function_name"
-      (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
-    );
-  if (func === undefined) throw new Error("No matched function exists.");
+// 2. Find the function by path and method
+const func: IHttpLlmFunction<"chatgpt"> | undefined = application.functions.find(
+  (f) => f.path === "/shoppings/sellers/sale" && f.method === "post"
+);
+if (!func) throw new Error("Function not found");
 
-  // Get arguments by ChatGPT function calling
-  const client: OpenAI = new OpenAI({
-    apiKey: "<YOUR_OPENAI_API_KEY>",
-  });
-  const completion: OpenAI.ChatCompletion =
-    await client.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "assistant",
-          content:
-            "You are a helpful customer support assistant. Use the supplied tools to assist the user.",
-        },
-        {
-          role: "user",
-          content: "<DESCRIPTION ABOUT THE SALE>",
-          // https://github.com/samchon/openapi/blob/master/examples/function-calling/prompts/microsoft-surface-pro-9.md
-        },
-      ],
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: func.name,
-            description: func.description,
-            parameters: func.parameters as Record<string, any>,
-          },
-        },
-      ],
-    });
-  const toolCall: OpenAI.ChatCompletionMessageToolCall =
-    completion.choices[0].message.tool_calls![0];
+// 3. Let OpenAI GPT call the function
+const client: OpenAI = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const completion: OpenAI.ChatCompletion = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [
+    { role: "system", content: "You are a helpful shopping assistant." },
+    { role: "user", content: "I want to sell Microsoft Surface Pro 9..." }
+  ],
+  tools: [{
+    type: "function",
+    function: {
+      name: func.name,
+      description: func.description,
+      parameters: func.parameters,
+    }
+  }],
+});
 
-  // Actual execution by yourself
-  const article = await HttpLlm.execute({
-    connection: {
-      host: "http://localhost:37001",
-    },
-    application,
-    function: func,
-    input: JSON.parse(toolCall.function.arguments),
-  });
-  console.log("article", article);
-};
-main().catch(console.error);
+// 4. Execute the function call on your actual server
+const toolCall: OpenAI.ChatCompletionMessageToolCall =
+  completion.choices[0].message.tool_calls![0];
+const result: unknown = await HttpLlm.execute({
+  connection: { host: "http://localhost:37001" },
+  application,
+  function: func,
+  input: JSON.parse(toolCall.function.arguments),
+});
 ```
 
-### Validation Feedback
+### Validation Feedback - Fixing LLM Mistakes
+
+**The Problem**: LLMs make type errors. A lot.
+
+Even when your schema says `Array<string>`, GPT might return just `"string"`. In real-world testing with OpenAI GPT-4o-mini on a shopping service:
+- **1st attempt**: 70% success rate ❌
+- **2nd attempt** (with validation feedback): 98% success rate ✅
+- **3rd attempt**: Never failed ✅
+
+**The Solution**: Validate LLM output and send errors back for correction.
+
 ```typescript
-import { IHttpLlmFunction, IValidation } from "@samchon/openapi";
-import { FunctionCall } from "pseudo";
+import { HttpLlm, OpenApi, IHttpLlmApplication, IHttpLlmFunction, IValidation } from "@samchon/openapi";
 
-export const correctFunctionCall = (p: {
-  call: FunctionCall;
-  functions: Array<IHttpLlmFunction<"chatgpt">>;
-  retry: (reason: string, errors?: IValidation.IError[]) => Promise<unknown>;
-}): Promise<unknown> => {
-  // FIND FUNCTION
-  const func: IHttpLlmFunction<"chatgpt"> | undefined =
-    p.functions.find((f) => f.name === p.call.name);
-  if (func === undefined) {
-    // never happened in my experience
-    return p.retry(
-      "Unable to find the matched function name. Try it again.",
-    );
-  }
+// Setup application
+const document: OpenApi.IDocument = OpenApi.convert(swagger);
+const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
+  model: "chatgpt",
+  document,
+});
+const func: IHttpLlmFunction<"chatgpt"> = application.functions[0];
 
-  // VALIDATE
-  const result: IValidation<unknown> = func.validate(p.call.arguments);
-  if (result.success === false) {
-    // 1st trial: 70% (gpt-4o-mini in shopping mall chatbot)
-    // 2nd trial with validation feedback: 98%
-    // 3rd trial with validation feedback again: never have failed
-    return p.retry(
-      "Type errors are detected. Correct it through validation errors",
-      {
-        errors: result.errors,
-      },
-    );
-  }
-  return result.data;
+// Validate LLM-generated arguments
+const result: IValidation<unknown> = func.validate(llmArguments);
+
+if (result.success === false) {
+  // Send detailed error feedback to LLM
+  return await retryWithFeedback({
+    message: "Type errors detected. Please correct the arguments.",
+    errors: result.errors, // Detailed error information
+  });
+} else {
+  // Execute the validated function
+  const output: unknown = await HttpLlm.execute({
+    connection: { host: "http://localhost:3000" },
+    application,
+    function: func,
+    input: result.data,
+  });
+  return output;
 }
 ```
 
-Is LLM Function Calling perfect? No, definitely not.
-
-LLM (Large Language Model) service vendors like OpenAI make many type-level mistakes when composing arguments for function calling or structured output. Even when the target schema is super simple like `Array<string>` type, LLM often fills it with just a `string` typed value.
-
-In my experience, OpenAI `gpt-4o-mini` (`8b` parameters) makes about 70% type-level mistakes when filling the arguments for function calling in Shopping Mall services. To overcome the imperfection of such LLM function calling, `@samchon/openapi` supports a validation feedback strategy.
-
-The key concept of the validation feedback strategy is to let LLM function calling construct invalid typed arguments first, then inform the LLM of detailed type errors, inducing it to correct the wrong typed arguments in the next turn by using the `IHttpLlmFunction<Model>.validate()` function.
-
-The embedded validator function in `IHttpLlmFunction<Model>.validate()` is exactly the same as [`typia.validate<T>()`](https://typia.io/docs/validators/validate) and is more detailed and accurate than other validators. Using this validation feedback strategy, the 70% success rate of the first function calling trial increased to 98% on the second trial and has never failed from the third trial onward.
+The validation uses [`typia.validate<T>()`](https://typia.io/docs/validators/validate), which provides the most accurate validation and extremely detailed error messages compared to other validators:
 
 Components               | `typia` | `TypeBox` | `ajv` | `io-ts` | `zod` | `C.V.`
 -------------------------|--------|-----------|-------|---------|-------|------------------
@@ -466,134 +336,10 @@ Components               | `typia` | `TypeBox` | `ajv` | `io-ts` | `zod` | `C.V.
 
 > `C.V.` means `class-validator`
 
-### Separation
-Arguments from both human and LLM sides.
-
-When composing parameter arguments through LLM (Large Language Model) function calling, there can be cases where some parameters (or nested properties) must be composed not by the LLM but by a human. File uploading features or sensitive information like secret keys (passwords) are representative examples.
-
-In such cases, you can configure the LLM function calling schemas to exclude human-side parameters (or nested properties) using the `IHttpLlmApplication.options.separate` property. Instead, you must merge both human and LLM composed parameters into one by calling [`HttpLlm.mergeParameters()`](https://samchon.github.io/openapi/api/functions/HttpLlm.mergeParameters.html) before executing the LLM function call with the [`HttpLlm.execute()`](https://samchon.github.io/openapi/api/functions/HttpLlm.execute.html) function.
-
-Here is example code that separates the file uploading feature from the LLM function calling schema and combines both human and LLM composed parameters into one before LLM function call execution.
-
-  - Example Code: [`test/examples/claude-function-call-separate-to-sale-create.ts`](https://github.com/samchon/openapi/blob/master/test/examples/claude-function-call-separate-to-sale-create.ts)
-  - Prompt describing the product to create: [`Microsoft Surface Pro 9`](https://github.com/samchon/openapi/blob/master/examples/function-calling/prompts/microsoft-surface-pro-9.md)
-  - Result of the Function Calling: [`examples/arguments/claude.microsoft-surface-pro-9.input.json`](https://github.com/samchon/openapi/blob/master/examples/function-calling/arguments/claude.microsoft-surface-pro-9.input.json)
-
-```typescript
-import Anthropic from "@anthropic-ai/sdk";
-import {
-  ClaudeTypeChecker,
-  HttpLlm,
-  IClaudeSchema,
-  IHttpLlmApplication,
-  IHttpLlmFunction,
-  OpenApi,
-  OpenApiV3,
-  OpenApiV3_1,
-  SwaggerV2,
-} from "@samchon/openapi";
-import typia from "typia";
-
-const main = async (): Promise<void> => {
-  // Read swagger document and validate it
-  const swagger:
-    | SwaggerV2.IDocument
-    | OpenApiV3.IDocument
-    | OpenApiV3_1.IDocument = JSON.parse(
-    await fetch(
-      "https://github.com/samchon/shopping-backend/blob/master/packages/api/swagger.json",
-    ).then((r) => r.json()),
-  );
-  typia.assert(swagger); // recommended
-
-  // convert to emended OpenAPI document,
-  // and compose LLM function calling application
-  const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"claude"> = HttpLlm.application({
-    model: "claude",
-    document,
-    options: {
-      reference: true,
-      separate: (schema) =>
-        ClaudeTypeChecker.isString(schema) &&
-        !!schema.contentMediaType?.startsWith("image"),
-    },
-  });
-
-  // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<"claude"> | undefined =
-    application.functions.find(
-      // (f) => f.name === "llm_selected_function_name"
-      (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
-    );
-  if (func === undefined) throw new Error("No matched function exists.");
-
-  // Get arguments by ChatGPT function calling
-  const client: Anthropic = new Anthropic({
-    apiKey: "<YOUR_ANTHROPIC_API_KEY>",
-  });
-  const completion: Anthropic.Message = await client.messages.create({
-    model: "claude-3-5-sonnet-latest",
-    max_tokens: 8_192,
-    messages: [
-      {
-        role: "assistant",
-        content:
-          "You are a helpful customer support assistant. Use the supplied tools to assist the user.",
-      },
-      {
-        role: "user",
-        content: "<DESCRIPTION ABOUT THE SALE>",
-        // https://github.com/samchon/openapi/blob/master/examples/function-calling/prompts/microsoft-surface-pro-9.md
-      },
-    ],
-    tools: [
-      {
-        name: func.name,
-        description: func.description,
-        input_schema: func.separated!.llm as any,
-      },
-    ],
-  });
-  const toolCall: Anthropic.ToolUseBlock = completion.content.filter(
-    (c) => c.type === "tool_use",
-  )[0]!;
-
-  // Actual execution by yourself
-  const article = await HttpLlm.execute({
-    connection: {
-      host: "http://localhost:37001",
-    },
-    application,
-    function: func,
-    input: HttpLlm.mergeParameters({
-      function: func,
-      llm: toolCall.input as any,
-      human: {
-        // Human composed parameter values
-        content: {
-          files: [],
-          thumbnails: [
-            {
-              name: "thumbnail",
-              extension: "jpeg",
-              url: "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg",
-            },
-            // ...
-          ],
-        },
-      },
-    }),
-  });
-  console.log("article", article);
-};
-main().catch(console.error);
-```
 
 
+## Model Context Protocol (MCP)
 
-
-## Model Context Protocol
 ```mermaid
 flowchart
   subgraph "JSON Schema Specification"
@@ -615,102 +361,131 @@ flowchart
   end
 ```
 
-LLM function calling schema from MCP documents.
+Connect your AI agents to MCP servers with proper function calling.
 
-Since MCP (Model Context Protocol) contains a function caller itself, it is possible to execute MCP server functions without any extra effort by simply using the [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property of the LLM API. However, due to [JSON schema model specification](https://wrtnlabs.io/agentica/docs/core/vendor/), [validation feedback](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#validation-feedback), and [selector agent](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy) filtering for context reduction, `@samchon/openapi` recommends using function calling instead of the [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property.
+### Why Not Use `mcp_servers` Directly?
 
-For example, if you bring a GitHub MCP server to Claude Desktop and request it to do something, you will often see the AI agent crash immediately. This is because there are 30 functions in the GitHub MCP server, and if you include them all using [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers), the context becomes huge and hallucination occurs.
+While MCP servers can be used directly via the [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property, this approach has critical problems:
 
+**Problem:** The GitHub MCP server has 30 functions. Loading them all into context:
+- 💥 **Crashes the agent** with context overflow
+- 🤯 **Causes hallucinations** from too much information
+- ❌ **No validation feedback** when LLM makes mistakes
+
+**Solution:** Use function calling with `@samchon/openapi`:
+- ✅ **Selective loading** - only include relevant functions
+- ✅ **Validation feedback** - automatically correct LLM errors
+- ✅ **Better control** - filter and manage function access
+
+> 📺 **Video Demo**: GitHub MCP server crashing vs working properly
+>
 > https://github.com/user-attachments/assets/72390cb4-d9b1-4d31-a6dd-d866da5a433b
 >
-> GitHub MCP server via [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) often breaks down AI agents.
->
-> However, if you call the GitHub MCP server functions via function calling with [`@agentica`](https://github.com/wrtnlabs/agentica), it works properly without any problems.
->
-> - Function calling to GitHub MCP: https://www.youtube.com/watch?v=rLlHkc24cJs
+> See [this comparison video](https://www.youtube.com/watch?v=rLlHkc24cJs) showing the difference
 
-To create function calling schemas, call the [`McpLlm.application()`](#validation-feedback) function. An [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html) typed application instance will be returned, containing the [`IMcpLlmFunction.validate()`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html#validate) function utilized for the [validation feedback](#validation-feedback) strategy.
-
-Don't worry about JSON schema specifications. Since MCP (Model Context Protocol) does not restrict any JSON schema specification, the [`McpLlm.application()`](#validation-feedback) function has been designed to support all JSON schema specifications.
-
-  - JSON Schema v4, v5, v6, v7
-  - JSON Schema 2019-03
-  - JSON Schema 2020-12
+### Using MCP with Function Calling
 
 ```typescript
-import {
-  IMcpApplication,
-  IMcpFunction,
-  IValidation,
-  McpLlm,
-} from "@samchon/openapi";
+import { McpLlm, IMcpLlmApplication, IMcpLlmFunction, IValidation } from "@samchon/openapi";
 
+// Convert MCP tools to function calling schemas
 const application: IMcpLlmApplication<"chatgpt"> = McpLlm.application({
   model: "chatgpt",
-  tools: [...],
+  tools: mcpServerTools, // from your MCP server
 });
-const func: IMcpLlmFunction<"chatgpt"> = application.functions.find(
-  (f) => f.name === "create",
-);
-const result: IValidation<unknown> = func.validate({
-  title: "Hello World",
-  body: "Nice to meet you AI developers",
-  thumbnail: "https://wrtnlabs.io/agentica/thumbnail.jpg",
-});
-console.log(result);
+
+// Same validation feedback as HTTP functions
+const func: IMcpLlmFunction<"chatgpt"> | undefined =
+  application.functions.find((f) => f.name === "create");
+const result: IValidation<unknown> = func.validate(llmGeneratedArgs);
+
+if (result.success) {
+  await executeMcpFunction(result.data);
+}
 ```
 
+**Supports All JSON Schema Versions:**
+- JSON Schema v4, v5, v6, v7
+- JSON Schema 2019-09
+- JSON Schema 2020-12
 
 
 
-## Agentica
+
+## Agentica - Full AI Agent Framework
+
 ![agentica-conceptual-diagram](https://wrtnlabs.io/agentica/og.jpg)
 
-https://github.com/wrtnlabs/agentica
+**https://github.com/wrtnlabs/agentica**
 
-Agentic AI framework specialized in AI Function Calling using `@samchon/openapi`.
+Build production-ready AI agents with `@samchon/openapi` at its core.
 
-Don't be afraid of AI agent development. Just list functions from the three protocols below. This is everything you need to do for AI agent development:
+### The Simplest Way to Build AI Agents
 
-- TypeScript Class
-- Swagger/OpenAPI Document
-- MCP (Model Context Protocol) Server
+**If you can write functions, you can build AI agents.** Just provide functions from any of these sources:
 
-Want to make an e-commerce agent? Bring in e-commerce functions. Need a newspaper agent? Get API functions from the newspaper company. Just prepare any functions you need, and it becomes an AI agent.
+1. 📦 **TypeScript Classes** - Your existing business logic
+2. 📄 **OpenAPI/Swagger** - Your REST APIs
+3. 🔌 **MCP Servers** - External tool integrations
 
-Are you a TypeScript developer? Then you're already an AI developer. Familiar with backend development? You're already well-versed in AI development. Anyone who can write functions can create AI agents.
+**That's literally it.** No complex prompts, no custom tooling, no AI expertise required.
+
+### Examples
+
+Want an **e-commerce agent**? → Add your shopping API functions
+
+Need a **news agent**? → Connect your news API
+
+Building a **file manager agent**? → Include file system operations
+
+**TypeScript developer?** You're already an AI developer.
+
+**Backend developer?** You already know AI development.
+
+**Can write functions?** You can build AI agents.
+
+### Quick Example
 
 ```typescript
 import { Agentica, assertHttpController } from "@agentica/core";
 import OpenAI from "openai";
 import typia from "typia";
-
 import { MobileFileSystem } from "./services/MobileFileSystem";
 
-const agent = new Agentica({
+const agent: Agentica = new Agentica({
   vendor: {
-    api: new OpenAI({ apiKey: "********" }),
+    api: new OpenAI({ apiKey: process.env.OPENAI_API_KEY }),
     model: "gpt-4o-mini",
   },
   controllers: [
-    // functions from TypeScript class
+    // 1. TypeScript class → AI functions
     typia.llm.controller<MobileFileSystem, "chatgpt">(
       "filesystem",
-      new MobileFileSystem(),
+      new MobileFileSystem()
     ),
-    // functions from Swagger/OpenAPI
+
+    // 2. OpenAPI/Swagger → AI functions
     assertHttpController({
       name: "shopping",
       model: "chatgpt",
-      document: await fetch(
-        "https://shopping-be.wrtn.ai/editor/swagger.json",
-      ).then(r => r.json()),
+      document: await fetch("https://api.example.com/swagger.json")
+        .then(r => r.json()),
       connection: {
-        host: "https://shopping-be.wrtn.ai",
-        headers: { Authorization: "Bearer ********" },
+        host: "https://api.example.com",
+        headers: { Authorization: `Bearer ${token}` },
       },
     }),
   ],
 });
-await agent.conversate("I wanna buy MacBook Pro");
+
+// Start chatting with your AI agent
+await agent.conversate("I want to buy a MacBook Pro");
 ```
+
+The agent automatically:
+- Selects the right functions from your APIs
+- Validates all arguments with feedback
+- Executes function calls safely
+- Handles errors and retries
+
+Learn more at **[github.com/wrtnlabs/agentica](https://github.com/wrtnlabs/agentica)**

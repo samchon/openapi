@@ -12,7 +12,7 @@
   "additionalProperties": false,
   "$defs": {
     "IShoppingSale.ICreate": {
-      "description": "Creation information of sale.\n\n### Description of {@link content} property:\n\n> Description and image content describing the sale.",
+      "description": "Creation information of sale.",
       "type": "object",
       "properties": {
         "section_code": {
@@ -270,7 +270,7 @@
       ]
     },
     "IShoppingSaleUnitStock.ICreate": {
-      "description": "Creation information of the stock.\n\n### Description of {@link price} property:\n\n> Price of the stock.",
+      "description": "Creation information of the stock.",
       "type": "object",
       "properties": {
         "name": {
