@@ -24,6 +24,7 @@ export class TestGlobal {
 }
 
 interface IEnvironments {
+  OPENAI_API_KEY?: string;
   OPENROUTER_API_KEY?: string;
 }
 

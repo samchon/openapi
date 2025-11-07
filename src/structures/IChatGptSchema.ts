@@ -48,8 +48,8 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * {@link IChatGptSchema.IReference} type.
  *
  * Also, OpenAI has banned the following constraint properties. Instead,
- * `IChatGptSchema` fills the {@link IChatGptSchema.__IAttribute.description}
- * property with comment text like `"@format uuid"`.
+ * `IChatGptSchema` fills the `description` property with comment text like
+ * `"@format uuid"`.
  *
  * - {@link OpenApi.IJsonSchema.INumber.minimum}
  * - {@link OpenApi.IJsonSchema.INumber.maximum}
@@ -172,31 +172,18 @@ export namespace IChatGptSchema {
   export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
     /** Enumeration values. */
     enum?: Array<boolean>;
-
-    /** Default value. */
-    default?: boolean;
   }
 
   /** Integer type info. */
   export interface IInteger extends IJsonSchemaAttribute.IInteger {
     /** Enumeration values. */
     enum?: Array<number>;
-
-    /**
-     * Default value.
-     *
-     * @type int64
-     */
-    default?: number;
   }
 
   /** Number (double) type info. */
   export interface INumber extends IJsonSchemaAttribute.INumber {
     /** Enumeration values. */
     enum?: Array<number>;
-
-    /** Default value. */
-    default?: number;
   }
 
   /** String type info. */
