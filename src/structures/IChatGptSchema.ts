@@ -285,8 +285,7 @@ export namespace IChatGptSchema {
   }
 
   /** Reference type directing to named schema. */
-  export interface IReference
-    extends Omit<IJsonSchemaAttribute, "title" | "description"> {
+  export interface IReference extends IJsonSchemaAttribute {
     /**
      * Reference to the named schema.
      *

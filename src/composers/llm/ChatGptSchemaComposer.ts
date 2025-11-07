@@ -139,22 +139,26 @@ export namespace ChatGptSchemaComposer {
           OpenApiConstraintShifter.shiftNumeric(next);
         else if (GeminiTypeChecker.isArray(next))
           OpenApiConstraintShifter.shiftArray(next);
-        else if (GeminiTypeChecker.isObject(next)) {
-          if (props.config.strict === true) next.additionalProperties = false;
+        else if (
+          GeminiTypeChecker.isObject(next) &&
+          props.config.strict === true
+        ) {
+          next.additionalProperties = false;
           next.description = JsonDescriptionUtil.take(next);
         }
       },
       schema,
     });
-    GeminiTypeChecker.visit({
-      closure: (next) => {
-        if (GeminiTypeChecker.isReference(next)) {
-          next.title = undefined;
-          next.description = undefined;
-        }
-      },
-      schema,
-    });
+    if (props.config.strict === true)
+      GeminiTypeChecker.visit({
+        closure: (next) => {
+          if (GeminiTypeChecker.isReference(next)) {
+            next.title = undefined;
+            next.description = undefined;
+          }
+        },
+        schema,
+      });
     return schema satisfies IChatGptSchema;
   };
 

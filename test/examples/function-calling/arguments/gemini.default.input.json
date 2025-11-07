@@ -2,7 +2,7 @@
   "trial": 1,
   "success": true,
   "data": {
-    "age": 99,
-    "name": "John Doe"
+    "name": "John Doe",
+    "age": 25
   }
 }

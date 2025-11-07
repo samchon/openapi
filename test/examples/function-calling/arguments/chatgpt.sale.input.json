@@ -1,6 +1,223 @@
 {
-  "trial": 2,
-  "success": true,
+  "trial": 3,
+  "success": false,
+  "errors": [
+    {
+      "path": "$input.input.content.format",
+      "expected": "(\"html\" | \"md\" | \"txt\")",
+      "value": null
+    },
+    {
+      "path": "$input.input.units[0].options[0].type",
+      "expected": "\"select\"",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `\"select\"` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[0].variable",
+      "expected": "boolean",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `boolean` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[0].candidates[0].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[0].candidates[1].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[0].candidates[2].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[1].type",
+      "expected": "\"select\"",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `\"select\"` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[1].variable",
+      "expected": "boolean",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `boolean` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[1].candidates[0].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[1].candidates[1].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[1].candidates[2].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[2].type",
+      "expected": "\"select\"",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `\"select\"` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[2].variable",
+      "expected": "boolean",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `boolean` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[2].candidates[0].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[2].candidates[1].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].options[2].candidates[2].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[0].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[0].price",
+      "expected": "IShoppingPrice",
+      "value": 1000000
+    },
+    {
+      "path": "$input.input.units[0].stocks[0].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[1].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[1].price",
+      "expected": "IShoppingPrice",
+      "value": 1200000
+    },
+    {
+      "path": "$input.input.units[0].stocks[1].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[2].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[2].price",
+      "expected": "IShoppingPrice",
+      "value": 1400000
+    },
+    {
+      "path": "$input.input.units[0].stocks[2].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[3].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[3].price",
+      "expected": "IShoppingPrice",
+      "value": 1500000
+    },
+    {
+      "path": "$input.input.units[0].stocks[3].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[4].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[4].price",
+      "expected": "IShoppingPrice",
+      "value": 1800000
+    },
+    {
+      "path": "$input.input.units[0].stocks[4].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[5].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[5].price",
+      "expected": "IShoppingPrice",
+      "value": 1800000
+    },
+    {
+      "path": "$input.input.units[0].stocks[5].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[6].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[0].stocks[6].price",
+      "expected": "IShoppingPrice",
+      "value": 2000000
+    },
+    {
+      "path": "$input.input.units[0].stocks[6].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[1].stocks[0].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[1].stocks[0].price",
+      "expected": "IShoppingPrice",
+      "value": 100000
+    },
+    {
+      "path": "$input.input.units[1].stocks[0].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    },
+    {
+      "path": "$input.input.units[2].stocks[0].name",
+      "expected": "string",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `string` typed value next time."
+    },
+    {
+      "path": "$input.input.units[2].stocks[0].price",
+      "expected": "IShoppingPrice",
+      "value": 200000
+    },
+    {
+      "path": "$input.input.units[2].stocks[0].choices",
+      "expected": "Array<IShoppingSaleUnitStockChoice.ICreate>",
+      "description": "The value at this path is `undefined`.\n\nPlease fill the `Array<IShoppingSaleUnitStockChoice.ICreate>` typed value next time."
+    }
+  ],
   "data": {
     "input": {
       "section_code": "general",
@@ -8,7 +225,7 @@
       "closed_at": null,
       "content": {
         "title": "Surface Pro 9",
-        "format": "md",
+        "format": null,
         "body": "The Surface Pro 9 is a versatile 2-in-1 device that combines the power of a laptop with the flexibility of a tablet. It features advanced technology, making it suitable for both professional and personal use.\n\n- \"Unleash Your Creativity Anywhere\": The Surface Pro 9 is designed for those who need power and portability, making it perfect for creative professionals and students alike.\n- \"The Ultimate 2-in-1 Experience\": With its detachable keyboard and touchscreen capabilities, the Surface Pro 9 adapts to your needs, whether you're working, studying, or relaxing.\n- \"Stay Connected with 5G\": Experience lightning-fast internet speeds and seamless connectivity, no matter where you are.\n- \"Power Meets Flexibility\": The Surface Pro 9 combines the performance of a laptop with the convenience of a tablet, making it the ideal device for multitasking.\n\nIn summary, the Surface Pro 9 stands out as a powerful and flexible device, perfect for users who require both performance and portability. With its advanced features and sleek design, it is an excellent choice for anyone looking to enhance their productivity and creativity. Whether for work or play, the Surface Pro 9 is ready to meet your needs.",
         "files": [],
         "thumbnails": [
@@ -44,215 +261,118 @@
           "required": true,
           "options": [
             {
-              "type": "select",
               "name": "CPU",
-              "variable": false,
               "candidates": [
                 {
-                  "name": "Intel Core i3"
+                  "value": "Intel Core i3"
                 },
                 {
-                  "name": "Intel Core i5"
+                  "value": "Intel Core i5"
                 },
                 {
-                  "name": "Intel Core i7"
+                  "value": "Intel Core i7"
                 }
               ]
             },
             {
-              "type": "select",
               "name": "RAM",
-              "variable": false,
               "candidates": [
                 {
-                  "name": "8 GB"
+                  "value": "8 GB"
                 },
                 {
-                  "name": "16 GB"
+                  "value": "16 GB"
                 },
                 {
-                  "name": "32 GB"
+                  "value": "32 GB"
                 }
               ]
             },
             {
-              "type": "select",
               "name": "Storage",
-              "variable": false,
               "candidates": [
                 {
-                  "name": "128 GB"
+                  "value": "128 GB"
                 },
                 {
-                  "name": "256 GB"
+                  "value": "256 GB"
                 },
                 {
-                  "name": "512 GB"
+                  "value": "512 GB"
                 }
               ]
             }
           ],
           "stocks": [
             {
-              "name": "Intel Core i3 / 8 GB / 128 GB",
-              "price": {
-                "nominal": 1000000,
-                "real": 899000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 0
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 0
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 0
-                }
-              ]
+              "options": [
+                "Intel Core i3",
+                "8 GB",
+                "128 GB"
+              ],
+              "price": 1000000,
+              "real_price": 899000,
+              "quantity": 1000
             },
             {
-              "name": "Intel Core i3 / 16 GB / 256 GB",
-              "price": {
-                "nominal": 1200000,
-                "real": 1099000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 0
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 1
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 1
-                }
-              ]
+              "options": [
+                "Intel Core i3",
+                "16 GB",
+                "256 GB"
+              ],
+              "price": 1200000,
+              "real_price": 1099000,
+              "quantity": 1000
             },
             {
-              "name": "Intel Core i3 / 16 GB / 512 GB",
-              "price": {
-                "nominal": 1400000,
-                "real": 1299000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 0
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 1
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 2
-                }
-              ]
+              "options": [
+                "Intel Core i3",
+                "16 GB",
+                "512 GB"
+              ],
+              "price": 1400000,
+              "real_price": 1299000,
+              "quantity": 1000
             },
             {
-              "name": "Intel Core i5 / 16 GB / 256 GB",
-              "price": {
-                "nominal": 1500000,
-                "real": 1399000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 1
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 1
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 1
-                }
-              ]
+              "options": [
+                "Intel Core i5",
+                "16 GB",
+                "256 GB"
+              ],
+              "price": 1500000,
+              "real_price": 1399000,
+              "quantity": 1000
             },
             {
-              "name": "Intel Core i5 / 32 GB / 512 GB",
-              "price": {
-                "nominal": 1800000,
-                "real": 1699000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 1
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 2
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 2
-                }
-              ]
+              "options": [
+                "Intel Core i5",
+                "32 GB",
+                "512 GB"
+              ],
+              "price": 1800000,
+              "real_price": 1699000,
+              "quantity": 1000
             },
             {
-              "name": "Intel Core i7 / 16 GB / 512 GB",
-              "price": {
-                "nominal": 1800000,
-                "real": 1699000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 2
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 1
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 2
-                }
-              ]
+              "options": [
+                "Intel Core i7",
+                "16 GB",
+                "512 GB"
+              ],
+              "price": 1800000,
+              "real_price": 1699000,
+              "quantity": 1000
             },
             {
-              "name": "Intel Core i7 / 32 GB / 512 GB",
-              "price": {
-                "nominal": 2000000,
-                "real": 1899000,
-                "currency": "KRW"
-              },
-              "quantity": 1000,
-              "choices": [
-                {
-                  "option_index": 0,
-                  "candidate_index": 2
-                },
-                {
-                  "option_index": 1,
-                  "candidate_index": 2
-                },
-                {
-                  "option_index": 2,
-                  "candidate_index": 2
-                }
-              ]
+              "options": [
+                "Intel Core i7",
+                "32 GB",
+                "512 GB"
+              ],
+              "price": 2000000,
+              "real_price": 1899000,
+              "quantity": 1000
             }
           ]
         },
@@ -263,14 +383,10 @@
           "options": [],
           "stocks": [
             {
-              "name": "Default",
-              "price": {
-                "nominal": 100000,
-                "real": 89000,
-                "currency": "KRW"
-              },
-              "quantity": 10000,
-              "choices": []
+              "options": [],
+              "price": 100000,
+              "real_price": 89000,
+              "quantity": 10000
             }
           ]
         },
@@ -281,30 +397,21 @@
           "options": [],
           "stocks": [
             {
-              "name": "Default",
-              "price": {
-                "nominal": 200000,
-                "real": 169000,
-                "currency": "KRW"
-              },
-              "quantity": 8000,
-              "choices": []
+              "options": [],
+              "price": 200000,
+              "real_price": 169000,
+              "quantity": 8000
             }
           ]
         }
       ],
       "tags": [
         "Surface Pro 9",
+        "2-in-1 Laptop",
+        "Tablet",
+        "Laptop",
         "Microsoft",
-        "2-in-1",
-        "tablet",
-        "laptop",
-        "Windows",
-        "detachable",
-        "convertible",
-        "tech",
-        "productivity",
-        "creativity"
+        "Sale"
       ]
     }
   }

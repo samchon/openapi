@@ -5,10 +5,10 @@
     {
       "path": "$input.shape",
       "expected": "(ICircle | IPolygon | IRectangle)",
-      "value": "<Polygon outer=[(0,0), (0,10), (10,10), (10,0)] inner=[]/>"
+      "value": null
     }
   ],
   "data": {
-    "shape": "<Polygon outer=[(0,0), (0,10), (10,10), (10,0)] inner=[]/>"
+    "shape": null
   }
 }
