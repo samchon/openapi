@@ -677,7 +677,7 @@ export namespace OpenApiTypeCheckerBase {
     });
   };
 
-  const coverInteger = (
+  export const coverInteger = (
     x: OpenApi.IJsonSchema.IInteger,
     y: OpenApi.IJsonSchema.IConstant | OpenApi.IJsonSchema.IInteger,
   ): boolean => {
@@ -686,7 +686,7 @@ export namespace OpenApiTypeCheckerBase {
     return x.type === y.type && coverNumericRange(x, y);
   };
 
-  const coverNumber = (
+  export const coverNumber = (
     x: OpenApi.IJsonSchema.INumber,
     y:
       | OpenApi.IJsonSchema.IConstant
@@ -700,7 +700,7 @@ export namespace OpenApiTypeCheckerBase {
     );
   };
 
-  const coverString = (
+  export const coverString = (
     x: OpenApi.IJsonSchema.IString,
     y: OpenApi.IJsonSchema.IConstant | OpenApi.IJsonSchema.IString,
   ): boolean => {

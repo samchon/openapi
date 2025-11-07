@@ -22,6 +22,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to
  *   {@link IChatGptSchema.IReference}
  * - When {@link IChatGptSchema.IConfig.strict} mode:
+ *
  *   - Every object properties must be required
  *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
@@ -36,14 +37,15 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link IChatGptSchema.additionalProperties} is fixed to `false`
  * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
  * - When {@link IChatGptSchema.IConfig.strict} mode:
+ *
  *   - Every object properties must be required
  *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
  * For reference, if you compose the `IChatGptSchema` type with the
  * {@link IChatGptSchema.IConfig.reference} `false` option (default is `false`),
  * only recursively named types are archived into the
- * {@link IChatGptSchema.IParameters.$defs}, and others are escaped from
- * the {@link IChatGptSchema.IReference} type.
+ * {@link IChatGptSchema.IParameters.$defs}, and others are escaped from the
+ * {@link IChatGptSchema.IReference} type.
  *
  * Also, OpenAI has banned the following constraint properties. Instead,
  * `IChatGptSchema` fills the {@link IChatGptSchema.__IAttribute.description}
@@ -63,9 +65,9 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link OpenApi.IJsonSchema.IArray.unique}
  *
  * Additionally, OpenAI cannot define the `description` property for the
- * {@link IChatGptSchema.IReference} type, and does not understand
- * encapsulation of the {@link IChatGptSchema.IAnyOf} type. Therefore, the
- * `description` is written to the parent object type, not the reference type.
+ * {@link IChatGptSchema.IReference} type, and does not understand encapsulation
+ * of the {@link IChatGptSchema.IAnyOf} type. Therefore, the `description` is
+ * written to the parent object type, not the reference type.
  *
  * ```json
  * {
@@ -103,11 +105,11 @@ export namespace IChatGptSchema {
   /**
    * Type for function parameters.
    *
-   * `IChatGptSchema.IParameters` defines a function's parameters as
-   * a keyword object type, where each property represents a named parameter.
+   * `IChatGptSchema.IParameters` defines a function's parameters as a keyword
+   * object type, where each property represents a named parameter.
    *
-   * It can also be used for structured output metadata to define the
-   * expected format of ChatGPT responses.
+   * It can also be used for structured output metadata to define the expected
+   * format of ChatGPT responses.
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
@@ -178,6 +180,14 @@ export namespace IChatGptSchema {
      * The `additionalProperties` defines the type schema for additional
      * properties that are not listed in the {@link properties}.
      *
+     * If the value is `true`, it means that the additional properties are not
+     * restricted. They can be any type. Otherwise, if the value is
+     * {@link IChatGptSchema} type, it means that the additional properties must
+     * follow the type schema info.
+     *
+     * - `true`: `Record<string, any>`
+     * - `IChatGptSchema`: `Record<string, T>`
+     *
      * Note: If you've configured {@link IChatGptSchema.IConfig.strict} as
      * `true`, ChatGPT function calling does not support dynamic key typed
      * properties, so `additionalProperties` is always `false`.
@@ -224,8 +234,8 @@ export namespace IChatGptSchema {
     /**
      * Reference to the named schema.
      *
-     * The `$ref` is a reference to a named schema. The format follows the
-     * JSON Pointer specification. In OpenAPI, the `$ref` starts with `#/$defs/`
+     * The `$ref` is a reference to a named schema. The format follows the JSON
+     * Pointer specification. In OpenAPI, the `$ref` starts with `#/$defs/`
      * which indicates the type is stored in the
      * {@link IChatGptSchema.IParameters.$defs} object.
      *
@@ -240,9 +250,9 @@ export namespace IChatGptSchema {
    *
    * `IAnyOf` represents a union type in TypeScript (`A | B | C`).
    *
-   * For reference, even if your Swagger (or OpenAPI) document defines
-   * `anyOf` instead of `oneOf`, {@link IChatGptSchema} forcibly converts it
-   * to `anyOf` type.
+   * For reference, even if your Swagger (or OpenAPI) document defines `anyOf`
+   * instead of `oneOf`, {@link IChatGptSchema} forcibly converts it to `anyOf`
+   * type.
    */
   export interface IAnyOf extends IJsonSchemaAttribute {
     /** List of the union types. */
@@ -262,8 +272,8 @@ export namespace IChatGptSchema {
        *
        * This property is valid only for {@link IReference} typed
        * {@link IAnyOf.anyOf} elements. Therefore, the `key` of `mapping` is the
-       * discriminator value, and the `value` of `mapping` is the schema name like
-       * `#/components/schemas/SomeObject`.
+       * discriminator value, and the `value` of `mapping` is the schema name
+       * like `#/components/schemas/SomeObject`.
        */
       mapping?: Record<string, string>;
     }
@@ -274,25 +284,6 @@ export namespace IChatGptSchema {
 
   /** Unknown, the `any` type. */
   export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /**
-   * Significant attributes that can be applied to the most types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export interface __ISignificant<Type extends string> extends __IAttribute {
-    /** Discriminator value of the type. */
-    type: Type;
-  }
-
-  /**
-   * Common attributes that can be applied to all types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export type __IAttribute = IJsonSchemaAttribute;
 
   /** Configuration for ChatGPT schema composition. */
   export interface IConfig {

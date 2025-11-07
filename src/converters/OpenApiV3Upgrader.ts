@@ -1,5 +1,6 @@
 import { OpenApi } from "../OpenApi";
 import { OpenApiV3 } from "../OpenApiV3";
+import { IJsonSchemaAttribute } from "../structures/IJsonSchemaAttribute";
 import { OpenApiExclusiveEmender } from "../utils/OpenApiExclusiveEmender";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
@@ -249,7 +250,7 @@ export namespace OpenApiV3Upgrader {
         default: undefined,
       };
       const union: OpenApi.IJsonSchema[] = [];
-      const attribute: OpenApi.IJsonSchema.__IAttribute = {
+      const attribute: IJsonSchemaAttribute = {
         title: input.title,
         description: input.description,
         ...Object.fromEntries(

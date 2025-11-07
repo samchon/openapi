@@ -66,117 +66,182 @@ export type IGeminiSchema =
   | IGeminiSchema.IString
   | IGeminiSchema.IArray
   | IGeminiSchema.IObject
-  | IGeminiSchema.IUnknown
-  | IGeminiSchema.INullOnly;
+  | IGeminiSchema.IReference
+  | IGeminiSchema.IAnyOf
+  | IGeminiSchema.INull
+  | IGeminiSchema.IUnknown;
 export namespace IGeminiSchema {
-  /** Configuration for the Gemini schema composition. */
-  export interface IConfig {
-    /**
-     * Whether to allow recursive types or not.
-     *
-     * If allow, then how many times to repeat the recursive types.
-     *
-     * By the way, if the model is "chatgpt", the recursive types are always
-     * allowed without any limitation, due to it supports the reference type.
-     *
-     * @default 3
-     */
-    recursive: false | number;
-  }
-
   /**
-   * Type of the function parameters.
+   * Type for function parameters.
    *
-   * `IGeminiSchema.IParameters` is a type defining a function's parameters as a
-   * keyworded object type.
+   * `IGeminiSchema.IParameters` defines a function's parameters as a keyword
+   * object type, where each property represents a named parameter.
    *
-   * It also can be utilized for the structured output metadata.
+   * It can also be used for structured output metadata to define the expected
+   * format of ChatGPT responses.
    *
-   * @reference https://ai.google.dev/gemini-api/docs/structured-output
+   * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
-  export type IParameters = IObject;
-
-  /** Boolean type schema info. */
-  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
-
-    /** Enumeration values. */
-    enum?: Array<boolean | null>;
-  }
-
-  /** Integer type schema info. */
-  export interface IInteger extends IJsonSchemaAttribute.IInteger {
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+    /** Collection of the named types. */
+    $defs: Record<string, IGeminiSchema>;
 
     /**
-     * Enumeration values.
+     * Additional properties information.
      *
-     * @type int64
+     * The `additionalProperties` defines the type schema for additional
+     * properties that are not listed in the {@link properties}.
+     *
+     * By the way, it is not allowed at the parameters level.
      */
-    enum?: Array<number | null>;
+    additionalProperties: false;
   }
 
-  /** Number type schema info. */
+  /** Boolean type info. */
+  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
+    /** Enumeration values. */
+    enum?: Array<boolean>;
+  }
+
+  /** Integer type info. */
+  export interface IInteger extends IJsonSchemaAttribute.IInteger {
+    /** Enumeration values. */
+    enum?: Array<number>;
+  }
+
+  /** Number (double) type info. */
   export interface INumber extends IJsonSchemaAttribute.INumber {
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
-
     /** Enumeration values. */
-    enum?: Array<number | null>;
+    enum?: Array<number>;
   }
 
-  /** String type schema info. */
+  /** String type info. */
   export interface IString extends IJsonSchemaAttribute.IString {
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
-
     /** Enumeration values. */
-    enum?: Array<string | null>;
-  }
+    enum?: Array<string>;
 
-  /** Array type schema info. */
-  export interface IArray extends IJsonSchemaAttribute.IArray {
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
+    /** Default value. */
+    default?: string;
+
+    /** Format restriction. */
+    format?:
+      | "binary"
+      | "byte"
+      | "password"
+      | "regex"
+      | "uuid"
+      | "email"
+      | "hostname"
+      | "idn-email"
+      | "idn-hostname"
+      | "iri"
+      | "iri-reference"
+      | "ipv4"
+      | "ipv6"
+      | "uri"
+      | "uri-reference"
+      | "uri-template"
+      | "url"
+      | "date-time"
+      | "date"
+      | "time"
+      | "duration"
+      | "json-pointer"
+      | "relative-json-pointer"
+      | (string & {});
+
+    /** Pattern restriction. */
+    pattern?: string;
+
+    /** Content media type restriction. */
+    contentMediaType?: string;
 
     /**
-     * Items type schema info.
+     * Minimum length restriction.
+     *
+     * @type uint64
+     */
+    minLength?: number;
+
+    /**
+     * Maximum length restriction.
+     *
+     * @type uint64
+     */
+    maxLength?: number;
+  }
+
+  /** Array type info. */
+  export interface IArray extends IJsonSchemaAttribute.IArray {
+    /**
+     * Items type info.
      *
      * The `items` means the type of the array elements. In other words, it is
      * the type schema info of the `T` in the TypeScript array type `Array<T>`.
      */
     items: IGeminiSchema;
+
+    /**
+     * Unique items restriction.
+     *
+     * If this property value is `true`, target array must have unique items.
+     */
+    uniqueItems?: boolean;
+
+    /**
+     * Minimum items restriction.
+     *
+     * Restriction of minimum number of items in the array.
+     *
+     * @type uint64
+     */
+    minItems?: number;
+
+    /**
+     * Maximum items restriction.
+     *
+     * Restriction of maximum number of items in the array.
+     *
+     * @type uint64
+     */
+    maxItems?: number;
   }
 
-  /** Object type schema info. */
+  /** Object type info. */
   export interface IObject extends IJsonSchemaAttribute.IObject {
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
-
     /**
      * Properties of the object.
      *
      * The `properties` means a list of key-value pairs of the object's regular
      * properties. The key is the name of the regular property, and the value is
      * the type schema info.
-     *
-     * If you need additional properties that is represented by dynamic key, it
-     * is not possible to compose because the Gemini does not support it.
      */
     properties: Record<string, IGeminiSchema>;
 
     /**
-     * List of key values of the required properties.
+     * Additional properties' info.
      *
-     * The `required` means a list of the key values of the required
-     * {@link properties}. If some property key is not listed in the `required`
-     * list, it means that property is optional. Otherwise some property key
-     * exists in the `required` list, it means that the property must be
-     * filled.
+     * The `additionalProperties` means the type schema info of the additional
+     * properties that are not listed in the {@link properties}.
      *
-     * Below is an example of the {@link properties} and `required`.
+     * If the value is `true`, it means that the additional properties are not
+     * restricted. They can be any type. Otherwise, if the value is
+     * {@link IGeminiSchema} type, it means that the additional properties must
+     * follow the type schema info.
+     *
+     * - `true`: `Record<string, any>`
+     * - `IGeminiSchema`: `Record<string, T>`
+     */
+    additionalProperties?: boolean | IGeminiSchema;
+
+    /**
+     * List of required property keys.
+     *
+     * The `required` contains a list of property keys from {@link properties}
+     * that must be provided. Properties not listed in `required` are optional,
+     * while those listed must be filled.
+     *
+     * Below is an example of {@link properties} and `required`:
      *
      * ```typescript
      * interface SomeObject {
@@ -187,7 +252,7 @@ export namespace IGeminiSchema {
      * ```
      *
      * As you can see, `id` and `email` {@link properties} are {@link required},
-     * so that they are listed in the `required` list.
+     * so they are listed in the `required` array.
      *
      * ```json
      * {
@@ -204,35 +269,82 @@ export namespace IGeminiSchema {
     required: string[];
   }
 
-  /** Null only type schema info. */
-  export interface INullOnly extends IJsonSchemaAttribute.INull {}
-
-  /**
-   * Unknown type schema info.
-   *
-   * It means the type of the value is `any`.
-   */
-  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /**
-   * Significant attributes that can be applied to the most types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export interface __ISignificant<Type extends string> extends __IAttribute {
-    /** Discriminator value of the type. */
-    type: Type;
-
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
+  /** Reference type directing to named schema. */
+  export interface IReference extends IJsonSchemaAttribute {
+    /**
+     * Reference to the named schema.
+     *
+     * The `$ref` is a reference to a named schema. The format follows the JSON
+     * Pointer specification. In OpenAPI, the `$ref` starts with `#/$defs/`
+     * which indicates the type is stored in the
+     * {@link IGeminiSchema.IParameters.$defs} object.
+     *
+     * - `#/$defs/SomeObject`
+     * - `#/$defs/AnotherObject`
+     */
+    $ref: string;
   }
 
   /**
-   * Common attributes that can be applied to all types.
+   * Union type.
    *
-   * @ignore
-   * @deprecated
+   * `IAnyOf` represents a union type in TypeScript (`A | B | C`).
+   *
+   * For reference, even if your Swagger (or OpenAPI) document defines `anyOf`
+   * instead of `oneOf`, {@link IGeminiSchema} forcibly converts it to `anyOf`
+   * type.
    */
-  export type __IAttribute = IJsonSchemaAttribute;
+  export interface IAnyOf extends IJsonSchemaAttribute {
+    /** List of the union types. */
+    anyOf: Exclude<IGeminiSchema, IGeminiSchema.IAnyOf>[];
+
+    /** Discriminator info of the union type. */
+    "x-discriminator"?: IAnyOf.IDiscriminator;
+  }
+  export namespace IAnyOf {
+    /** Discriminator info of the union type. */
+    export interface IDiscriminator {
+      /** Property name for the discriminator. */
+      propertyName: string;
+
+      /**
+       * Mapping of discriminator values to schema names.
+       *
+       * This property is valid only for {@link IReference} typed
+       * {@link IAnyOf.anyOf} elements. Therefore, the `key` of `mapping` is the
+       * discriminator value, and the `value` of `mapping` is the schema name
+       * like `#/components/schemas/SomeObject`.
+       */
+      mapping?: Record<string, string>;
+    }
+  }
+
+  /** Null type. */
+  export interface INull extends IJsonSchemaAttribute.INull {}
+
+  /** Unknown, the `any` type. */
+  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
+
+  /** Configuration for the Gemini schema composition. */
+  export interface IConfig {
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link IGeminiSchema.IReference} would be escaped to a
+     * plain type unless recursive type case.
+     *
+     * This is because the lower version of ChatGPT does not understand the
+     * reference type well, and even the modern version of ChatGPT sometimes
+     * occur the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that
+     * reduces the LLM token cost. Therefore, if you're using the modern version
+     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
+     * property to `true`.
+     *
+     * @default true
+     */
+    reference: boolean;
+  }
 }
