@@ -335,3 +335,166 @@ Components               | `typia` | `TypeBox` | `ajv` | `io-ts` | `zod` | `C.V.
 [**Ultimate Union Type**](https://github.com/samchon/typia/blob/master/test/src/structures/UltimateUnion.ts)  | ✅ | ❌ | ❌ | ❌ | ❌ | ❌
 
 > `C.V.` means `class-validator`
+
+
+
+
+## Model Context Protocol
+```mermaid
+flowchart
+  subgraph "JSON Schema Specification"
+    schemav4("JSON Schema v4 ~ v7") --upgrades--> emended[["OpenAPI v3.1 (emended)"]]
+    schema2910("JSON Schema 2019-03") --upgrades--> emended
+    schema2020("JSON Schema 2020-12") --emends--> emended
+  end
+  subgraph "OpenAPI Generator"
+    emended --normalizes--> migration[["Migration Schema"]]
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling"}}
+    lfc --"OpenAI"--> chatgpt("ChatGPT")
+    lfc --"Google"--> gemini("Gemini")
+    lfc --"Anthropic"--> claude("Claude")
+    lfc --"<i>Google</i>" --> legacy_gemini("<i> (legacy) Gemini</i>")
+    legacy_gemini --"3.0" --> custom(["Custom JSON Schema"])
+    chatgpt --"3.1"--> custom
+    gemini --"3.1"--> standard(["Standard JSON Schema"])
+    claude --"3.1"--> standard
+  end
+```
+
+`@samchon/openapi` provides better MCP function calling than using the [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) property directly.
+
+While MCP (Model Context Protocol) can execute server functions directly through the `mcp_servers` property, `@samchon/openapi` offers significant advantages through [model specification support](https://wrtnlabs.io/agentica/docs/core/vendor/), [validation feedback](#validation-feedback), and [selector agent filtering](https://wrtnlabs.io/agentica/docs/concepts/function-calling/#orchestration-strategy) for context optimization.
+
+For example, the GitHub MCP server has 30 functions. Loading all of them via `mcp_servers` creates huge context that often causes AI agents to crash with hallucinations. Function calling with proper filtering avoids this problem.
+
+> https://github.com/user-attachments/assets/72390cb4-d9b1-4d31-a6dd-d866da5a433b
+>
+> GitHub MCP server via [`mcp_servers`](https://openai.github.io/openai-agents-python/mcp/#using-mcp-servers) often crashes.
+>
+> However, function calling to GitHub MCP with [`@agentica`](https://github.com/wrtnlabs/agentica) works properly.
+>
+> - Function calling demo: https://www.youtube.com/watch?v=rLlHkc24cJs
+
+**Creating MCP applications:**
+
+Use [`McpLlm.application()`](https://samchon.github.io/openapi/api/functions/McpLlm.application.html) to create function calling schemas from MCP tools. The returned [`IMcpLlmApplication`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmApplication-1.html) includes the [`IMcpLlmFunction.validate()`](https://samchon.github.io/openapi/api/interfaces/IMcpLlmFunction.html#validate) function for [validation feedback](#validation-feedback).
+
+MCP supports all JSON schema specifications without restrictions:
+  - JSON Schema v4, v5, v6, v7
+  - JSON Schema 2019-03
+  - JSON Schema 2020-12
+
+```typescript
+import {
+  IMcpLlmApplication,
+  IMcpLlmFunction,
+  IValidation,
+  McpLlm,
+} from "@samchon/openapi";
+
+const application: IMcpLlmApplication<"chatgpt"> = McpLlm.application({
+  model: "chatgpt",
+  tools: [...],
+});
+
+const func: IMcpLlmFunction<"chatgpt"> = application.functions.find(
+  (f) => f.name === "create",
+)!;
+
+const result: IValidation<unknown> = func.validate({
+  title: "Hello World",
+  body: "Nice to meet you AI developers",
+  thumbnail: "https://wrtnlabs.io/agentica/thumbnail.jpg",
+});
+console.log(result);
+```
+
+
+
+
+## Utilization Cases
+### Agentica
+[![Agentica](https://wrtnlabs.io/agentica/og.jpg)](https://github.com/wrtnlabs/agentica)
+
+https://github.com/wrtnlabs/agentica
+
+Agentic AI framework that converts OpenAPI documents into LLM function calling schemas for ChatGPT, Claude, and Gemini. Uses `@samchon/openapi` to transform backend REST APIs into callable functions with automatic parameter validation and type-safe remote execution.
+
+```typescript
+import { Agentica, assertHttpController } from "@agentica/core";
+import OpenAI from "openai";
+import typia from "typia";
+
+import { MobileFileSystem } from "./services/MobileFileSystem";
+
+const agent = new Agentica({
+  model: "chatgpt",
+  vendor: {
+    api: new OpenAI({ apiKey: "********" }),
+    model: "gpt-4.1-mini",
+  },
+  controllers: [
+    // functions from TypeScript class
+    typia.llm.controller<MobileFileSystem, "chatgpt">(
+      "filesystem",
+      MobileFileSystem(),
+    ),
+    // functions from Swagger/OpenAPI
+    // Uses @samchon/openapi under the hood:
+    // 1. OpenApi.convert() to emended format
+    // 2. HttpLlm.application() to create IHttpLlmApplication<"chatgpt">
+    // 3. IChatGptSchema composed for each API operation
+    assertHttpController({
+      name: "shopping",
+      model: "chatgpt",
+      document: await fetch(
+        "https://shopping-be.wrtn.ai/editor/swagger.json",
+      ).then(r => r.json()),
+      connection: {
+        host: "https://shopping-be.wrtn.ai",
+        headers: { Authorization: "Bearer ********" },
+      },
+    }),
+  ],
+});
+await agent.conversate("I wanna buy MacBook Pro");
+```
+
+### AutoBE
+[![AutoBE](https://autobe.dev/og.jpg)](https://autobe.dev)
+
+https://autobe.dev
+
+AI backend code generator achieving 100% compilation success by using function calling to construct compiler AST instead of generating code text. For API specification design, uses `@samchon/openapi` types - AI calls compiler functions to build OpenAPI document structures that define REST endpoints and request/response schemas.
+
+```typescript
+import { MicroAgentica } from "@agentica/core";
+import { OpenApi } from "@samchon/openapi";
+
+const agent = new MicroAgentica({
+  model: "chatgpt",
+  vendor: {
+    api: new OpenAI({ apiKey: "********" }),
+    model: "gpt-4.1-mini",
+  },
+  controllers: [
+    // Compiler functions that receive/produce OpenApi.IDocument
+    typia.llm.controller<OpenApiWriteApplication>(
+      "api",
+      new OpenApiWriteApplication(),
+    ),
+  ],
+});
+await agent.conversate("Design API specification, and generate backend app.");
+
+class OpenApiWriteApplication {
+  // LLM calls this function with OpenApi.IDocument structure
+  // The type guarantees all operations have valid IJsonSchema definitions
+  public async write(document: OpenApi.IDocument): Promise<void>  {
+    // document.paths contains OpenApi.IOperation[]
+    // Each operation.parameters, requestBody, responses use OpenApi.IJsonSchema
+    // Compiler validates schema structure before code generation
+    ...
+  }
+}
+```
