@@ -255,7 +255,7 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
 
 `@samchon/openapi` supports three major LLM function calling schemas.
 
-[`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html) is designed for OpenAI models. When using OpenAI's strict mode, it handles the restrictions elegantly by utilizing JSDoc tags within the `description` property to support full JSON schema specifications despite OpenAI's constraints.
+[`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html) is designed for OpenAI models. It is fully compatible with OpenAI's strict mode, handling its restrictions elegantly by utilizing JSDoc tags within the `description` property to support full JSON schema specifications despite OpenAI's constraints.
 
 [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html) is the most recommended option as it most closely follows the JSON schema standard with the most concise types and accurate expressions. Claude imposes no JSON schema specification restrictions, making it the ideal choice when you're unsure about your AI model's requirements or when no explicit specification is provided.
 

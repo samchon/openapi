@@ -10,9 +10,10 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * `ILlmSchema` is a union type collecting every schema for LLM function calling.
  * Select a proper schema type according to the LLM provider you're using.
  *
- * {@link IChatGptSchema} is designed for OpenAI models. When using OpenAI's strict
- * mode, it handles restrictions by utilizing JSDoc tags in the `description`
- * property to support full JSON schema specifications despite OpenAI's constraints.
+ * {@link IChatGptSchema} is designed for OpenAI models. It is fully compatible
+ * with OpenAI's strict mode, handling its restrictions by utilizing JSDoc tags
+ * in the `description` property to support full JSON schema specifications
+ * despite OpenAI's constraints.
  *
  * {@link IClaudeSchema} is the most recommended option as it most closely follows
  * the JSON schema standard with the most concise types and accurate expressions.
