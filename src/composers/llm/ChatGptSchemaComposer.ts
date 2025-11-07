@@ -8,8 +8,8 @@ import { IResult } from "../../structures/IResult";
 import { GeminiTypeChecker } from "../../utils/GeminiTypeChecker";
 import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { JsonDescriptionUtil } from "../../utils/internal/JsonDescriptionUtil";
 import { GeminiSchemaComposer } from "./GeminiSchemaComposer";
-import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
 import { LlmSchemaV3_1Composer } from "./LlmSchemaV3_1Composer";
 
 export namespace ChatGptSchemaComposer {
@@ -139,11 +139,16 @@ export namespace ChatGptSchemaComposer {
           OpenApiConstraintShifter.shiftNumeric(next);
         else if (GeminiTypeChecker.isArray(next))
           OpenApiConstraintShifter.shiftArray(next);
-        else if (
-          GeminiTypeChecker.isObject(next) &&
-          props.config.strict === true
-        )
-          next.additionalProperties = false;
+        else if (GeminiTypeChecker.isObject(next)) {
+          if (props.config.strict === true) next.additionalProperties = false;
+          next.description = JsonDescriptionUtil.take(next);
+        }
+      },
+      schema,
+    });
+    GeminiTypeChecker.visit({
+      closure: (next) => {
+        if (GeminiTypeChecker.isReference(next)) next.description = undefined;
       },
       schema,
     });
@@ -156,31 +161,11 @@ export namespace ChatGptSchemaComposer {
     convention?: (key: string, type: "llm" | "human") => string;
     equals?: boolean;
   }): ILlmFunction.ISeparated<"chatgpt"> =>
-    GeminiSchemaComposer.separateParameters(
-      props,
-    ) satisfies ILlmFunction.ISeparated<"chatgpt">;
+    GeminiSchemaComposer.separateParameters(props);
 
   export const invert = (props: {
     components: OpenApi.IComponents;
     schema: IChatGptSchema;
     $defs: Record<string, IChatGptSchema>;
-  }): OpenApi.IJsonSchema => {
-    const result: OpenApi.IJsonSchema = GeminiSchemaComposer.invert(props);
-    OpenApiTypeChecker.visit({
-      components: props.components,
-      schema: result,
-      closure: (next) => {
-        if (OpenApiTypeChecker.isString(next))
-          Object.assign(next, LlmDescriptionInverter.string(next.description));
-        else if (
-          OpenApiTypeChecker.isInteger(next) ||
-          OpenApiTypeChecker.isNumber(next)
-        )
-          Object.assign(next, LlmDescriptionInverter.numeric(next.description));
-        else if (OpenApiTypeChecker.isArray(next))
-          Object.assign(next, LlmDescriptionInverter.array(next.description));
-      },
-    });
-    return result;
-  };
+  }): OpenApi.IJsonSchema => GeminiSchemaComposer.invert(props);
 }

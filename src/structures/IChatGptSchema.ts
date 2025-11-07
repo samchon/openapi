@@ -1,16 +1,26 @@
 import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 
 /**
- * Type schema info of the ChatGPT.
+ * Type schema info for OpenAI function calling.
  *
- * `IChatGptSchema` is a type schema info of the ChatGPT function calling.
+ * `IChatGptSchema` is a type schema info for OpenAI function calling. The type
+ * name "ChatGpt" is intentionally used to avoid confusion with "OpenAPI"
+ * specification, even though this is designed for OpenAI models.
  *
  * `IChatGptSchema` basically follows the JSON schema definition of the OpenAPI
- * v3.1 specification; {@link OpenApiV3_1.IJsonSchema}.
+ * v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. However, it deviates from
+ * the standard JSON schema specification and omits many features when used in
+ * {@link IChatGptSchema.IConfig.strict} mode for OpenAI function calling.
  *
- * However, the `IChatGptSchema` does not follow the entire specification of the
- * OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
- * list of how `IChatGptSchema` is different with the OpenAPI v3.1 JSON schema.
+ * If you don't need the "strict" mode, you can use {@link IGeminiSchema} or
+ * {@link IClaudeSchema} instead of `IChatGptSchema`, as they support more
+ * complete JSON schema specifications. However, `IChatGptSchema` supports all
+ * JSON schema features through workaround expressions using JSDoc tags in the
+ * `description` property, so using `IChatGptSchema` does not degrade function
+ * calling performance.
+ *
+ * Here is the list of how `IChatGptSchema` is different with the OpenAPI v3.1
+ * JSON schema:
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:
@@ -48,8 +58,8 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * {@link IChatGptSchema.IReference} type.
  *
  * Also, OpenAI has banned the following constraint properties. Instead,
- * `IChatGptSchema` fills the `description` property with comment text like
- * `"@format uuid"`.
+ * `IChatGptSchema` fills the `description` property with workaround expressions
+ * using JSDoc tags like `"@format uuid"` to convey these constraints:
  *
  * - {@link OpenApi.IJsonSchema.INumber.minimum}
  * - {@link OpenApi.IJsonSchema.INumber.maximum}
