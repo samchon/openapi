@@ -170,12 +170,12 @@ export namespace ChatGptSchemaComposer {
       schema: result,
       closure: (next) => {
         if (OpenApiTypeChecker.isString(next))
-          Object.assign(next, LlmDescriptionInverter.numeric(next.description));
+          Object.assign(next, LlmDescriptionInverter.string(next.description));
         else if (
           OpenApiTypeChecker.isInteger(next) ||
           OpenApiTypeChecker.isNumber(next)
         )
-          Object.assign(next, LlmDescriptionInverter.string(next.description));
+          Object.assign(next, LlmDescriptionInverter.numeric(next.description));
         else if (OpenApiTypeChecker.isArray(next))
           Object.assign(next, LlmDescriptionInverter.array(next.description));
       },
