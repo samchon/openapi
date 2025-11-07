@@ -10,7 +10,7 @@ export const test_claude_schema_nullable = (): void =>
   validate_llm_schema_nullable("claude", "oneOf");
 
 export const test_gemini_schema_nullable = (): void =>
-  validate_llm_schema_nullable("gemini", "nullable");
+  validate_llm_schema_nullable("gemini", "anyOf");
 
 export const test_llm_v30_schema_nullable = (): void =>
   validate_llm_schema_nullable("3.0", "nullable");

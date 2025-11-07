@@ -6,6 +6,7 @@ import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
 import { IResult } from "../../structures/IResult";
 import { GeminiTypeChecker } from "../../utils/GeminiTypeChecker";
+import { OpenApiConstraintShifter } from "../../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
 import { GeminiSchemaComposer } from "./GeminiSchemaComposer";
 import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
@@ -130,14 +131,14 @@ export namespace ChatGptSchemaComposer {
     GeminiTypeChecker.visit({
       closure: (next) => {
         if (GeminiTypeChecker.isString(next))
-          Object.assign(next, LlmDescriptionInverter.string(next.description));
+          OpenApiConstraintShifter.shiftString(next);
         else if (
           GeminiTypeChecker.isInteger(next) ||
           GeminiTypeChecker.isNumber(next)
         )
-          Object.assign(next, LlmDescriptionInverter.numeric(next.description));
+          OpenApiConstraintShifter.shiftNumeric(next);
         else if (GeminiTypeChecker.isArray(next))
-          Object.assign(next, LlmDescriptionInverter.array(next.description));
+          OpenApiConstraintShifter.shiftArray(next);
         else if (
           GeminiTypeChecker.isObject(next) &&
           props.config.strict === true
