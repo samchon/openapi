@@ -57,6 +57,7 @@
           ]
         },
         "content": {
+          "description": "Description and image content describing the sale.",
           "$ref": "#/$defs/IShoppingSaleContent.ICreate"
         },
         "channels": {
@@ -278,6 +279,7 @@
           "type": "string"
         },
         "price": {
+          "description": "Price of the stock.",
           "$ref": "#/$defs/IShoppingPrice"
         },
         "quantity": {

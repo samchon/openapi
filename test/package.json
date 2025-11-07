@@ -32,7 +32,7 @@
     "randexp": "^0.5.3",
     "source-map-support": "^0.5.21",
     "tstl": "^3.0.0",
-    "typia": "^10.0.0-dev.20251107-3",
+    "typia": "^10.0.0-dev.20251107-4",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
