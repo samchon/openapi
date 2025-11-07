@@ -39,7 +39,9 @@ const validate_llm_schema_separate_string = <Model extends ILlmSchema.Model>(
         ) &&
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
-          : s.description?.includes("@contentMediaType") === true),
+          : (s as OpenApi.IJsonSchema.IString).description?.includes(
+              "@contentMediaType",
+            ) === true),
       parameters: schema as any,
     });
   const plain: ILlmSchema.IParameters<Model> = schema(

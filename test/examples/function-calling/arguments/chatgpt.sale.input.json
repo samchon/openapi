@@ -1,5 +1,5 @@
 {
-  "trial": 1,
+  "trial": 2,
   "success": true,
   "data": {
     "input": {
@@ -13,19 +13,19 @@
         "files": [],
         "thumbnails": [
           {
-            "name": "microsoft-surface-pro-9-thumbnail-1",
-            "extension": "jpeg",
-            "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg"
+            "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7509f1af89c326cb41749301b94375eb5680b9bddcdf88fabcb.jpeg",
+            "name": "microsoft-surface-pro-9-thumbnail-1.jpeg",
+            "extension": "jpeg"
           },
           {
-            "name": "microsoft-surface-pro-9-thumbnail-2",
-            "extension": "jpeg",
-            "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg"
+            "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb750d6c1bc749467f5aba0340886f4f4943fe72302c5e658b15a.jpeg",
+            "name": "microsoft-surface-pro-9-thumbnail-2.jpeg",
+            "extension": "jpeg"
           },
           {
-            "name": "microsoft-surface-pro-9-thumbnail-3",
-            "extension": "jpeg",
-            "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg"
+            "url": "https://serpapi.com/searches/673d3a37e45f3316ecd8ab3e/images/1be25e6e2b1fb7505946d975aac683f8826bcb8c509672de4a5f8c71f149fdef.jpeg",
+            "name": "microsoft-surface-pro-9-thumbnail-3.jpeg",
+            "extension": "jpeg"
           }
         ]
       },
@@ -33,17 +33,20 @@
         {
           "code": "samchon",
           "category_codes": [
-            "2in1_laptops"
+            "2_in_1_laptops"
           ]
         }
       ],
       "units": [
         {
+          "name": "Surface Pro 9 Entity",
+          "primary": true,
+          "required": true,
           "options": [
             {
               "type": "select",
               "name": "CPU",
-              "variable": true,
+              "variable": false,
               "candidates": [
                 {
                   "name": "Intel Core i3"
@@ -59,7 +62,7 @@
             {
               "type": "select",
               "name": "RAM",
-              "variable": true,
+              "variable": false,
               "candidates": [
                 {
                   "name": "8 GB"
@@ -75,7 +78,7 @@
             {
               "type": "select",
               "name": "Storage",
-              "variable": true,
+              "variable": false,
               "candidates": [
                 {
                   "name": "128 GB"
@@ -91,10 +94,11 @@
           ],
           "stocks": [
             {
-              "name": "i3, 8 GB, 128 GB",
+              "name": "Intel Core i3 / 8 GB / 128 GB",
               "price": {
                 "nominal": 1000000,
-                "real": 899000
+                "real": 899000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -113,10 +117,11 @@
               ]
             },
             {
-              "name": "i3, 16 GB, 256 GB",
+              "name": "Intel Core i3 / 16 GB / 256 GB",
               "price": {
                 "nominal": 1200000,
-                "real": 1099000
+                "real": 1099000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -135,10 +140,11 @@
               ]
             },
             {
-              "name": "i3, 16 GB, 512 GB",
+              "name": "Intel Core i3 / 16 GB / 512 GB",
               "price": {
                 "nominal": 1400000,
-                "real": 1299000
+                "real": 1299000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -157,10 +163,11 @@
               ]
             },
             {
-              "name": "i5, 16 GB, 256 GB",
+              "name": "Intel Core i5 / 16 GB / 256 GB",
               "price": {
                 "nominal": 1500000,
-                "real": 1399000
+                "real": 1399000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -179,10 +186,11 @@
               ]
             },
             {
-              "name": "i5, 32 GB, 512 GB",
+              "name": "Intel Core i5 / 32 GB / 512 GB",
               "price": {
                 "nominal": 1800000,
-                "real": 1699000
+                "real": 1699000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -201,10 +209,11 @@
               ]
             },
             {
-              "name": "i7, 16 GB, 512 GB",
+              "name": "Intel Core i7 / 16 GB / 512 GB",
               "price": {
                 "nominal": 1800000,
-                "real": 1699000
+                "real": 1699000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -223,10 +232,11 @@
               ]
             },
             {
-              "name": "i7, 32 GB, 512 GB",
+              "name": "Intel Core i7 / 32 GB / 512 GB",
               "price": {
                 "nominal": 2000000,
-                "real": 1899000
+                "real": 1899000,
+                "currency": "KRW"
               },
               "quantity": 1000,
               "choices": [
@@ -244,52 +254,57 @@
                 }
               ]
             }
-          ],
-          "name": "Surface Pro 8 Entity",
-          "primary": true,
-          "required": true
+          ]
         },
         {
+          "name": "Warranty Program",
+          "primary": false,
+          "required": false,
           "options": [],
           "stocks": [
             {
-              "name": "Warranty Program",
+              "name": "Default",
               "price": {
                 "nominal": 100000,
-                "real": 89000
+                "real": 89000,
+                "currency": "KRW"
               },
               "quantity": 10000,
               "choices": []
             }
-          ],
-          "name": "Warranty Program",
-          "primary": false,
-          "required": false
+          ]
         },
         {
+          "name": "Magnetic Keyboard",
+          "primary": false,
+          "required": false,
           "options": [],
           "stocks": [
             {
-              "name": "Magnetic Keyboard",
+              "name": "Default",
               "price": {
                 "nominal": 200000,
-                "real": 169000
+                "real": 169000,
+                "currency": "KRW"
               },
               "quantity": 8000,
               "choices": []
             }
-          ],
-          "name": "Magnetic Keyboard",
-          "primary": false,
-          "required": false
+          ]
         }
       ],
       "tags": [
         "Surface Pro 9",
-        "2-in-1 Laptop",
-        "Tablet",
         "Microsoft",
-        "Portable Device"
+        "2-in-1",
+        "tablet",
+        "laptop",
+        "Windows",
+        "detachable",
+        "convertible",
+        "tech",
+        "productivity",
+        "creativity"
       ]
     }
   }

@@ -1,0 +1,14 @@
+{
+  "trial": 3,
+  "success": false,
+  "errors": [
+    {
+      "path": "$input.shape",
+      "expected": "(ICircle | IPolygon | IRectangle)",
+      "value": "<Polygon outer=[(0,0), (0,10), (10,10), (10,0)] inner=[]/>"
+    }
+  ],
+  "data": {
+    "shape": "<Polygon outer=[(0,0), (0,10), (10,10), (10,0)] inner=[]/>"
+  }
+}

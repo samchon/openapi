@@ -41,7 +41,9 @@ const validate_llm_parameters_separate_nested = <
         ) &&
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
-          : s.description?.includes("@contentMediaType") === true),
+          : (s as OpenApi.IJsonSchema.IString).description?.includes(
+              "@contentMediaType",
+            ) === true),
       parameters: schema as any,
     });
   const member: ILlmSchema.IParameters<Model> = schema(

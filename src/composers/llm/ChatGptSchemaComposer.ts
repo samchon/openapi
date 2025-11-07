@@ -148,7 +148,10 @@ export namespace ChatGptSchemaComposer {
     });
     GeminiTypeChecker.visit({
       closure: (next) => {
-        if (GeminiTypeChecker.isReference(next)) next.description = undefined;
+        if (GeminiTypeChecker.isReference(next)) {
+          next.title = undefined;
+          next.description = undefined;
+        }
       },
       schema,
     });

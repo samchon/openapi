@@ -12,12 +12,10 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * the standard JSON schema specification and omits many features when used in
  * {@link IChatGptSchema.IConfig.strict} mode for OpenAI function calling.
  *
- * If you don't need the "strict" mode, you can use {@link IGeminiSchema} or
- * {@link IClaudeSchema} instead of `IChatGptSchema`, as they support more
- * complete JSON schema specifications. However, `IChatGptSchema` supports all
- * JSON schema features through workaround expressions using JSDoc tags in the
- * `description` property, so using `IChatGptSchema` does not degrade function
- * calling performance.
+ * `IChatGptSchema` supports all JSON schema features through workaround
+ * expressions using JSDoc tags in the `description` property, so using
+ * `IChatGptSchema` does not degrade function calling performance even in strict
+ * mode.
  *
  * Here is the list of how `IChatGptSchema` is different with the OpenAPI v3.1
  * JSON schema:
@@ -41,10 +39,12 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  *
  * - {@link IChatGptSchema.IAnyOf} instead of {@link OpenApi.IJsonSchema.IOneOf}
  * - {@link IChatGptSchema.IParameters.$defs} instead of
- *   {@link OpenApi.IJsonSchema.IComponents.schemas}
+ *   {@link OpenApi.IComponents.schemas}
  * - {@link IChatGptSchema.IString.enum} instead of
  *   {@link OpenApi.IJsonSchema.IConstant}
- * - {@link IChatGptSchema.additionalProperties} is fixed to `false`
+ * - {@link IChatGptSchema.additionalProperties} is fixed to `false` in strict mode
+ * - {@link IChatGptSchema.properties} and {@link IChatGptSchema.required} are
+ *   always defined
  * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
  * - When {@link IChatGptSchema.IConfig.strict} mode:
  *
@@ -58,8 +58,9 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * {@link IChatGptSchema.IReference} type.
  *
  * Also, OpenAI has banned the following constraint properties. Instead,
- * `IChatGptSchema` fills the `description` property with workaround expressions
- * using JSDoc tags like `"@format uuid"` to convey these constraints:
+ * `IChatGptSchema` fills the {@link IChatGptSchema.description} property with
+ * workaround expressions using JSDoc tags like `"@format uuid"` to convey these
+ * constraints:
  *
  * - {@link OpenApi.IJsonSchema.INumber.minimum}
  * - {@link OpenApi.IJsonSchema.INumber.maximum}
@@ -74,10 +75,11 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link OpenApi.IJsonSchema.IArray.maxItems}
  * - {@link OpenApi.IJsonSchema.IArray.unique}
  *
- * Additionally, OpenAI cannot define the `description` property for the
- * {@link IChatGptSchema.IReference} type, and does not understand encapsulation
- * of the {@link IChatGptSchema.IAnyOf} type. Therefore, the `description` is
- * written to the parent object type, not the reference type.
+ * Additionally, OpenAI cannot define the {@link IChatGptSchema.description}
+ * property for the {@link IChatGptSchema.IReference} type, and does not
+ * understand encapsulation of the {@link IChatGptSchema.IAnyOf} type. Therefore,
+ * the {@link IChatGptSchema.description} is written to the parent object type,
+ * not the reference type.
  *
  * ```json
  * {
@@ -283,7 +285,8 @@ export namespace IChatGptSchema {
   }
 
   /** Reference type directing to named schema. */
-  export interface IReference extends IJsonSchemaAttribute {
+  export interface IReference
+    extends Omit<IJsonSchemaAttribute, "title" | "description"> {
     /**
      * Reference to the named schema.
      *

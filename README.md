@@ -12,13 +12,11 @@ flowchart
     lfc --"OpenAI"--> chatgpt("ChatGPT")
     lfc --"Google"--> gemini("Gemini")
     lfc --"Anthropic"--> claude("Claude")
-    lfc --"High-Flyer"--> deepseek("DeepSeek")
-    lfc --"Meta"--> llama("Llama")
-    chatgpt --"3.1"--> custom(["Custom JSON Schema"])
-    gemini --"3.0"--> custom(["Custom JSON Schema"])
-    claude --"3.1"--> standard(["Standard JSON Schema"])
-    deepseek --"3.1"--> standard
-    llama --"3.1"--> standard
+    lfc --"<i>Google</i>" --> legacy_gemini("<i> (legacy) Gemini</i>")
+    legacy_gemini --"3.0" --> custom(["Custom JSON Schema"])
+    chatgpt --"3.1"--> custom
+    gemini --"3.1"--> standard(["Standard JSON Schema"])
+    claude --"3.1"--> standard
   end
 ```
 
@@ -46,10 +44,8 @@ OpenAPI definitions, converters and LLM function calling application composer.
   - Supported schemas
     - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
     - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IDeepSeekSchema`](https://samchon.github.io/openapi/api/types/IDeepSeekSchema-1.html): High-Flyer DeepSeek
     - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
-    - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
-  - Midldle layer schemas
+  - Middle layer schemas
     - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
 
@@ -226,17 +222,15 @@ flowchart
   end
   subgraph "OpenAPI Generator"
     emended --normalizes--> migration[["Migration Schema"]]
-    migration --"Artificial Intelligence"--> lfc{{"<b><u>LLM Function Calling</u></b>"}}
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling"}}
     lfc --"OpenAI"--> chatgpt("ChatGPT")
     lfc --"Google"--> gemini("Gemini")
     lfc --"Anthropic"--> claude("Claude")
-    lfc --"High-Flyer"--> deepseek("DeepSeek")
-    lfc --"Meta"--> llama("Llama")
-    chatgpt --"3.1"--> custom(["Custom JSON Schema"])
-    gemini --"3.0"--> custom(["Custom JSON Schema"])
-    claude --"3.1"--> standard(["Standard JSON Schema"])
-    deepseek --"3.1"--> standard
-    llama --"3.1"--> standard
+    lfc --"<i>Google</i>" --> legacy_gemini("<i> (legacy) Gemini</i>")
+    legacy_gemini --"3.0" --> custom(["Custom JSON Schema"])
+    chatgpt --"3.1"--> custom
+    gemini --"3.1"--> standard(["Standard JSON Schema"])
+    claude --"3.1"--> standard
   end
 ```
 
@@ -255,16 +249,24 @@ Let's enjoy the fantastic LLM function calling feature very easily with `@samcho
   - Schemas
     - [`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html): OpenAI ChatGPT
     - [`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html): Anthropic Claude
-    - [`IDeepSeekSchema`](https://samchon.github.io/openapi/api/types/IDeepSeekSchema-1.html): High-Flyer DeepSeek
     - [`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html): Google Gemini
-    - [`ILlamaSchema`](https://samchon.github.io/openapi/api/types/ILlamaSchema-1.html): Meta Llama
     - [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html): middle layer based on OpenAPI v3.0 specification
     - [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html): middle layer based on OpenAPI v3.1 specification
+
+`@samchon/openapi` supports three major LLM function calling schemas.
+
+[`IChatGptSchema`](https://samchon.github.io/openapi/api/types/IChatGptSchema-1.html) is designed for OpenAI models. When using OpenAI's strict mode, it handles the restrictions elegantly by utilizing JSDoc tags within the `description` property to support full JSON schema specifications despite OpenAI's constraints.
+
+[`IClaudeSchema`](https://samchon.github.io/openapi/api/types/IClaudeSchema-1.html) is the most recommended option as it most closely follows the JSON schema standard with the most concise types and accurate expressions. Claude imposes no JSON schema specification restrictions, making it the ideal choice when you're unsure about your AI model's requirements or when no explicit specification is provided.
+
+[`IGeminiSchema`](https://samchon.github.io/openapi/api/types/IGeminiSchema-1.html) is implemented according to the Gemini guide documentation specification. Prior to November 2025, Gemini had virtually blocked all JSON schema specifications (such as `anyOf`, `$ref`, `format`, `maxItems`), making function calling practically impossible. However, these limitations have been removed in recent updates, and now it supports nearly all JSON schema specifications.
+
+Additionally, [`ILlmSchemaV3`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3-1.html) and [`ILlmSchemaV3_1`](https://samchon.github.io/openapi/api/types/ILlmSchemaV3_1-1.html) serve as middle layer schemas for advanced users who need direct control over OpenAPI v3.0 or v3.1 specifications.
+
   - Type Checkers
     - [`ChatGptTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ChatGptTypeChecker.ts)
     - [`ClaudeTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/ClaudeTypeChecker.ts)
     - [`GeminiTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/GeminiTypeChecker.ts)
-    - [`LlamaTypeChecker`](https://github.com/samchon/openapi/blob/master/src/utils/LlamaTypeChecker.ts)
     - [`LlmTypeCheckerV3`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeCheckerV3.ts)
     - [`LlmTypeCheckerV3_1`](https://github.com/samchon/openapi/blob/master/src/utils/LlmTypeCheckerV3_1.ts)
 
@@ -601,18 +603,17 @@ flowchart
     schema2910("JSON Schema 2019-03") --upgrades--> emended
     schema2020("JSON Schema 2020-12") --emends--> emended
   end
-  subgraph "Model Context Protocol"
-    emended --"Artificial Intelligence"--> lfc{{"LLM Function Calling"}}
+  subgraph "OpenAPI Generator"
+    emended --normalizes--> migration[["Migration Schema"]]
+    migration --"Artificial Intelligence"--> lfc{{"LLM Function Calling"}}
     lfc --"OpenAI"--> chatgpt("ChatGPT")
     lfc --"Google"--> gemini("Gemini")
     lfc --"Anthropic"--> claude("Claude")
-    lfc --"High-Flyer"--> deepseek("DeepSeek")
-    lfc --"Meta"--> llama("Llama")
-    chatgpt --"3.1"--> custom(["Custom JSON Schema"])
-    gemini --"3.0"--> custom(["Custom JSON Schema"])
-    claude --"3.1"--> standard(["Standard JSON Schema"])
-    deepseek --"3.1"--> standard
-    llama --"3.1"--> standard
+    lfc --"<i>Google</i>" --> legacy_gemini("<i> (legacy) Gemini</i>")
+    legacy_gemini --"3.0" --> custom(["Custom JSON Schema"])
+    chatgpt --"3.1"--> custom
+    gemini --"3.1"--> standard(["Standard JSON Schema"])
+    claude --"3.1"--> standard
   end
 ```
 

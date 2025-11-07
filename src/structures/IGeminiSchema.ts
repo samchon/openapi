@@ -1,62 +1,63 @@
 import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 
 /**
- * Type schema info for the Gemini function calling.
+ * Type schema info for Gemini function calling.
  *
- * `IGeminiSchema` is a type metadata for the LLM (Large Language Model)
- * function calling in the Gemini.
+ * `IGeminiSchema` is a type schema info for Gemini function calling,
+ * implemented according to the official Gemini guide documentation
+ * specification.
  *
  * `IGeminiSchema` basically follows the JSON schema definition of the OpenAPI
- * v3.0 specification; {@link OpenApiV3.IJsonSchema}. However, `IGeminiSchema`
- * cannot understand union and reference types, represented by the `oneOf` and
- * `$ref` properties. Also, as OpenAPI v3.0 specification does not support the
- * tuple type, `IGeminiSchema` does not support the tuple type either.
+ * v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. Although Gemini had
+ * significant limitations in earlier versions (prior to 2025-11-05), it now
+ * supports nearly all JSON schema features including union types, reference
+ * types, and various constraint properties.
  *
- * - Does not support
+ * In earlier versions, Gemini blocked virtually all JSON schema specifications
+ * such as `anyOf`, `$ref`, `format`, `maxItems`, making function calling
+ * practically impossible. However, these limitations have been removed in recent
+ * updates.
  *
- *   - {@link OpenApiV3.IJsonSchema.IReference}
- *   - {@link OpenApiV3.IJsonSchema.IAllOf}
- *   - {@link OpenApiV3.IJsonSchema.IAnyOf}
- *   - {@link OpenApiV3.IJsonSchema.IOneOf}
- *   - {@link OpenApiV3.IJsonSchema.IObject.additionalProperties}
- *   - {@link OpenApiV3.IJsonSchema.__IAttribute.title}
+ * `IGeminiSchema` provides a type definition that strictly follows the Gemini
+ * official specification.
  *
- * If compare with {@link OpenApi.IJsonSchema}, the emended JSON schema type,
- * these are not supported in the Gemini schema. One thing interesting is, the
- * Gemini does not support the `title` property, so it would be revealed in the
- * {@link IGeminiSchema.__IAttribute.description} property instead.
+ * Here is the list of how `IGeminiSchema` is different with the OpenAPI v3.1
+ * JSON schema:
  *
- * - {@link OpenApi.IJsonSchema.IReference}
- * - {@link OpenApi.IJsonSchema.IOneOf}
- * - {@link OpenApi.IJsonSchema.ITuple}
- * - {@link OpenApi.IJsonSchema.IObject.additionalProperties}
- * - {@link OpenApi.IJsonSchema.__IAttribute.title}
+ * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
+ * - Resolve nullable property:
+ *   {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
+ * - Tuple type is banned: {@link OpenApiV3_1.IJsonSchema.ITuple.prefixItems}
+ * - Constant type is banned: {@link OpenApiV3_1.IJsonSchema.IConstant}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IOneOf} to {@link IGeminiSchema.IAnyOf}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link IGeminiSchema.IObject}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to
+ *   {@link IGeminiSchema.IReference}
  *
- * Also, Gemini has banned below constraint properties. Instead, I'll will fill
- * the {@link IGeminiSchema.__IAttribute.description} property with the comment
- * text like `"@format uuid"`.
+ * Compared to {@link OpenApi.IJsonSchema}, the emended JSON schema
+ * specification:
  *
- * - {@link OpenApi.IJsonSchema.INumber.minimum}
- * - {@link OpenApi.IJsonSchema.INumber.maximum}
- * - {@link OpenApi.IJsonSchema.INumber.multipleOf}
- * - {@link OpenApi.IJsonSchema.IString.minLength}
- * - {@link OpenApi.IJsonSchema.IString.maxLength}
- * - {@link OpenApi.IJsonSchema.IString.format}
- * - {@link OpenApi.IJsonSchema.IString.pattern}
- * - {@link OpenApi.IJsonSchema.IString.contentMediaType}
- * - {@link OpenApi.IJsonSchema.IString.default}
- * - {@link OpenApi.IJsonSchema.IArray.minItems}
- * - {@link OpenApi.IJsonSchema.IArray.maxItems}
- * - {@link OpenApi.IJsonSchema.IArray.uniqueItems}
+ * - {@link IGeminiSchema.IAnyOf} instead of {@link OpenApi.IJsonSchema.IOneOf}
+ * - {@link IGeminiSchema.IParameters.$defs} instead of
+ *   {@link OpenApi.IJsonSchema.IComponents.schemas}
+ * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
+ * - {@link IGeminiSchema.properties} and {@link IGeminiSchema.required} are always
+ *   defined
+ *
+ * For reference, if you compose the `IGeminiSchema` type with the
+ * {@link IGeminiSchema.IConfig.reference} `false` option (default is `false`),
+ * only recursively named types are archived into the
+ * {@link IGeminiSchema.IParameters.$defs}, and others are escaped from the
+ * {@link IGeminiSchema.IReference} type.
  *
  * @author Jeongho Nam - https://github.com/samchon
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/function-calling
  * @reference https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling
  * @reference https://ai.google.dev/gemini-api/docs/structured-output
- * @warning Specified not only by the official documentation, but also by my
- *          experiments. Therefore, its definitions can be inaccurate or be
- *          changed in the future. If you find any wrong or outdated definitions,
- *          please let me know by issue.
+ * @warning Specified not only by the official documentation, but also by
+ *          experimental validation. Therefore, definitions may be inaccurate or
+ *          change in the future. If you find wrong or outdated definitions,
+ *          please report via issue.
  * @issue https://github.com/samchon/openapi/issues
  */
 export type IGeminiSchema =

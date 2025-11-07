@@ -45,13 +45,17 @@ const validate_llm_schema_reference_escaped_description_of_namespace = <
   const schema: ILlmSchema.IParameters<Model> =
     composeSchema(model)(collection);
   const deep: ILlmSchema<Model> = schema.properties.deep as ILlmSchema<Model>;
-  TestValidator.predicate("description")(
-    () =>
-      !!deep.description &&
-      deep.description.includes("Something interface") &&
-      deep.description.includes("Something nested interface") &&
-      deep.description.includes("Something nested and deep interface"),
-  );
+  TestValidator.predicate("description")(() => {
+    const description: string | undefined = (
+      deep as OpenApi.IJsonSchema.IObject
+    ).description;
+    return (
+      !!description &&
+      description.includes("Something interface") &&
+      description.includes("Something nested interface") &&
+      description.includes("Something nested and deep interface")
+    );
+  });
 };
 
 /** Something interface. */

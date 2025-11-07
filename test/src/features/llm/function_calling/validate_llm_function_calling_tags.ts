@@ -20,6 +20,12 @@ export const test_claude_function_calling_tags = () =>
 export const test_gemini_function_calling_tags = () =>
   validate_llm_function_calling_tags({
     vendor: "google/gemini-2.5-pro",
+    application: typia.llm.application<IApplication, "gemini">(),
+  });
+
+export const test_llama_function_calling_tags = () =>
+  validate_llm_function_calling_tags({
+    vendor: "meta-llama/llama-3.3-70b-instruct",
     application: typia.llm.application<IApplication, "claude">(),
   });
 

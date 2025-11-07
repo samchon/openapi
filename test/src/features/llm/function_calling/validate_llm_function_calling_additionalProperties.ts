@@ -11,12 +11,6 @@ export const test_chatgpt_function_calling_additionalProperties = () =>
     application: typia.llm.application<IApplication, "chatgpt">(),
   });
 
-export const test_gemini_function_calling_additionalProperties = () =>
-  validate_llm_function_calling_additionalProperties({
-    vendor: "google/gemini-2.5-pro",
-    application: typia.llm.application<IApplication, "claude">(),
-  });
-
 export const test_claude_function_calling_additionalProperties = () =>
   validate_llm_function_calling_additionalProperties({
     vendor: "anthropic/claude-sonnet-4.5",
@@ -29,9 +23,21 @@ export const test_deepseek_function_calling_additionalProperties = () =>
     application: typia.llm.application<IApplication, "claude">(),
   });
 
+export const test_gemini_function_calling_additionalProperties = () =>
+  validate_llm_function_calling_additionalProperties({
+    vendor: "google/gemini-2.5-pro",
+    application: typia.llm.application<IApplication, "gemini">(),
+  });
+
 export const test_llama_function_calling_additionalProperties = () =>
   validate_llm_function_calling_additionalProperties({
     vendor: "meta-llama/llama-3.3-70b-instruct",
+    application: typia.llm.application<IApplication, "claude">(),
+  });
+
+export const test_qwen_function_calling_additionalProperties = () =>
+  validate_llm_function_calling_additionalProperties({
+    vendor: "qwen/qwen3-next-80b-a3b-instruct",
     application: typia.llm.application<IApplication, "claude">(),
   });
 

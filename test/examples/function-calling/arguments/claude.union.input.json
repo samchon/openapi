@@ -1,14 +1,28 @@
 {
-  "trial": 3,
-  "success": false,
-  "errors": [
-    {
-      "path": "$input.shape",
-      "expected": "(ICircle | IPolygon | IRectangle)",
-      "value": "{\"type\": \"polygon\", \"outer\": [{\"x\": 0, \"y\": 0}, {\"x\": 0, \"y\": 10}, {\"x\": 10, \"y\": 10}, {\"x\": 10, \"y\": 0}], \"inner\": null}"
-    }
-  ],
+  "trial": 2,
+  "success": true,
   "data": {
-    "shape": "{\"type\": \"polygon\", \"outer\": [{\"x\": 0, \"y\": 0}, {\"x\": 0, \"y\": 10}, {\"x\": 10, \"y\": 10}, {\"x\": 10, \"y\": 0}], \"inner\": null}"
+    "shape": {
+      "type": "polygon",
+      "outer": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 10
+        },
+        {
+          "x": 10,
+          "y": 10
+        },
+        {
+          "x": 10,
+          "y": 0
+        }
+      ],
+      "inner": null
+    }
   }
 }

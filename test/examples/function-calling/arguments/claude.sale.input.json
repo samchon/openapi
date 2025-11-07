@@ -4,12 +4,12 @@
   "data": {
     "input": {
       "section_code": "general",
-      "opened_at": null,
+      "opened_at": "2023-01-01T00:00:00Z",
       "closed_at": null,
       "content": {
         "title": "Surface Pro 9",
-        "format": "md",
-        "body": "The Surface Pro 9 is a versatile 2-in-1 device that combines the power of a laptop with the flexibility of a tablet. It features advanced technology, making it suitable for both professional and personal use.\n\n- \"Unleash Your Creativity Anywhere\": The Surface Pro 9 is designed for those who need power and portability, making it perfect for creative professionals and students alike.\n- \"The Ultimate 2-in-1 Experience\": With its detachable keyboard and touchscreen capabilities, the Surface Pro 9 adapts to your needs, whether you're working, studying, or relaxing.\n- \"Stay Connected with 5G\": Experience lightning-fast internet speeds and seamless connectivity, no matter where you are.\n- \"Power Meets Flexibility\": The Surface Pro 9 combines the performance of a laptop with the convenience of a tablet, making it the ideal device for multitasking.\n\nIn summary, the Surface Pro 9 stands out as a powerful and flexible device, perfect for users who require both performance and portability. With its advanced features and sleek design, it is an excellent choice for anyone looking to enhance their productivity and creativity. Whether for work or play, the Surface Pro 9 is ready to meet your needs.",
+        "format": "html",
+        "body": "<p>The Surface Pro 9 is a versatile 2-in-1 device that combines the power of a laptop with the flexibility of a tablet. It features advanced technology, making it suitable for both professional and personal use.</p><ul><li>\"Unleash Your Creativity Anywhere\": The Surface Pro 9 is designed for those who need power and portability, making it perfect for creative professionals and students alike.</li><li>\"The Ultimate 2-in-1 Experience\": With its detachable keyboard and touchscreen capabilities, the Surface Pro 9 adapts to your needs, whether you're working, studying, or relaxing.</li><li>\"Stay Connected with 5G\": Experience lightning-fast internet speeds and seamless connectivity, no matter where you are.</li><li>\"Power Meets Flexibility\": The Surface Pro 9 combines the performance of a laptop with the convenience of a tablet, making it the ideal device for multitasking.</li></ul><p>In summary, the Surface Pro 9 stands out as a powerful and flexible device, perfect for users who require both performance and portability. With its advanced features and sleek design, it is an excellent choice for anyone looking to enhance their productivity and creativity. Whether for work or play, the Surface Pro 9 is ready to meet your needs.</p>",
         "files": [],
         "thumbnails": [
           {
@@ -33,17 +33,14 @@
         {
           "code": "samchon",
           "category_codes": [
-            "electronics",
             "laptops",
-            "2in1_laptops"
+            "ultrabooks",
+            "2_in_1_laptops"
           ]
         }
       ],
       "units": [
         {
-          "name": "Surface Pro 9 Entity",
-          "primary": true,
-          "required": true,
           "options": [
             {
               "type": "select",
@@ -96,7 +93,7 @@
           ],
           "stocks": [
             {
-              "name": "i3 8GB 128GB",
+              "name": "Surface Pro 9 (i3, 8 GB, 128 GB)",
               "price": {
                 "nominal": 1000000,
                 "real": 899000
@@ -118,7 +115,7 @@
               ]
             },
             {
-              "name": "i3 16GB 256GB",
+              "name": "Surface Pro 9 (i3, 16 GB, 256 GB)",
               "price": {
                 "nominal": 1200000,
                 "real": 1099000
@@ -140,7 +137,7 @@
               ]
             },
             {
-              "name": "i3 16GB 512GB",
+              "name": "Surface Pro 9 (i3, 16 GB, 512 GB)",
               "price": {
                 "nominal": 1400000,
                 "real": 1299000
@@ -162,7 +159,7 @@
               ]
             },
             {
-              "name": "i5 16GB 256GB",
+              "name": "Surface Pro 9 (i5, 16 GB, 256 GB)",
               "price": {
                 "nominal": 1500000,
                 "real": 1399000
@@ -184,7 +181,7 @@
               ]
             },
             {
-              "name": "i5 32GB 512GB",
+              "name": "Surface Pro 9 (i5, 32 GB, 512 GB)",
               "price": {
                 "nominal": 1800000,
                 "real": 1699000
@@ -206,7 +203,7 @@
               ]
             },
             {
-              "name": "i7 16GB 512GB",
+              "name": "Surface Pro 9 (i7, 16 GB, 512 GB)",
               "price": {
                 "nominal": 1800000,
                 "real": 1699000
@@ -228,7 +225,7 @@
               ]
             },
             {
-              "name": "i7 32GB 512GB",
+              "name": "Surface Pro 9 (i7, 32 GB, 512 GB)",
               "price": {
                 "nominal": 2000000,
                 "real": 1899000
@@ -249,16 +246,16 @@
                 }
               ]
             }
-          ]
+          ],
+          "name": "Surface Pro 9 Entity",
+          "primary": true,
+          "required": true
         },
         {
-          "name": "Warranty Program",
-          "primary": false,
-          "required": false,
           "options": [],
           "stocks": [
             {
-              "name": "Standard Warranty",
+              "name": "Warranty Program",
               "price": {
                 "nominal": 100000,
                 "real": 89000
@@ -266,16 +263,16 @@
               "quantity": 10000,
               "choices": []
             }
-          ]
+          ],
+          "name": "Warranty Program",
+          "primary": false,
+          "required": false
         },
         {
-          "name": "Magnetic Keyboard",
-          "primary": false,
-          "required": false,
           "options": [],
           "stocks": [
             {
-              "name": "Standard Magnetic Keyboard",
+              "name": "Magnetic Keyboard",
               "price": {
                 "nominal": 200000,
                 "real": 169000
@@ -283,16 +280,19 @@
               "quantity": 8000,
               "choices": []
             }
-          ]
+          ],
+          "name": "Magnetic Keyboard",
+          "primary": false,
+          "required": false
         }
       ],
       "tags": [
-        "Surface Pro 9",
-        "2-in-1",
-        "tablet",
+        "surface pro 9",
+        "microsoft",
         "laptop",
-        "Microsoft",
-        "Windows"
+        "tablet",
+        "2in1",
+        "5g"
       ]
     }
   }

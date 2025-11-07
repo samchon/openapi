@@ -23,7 +23,7 @@
               },
               {
                 "code": "macbooks",
-                "name": "MacBooks",
+                "name": "Macbooks",
                 "children": []
               },
               {
@@ -32,7 +32,7 @@
                 "children": []
               },
               {
-                "code": "2in1_laptops",
+                "code": "2_in_1_laptops",
                 "name": "2 in 1 Laptops",
                 "children": []
               }

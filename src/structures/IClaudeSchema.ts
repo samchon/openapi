@@ -7,14 +7,14 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *
  * `IClaudeSchema` appears to fully support the JSON schema definition of the
  * OpenAPI v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. However, since
- * {@link OpenApiV3_1.IJsonSchema} has many ambiguous and duplicated
- * expressions, `IClaudeSchema` is designed to be clear and simple for Claude
- * function calling by utilizing {@link ILlmSchemaV3_1}, which has been
- * transformed from {@link OpenApi.IJsonSchema} for convenience and clarity.
+ * {@link OpenApiV3_1.IJsonSchema} has many ambiguous and duplicated expressions,
+ * `IClaudeSchema` is designed to be clear and simple for Claude function
+ * calling by utilizing {@link ILlmSchemaV3_1}, which has been transformed from
+ * {@link OpenApi.IJsonSchema} for convenience and clarity.
  *
- * Therefore, `IClaudeSchema` does not follow the entire OpenAPI v3.1 specification.
- * It has specific restrictions and definitions. Here are the differences between
- * `ILlmSchemaV3_1` and the OpenAPI v3.1 JSON schema:
+ * Therefore, `IClaudeSchema` does not follow the entire OpenAPI v3.1
+ * specification. It has specific restrictions and definitions. Here are the
+ * differences between `ILlmSchemaV3_1` and the OpenAPI v3.1 JSON schema:
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:
@@ -27,10 +27,11 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  *   {@link IClaudeSchema.IReference}
  * - Do not support {@link OpenApiV3_1.IJsonSchema.ITuple} type
  *
- * Compared to {@link OpenApi.IJsonSchema}, the emended JSON schema specification:
+ * Compared to {@link OpenApi.IJsonSchema}, the emended JSON schema
+ * specification:
  *
  * - {@link IClaudeSchema.IParameters.$defs} instead of
- *   {@link OpenApi.IJsonSchema.schemas}
+ *   {@link OpenApi.IComponents.schemas}
  * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
  * - {@link IClaudeSchema.properties} and {@link IClaudeSchema.required} are always
  *   defined
@@ -38,8 +39,8 @@ import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
  * For reference, if you compose the `IClaudeSchema` type with the
  * {@link IClaudeSchema.IConfig.reference} `false` option (default is `false`),
  * only recursively named types will be archived into the
- * {@link IClaudeSchema.IParameters.$defs}, and others will be escaped from
- * the {@link IClaudeSchema.IReference} type.
+ * {@link IClaudeSchema.IParameters.$defs}, and others will be escaped from the
+ * {@link IClaudeSchema.IReference} type.
  *
  * @author Jeongho Nam - https://github.com/samchon
  * @reference https://docs.anthropic.com/en/docs/build-with-claude/tool-use
@@ -64,16 +65,15 @@ export namespace IClaudeSchema {
      * Whether to allow reference types everywhere.
      *
      * If you configure this property to `false`, most reference types
-     * represented by {@link IClaudeSchema.IReference} will be escaped to
-     * plain types unless in recursive type cases.
+     * represented by {@link IClaudeSchema.IReference} will be escaped to plain
+     * types unless in recursive type cases.
      *
-     * This is because some smaller LLM models do not understand reference
-     * types well, and even large LLM models sometimes experience
-     * hallucinations.
+     * This is because some smaller LLM models do not understand reference types
+     * well, and even large LLM models sometimes experience hallucinations.
      *
-     * However, reference types make the schema size smaller, reducing
-     * LLM token costs. Therefore, if you're using a large LLM model
-     * and want to reduce token costs, you can configure this property to `true`.
+     * However, reference types make the schema size smaller, reducing LLM token
+     * costs. Therefore, if you're using a large LLM model and want to reduce
+     * token costs, you can configure this property to `true`.
      *
      * @default true
      */
@@ -83,8 +83,8 @@ export namespace IClaudeSchema {
   /**
    * Type for function parameters.
    *
-   * `IClaudeSchema.IParameters` defines a function's parameters as a
-   * keyword object type.
+   * `IClaudeSchema.IParameters` defines a function's parameters as a keyword
+   * object type.
    *
    * It can also be used for structured output metadata.
    *
@@ -121,9 +121,8 @@ export namespace IClaudeSchema {
    *
    * `IOneOf` represents a union type in TypeScript (`A | B | C`).
    *
-   * For reference, even if your Swagger (or OpenAPI) document defines
-   * `anyOf` instead of `oneOf`, {@link OpenApi} forcibly converts it to
-   * `oneOf` type.
+   * For reference, even if your Swagger (or OpenAPI) document defines `anyOf`
+   * instead of `oneOf`, {@link OpenApi} forcibly converts it to `oneOf` type.
    */
   export type IOneOf = ILlmSchemaV3_1.IOneOf;
   export namespace IOneOf {

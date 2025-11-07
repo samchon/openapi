@@ -44,7 +44,10 @@ const validate_llm_schema_reference_escaped_description_of_name = <
     composeSchema(model)(collection);
   const deep: ILlmSchema<Model> = schema.properties.deep as ILlmSchema<Model>;
   TestValidator.predicate("description")(
-    () => !!deep.description?.includes("Something.INested.IDeep"),
+    () =>
+      !!(deep as OpenApi.IJsonSchema.IObject).description?.includes(
+        "Something.INested.IDeep",
+      ),
   );
 };
 

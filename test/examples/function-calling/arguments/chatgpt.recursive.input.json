@@ -111,42 +111,6 @@
             "children": []
           }
         ]
-      },
-      {
-        "code": "furnitures",
-        "name": "furnitures",
-        "children": []
-      },
-      {
-        "code": "accessories",
-        "name": "accessories",
-        "children": [
-          {
-            "code": "jewelry",
-            "name": "jewelry",
-            "children": []
-          },
-          {
-            "code": "clothing",
-            "name": "clothing",
-            "children": []
-          },
-          {
-            "code": "shoes",
-            "name": "shoes",
-            "children": []
-          }
-        ]
-      },
-      {
-        "code": "clothes",
-        "name": "clothes",
-        "children": []
-      },
-      {
-        "code": "others",
-        "name": "others",
-        "children": []
       }
     ]
   }

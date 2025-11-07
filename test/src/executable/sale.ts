@@ -9,27 +9,15 @@ import { StopWatch } from "../utils/StopWatch";
 const VENDORS = [
   [
     "openai/gpt-4.1",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "chatgpt",
-      { reference: true }
-    >(),
+    typia.llm.application<ShoppingSalePrompt.IApplication, "chatgpt">(),
   ],
   [
     "anthropic/claude-sonnet-4.5",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "claude",
-      { reference: true }
-    >(),
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
   [
     "deepseek/deepseek-v3.1-terminus:exacto",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "claude",
-      { reference: true }
-    >(),
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
   [
     "google/gemini-2.5-pro",
@@ -37,11 +25,11 @@ const VENDORS = [
   ],
   [
     "meta-llama/llama-3.3-70b-instruct",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "claude",
-      { reference: true }
-    >(),
+    typia.llm.application<ShoppingSalePrompt.IApplication, "gemini">(),
+  ],
+  [
+    "qwen/qwen3-next-80b-a3b-instruct",
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
 ] as const;
 

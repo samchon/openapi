@@ -26,12 +26,18 @@ export const test_deepseek_function_calling_default = () =>
 export const test_gemini_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "google/gemini-2.5-pro",
-    application: typia.llm.application<IApplication, "claude">(),
+    application: typia.llm.application<IApplication, "gemini">(),
   });
 
 export const test_llama_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "meta-llama/llama-3.3-70b-instruct",
+    application: typia.llm.application<IApplication, "claude">(),
+  });
+
+export const test_qwen_function_calling_default = () =>
+  validate_llm_function_calling_default({
+    vendor: "qwen/qwen3-next-80b-a3b-instruct",
     application: typia.llm.application<IApplication, "claude">(),
   });
 

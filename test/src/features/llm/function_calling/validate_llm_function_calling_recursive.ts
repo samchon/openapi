@@ -26,7 +26,7 @@ export const test_deepseek_function_calling_recursive = () =>
 export const test_gemini_function_calling_recursive = () =>
   validate_llm_function_calling_recursive({
     vendor: "google/gemini-2.5-pro",
-    application: typia.llm.application<IApplication, "claude">(),
+    application: typia.llm.application<IApplication, "gemini">(),
   });
 
 export const test_llama_function_calling_recursive = () =>

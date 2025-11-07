@@ -3,24 +3,17 @@
   "type": "object",
   "properties": {
     "name": {
-      "title": "The name of the person",
       "description": "The name of the person.",
       "type": "string"
     },
     "age": {
-      "title": "The age of the person",
       "description": "The age of the person.",
       "type": "integer",
       "minimum": 0
     },
     "etc": {
-      "description": "Additional information about the person.\n\n------------------------------\n\nDescription of the current {@link Recordstringstring} type:\n\n> Construct a type with a set of properties K of type T",
-      "type": "object",
-      "properties": {},
-      "required": [],
-      "additionalProperties": {
-        "type": "string"
-      }
+      "description": "Additional information about the person.",
+      "$ref": "#/$defs/Recordstringstring"
     }
   },
   "required": [
@@ -29,5 +22,15 @@
     "etc"
   ],
   "additionalProperties": false,
-  "$defs": {}
+  "$defs": {
+    "Recordstringstring": {
+      "description": "Construct a type with a set of properties K of type T",
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
 }

@@ -2,10 +2,10 @@
   "trial": 3,
   "success": true,
   "data": {
-    "temporary": false,
+    "time": "2024-02-14T12:00:00Z",
     "reasons": [
       "marketing sales"
     ],
-    "time": "2024-07-25T12:10:32.440082Z"
+    "temporary": false
   }
 }

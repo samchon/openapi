@@ -26,12 +26,18 @@ export const test_deepseek_function_calling_example = () =>
 export const test_gemini_function_calling_example = () =>
   validate_llm_function_calling_example({
     vendor: "google/gemini-2.5-pro",
-    application: typia.llm.application<IApplication, "claude">(),
+    application: typia.llm.application<IApplication, "gemini">(),
   });
 
 export const test_llama_function_calling_example = () =>
   validate_llm_function_calling_example({
     vendor: "meta-llama/llama-3.3-70b-instruct",
+    application: typia.llm.application<IApplication, "claude">(),
+  });
+
+export const test_qwen_function_calling_example = () =>
+  validate_llm_function_calling_example({
+    vendor: "qwen/qwen3-next-80b-a3b-instruct",
     application: typia.llm.application<IApplication, "claude">(),
   });
 
@@ -79,7 +85,22 @@ interface IApplication {
 }
 
 interface IPerson {
+  /**
+   * Person's actual name.
+   *
+   * It must not be nickname, but real full name of the citizenship.
+   *
+   * @title Person Name
+   */
   name: string & tags.Example<"John Doe">;
+
+  /**
+   * Person's age.
+   *
+   * It must be an integer number between 0 and 120.
+   *
+   * @title Person Age
+   */
   age: number & tags.Example<42>;
 }
 
