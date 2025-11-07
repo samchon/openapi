@@ -25,7 +25,7 @@ const VENDORS = [
   ],
   [
     "meta-llama/llama-3.3-70b-instruct",
-    typia.llm.application<ShoppingSalePrompt.IApplication, "gemini">(),
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
   [
     "qwen/qwen3-next-80b-a3b-instruct",
