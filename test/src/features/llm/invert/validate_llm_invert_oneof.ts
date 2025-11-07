@@ -9,12 +9,6 @@ export const test_chatgpt_invert_oneof = (): void =>
 export const test_claude_invert_oneof = (): void =>
   validate_llm_invert_oneof("claude");
 
-export const test_deepseek_invert_oneof = (): void =>
-  validate_llm_invert_oneof("deepseek");
-
-export const test_llama_invert_oneof = (): void =>
-  validate_llm_invert_oneof("llama");
-
 export const test_llm_v30_invert_oneof = (): void =>
   validate_llm_invert_oneof("3.0");
 

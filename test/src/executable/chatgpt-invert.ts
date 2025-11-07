@@ -1,7 +1,7 @@
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { tags } from "typia";
 
-for (const model of ["chatgpt", "gemini", "llama", "3.0", "3.1"] as const) {
+for (const model of ["chatgpt", "gemini", "claude", "3.0", "3.1"] as const) {
   const invert = LlmSchemaComposer.invert(model)({
     components: {},
     $defs: {},

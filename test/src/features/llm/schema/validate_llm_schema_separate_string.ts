@@ -14,14 +14,8 @@ export const test_chatgpt_schema_separate_string = (): void =>
 export const test_claude_schema_separate_string = (): void =>
   validate_llm_schema_separate_string("claude", true);
 
-export const test_deepseek_schema_separate_string = (): void =>
-  validate_llm_schema_separate_string("deepseek", true);
-
 export const test_gemini_schema_separate_string = (): void =>
   validate_llm_schema_separate_string("gemini", false);
-
-export const test_llama_schema_separate_string = (): void =>
-  validate_llm_schema_separate_string("llama", true);
 
 export const test_llm_v30_schema_separate_string = (): void => {
   validate_llm_schema_separate_string("3.0", false);
@@ -45,7 +39,9 @@ const validate_llm_schema_separate_string = <Model extends ILlmSchema.Model>(
         ) &&
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
-          : s.description?.includes("@contentMediaType") === true),
+          : (s as OpenApi.IJsonSchema.IString).description?.includes(
+              "@contentMediaType",
+            ) === true),
       parameters: schema as any,
     });
   const plain: ILlmSchema.IParameters<Model> = schema(

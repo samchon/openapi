@@ -9,12 +9,6 @@ export const test_chatgpt_invert_array = (): void =>
 export const test_claude_invert_array = (): void =>
   validate_llm_invert_array("claude");
 
-export const test_deepseek_invert_array = (): void =>
-  validate_llm_invert_array("deepseek");
-
-export const test_llama_invert_array = (): void =>
-  validate_llm_invert_array("llama");
-
 export const test_gemini_invert_array = (): void =>
   validate_llm_invert_array("gemini");
 

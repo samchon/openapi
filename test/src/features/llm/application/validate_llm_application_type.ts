@@ -23,18 +23,6 @@ export const test_claude_application_type = (): void => {
   typia.assert(classic);
 };
 
-export const test_deepseek_application_type = (): void => {
-  const http: IHttpLlmApplication<"deepseek"> = application("deepseek");
-  const classic: ILlmApplication<"deepseek"> = http;
-  typia.assert(classic);
-};
-
-export const test_llama_application_type = (): void => {
-  const http: IHttpLlmApplication<"llama"> = application("llama");
-  const classic: ILlmApplication<"llama"> = http;
-  typia.assert(classic);
-};
-
 export const test_llm_v30_application_type = (): void => {
   const http: IHttpLlmApplication<"3.0"> = application("3.0");
   const classic: ILlmApplication<"3.0"> = http;

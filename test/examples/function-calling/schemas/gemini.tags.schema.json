@@ -1,20 +1,27 @@
 {
+  "description": "Current Type: {@link IOpeningTime}",
   "type": "object",
   "properties": {
     "reasons": {
+      "description": "@minItems 1",
       "type": "array",
       "items": {
         "type": "string"
-      },
-      "description": "@minItems 1"
+      }
     },
     "temporary": {
       "type": "boolean"
     },
     "time": {
-      "type": "string",
-      "nullable": true,
-      "description": "@format date-time"
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "description": "@format date-time"
+        }
+      ]
     }
   },
   "required": [
@@ -22,5 +29,6 @@
     "temporary",
     "time"
   ],
-  "description": "Current Type: {@link IOpeningTime}"
+  "additionalProperties": false,
+  "$defs": {}
 }

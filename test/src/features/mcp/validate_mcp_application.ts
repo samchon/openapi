@@ -12,14 +12,8 @@ export const test_mcp_application_of_chatgpt = () =>
 export const test_mcp_application_of_claude = () =>
   validate_mcp_application("claude");
 
-export const test_mcp_application_of_deepseek = () =>
-  validate_mcp_application("deepseek");
-
 export const test_mcp_application_of_gemini = () =>
   validate_mcp_application("gemini");
-
-export const test_mcp_application_of_llama = () =>
-  validate_mcp_application("llama");
 
 export const test_mcp_application_of_v30 = () =>
   validate_mcp_application("3.0");
@@ -47,7 +41,7 @@ const validate_mcp_application = async <Model extends ILlmSchema.Model>(
 
   llm.functions.forEach((x) => {
     const parameters = { ...x.parameters };
-    if (model !== "3.0" && model !== "gemini") {
+    if (model !== "3.0") {
       const visited: Set<string> = new Set<string>();
       LlmSchemaComposer.typeChecker(model).visit({
         closure: (schema: any) => {

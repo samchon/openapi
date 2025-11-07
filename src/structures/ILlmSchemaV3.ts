@@ -407,26 +407,4 @@ export namespace ILlmSchemaV3 {
    * It means the type of the value is `any`.
    */
   export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /**
-   * Significant attributes that can be applied to the most types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export interface __ISignificant<Type extends string> extends __IAttribute {
-    /** Discriminator value of the type. */
-    type: Type;
-
-    /** Whether to allow `null` value or not. */
-    nullable?: boolean;
-  }
-
-  /**
-   * Common attributes that can be applied to all types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export type __IAttribute = IJsonSchemaAttribute;
 }

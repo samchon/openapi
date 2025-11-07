@@ -13,14 +13,8 @@ export const test_chatgpt_application_mismatch = (): void =>
 export const test_claude_application_mismatch = (): void =>
   validate_llm_application_mismatch("claude");
 
-export const test_deepseek_application_mismatch = (): void =>
-  validate_llm_application_mismatch("deepseek");
-
 export const test_gemini_application_mismatch = (): void =>
   validate_llm_application_mismatch("gemini");
-
-export const test_llama_application_mismatch = (): void =>
-  validate_llm_application_mismatch("llama");
 
 export const test_llm_v30_application_mismatch = (): void =>
   validate_llm_application_mismatch("3.0");

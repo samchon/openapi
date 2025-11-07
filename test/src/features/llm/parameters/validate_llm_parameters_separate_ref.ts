@@ -15,12 +15,6 @@ export const test_chatgpt_parameters_separate_ref = (): void =>
 export const test_claude_parameters_separate_ref = (): void =>
   validate_llm_parameters_separate_ref("claude", true);
 
-export const test_deepseek_parameters_separate_ref = (): void =>
-  validate_llm_parameters_separate_ref("deepseek", true);
-
-export const test_llama_parameters_separate_ref = (): void =>
-  validate_llm_parameters_separate_ref("llama", true);
-
 export const test_llm_v31_parameters_separate_ref = (): void => {
   validate_llm_parameters_separate_ref("3.1", false);
   validate_llm_parameters_separate_ref("3.1", true);
@@ -40,7 +34,9 @@ const validate_llm_parameters_separate_ref = <
         ) &&
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
-          : s.description?.includes("@contentMediaType") === true),
+          : (s as OpenApi.IJsonSchema.IString).description?.includes(
+              "@contentMediaType",
+            ) === true),
       parameters: schema as any,
     });
   const member: ILlmSchema.IParameters<Model> = schema(

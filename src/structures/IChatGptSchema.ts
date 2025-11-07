@@ -1,16 +1,24 @@
 import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 
 /**
- * Type schema info of the ChatGPT.
+ * Type schema info for OpenAI function calling.
  *
- * `IChatGptSchema` is a type schema info of the ChatGPT function calling.
+ * `IChatGptSchema` is a type schema info for OpenAI function calling. The type
+ * name "ChatGpt" is intentionally used to avoid confusion with "OpenAPI"
+ * specification, even though this is designed for OpenAI models.
  *
  * `IChatGptSchema` basically follows the JSON schema definition of the OpenAPI
- * v3.1 specification; {@link OpenApiV3_1.IJsonSchema}.
+ * v3.1 specification; {@link OpenApiV3_1.IJsonSchema}. However, it deviates from
+ * the standard JSON schema specification and omits many features when used in
+ * {@link IChatGptSchema.IConfig.strict} mode for OpenAI function calling.
  *
- * However, the `IChatGptSchema` does not follow the entire specification of the
- * OpenAPI v3.1. It has own specific restrictions and definitions. Here is the
- * list of how `IChatGptSchema` is different with the OpenAPI v3.1 JSON schema.
+ * `IChatGptSchema` supports all JSON schema features through workaround
+ * expressions using JSDoc tags in the `description` property, so using
+ * `IChatGptSchema` does not degrade function calling performance even in strict
+ * mode.
+ *
+ * Here is the list of how `IChatGptSchema` is different with the OpenAPI v3.1
+ * JSON schema:
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:
@@ -22,6 +30,7 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to
  *   {@link IChatGptSchema.IReference}
  * - When {@link IChatGptSchema.IConfig.strict} mode:
+ *
  *   - Every object properties must be required
  *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
@@ -30,24 +39,28 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  *
  * - {@link IChatGptSchema.IAnyOf} instead of {@link OpenApi.IJsonSchema.IOneOf}
  * - {@link IChatGptSchema.IParameters.$defs} instead of
- *   {@link OpenApi.IJsonSchema.IComponents.schemas}
+ *   {@link OpenApi.IComponents.schemas}
  * - {@link IChatGptSchema.IString.enum} instead of
  *   {@link OpenApi.IJsonSchema.IConstant}
- * - {@link IChatGptSchema.additionalProperties} is fixed to `false`
+ * - {@link IChatGptSchema.additionalProperties} is fixed to `false` in strict mode
+ * - {@link IChatGptSchema.properties} and {@link IChatGptSchema.required} are
+ *   always defined
  * - No tuple type {@link OpenApi.IJsonSchema.ITuple} support
  * - When {@link IChatGptSchema.IConfig.strict} mode:
+ *
  *   - Every object properties must be required
  *   - Do not allow {@link IChatGptSchema.IObject.additionalProperties}
  *
  * For reference, if you compose the `IChatGptSchema` type with the
  * {@link IChatGptSchema.IConfig.reference} `false` option (default is `false`),
  * only recursively named types are archived into the
- * {@link IChatGptSchema.IParameters.$defs}, and others are escaped from
- * the {@link IChatGptSchema.IReference} type.
+ * {@link IChatGptSchema.IParameters.$defs}, and others are escaped from the
+ * {@link IChatGptSchema.IReference} type.
  *
  * Also, OpenAI has banned the following constraint properties. Instead,
- * `IChatGptSchema` fills the {@link IChatGptSchema.__IAttribute.description}
- * property with comment text like `"@format uuid"`.
+ * `IChatGptSchema` fills the {@link IChatGptSchema.description} property with
+ * workaround expressions using JSDoc tags like `"@format uuid"` to convey these
+ * constraints:
  *
  * - {@link OpenApi.IJsonSchema.INumber.minimum}
  * - {@link OpenApi.IJsonSchema.INumber.maximum}
@@ -62,10 +75,11 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link OpenApi.IJsonSchema.IArray.maxItems}
  * - {@link OpenApi.IJsonSchema.IArray.unique}
  *
- * Additionally, OpenAI cannot define the `description` property for the
- * {@link IChatGptSchema.IReference} type, and does not understand
- * encapsulation of the {@link IChatGptSchema.IAnyOf} type. Therefore, the
- * `description` is written to the parent object type, not the reference type.
+ * Additionally, OpenAI cannot define the {@link IChatGptSchema.description}
+ * property for the {@link IChatGptSchema.IReference} type, and does not
+ * understand encapsulation of the {@link IChatGptSchema.IAnyOf} type. Therefore,
+ * the {@link IChatGptSchema.description} is written to the parent object type,
+ * not the reference type.
  *
  * ```json
  * {
@@ -100,14 +114,54 @@ export type IChatGptSchema =
   | IChatGptSchema.INull
   | IChatGptSchema.IUnknown;
 export namespace IChatGptSchema {
+  /** Configuration for ChatGPT schema composition. */
+  export interface IConfig {
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link IChatGptSchema.IReference} would be escaped to a
+     * plain type unless recursive type case.
+     *
+     * This is because the lower version of ChatGPT does not understand the
+     * reference type well, and even the modern version of ChatGPT sometimes
+     * occur the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that
+     * reduces the LLM token cost. Therefore, if you're using the modern version
+     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
+     * property to `true`.
+     *
+     * @default true
+     */
+    reference: boolean;
+
+    /**
+     * Whether to apply the strict mode.
+     *
+     * If you configure this property to `true`, the ChatGPT function calling
+     * does not allow optional properties and dynamic key typed properties in
+     * the {@link IChatGptSchema.IObject} type. Instead, it increases the success
+     * rate of the function calling.
+     *
+     * By the way, if you utilize the {@link typia.validate} function and give
+     * its validation feedback to the ChatGPT, its performance is much better
+     * than the strict mode. Therefore, I recommend you to just turn off the
+     * strict mode and utilize the {@link typia.validate} function instead.
+     *
+     * @default false
+     */
+    strict?: boolean;
+  }
+
   /**
    * Type for function parameters.
    *
-   * `IChatGptSchema.IParameters` defines a function's parameters as
-   * a keyword object type, where each property represents a named parameter.
+   * `IChatGptSchema.IParameters` defines a function's parameters as a keyword
+   * object type, where each property represents a named parameter.
    *
-   * It can also be used for structured output metadata to define the
-   * expected format of ChatGPT responses.
+   * It can also be used for structured output metadata to define the expected
+   * format of ChatGPT responses.
    *
    * @reference https://platform.openai.com/docs/guides/structured-outputs
    */
@@ -148,6 +202,9 @@ export namespace IChatGptSchema {
   export interface IString extends IJsonSchemaAttribute.IString {
     /** Enumeration values. */
     enum?: Array<string>;
+
+    /** Default value. */
+    default?: string;
   }
 
   /** Array type info. */
@@ -177,6 +234,14 @@ export namespace IChatGptSchema {
      *
      * The `additionalProperties` defines the type schema for additional
      * properties that are not listed in the {@link properties}.
+     *
+     * If the value is `true`, it means that the additional properties are not
+     * restricted. They can be any type. Otherwise, if the value is
+     * {@link IChatGptSchema} type, it means that the additional properties must
+     * follow the type schema info.
+     *
+     * - `true`: `Record<string, any>`
+     * - `IChatGptSchema`: `Record<string, T>`
      *
      * Note: If you've configured {@link IChatGptSchema.IConfig.strict} as
      * `true`, ChatGPT function calling does not support dynamic key typed
@@ -224,8 +289,8 @@ export namespace IChatGptSchema {
     /**
      * Reference to the named schema.
      *
-     * The `$ref` is a reference to a named schema. The format follows the
-     * JSON Pointer specification. In OpenAPI, the `$ref` starts with `#/$defs/`
+     * The `$ref` is a reference to a named schema. The format follows the JSON
+     * Pointer specification. In OpenAPI, the `$ref` starts with `#/$defs/`
      * which indicates the type is stored in the
      * {@link IChatGptSchema.IParameters.$defs} object.
      *
@@ -240,9 +305,9 @@ export namespace IChatGptSchema {
    *
    * `IAnyOf` represents a union type in TypeScript (`A | B | C`).
    *
-   * For reference, even if your Swagger (or OpenAPI) document defines
-   * `anyOf` instead of `oneOf`, {@link IChatGptSchema} forcibly converts it
-   * to `anyOf` type.
+   * For reference, even if your Swagger (or OpenAPI) document defines `anyOf`
+   * instead of `oneOf`, {@link IChatGptSchema} forcibly converts it to `anyOf`
+   * type.
    */
   export interface IAnyOf extends IJsonSchemaAttribute {
     /** List of the union types. */
@@ -262,8 +327,8 @@ export namespace IChatGptSchema {
        *
        * This property is valid only for {@link IReference} typed
        * {@link IAnyOf.anyOf} elements. Therefore, the `key` of `mapping` is the
-       * discriminator value, and the `value` of `mapping` is the schema name like
-       * `#/components/schemas/SomeObject`.
+       * discriminator value, and the `value` of `mapping` is the schema name
+       * like `#/components/schemas/SomeObject`.
        */
       mapping?: Record<string, string>;
     }
@@ -274,63 +339,4 @@ export namespace IChatGptSchema {
 
   /** Unknown, the `any` type. */
   export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /**
-   * Significant attributes that can be applied to the most types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export interface __ISignificant<Type extends string> extends __IAttribute {
-    /** Discriminator value of the type. */
-    type: Type;
-  }
-
-  /**
-   * Common attributes that can be applied to all types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export type __IAttribute = IJsonSchemaAttribute;
-
-  /** Configuration for ChatGPT schema composition. */
-  export interface IConfig {
-    /**
-     * Whether to allow reference type in everywhere.
-     *
-     * If you configure this property to `false`, most of reference types
-     * represented by {@link IChatGptSchema.IReference} would be escaped to a
-     * plain type unless recursive type case.
-     *
-     * This is because the lower version of ChatGPT does not understand the
-     * reference type well, and even the modern version of ChatGPT sometimes
-     * occur the hallucination.
-     *
-     * However, the reference type makes the schema size smaller, so that
-     * reduces the LLM token cost. Therefore, if you're using the modern version
-     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
-     * property to `true`.
-     *
-     * @default true
-     */
-    reference: boolean;
-
-    /**
-     * Whether to apply the strict mode.
-     *
-     * If you configure this property to `true`, the ChatGPT function calling
-     * does not allow optional properties and dynamic key typed properties in
-     * the {@link IChatGptSchema.IObject} type. Instead, it increases the success
-     * rate of the function calling.
-     *
-     * By the way, if you utilize the {@link typia.validate} function and give
-     * its validation feedback to the ChatGPT, its performance is much better
-     * than the strict mode. Therefore, I recommend you to just turn off the
-     * strict mode and utilize the {@link typia.validate} function instead.
-     *
-     * @default false
-     */
-    strict?: boolean;
-  }
 }

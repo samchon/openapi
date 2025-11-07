@@ -9,14 +9,8 @@ export const test_chatgpt_invert_nullable = (): void =>
 export const test_claude_invert_nullable = (): void =>
   validate_llm_invert_nullable("claude");
 
-export const test_deepseek_invert_nullable = (): void =>
-  validate_llm_invert_nullable("deepseek");
-
 export const test_gemini_invert_nullable = (): void =>
   validate_llm_invert_nullable("gemini");
-
-export const test_llama_invert_nullable = (): void =>
-  validate_llm_invert_nullable("llama");
 
 export const test_llm_v30_invert_nullable = (): void =>
   validate_llm_invert_nullable("3.0");
@@ -78,14 +72,10 @@ const validate_llm_invert_nullable = <Model extends ILlmSchema.Model>(
     typia.json.schemas<
       [
         {
-          /**
-           * Primary Key.
-           */
+          /** Primary Key. */
           id: string & tags.Format<"uuid">;
 
-          /**
-           * Email Address.
-           */
+          /** Email Address. */
           email: string & tags.Format<"email">;
           name: string;
           age: null | (number & tags.Minimum<0> & tags.Maximum<100>);

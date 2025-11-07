@@ -11,7 +11,10 @@ export const test_issue_127_enum_description = (): void => {
     schema: collection.schemas[0] as OpenApi.IJsonSchema.IReference,
   });
   TestValidator.equals("description")(
-    chatgpt.success ? chatgpt.value.properties.value.description : "",
+    chatgpt.success
+      ? (chatgpt.value.properties.value as OpenApi.IJsonSchema.IOneOf)
+          .description
+      : "",
   )("The description.");
 
   const gemini = LlmSchemaComposer.parameters("gemini")({
@@ -25,8 +28,6 @@ export const test_issue_127_enum_description = (): void => {
 };
 
 interface ISomething {
-  /**
-   * The description.
-   */
+  /** The description. */
   value: 1 | 2 | 3;
 }

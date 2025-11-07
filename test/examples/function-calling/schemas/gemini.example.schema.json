@@ -1,18 +1,24 @@
 {
+  "description": "Current Type: {@link IPerson}",
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
-      "example": "John Doe"
+      "title": "Person Name",
+      "description": "Person's actual name.\n\nIt must not be nickname, but real full name of the citizenship.",
+      "example": "John Doe",
+      "type": "string"
     },
     "age": {
-      "type": "number",
-      "example": 42
+      "title": "Person Age",
+      "description": "Person's age.\n\nIt must be an integer number between 0 and 120.",
+      "example": 42,
+      "type": "number"
     }
   },
   "required": [
     "name",
     "age"
   ],
-  "description": "Current Type: {@link IPerson}"
+  "additionalProperties": false,
+  "$defs": {}
 }

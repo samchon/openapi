@@ -22,13 +22,6 @@ export const test_claude_parameters_separate_object_additionalProperties =
       true,
     );
 
-export const test_deepseek_parameters_separate_object_additionalProperties =
-  (): void =>
-    validate_llm_parameters_separate_object_additionalProperties(
-      "deepseek",
-      true,
-    );
-
 export const test_gemini_parameters_separate_object_additionalProperties =
   (): void =>
     TestValidator.error("Geimini does not support additionalProperties")(() =>
@@ -37,10 +30,6 @@ export const test_gemini_parameters_separate_object_additionalProperties =
         false,
       ),
     );
-
-export const test_llama_parameters_separate_object_additionalProperties =
-  (): void =>
-    validate_llm_parameters_separate_object_additionalProperties("llama", true);
 
 export const test_llm_v30_parameters_separate_object_additionalProperties =
   (): void => {
@@ -68,7 +57,9 @@ const validate_llm_parameters_separate_object_additionalProperties = <
         ) &&
         (constraint
           ? (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined
-          : s.description?.includes("@contentMediaType") === true),
+          : (s as OpenApi.IJsonSchema.IString).description?.includes(
+              "@contentMediaType",
+            ) === true),
       parameters: schema as any,
     });
   const params: ILlmSchema.IParameters<Model> = schema(

@@ -7,32 +7,38 @@ import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 
 export const test_chatgpt_function_calling_default = () =>
   validate_llm_function_calling_default({
-    vendor: "openai/gpt-4o",
+    vendor: "openai/gpt-4.1",
     application: typia.llm.application<IApplication, "chatgpt">(),
   });
 
 export const test_claude_function_calling_default = () =>
   validate_llm_function_calling_default({
-    vendor: "anthropic/claude-3.5-sonnet",
+    vendor: "anthropic/claude-sonnet-4.5",
     application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_deepseek_function_calling_default = () =>
   validate_llm_function_calling_default({
-    vendor: "deepseek/deepseek-chat-v3",
-    application: typia.llm.application<IApplication, "deepseek">(),
+    vendor: "deepseek/deepseek-v3.1-terminus:exacto",
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_gemini_function_calling_default = () =>
   validate_llm_function_calling_default({
-    vendor: "google/gemini-pro-1.5",
+    vendor: "google/gemini-2.5-pro",
     application: typia.llm.application<IApplication, "gemini">(),
   });
 
 export const test_llama_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "llama">(),
+    application: typia.llm.application<IApplication, "claude">(),
+  });
+
+export const test_qwen_function_calling_default = () =>
+  validate_llm_function_calling_default({
+    vendor: "qwen/qwen3-next-80b-a3b-instruct",
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 const validate_llm_function_calling_default = <
@@ -74,9 +80,7 @@ const validate_llm_function_calling_default = <
   });
 
 interface IApplication {
-  /**
-   * Enroll a person to the restaurant reservation list.
-   */
+  /** Enroll a person to the restaurant reservation list. */
   enroll(person: IPerson): void;
 }
 interface IPerson {

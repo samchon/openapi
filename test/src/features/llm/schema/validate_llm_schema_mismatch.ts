@@ -14,14 +14,8 @@ export const test_chatgpt_schema_mismatch = (): void =>
 export const test_claude_schema_mismatch = (): void =>
   validate_llm_schema_mismatch("claude");
 
-export const test_deepseek_schema_mismatch = (): void =>
-  validate_llm_schema_mismatch("deepseek");
-
 export const test_gemini_schema_mismatch = (): void =>
   validate_llm_schema_mismatch("gemini");
-
-export const test_llama_schema_mismatch = (): void =>
-  validate_llm_schema_mismatch("llama");
 
 export const test_llm_v30_schema_mismatch = (): void =>
   validate_llm_schema_mismatch("3.0");

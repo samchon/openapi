@@ -1,0 +1,14 @@
+{
+  "trial": 3,
+  "success": false,
+  "errors": [
+    {
+      "path": "$input.shape",
+      "expected": "(ICircle | IPolygon | IRectangle)",
+      "value": null
+    }
+  ],
+  "data": {
+    "shape": null
+  }
+}

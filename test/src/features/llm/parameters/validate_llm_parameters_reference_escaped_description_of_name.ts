@@ -16,17 +16,9 @@ export const test_claude_parameters_reference_escaped_description_of_name =
   (): void =>
     validate_llm_parameters_reference_escaped_description_of_name("claude");
 
-export const test_deepseek_parameters_reference_escaped_description_of_name =
-  (): void =>
-    validate_llm_parameters_reference_escaped_description_of_name("deepseek");
-
 export const test_gemini_parameters_reference_escaped_description_of_name =
   (): void =>
     validate_llm_parameters_reference_escaped_description_of_name("gemini");
-
-export const test_llama_parameters_reference_escaped_description_of_name =
-  (): void =>
-    validate_llm_parameters_reference_escaped_description_of_name("llama");
 
 export const test_llm_v30_parameters_reference_escaped_description_of_name =
   (): void =>

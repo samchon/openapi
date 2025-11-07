@@ -8,40 +8,28 @@ import { StopWatch } from "../utils/StopWatch";
 
 const VENDORS = [
   [
-    "openai/gpt-4o",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "chatgpt",
-      { reference: true }
-    >(),
+    "openai/gpt-4.1",
+    typia.llm.application<ShoppingSalePrompt.IApplication, "chatgpt">(),
   ],
   [
-    "anthropic/claude-3.5-sonnet",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "claude",
-      { reference: true }
-    >(),
+    "anthropic/claude-sonnet-4.5",
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
   [
-    "deepseek/deepseek-chat-v3",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "deepseek",
-      { reference: true }
-    >(),
+    "deepseek/deepseek-v3.1-terminus:exacto",
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
   [
-    "google/gemini-pro-1.5",
+    "google/gemini-2.5-pro",
     typia.llm.application<ShoppingSalePrompt.IApplication, "gemini">(),
   ],
   [
     "meta-llama/llama-3.3-70b-instruct",
-    typia.llm.application<
-      ShoppingSalePrompt.IApplication,
-      "llama",
-      { reference: true }
-    >(),
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
+  ],
+  [
+    "qwen/qwen3-next-80b-a3b-instruct",
+    typia.llm.application<ShoppingSalePrompt.IApplication, "claude">(),
   ],
 ] as const;
 
@@ -53,7 +41,7 @@ const main = async (): Promise<void> => {
           LlmFunctionCaller.test({
             vendor,
             model: application.model,
-            function: application.functions[0],
+            function: application.functions[0] as any,
             texts: await ShoppingSalePrompt.texts(title),
             handleCompletion: async (input) => {
               await fs.promises.writeFile(

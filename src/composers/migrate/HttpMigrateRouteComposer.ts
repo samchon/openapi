@@ -340,8 +340,8 @@ export namespace HttpMigrateRouteComposer {
     add("@param connection");
     for (const p of props.parameters ?? []) {
       const param = p.parameter();
-      if (param.description || param.title) {
-        const text: string = (param.description ?? param.title)!;
+      if (param.description) {
+        const text: string = param.description!;
         add(`@param ${p.name} ${writeIndented(text, p.name.length + 8)}`);
       }
     }

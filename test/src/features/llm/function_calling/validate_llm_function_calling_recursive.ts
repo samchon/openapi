@@ -7,26 +7,32 @@ import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 
 export const test_chatgpt_function_calling_recursive = () =>
   validate_llm_function_calling_recursive({
-    vendor: "openai/gpt-4o",
+    vendor: "openai/gpt-4.1",
     application: typia.llm.application<IApplication, "chatgpt">(),
   });
 
 export const test_claude_function_calling_recursive = () =>
   validate_llm_function_calling_recursive({
-    vendor: "anthropic/claude-3.5-sonnet",
+    vendor: "anthropic/claude-sonnet-4.5",
     application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_deepseek_function_calling_recursive = () =>
   validate_llm_function_calling_recursive({
-    vendor: "deepseek/deepseek-chat-v3",
-    application: typia.llm.application<IApplication, "deepseek">(),
+    vendor: "deepseek/deepseek-v3.1-terminus:exacto",
+    application: typia.llm.application<IApplication, "claude">(),
+  });
+
+export const test_gemini_function_calling_recursive = () =>
+  validate_llm_function_calling_recursive({
+    vendor: "google/gemini-2.5-pro",
+    application: typia.llm.application<IApplication, "gemini">(),
   });
 
 export const test_llama_function_calling_recursive = () =>
   validate_llm_function_calling_recursive({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "llama">(),
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 const validate_llm_function_calling_recursive = <
@@ -68,9 +74,7 @@ const validate_llm_function_calling_recursive = <
   });
 
 interface IApplication {
-  /**
-   * Compose categories from the input.
-   */
+  /** Compose categories from the input. */
   commpose(props: IComposeProps): void;
 }
 
@@ -79,19 +83,13 @@ interface IComposeProps {
 }
 
 interface IShoppingCategory {
-  /**
-   * Identifier code of the category.
-   */
+  /** Identifier code of the category. */
   code: string & tags.Pattern<"^[a-z0-9_]+$">;
 
-  /**
-   * Name of the category.
-   */
+  /** Name of the category. */
   name: string;
 
-  /**
-   * Children categories belong to this category.
-   */
+  /** Children categories belong to this category. */
   children: IShoppingCategory[];
 }
 

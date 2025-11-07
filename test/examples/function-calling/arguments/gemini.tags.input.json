@@ -1,11 +1,18 @@
 {
   "trial": 3,
-  "success": true,
+  "success": false,
+  "errors": [
+    {
+      "path": "$input.time",
+      "expected": "string & Format<\"date-time\">",
+      "value": "<USER-PROVIDED-TIME>"
+    }
+  ],
   "data": {
-    "temporary": false,
     "reasons": [
       "marketing sales"
     ],
-    "time": "2024-07-25T12:10:32.440082Z"
+    "temporary": false,
+    "time": "<USER-PROVIDED-TIME>"
   }
 }

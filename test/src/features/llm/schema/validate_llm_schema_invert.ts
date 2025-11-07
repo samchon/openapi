@@ -9,14 +9,8 @@ export const test_chatgpt_schema_invert = () =>
 export const test_claude_schema_invert = () =>
   validate_llm_schema_invert("claude");
 
-export const test_deepseek_schema_invert = () =>
-  validate_llm_schema_invert("deepseek");
-
 export const test_gemini_schema_invert = () =>
   validate_llm_schema_invert("gemini");
-
-export const test_llama_schema_invert = () =>
-  validate_llm_schema_invert("llama");
 
 export const test_llm_v30_schema_invert = () =>
   validate_llm_schema_invert("3.0");

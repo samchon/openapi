@@ -1,4 +1,5 @@
 import { OpenApi } from "../../OpenApi";
+import { IJsonSchemaAttribute } from "../../structures/IJsonSchemaAttribute";
 import { ILlmFunction } from "../../structures/ILlmFunction";
 import { ILlmSchemaV3_1 } from "../../structures/ILlmSchemaV3_1";
 import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
@@ -83,7 +84,7 @@ export namespace LlmSchemaV3_1Composer {
     refAccessor?: string;
   }): IResult<ILlmSchemaV3_1, IOpenApiSchemaError> => {
     const union: Array<ILlmSchemaV3_1 | null> = [];
-    const attribute: ILlmSchemaV3_1.__IAttribute = {
+    const attribute: IJsonSchemaAttribute = {
       title: props.schema.title,
       description: props.schema.description,
       example: props.schema.example,

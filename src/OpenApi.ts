@@ -179,9 +179,9 @@ export namespace OpenApi {
      * When this property is configured, it will be overwritten in every API
      * route.
      *
-     * For reference, the key means the name of the security scheme and the value means the
-     * `scopes`. The `scopes` can be used only when the target security scheme is
-     * `oauth2` type, especially for
+     * For reference, the key means the name of the security scheme and the
+     * value means the `scopes`. The `scopes` can be used only when the target
+     * security scheme is `oauth2` type, especially for
      * {@link ISwaggerSecurityScheme.IOAuth2.IFlow.scopes} property.
      */
     security?: Record<string, string[]>[];
@@ -361,8 +361,8 @@ export namespace OpenApi {
      * List of securities and their scopes that are required for execution.
      *
      * When this property is configured, the RESTful API operation requires the
-     * matching security value for execution. Its key means the security key matching
-     * {@link OpenApi.IDocument.security}.
+     * matching security value for execution. Its key means the security key
+     * matching {@link OpenApi.IDocument.security}.
      *
      * The value means scopes required for the security key when the security
      * type is {@link OpenApi.ISecurityScheme.IOAuth2}. Otherwise, if the target
@@ -426,9 +426,9 @@ export namespace OpenApi {
        * Therefore, the `name` must be filled with the significant variable name
        * of the parameter.
        *
-       * Note: Only when the {@link in} property is `path`, the `name` can
-       * be omitted. In that case, the `name` is automatically deduced from the
-       * URL path's positional template argument analysis.
+       * Note: Only when the {@link in} property is `path`, the `name` can be
+       * omitted. In that case, the `name` is automatically deduced from the URL
+       * path's positional template argument analysis.
        */
       name?: string;
 
@@ -547,8 +547,8 @@ export namespace OpenApi {
    * `OpenApi.IJsonSchema` is a type schema info for OpenAPI.
    *
    * `OpenApi.IJsonSchema` basically follows the JSON schema definition of
-   * OpenAPI v3.1, but is refined to remove ambiguous and duplicated
-   * expressions of OpenAPI v3.1 for convenience and clarity.
+   * OpenAPI v3.1, but is refined to remove ambiguous and duplicated expressions
+   * of OpenAPI v3.1 for convenience and clarity.
    *
    * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
    * - Resolve nullable property:
@@ -938,26 +938,6 @@ export namespace OpenApi {
       /** Default value of the `any` type. */
       default?: any;
     }
-
-    /**
-     * Significant attributes that can be applied to the most types.
-     *
-     * @ignore
-     * @deprecated
-     */
-    export interface __ISignificant<Type extends string>
-      extends IJsonSchemaAttribute {
-      /** Discriminator value of the type. */
-      type: Type;
-    }
-
-    /**
-     * Common attributes that can be applied to all types.
-     *
-     * @ignore
-     * @deprecated
-     */
-    export type __IAttribute = IJsonSchemaAttribute;
   }
 
   /**

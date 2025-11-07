@@ -1,22 +1,24 @@
 {
+  "description": "Description of the current {@link IMember} type:\n\n> Membership information.",
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
-      "description": "Name of the member."
+      "description": "Name of the member.",
+      "type": "string"
     },
     "age": {
-      "type": "number",
-      "description": "Age of the member."
+      "description": "Age of the member.",
+      "type": "number"
     },
     "hobby": {
-      "type": "string",
-      "description": "Hobby of the member."
+      "description": "Hobby of the member.",
+      "type": "string"
     }
   },
   "required": [
     "name",
     "age"
   ],
-  "description": "Description of the current {@link IMember} type:\n\n> Membership information."
+  "additionalProperties": false,
+  "$defs": {}
 }

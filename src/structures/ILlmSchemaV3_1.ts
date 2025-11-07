@@ -5,16 +5,16 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  *
  * `ILlmSchemaV3_1` is type metadata for LLM (Large Language Model) function
  * calling, based on the OpenAPI v3.1 specification. This type is not the final
- * type for LLM function calling, but an intermediate structure for
- * conversion to the final types:
+ * type for LLM function calling, but an intermediate structure for conversion
+ * to the final types:
  *
  * - {@link IChatGptSchema}
  * - {@link IClaudeSchema}
  * - {@link ILlamaSchema}
  *
- * However, `ILlmSchemaV3_1` does not follow the entire OpenAPI v3.1 specification.
- * It has specific restrictions and definitions. Here are the differences between
- * `ILlmSchemaV3_1` and the OpenAPI v3.1 JSON schema:
+ * However, `ILlmSchemaV3_1` does not follow the entire OpenAPI v3.1
+ * specification. It has specific restrictions and definitions. Here are the
+ * differences between `ILlmSchemaV3_1` and the OpenAPI v3.1 JSON schema:
  *
  * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
  * - Resolve nullable property:
@@ -344,11 +344,11 @@ export namespace ILlmSchemaV3_1 {
      *
      * If the value is `true`, it means that the additional properties are not
      * restricted. They can be any type. Otherwise, if the value is
-     * {@link IOpenAiSchema} type, it means that the additional properties must
+     * {@link ILlmSchemaV3_1} type, it means that the additional properties must
      * follow the type schema info.
      *
      * - `true`: `Record<string, any>`
-     * - `IOpenAiSchema`: `Record<string, T>`
+     * - `ILlmSchemaV3_1`: `Record<string, T>`
      */
     additionalProperties?: boolean | ILlmSchemaV3_1;
 
@@ -447,23 +447,4 @@ export namespace ILlmSchemaV3_1 {
 
   /** Unknown, the `any` type. */
   export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /**
-   * Significant attributes that can be applied to the most types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export interface __ISignificant<Type extends string> extends __IAttribute {
-    /** Discriminator value of the type. */
-    type: Type;
-  }
-
-  /**
-   * Common attributes that can be applied to all types.
-   *
-   * @ignore
-   * @deprecated
-   */
-  export type __IAttribute = IJsonSchemaAttribute;
 }

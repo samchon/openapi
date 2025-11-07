@@ -22,18 +22,8 @@ export const test_claude_application_separate = async (): Promise<void> => {
   await validate_llm_application_separate("claude", true);
 };
 
-export const test_deepseek_application_separate = async (): Promise<void> => {
-  await validate_llm_application_separate("deepseek", false);
-  await validate_llm_application_separate("deepseek", true);
-};
-
 export const test_gemini_application_separate = async (): Promise<void> => {
   await validate_llm_application_separate("gemini", false);
-};
-
-export const test_llama_application_separate = async (): Promise<void> => {
-  await validate_llm_application_separate("llama", false);
-  await validate_llm_application_separate("llama", true);
 };
 
 export const test_llm_v30_application_separate = async (): Promise<void> => {

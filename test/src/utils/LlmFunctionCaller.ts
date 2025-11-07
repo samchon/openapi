@@ -20,7 +20,11 @@ export namespace LlmFunctionCaller {
   export const test = async <Model extends ILlmSchema.Model>(
     props: IProps<Model>,
   ) => {
-    if (TestGlobal.env.OPENROUTER_API_KEY === undefined) return false;
+    if (
+      TestGlobal.env.OPENAI_API_KEY === undefined ||
+      TestGlobal.env.OPENROUTER_API_KEY === undefined
+    )
+      return false;
     if (props.handleParameters)
       await props.handleParameters(props.function.parameters);
 
@@ -28,7 +32,7 @@ export namespace LlmFunctionCaller {
     let trial: number = 0;
     for (trial; trial < 3; ++trial) {
       if (result && result.success === true) break;
-      result = await step(props, TestGlobal.env.OPENROUTER_API_KEY, result);
+      result = await step(props, result);
     }
     await props.handleCompletion({
       trial,
@@ -38,20 +42,24 @@ export namespace LlmFunctionCaller {
 
   const step = async <Model extends ILlmSchema.Model>(
     props: IProps<Model>,
-    apiKey: string,
     previous?: IValidation.IFailure,
   ): Promise<IValidation<any>> => {
     const client: OpenAI = new OpenAI({
-      baseURL: "https://openrouter.ai/api/v1",
-      apiKey,
+      baseURL: props.vendor.startsWith("openai/")
+        ? undefined
+        : "https://openrouter.ai/api/v1",
+      apiKey: props.vendor.startsWith("openai/")
+        ? TestGlobal.env.OPENAI_API_KEY
+        : TestGlobal.env.OPENROUTER_API_KEY,
     });
     const completion: OpenAI.ChatCompletion =
       await client.chat.completions.create({
-        model: props.vendor,
+        model: props.vendor.startsWith("openai/")
+          ? props.vendor.split("/").at(-1)!
+          : props.vendor,
         messages: previous
           ? [
               ...props.texts.slice(0, -1),
-
               {
                 role: "assistant",
                 content: [

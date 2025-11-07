@@ -7,32 +7,38 @@ import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 
 export const test_chatgpt_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
-    vendor: "openai/gpt-4o",
+    vendor: "openai/gpt-4.1",
     application: typia.llm.application<IApplication, "chatgpt">(),
   });
 
 export const test_claude_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
-    vendor: "anthropic/claude-3.5-sonnet",
+    vendor: "anthropic/claude-sonnet-4.5",
     application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_deepseek_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
-    vendor: "deepseek/deepseek-chat-v3",
-    application: typia.llm.application<IApplication, "deepseek">(),
+    vendor: "deepseek/deepseek-v3.1-terminus:exacto",
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 export const test_gemini_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
-    vendor: "google/gemini-pro-1.5",
+    vendor: "google/gemini-2.5-pro",
     application: typia.llm.application<IApplication, "gemini">(),
   });
 
 export const test_llama_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "llama">(),
+    application: typia.llm.application<IApplication, "claude">(),
+  });
+
+export const test_qwen_function_calling_optional = () =>
+  validate_chatgpt_function_calling_optional({
+    vendor: "qwen/qwen3-next-80b-a3b-instruct",
+    application: typia.llm.application<IApplication, "claude">(),
   });
 
 const validate_chatgpt_function_calling_optional = <
@@ -74,29 +80,19 @@ const validate_chatgpt_function_calling_optional = <
   });
 
 interface IApplication {
-  /**
-   * Register a membership.
-   */
+  /** Register a membership. */
   register(member: IMember): void;
 }
 
-/**
- * Membership information.
- */
+/** Membership information. */
 interface IMember {
-  /**
-   * Name of the member.
-   */
+  /** Name of the member. */
   name: string;
 
-  /**
-   * Age of the member.
-   */
+  /** Age of the member. */
   age: number;
 
-  /**
-   * Hobby of the member.
-   */
+  /** Hobby of the member. */
   hobby?: string;
 }
 

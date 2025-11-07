@@ -14,7 +14,6 @@
  * - {@link IClaudeSchema}
  * - {@link IGeminiSchema}
  * - {@link ILlmSchemaV3}
- * - {@link ILlmSchemaV3_1}
  *
  * For example, if you extend the `IJsonSchemaAttribute` interface like below,
  * every JSON schema types in `@samchon/openapi` will have a new custom
