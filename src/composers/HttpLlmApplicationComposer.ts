@@ -137,7 +137,6 @@ export namespace HttpLlmComposer {
               s.key,
               {
                 ...s.schema,
-                title: s.parameter().title ?? s.schema.title,
                 description: s.parameter().description ?? s.schema.description,
               },
             ] as const,
