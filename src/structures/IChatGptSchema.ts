@@ -102,6 +102,46 @@ export type IChatGptSchema =
   | IChatGptSchema.INull
   | IChatGptSchema.IUnknown;
 export namespace IChatGptSchema {
+  /** Configuration for ChatGPT schema composition. */
+  export interface IConfig {
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link IChatGptSchema.IReference} would be escaped to a
+     * plain type unless recursive type case.
+     *
+     * This is because the lower version of ChatGPT does not understand the
+     * reference type well, and even the modern version of ChatGPT sometimes
+     * occur the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that
+     * reduces the LLM token cost. Therefore, if you're using the modern version
+     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
+     * property to `true`.
+     *
+     * @default true
+     */
+    reference: boolean;
+
+    /**
+     * Whether to apply the strict mode.
+     *
+     * If you configure this property to `true`, the ChatGPT function calling
+     * does not allow optional properties and dynamic key typed properties in
+     * the {@link IChatGptSchema.IObject} type. Instead, it increases the success
+     * rate of the function calling.
+     *
+     * By the way, if you utilize the {@link typia.validate} function and give
+     * its validation feedback to the ChatGPT, its performance is much better
+     * than the strict mode. Therefore, I recommend you to just turn off the
+     * strict mode and utilize the {@link typia.validate} function instead.
+     *
+     * @default false
+     */
+    strict?: boolean;
+  }
+
   /**
    * Type for function parameters.
    *
@@ -132,24 +172,40 @@ export namespace IChatGptSchema {
   export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
     /** Enumeration values. */
     enum?: Array<boolean>;
+
+    /** Default value. */
+    default?: boolean;
   }
 
   /** Integer type info. */
   export interface IInteger extends IJsonSchemaAttribute.IInteger {
     /** Enumeration values. */
     enum?: Array<number>;
+
+    /**
+     * Default value.
+     *
+     * @type int64
+     */
+    default?: number;
   }
 
   /** Number (double) type info. */
   export interface INumber extends IJsonSchemaAttribute.INumber {
     /** Enumeration values. */
     enum?: Array<number>;
+
+    /** Default value. */
+    default?: number;
   }
 
   /** String type info. */
   export interface IString extends IJsonSchemaAttribute.IString {
     /** Enumeration values. */
     enum?: Array<string>;
+
+    /** Default value. */
+    default?: string;
   }
 
   /** Array type info. */
@@ -284,44 +340,4 @@ export namespace IChatGptSchema {
 
   /** Unknown, the `any` type. */
   export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /** Configuration for ChatGPT schema composition. */
-  export interface IConfig {
-    /**
-     * Whether to allow reference type in everywhere.
-     *
-     * If you configure this property to `false`, most of reference types
-     * represented by {@link IChatGptSchema.IReference} would be escaped to a
-     * plain type unless recursive type case.
-     *
-     * This is because the lower version of ChatGPT does not understand the
-     * reference type well, and even the modern version of ChatGPT sometimes
-     * occur the hallucination.
-     *
-     * However, the reference type makes the schema size smaller, so that
-     * reduces the LLM token cost. Therefore, if you're using the modern version
-     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
-     * property to `true`.
-     *
-     * @default true
-     */
-    reference: boolean;
-
-    /**
-     * Whether to apply the strict mode.
-     *
-     * If you configure this property to `true`, the ChatGPT function calling
-     * does not allow optional properties and dynamic key typed properties in
-     * the {@link IChatGptSchema.IObject} type. Instead, it increases the success
-     * rate of the function calling.
-     *
-     * By the way, if you utilize the {@link typia.validate} function and give
-     * its validation feedback to the ChatGPT, its performance is much better
-     * than the strict mode. Therefore, I recommend you to just turn off the
-     * strict mode and utilize the {@link typia.validate} function instead.
-     *
-     * @default false
-     */
-    strict?: boolean;
-  }
 }

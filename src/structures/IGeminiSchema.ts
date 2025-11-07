@@ -71,6 +71,29 @@ export type IGeminiSchema =
   | IGeminiSchema.INull
   | IGeminiSchema.IUnknown;
 export namespace IGeminiSchema {
+  /** Configuration for the Gemini schema composition. */
+  export interface IConfig {
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link IGeminiSchema.IReference} would be escaped to a
+     * plain type unless recursive type case.
+     *
+     * This is because the lower version of ChatGPT does not understand the
+     * reference type well, and even the modern version of ChatGPT sometimes
+     * occur the hallucination.
+     *
+     * However, the reference type makes the schema size smaller, so that
+     * reduces the LLM token cost. Therefore, if you're using the modern version
+     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
+     * property to `true`.
+     *
+     * @default true
+     */
+    reference: boolean;
+  }
+
   /**
    * Type for function parameters.
    *
@@ -101,18 +124,78 @@ export namespace IGeminiSchema {
   export interface IBoolean extends IJsonSchemaAttribute.IBoolean {
     /** Enumeration values. */
     enum?: Array<boolean>;
+
+    /** Default value. */
+    default?: boolean;
   }
 
   /** Integer type info. */
   export interface IInteger extends IJsonSchemaAttribute.IInteger {
     /** Enumeration values. */
     enum?: Array<number>;
+
+    /**
+     * Default value.
+     *
+     * @type int64
+     */
+    default?: number;
+
+    /**
+     * Minimum value restriction.
+     *
+     * @type int64
+     */
+    minimum?: number;
+
+    /**
+     * Maximum value restriction.
+     *
+     * @type int64
+     */
+    maximum?: number;
+
+    /** Exclusive minimum value restriction. */
+    exclusiveMinimum?: number;
+
+    /** Exclusive maximum value restriction. */
+    exclusiveMaximum?: number;
+
+    /**
+     * Multiple of value restriction.
+     *
+     * @type uint64
+     * @exclusiveMinimum 0
+     */
+    multipleOf?: number;
   }
 
   /** Number (double) type info. */
   export interface INumber extends IJsonSchemaAttribute.INumber {
     /** Enumeration values. */
     enum?: Array<number>;
+
+    /** Default value. */
+    default?: number;
+
+    /** Minimum value restriction. */
+    minimum?: number;
+
+    /** Maximum value restriction. */
+    maximum?: number;
+
+    /** Exclusive minimum value restriction. */
+    exclusiveMinimum?: number;
+
+    /** Exclusive maximum value restriction. */
+    exclusiveMaximum?: number;
+
+    /**
+     * Multiple of value restriction.
+     *
+     * @exclusiveMinimum 0
+     */
+    multipleOf?: number;
   }
 
   /** String type info. */
@@ -324,27 +407,4 @@ export namespace IGeminiSchema {
 
   /** Unknown, the `any` type. */
   export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
-
-  /** Configuration for the Gemini schema composition. */
-  export interface IConfig {
-    /**
-     * Whether to allow reference type in everywhere.
-     *
-     * If you configure this property to `false`, most of reference types
-     * represented by {@link IGeminiSchema.IReference} would be escaped to a
-     * plain type unless recursive type case.
-     *
-     * This is because the lower version of ChatGPT does not understand the
-     * reference type well, and even the modern version of ChatGPT sometimes
-     * occur the hallucination.
-     *
-     * However, the reference type makes the schema size smaller, so that
-     * reduces the LLM token cost. Therefore, if you're using the modern version
-     * of ChatGPT, and want to reduce the LLM token cost, you can configure this
-     * property to `true`.
-     *
-     * @default true
-     */
-    reference: boolean;
-  }
 }

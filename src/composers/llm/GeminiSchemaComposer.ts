@@ -138,7 +138,7 @@ export namespace GeminiSchemaComposer {
                   config: props.config,
                   schema: input.additionalProperties,
                 })
-              : input.additionalProperties,
+              : (input.additionalProperties ?? false),
           description: JsonDescriptionUtil.take(input),
         });
       else if (LlmTypeCheckerV3_1.isConstant(input) === false)
