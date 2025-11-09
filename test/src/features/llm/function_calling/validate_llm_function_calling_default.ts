@@ -3,54 +3,60 @@ import fs from "fs";
 import typia, { tags } from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
+import { LlmApplicationFactory } from "../../../utils/LlmApplicationFactory";
 import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 
 export const test_chatgpt_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "openai/gpt-4.1",
-    application: typia.llm.application<IApplication, "chatgpt">(),
+    model: "chatgpt",
   });
 
 export const test_claude_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "anthropic/claude-sonnet-4.5",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
 export const test_deepseek_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "deepseek/deepseek-v3.1-terminus:exacto",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
 export const test_gemini_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "google/gemini-2.5-pro",
-    application: typia.llm.application<IApplication, "gemini">(),
+    model: "gemini",
   });
 
 export const test_llama_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
 export const test_qwen_function_calling_default = () =>
   validate_llm_function_calling_default({
     vendor: "qwen/qwen3-next-80b-a3b-instruct",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
-const validate_llm_function_calling_default = <
+const validate_llm_function_calling_default = async <
   Model extends ILlmSchema.Model,
 >(props: {
   vendor: string;
-  application: ILlmApplication<Model>;
-}) =>
-  LlmFunctionCaller.test({
+  model: Model;
+}) => {
+  const application: ILlmApplication<Model> =
+    LlmApplicationFactory.convert<Model>({
+      model: props.model,
+      application: typia.json.application<IApplication>(),
+    });
+  return await LlmFunctionCaller.test({
     vendor: props.vendor,
-    model: props.application.model,
-    function: props.application.functions[0],
+    model: props.model,
+    function: application.functions[0],
     texts: [
       {
         role: "assistant",
@@ -64,7 +70,7 @@ const validate_llm_function_calling_default = <
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/${props.application.model}.default.schema.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/${props.model}.default.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -72,12 +78,13 @@ const validate_llm_function_calling_default = <
     handleCompletion: async (input) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/${props.application.model}.default.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/${props.model}.default.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );
     },
   });
+};
 
 interface IApplication {
   /** Enroll a person to the restaurant reservation list. */
