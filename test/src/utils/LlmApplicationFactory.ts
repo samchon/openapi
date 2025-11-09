@@ -44,13 +44,15 @@ export namespace LlmApplicationFactory {
     > = LlmSchemaComposer.parameters(props.model)({
       config: props.options as any,
       components: props.components,
-      schema: props.function.parameters[0] as any,
+      schema: props.function.parameters[0].schema as any,
     }) satisfies IResult<
       ILlmSchema.IParameters,
       IOpenApiSchemaError
     > as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
-    if (parameters.success === false)
-      throw new Error("Failed to compose schema.");
+    if (parameters.success === false) {
+      console.log(JSON.stringify(parameters.error, null, 2));
+      throw new Error("Failed to compose parameters schema.");
+    }
     const out = (
       schema: ILlmSchema<Model> | undefined,
     ): ILlmFunction<Model> => ({
@@ -60,7 +62,7 @@ export namespace LlmApplicationFactory {
       output: schema as any,
       validate: OpenApiValidator.create({
         components: props.components,
-        schema: props.function.parameters[0],
+        schema: props.function.parameters[0].schema,
         required: true,
       }),
     });
@@ -72,13 +74,16 @@ export namespace LlmApplicationFactory {
     > = LlmSchemaComposer.schema(props.model)({
       config: props.options as any,
       components: props.components,
-      schema: props.function.output,
+      schema: props.function.output.schema,
       $defs: (parameters.value as any).$defs,
     }) satisfies IResult<ILlmSchema, IOpenApiSchemaError> as IResult<
       ILlmSchema<Model>,
       IOpenApiSchemaError
     >;
-    if (output.success === false) throw new Error("Failed to compose schema.");
+    if (output.success === false) {
+      console.log(JSON.stringify(output.error), null, 2);
+      throw new Error("Failed to compose output schema.");
+    }
     return out(output.value as any);
   };
 }

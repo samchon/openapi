@@ -15,7 +15,7 @@ export const test_claude_schema_separate_string = (): void =>
   validate_llm_schema_separate_string("claude", true);
 
 export const test_gemini_schema_separate_string = (): void =>
-  validate_llm_schema_separate_string("gemini", false);
+  validate_llm_schema_separate_string("gemini", true);
 
 export const test_llm_v30_schema_separate_string = (): void => {
   validate_llm_schema_separate_string("3.0", false);

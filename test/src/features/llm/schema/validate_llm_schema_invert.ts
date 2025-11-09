@@ -1,7 +1,7 @@
 import { TestValidator } from "@nestia/e2e";
 import { ILlmSchema } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
-import typia, { tags } from "typia";
+import typia, { IJsonSchemaUnit, tags } from "typia";
 
 export const test_chatgpt_schema_invert = () =>
   validate_llm_schema_invert("chatgpt");
@@ -21,44 +21,37 @@ export const test_llm_v31_schema_invert = () =>
 const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
   model: Model,
 ) => {
-  TestValidator.equals("string")(
-    LlmSchemaComposer.invert(model)({
+  const assert = (title: string, unit: IJsonSchemaUnit): void => {
+    const result = LlmSchemaComposer.schema(model)({
+      config: LlmSchemaComposer.defaultConfig(model) as any,
+      components: unit.components,
+      schema: unit.schema,
+      $defs: {},
+    });
+    if (result.success === false)
+      throw new Error("Failed to compose LLM schema.");
+    const inverted = LlmSchemaComposer.invert(model)({
       components: {},
       $defs: {},
-      schema: typia.llm.schema<
-        string &
-          tags.Format<"uri"> &
-          tags.ContentMediaType<"image/*"> &
-          tags.MinLength<0> &
-          tags.MaxLength<128>,
-        "chatgpt"
-      >({}),
-    } as any),
-  )(
+      schema: result.value,
+    } as any);
+    TestValidator.equals(title, (key) => key === "description")(inverted)(
+      unit.schema,
+    );
+  };
+
+  assert(
+    "string",
     typia.json.schema<
       string &
         tags.Format<"uri"> &
         tags.ContentMediaType<"image/*"> &
         tags.MinLength<0> &
         tags.MaxLength<128>
-    >().schema,
+    >(),
   );
-
-  TestValidator.equals("integer")(
-    LlmSchemaComposer.invert(model)({
-      components: {},
-      $defs: {},
-      schema: typia.llm.schema<
-        number &
-          tags.Type<"int32"> &
-          tags.ExclusiveMinimum<0> &
-          tags.ExclusiveMaximum<100> &
-          tags.MultipleOf<5> &
-          tags.Default<5>,
-        "chatgpt"
-      >({}),
-    } as any),
-  )(
+  assert(
+    "integer",
     typia.json.schema<
       number &
         tags.Type<"int32"> &
@@ -66,85 +59,26 @@ const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
         tags.ExclusiveMaximum<100> &
         tags.MultipleOf<5> &
         tags.Default<5>
-    >().schema,
+    >(),
   );
-
-  TestValidator.equals("number")(
-    LlmSchemaComposer.invert(model)({
-      components: {},
-      $defs: {},
-      schema: typia.llm.schema<
-        number &
-          tags.ExclusiveMinimum<0> &
-          tags.ExclusiveMaximum<100> &
-          tags.MultipleOf<5>,
-        "chatgpt"
-      >({}),
-    } as any),
-  )(
+  assert(
+    "number",
     typia.json.schema<
       number &
+        tags.Type<"int32"> &
         tags.ExclusiveMinimum<0> &
         tags.ExclusiveMaximum<100> &
-        tags.MultipleOf<5>
-    >().schema,
+        tags.MultipleOf<5> &
+        tags.Default<5>
+    >(),
   );
 
-  TestValidator.equals("array")(
-    LlmSchemaComposer.invert(model)({
-      components: {},
-      $defs: {},
-      schema: typia.llm.schema<
-        Array<string & tags.Pattern<"*">> & tags.UniqueItems,
-        "chatgpt"
-      >({}),
-    } as any),
-  )(
-    typia.json.schema<Array<string & tags.Pattern<"*">> & tags.UniqueItems>()
-      .schema,
+  assert(
+    "array",
+    typia.json.schema<Array<string & tags.Pattern<"*">> & tags.UniqueItems>(),
   );
-
-  TestValidator.equals("number")(
-    LlmSchemaComposer.invert(model)({
-      components: {},
-      $defs: {},
-      schema: typia.llm.schema<
-        number &
-          tags.ExclusiveMinimum<0> &
-          tags.ExclusiveMaximum<100> &
-          tags.MultipleOf<5>,
-        "chatgpt"
-      >({}),
-    } as any),
-  )(
-    typia.json.schema<
-      number &
-        tags.ExclusiveMinimum<0> &
-        tags.ExclusiveMaximum<100> &
-        tags.MultipleOf<5>
-    >().schema,
-  );
-
-  TestValidator.equals(
+  assert(
     "object",
-    (key) => key === "description",
-  )(
-    LlmSchemaComposer.invert(model)({
-      components: {},
-      $defs: {},
-      schema: typia.llm.schema<
-        {
-          /**
-           * List of items.
-           *
-           * List of items containing any string values.
-           */
-          array: Array<string & tags.Pattern<"*">>;
-        },
-        "chatgpt"
-      >({}),
-    } as any),
-  )(
     typia.json.schema<{
       /**
        * List of items.
@@ -152,6 +86,6 @@ const validate_llm_schema_invert = <Model extends ILlmSchema.Model>(
        * List of items containing any string values.
        */
       array: Array<string & tags.Pattern<"*">>;
-    }>().schema,
+    }>(),
   );
 };
