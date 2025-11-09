@@ -48,10 +48,10 @@
     {
       "name": "shoppings_admins_authenticate_join",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Joining request info",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Joining request info",
             "$ref": "#/$defs/IShoppingAdministrator.IJoin"
           }
         },
@@ -73,10 +73,10 @@
     {
       "name": "shoppings_admins_authenticate_login",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Login request info",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Login request info",
             "$ref": "#/$defs/IShoppingMember.ILogin"
           }
         },
@@ -90,12 +90,10 @@
             "type": "object",
             "properties": {
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.\n\n\n@format email",
                 "type": "string"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -112,10 +110,10 @@
     {
       "name": "shoppings_admins_coupons_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the coupon",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the coupon",
             "$ref": "#/$defs/IShoppingCoupon.ICreate"
           }
         },
@@ -125,11 +123,10 @@
         "additionalProperties": false,
         "$defs": {
           "IShoppingCoupon.ICreate": {
-            "description": "Creation information of the coupon.\n\n### Description of {@link restriction} property:\n\n> Restriction information.",
+            "description": "Creation information of the coupon.",
             "type": "object",
             "properties": {
               "discount": {
-                "title": "Discount information",
                 "description": "Discount information.",
                 "anyOf": [
                   {
@@ -141,11 +138,10 @@
                 ]
               },
               "restriction": {
-                "title": "Restriction information",
+                "description": "Restriction information.",
                 "$ref": "#/$defs/IShoppingCouponRestriction"
               },
               "criterias": {
-                "title": "List of criteria information",
                 "description": "List of criteria information.",
                 "type": "array",
                 "items": {
@@ -166,7 +162,6 @@
                 }
               },
               "disposable_codes": {
-                "title": "Disposable codes for the coupon",
                 "description": "Disposable codes for the coupon.",
                 "type": "array",
                 "items": {
@@ -174,12 +169,10 @@
                 }
               },
               "name": {
-                "title": "Representative name of the coupon",
                 "description": "Representative name of the coupon.",
                 "type": "string"
               },
               "opened_at": {
-                "title": "Opening time of the coupon",
                 "description": "Opening time of the coupon.",
                 "anyOf": [
                   {
@@ -192,7 +185,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the coupon",
                 "description": "Closing time of the coupon.\n\nTickets cannot be issued after this time.\n\nHowever, previously issued tickets can still be used until their\nexpiration date.",
                 "anyOf": [
                   {
@@ -220,7 +212,6 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as amount",
                 "description": "Discount unit as amount.\n\nIt means the order price would be discounted by the amount value.",
                 "type": "string",
                 "enum": [
@@ -228,12 +219,10 @@
                 ]
               },
               "value": {
-                "title": "Discount value as amount",
                 "description": "Discount value as amount.",
                 "type": "number"
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "anyOf": [
                   {
@@ -246,7 +235,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order. This property would be meaningful\nonly when the {@link multiplicative} is `true`.",
                 "anyOf": [
                   {
@@ -259,7 +247,6 @@
                 ]
               },
               "multiplicative": {
-                "title": "Multiplicative or not",
                 "description": "Multiplicative or not.\n\nIf this property is `true`, the discount value would be multiplied\nto the {@link IShoppingCartCommodity.volume} or\n{@link IShoppingOrderGood.volume} value. Also, in that case,\nthe {@link limit} property would be meaningful.",
                 "type": "boolean"
               }
@@ -277,7 +264,6 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as percent",
                 "description": "Discount unit as percent.\n\nIt means the order price would be discounted by the percent value.",
                 "type": "string",
                 "enum": [
@@ -285,12 +271,10 @@
                 ]
               },
               "value": {
-                "title": "Discount value as percent",
                 "description": "Discount value as percent.\n\n\n@minimum 0\n@maximum 100",
                 "type": "number"
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "anyOf": [
                   {
@@ -303,7 +287,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order.",
                 "anyOf": [
                   {
@@ -328,7 +311,6 @@
             "type": "object",
             "properties": {
               "access": {
-                "title": "Access level of coupon",
                 "description": "Access level of coupon.\n\n- public: possible to find from public API\n- private: unable to find from public API\n  - arbitrarily assigned by the seller or administrator\n  - issued from one-time link",
                 "type": "string",
                 "enum": [
@@ -337,12 +319,10 @@
                 ]
               },
               "exclusive": {
-                "title": "Exclusivity or not",
                 "description": "Exclusivity or not.\n\nAn exclusive discount coupon refers to a discount coupon that has an\nexclusive relationship with other discount coupons and can only be\nused alone. That is, when an exclusive discount coupon is used, no\nother discount coupon can be used for the same\n{@link IShoppingOrder order} or {@link IShoppingOrderGood good}.\n\nPlease note that this exclusive attribute is a very different concept\nfrom multiplicative, which means whether the same coupon can be\nmultiplied and applied to multiple coupons of the same order, so\nplease do not confuse them.",
                 "type": "boolean"
               },
               "volume": {
-                "title": "Limited quantity issued",
                 "description": "Limited quantity issued.\n\nIf there is a limit to the quantity issued, it becomes impossible\nto issue tickets exceeding this value.\n\nIn other words, the concept of N coupons being issued on\na first-come, first-served basis is created.",
                 "anyOf": [
                   {
@@ -355,7 +335,6 @@
                 ]
               },
               "volume_per_citizen": {
-                "title": "Limited quantity issued per person",
                 "description": "Limited quantity issued per person.\n\nAs a limit to the total amount of issuance per person, it is\ncommon to assign 1 to limit duplicate issuance to the same citizen,\nor to use the NULL value to set no limit.\n\nOf course, by assigning a value of N, the total amount issued\nto the same citizen can be limited.",
                 "anyOf": [
                   {
@@ -368,7 +347,6 @@
                 ]
               },
               "expired_in": {
-                "title": "Expiration day(s) value",
                 "description": "Expiration day(s) value.\n\nThe concept of expiring N days after a discount coupon ticket is issued.\n\nTherefore, customers must use the ticket within N days, if possible,\nfrom the time it is issued.",
                 "anyOf": [
                   {
@@ -381,7 +359,6 @@
                 ]
               },
               "expired_at": {
-                "title": "Expiration date",
                 "description": "Expiration date.\n\nA concept that expires after YYYY-MM-DD after a discount coupon ticket\nis issued.\n\nDouble restrictions are possible with expired_in, of which the one\nwith the shorter expiration date is used.",
                 "anyOf": [
                   {
@@ -408,7 +385,6 @@
             "type": "object",
             "properties": {
               "section_codes": {
-                "title": "List of target section's {@link IShoppingSection.code}s",
                 "description": "List of target section's {@link IShoppingSection.code}s.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -440,7 +416,6 @@
             "type": "object",
             "properties": {
               "seller_ids": {
-                "title": "List of target seller's {@link IShoppingSeller.id}s",
                 "description": "List of target seller's {@link IShoppingSeller.id}s.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -473,7 +448,6 @@
             "type": "object",
             "properties": {
               "sale_ids": {
-                "title": "List of target sale's {@link IShoppingSale.id}s",
                 "description": "List of target sale's {@link IShoppingSale.id}s.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -506,7 +480,6 @@
             "type": "object",
             "properties": {
               "funnels": {
-                "title": "List of target funnels",
                 "description": "List of target funnels.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -545,7 +518,6 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "type": "string",
                 "enum": [
@@ -554,7 +526,6 @@
                 ]
               },
               "value": {
-                "title": "Target value",
                 "description": "Target value.",
                 "type": "string"
               }
@@ -569,7 +540,6 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "type": "string",
                 "enum": [
@@ -577,12 +547,10 @@
                 ]
               },
               "key": {
-                "title": "Target variable's key",
                 "description": "Target variable's key.",
                 "type": "string"
               },
               "value": {
-                "title": "Target variable's value",
                 "description": "Target variable's value.",
                 "type": "string"
               }
@@ -600,10 +568,10 @@
     {
       "name": "shoppings_admins_coupons_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingCoupon.IRequest"
           }
         },
@@ -653,7 +621,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -666,7 +633,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -740,10 +706,10 @@
     {
       "name": "shoppings_admins_deposits_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation information of deposit metadata",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation information of deposit metadata",
             "$ref": "#/$defs/IShoppingDeposit.ICreate"
           }
         },
@@ -782,10 +748,10 @@
     {
       "name": "shoppings_admins_deposits_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingDeposit.IRequest"
           }
         },
@@ -829,7 +795,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -842,7 +807,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -957,10 +921,10 @@
     {
       "name": "shoppings_admins_mileages_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation information of mileage metadata",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation information of mileage metadata",
             "$ref": "#/$defs/IShoppingMileage.ICreate"
           }
         },
@@ -1010,10 +974,10 @@
     {
       "name": "shoppings_admins_mileages_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingMileage.IRequest"
           }
         },
@@ -1057,7 +1021,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -1070,7 +1033,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -1185,10 +1147,10 @@
     {
       "name": "shoppings_admins_mileages_donations_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of mileage donation",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of mileage donation",
             "$ref": "#/$defs/IShoppingMileageDonation.ICreate"
           }
         },
@@ -1224,10 +1186,10 @@
     {
       "name": "shoppings_admins_mileages_donations_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingMileageDonation.IRequest"
           }
         },
@@ -1271,7 +1233,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -1284,7 +1245,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -1411,10 +1371,10 @@
     {
       "name": "shoppings_admins_orders_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingOrder.IRequest"
           }
         },
@@ -1461,7 +1421,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -1474,7 +1433,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -1858,10 +1816,10 @@
     {
       "name": "shoppings_admins_sales_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSale.IRequest"
           }
         },
@@ -1875,7 +1833,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -1924,7 +1881,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -1937,7 +1893,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -1977,7 +1932,6 @@
     {
       "name": "shoppings_admins_sales_questions_comments_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -1989,6 +1943,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -2004,7 +1959,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -2014,12 +1968,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2037,12 +1989,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -2055,7 +2005,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -2073,7 +2022,6 @@
     {
       "name": "shoppings_admins_sales_questions_comments_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2085,6 +2033,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.IRequest"
           }
         },
@@ -2127,7 +2076,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -2140,7 +2088,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -2226,7 +2173,6 @@
     {
       "name": "shoppings_admins_sales_questions_comments_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2242,6 +2188,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -2258,7 +2205,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -2268,12 +2214,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2291,12 +2235,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -2309,7 +2251,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -2350,7 +2291,6 @@
     {
       "name": "shoppings_admins_sales_reviews_comments_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2362,6 +2302,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -2377,7 +2318,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -2387,12 +2327,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2410,12 +2348,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -2428,7 +2364,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -2446,7 +2381,6 @@
     {
       "name": "shoppings_admins_sales_reviews_comments_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2458,6 +2392,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.IRequest"
           }
         },
@@ -2500,7 +2435,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -2513,7 +2447,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -2599,7 +2532,6 @@
     {
       "name": "shoppings_admins_sales_reviews_comments_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2615,6 +2547,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -2631,7 +2564,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -2641,12 +2573,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2664,12 +2594,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -2682,7 +2610,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -2700,7 +2627,6 @@
     {
       "name": "shoppings_admins_sales_reviews_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2708,6 +2634,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleReview.IRequest"
           }
         },
@@ -2722,7 +2649,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "anyOf": [
                   {
@@ -2734,7 +2660,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -2763,7 +2688,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -2776,7 +2700,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -2908,7 +2831,6 @@
     {
       "name": "shoppings_admins_sales_reviews_abridges",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -2916,6 +2838,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleReview.IRequest"
           }
         },
@@ -2930,7 +2853,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "anyOf": [
                   {
@@ -2942,7 +2864,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -2971,7 +2892,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -2984,7 +2904,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -3139,7 +3058,6 @@
     {
       "name": "shoppings_admins_sales_snapshots_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Requestion info of pagination",
         "type": "object",
         "properties": {
           "saleId": {
@@ -3147,6 +3065,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Requestion info of pagination",
             "$ref": "#/$defs/IPage.IRequest"
           }
         },
@@ -3161,7 +3080,6 @@
             "type": "object",
             "properties": {
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -3174,7 +3092,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -3242,7 +3159,6 @@
     {
       "name": "shoppings_admins_systematic_channels_categories_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the category",
         "type": "object",
         "properties": {
           "channelCode": {
@@ -3250,6 +3166,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the category",
             "$ref": "#/$defs/IShoppingChannelCategory.ICreate"
           }
         },
@@ -3264,7 +3181,6 @@
             "type": "object",
             "properties": {
               "parent_id": {
-                "title": "Parent category's ID",
                 "description": "Parent category's ID.",
                 "anyOf": [
                   {
@@ -3277,12 +3193,10 @@
                 ]
               },
               "code": {
-                "title": "Identifier code of the category",
                 "description": "Identifier code of the category.\n\nThe code must be unique in the channel.",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the category",
                 "description": "Representative name of the category.\n\nThe name must be unique within the parent category. If no parent exists,\nthen the name must be unique within the channel between no parent\ncategories.",
                 "type": "string"
               }
@@ -3341,7 +3255,6 @@
     {
       "name": "shoppings_admins_systematic_channels_categories_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the category",
         "type": "object",
         "properties": {
           "channelCode": {
@@ -3353,6 +3266,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the category",
             "$ref": "#/$defs/IShoppingChannelCategory.ICreate"
           }
         },
@@ -3368,7 +3282,6 @@
             "type": "object",
             "properties": {
               "parent_id": {
-                "title": "Parent category's ID",
                 "description": "Parent category's ID.",
                 "anyOf": [
                   {
@@ -3381,12 +3294,10 @@
                 ]
               },
               "code": {
-                "title": "Identifier code of the category",
                 "description": "Identifier code of the category.\n\nThe code must be unique in the channel.",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the category",
                 "description": "Representative name of the category.\n\nThe name must be unique within the parent category. If no parent exists,\nthen the name must be unique within the channel between no parent\ncategories.",
                 "type": "string"
               }
@@ -3404,7 +3315,6 @@
     {
       "name": "shoppings_admins_systematic_channels_categories_merge",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Merge info of the categories",
         "type": "object",
         "properties": {
           "channelCode": {
@@ -3412,6 +3322,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Merge info of the categories",
             "$ref": "#/$defs/IRecordMerge"
           }
         },
@@ -3426,12 +3337,10 @@
             "type": "object",
             "properties": {
               "keep": {
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record.\n\n\n@format uuid",
                 "type": "string"
               },
               "absorbed": {
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging.",
                 "type": "array",
                 "items": {
@@ -3475,10 +3384,10 @@
     {
       "name": "shoppings_admins_systematic_channels_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the channel",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the channel",
             "$ref": "#/$defs/IShoppingChannel.ICreate"
           }
         },
@@ -3492,12 +3401,10 @@
             "type": "object",
             "properties": {
               "code": {
-                "title": "Identifier code",
                 "description": "Identifier code.",
                 "type": "string"
               },
               "name": {
-                "title": "Name of the channel",
                 "description": "Name of the channel.",
                 "type": "string"
               }
@@ -3514,10 +3421,10 @@
     {
       "name": "shoppings_admins_systematic_channels_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingChannel.IRequest"
           }
         },
@@ -3562,7 +3469,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -3575,7 +3481,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -3641,7 +3546,6 @@
     {
       "name": "shoppings_admins_systematic_channels_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the channel",
         "type": "object",
         "properties": {
           "id": {
@@ -3649,6 +3553,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the channel",
             "$ref": "#/$defs/IShoppingChannel.IUpdate"
           }
         },
@@ -3663,7 +3568,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Name of the channel",
                 "description": "Name of the channel.",
                 "type": "string"
               }
@@ -3679,10 +3583,10 @@
     {
       "name": "shoppings_admins_systematic_channels_merge",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of the merge",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of the merge",
             "$ref": "#/$defs/IRecordMerge"
           }
         },
@@ -3696,12 +3600,10 @@
             "type": "object",
             "properties": {
               "keep": {
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record.\n\n\n@format uuid",
                 "type": "string"
               },
               "absorbed": {
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging.",
                 "type": "array",
                 "items": {
@@ -3722,10 +3624,10 @@
     {
       "name": "shoppings_admins_systematic_channels_hierarchical",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingChannel.IRequest"
           }
         },
@@ -3770,7 +3672,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -3783,7 +3684,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -3849,10 +3749,10 @@
     {
       "name": "shoppings_admins_systematic_sections_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the section",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the section",
             "$ref": "#/$defs/IShoppingSection.ICreate"
           }
         },
@@ -3866,12 +3766,10 @@
             "type": "object",
             "properties": {
               "code": {
-                "title": "Identifier code",
                 "description": "Identifier code.",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the section",
                 "description": "Representative name of the section.",
                 "type": "string"
               }
@@ -3888,10 +3786,10 @@
     {
       "name": "shoppings_admins_systematic_sections_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSection.IRequest"
           }
         },
@@ -3936,7 +3834,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -3949,7 +3846,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -4015,7 +3911,6 @@
     {
       "name": "shoppings_admins_systematic_sections_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the section",
         "type": "object",
         "properties": {
           "id": {
@@ -4023,6 +3918,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the section",
             "$ref": "#/$defs/IShoppingSection.IUpdate"
           }
         },
@@ -4037,7 +3933,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Representative name of the section",
                 "description": "Representative name of the section.",
                 "type": "string"
               }
@@ -4053,10 +3948,10 @@
     {
       "name": "shoppings_admins_systematic_sections_merge",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> input Request info of the merge",
         "type": "object",
         "properties": {
           "body": {
+            "description": "input Request info of the merge",
             "$ref": "#/$defs/IRecordMerge"
           }
         },
@@ -4070,12 +3965,10 @@
             "type": "object",
             "properties": {
               "keep": {
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record.\n\n\n@format uuid",
                 "type": "string"
               },
               "absorbed": {
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging.",
                 "type": "array",
                 "items": {
@@ -4114,10 +4007,10 @@
     {
       "name": "shoppings_customers_authenticate_refresh",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Refresh token.",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Refresh token.",
             "$ref": "#/$defs/IShoppingCustomer.IRefresh"
           }
         },
@@ -4155,10 +4048,10 @@
     {
       "name": "shoppings_customers_authenticate_join",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Join information of the member",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Join information of the member",
             "$ref": "#/$defs/IShoppingMember.IJoin"
           }
         },
@@ -4172,12 +4065,10 @@
             "type": "object",
             "properties": {
               "nickname": {
-                "title": "Nickname that uniquely identifies the member",
                 "description": "Nickname that uniquely identifies the member.",
                 "type": "string"
               },
               "citizen": {
-                "title": "Citizen information",
                 "description": "Citizen information.",
                 "anyOf": [
                   {
@@ -4189,12 +4080,10 @@
                 ]
               },
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.\n\n\n@format email",
                 "type": "string"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -4211,13 +4100,11 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number",
                 "description": "Mobile number.\n\n\n@pattern ^[0-9]*$",
                 "x-wrtn-payment-order-mobile": true,
                 "type": "string"
               },
               "name": {
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname.",
                 "x-wrtn-payment-order-citizen": true,
                 "type": "string"
@@ -4235,10 +4122,10 @@
     {
       "name": "shoppings_customers_authenticate_login",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Login request info",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Login request info",
             "$ref": "#/$defs/IShoppingMember.ILogin"
           }
         },
@@ -4252,12 +4139,10 @@
             "type": "object",
             "properties": {
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.\n\n\n@format email",
                 "type": "string"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -4274,10 +4159,10 @@
     {
       "name": "shoppings_customers_authenticate_activate",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Activation information of the citizenship",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Activation information of the citizenship",
             "$ref": "#/$defs/IShoppingCitizen.ICreate"
           }
         },
@@ -4291,13 +4176,11 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number",
                 "description": "Mobile number.\n\n\n@pattern ^[0-9]*$",
                 "x-wrtn-payment-order-mobile": true,
                 "type": "string"
               },
               "name": {
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname.",
                 "x-wrtn-payment-order-citizen": true,
                 "type": "string"
@@ -4315,10 +4198,10 @@
     {
       "name": "shoppings_customers_authenticate_external",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Enroll information of the external user",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Enroll information of the external user",
             "$ref": "#/$defs/IShoppingExternalUser.ICreate"
           }
         },
@@ -4332,7 +4215,6 @@
             "type": "object",
             "properties": {
               "citizen": {
-                "title": "Citizen activation info",
                 "description": "Citizen activation info.",
                 "anyOf": [
                   {
@@ -4344,22 +4226,18 @@
                 ]
               },
               "application": {
-                "title": "Identifier code of the external service",
                 "description": "Identifier code of the external service.\n\nIt can be same with {@link IShoppingChannel.code} in common.",
                 "type": "string"
               },
               "uid": {
-                "title": "Identifier key of external user from the external system",
                 "description": "Identifier key of external user from the external system.",
                 "type": "string"
               },
               "nickname": {
-                "title": "Nickname of external user in the external system",
                 "description": "Nickname of external user in the external system.",
                 "type": "string"
               },
               "password": {
-                "title": "Password of external user from the external system",
                 "description": "Password of external user from the external system.\n\nThis is a password issued to the user by an external service,\nand is by no means the actual user password. However, for\n{@link IShoppingCustomer customers} who entered the same\napplication and code as the current external system user, this is\nto determine whether to view this as a correct external system\nuser or a violation.",
                 "type": "string"
               },
@@ -4381,13 +4259,11 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number",
                 "description": "Mobile number.\n\n\n@pattern ^[0-9]*$",
                 "x-wrtn-payment-order-mobile": true,
                 "type": "string"
               },
               "name": {
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname.",
                 "x-wrtn-payment-order-citizen": true,
                 "type": "string"
@@ -4405,10 +4281,10 @@
     {
       "name": "shoppings_customers_authenticate_password_change",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> New password and current password",
         "type": "object",
         "properties": {
           "body": {
+            "description": "New password and current password",
             "$ref": "#/$defs/IShoppingMember.IPasswordChange"
           }
         },
@@ -4422,12 +4298,10 @@
             "type": "object",
             "properties": {
               "oldbie": {
-                "title": "Current password",
                 "description": "Current password.",
                 "type": "string"
               },
               "newbie": {
-                "title": "The new password to change",
                 "description": "The new password to change.",
                 "type": "string"
               }
@@ -4444,10 +4318,10 @@
     {
       "name": "shoppings_customers_coupons_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingCoupon.IRequest"
           }
         },
@@ -4497,7 +4371,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -4510,7 +4383,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -4566,10 +4438,10 @@
     {
       "name": "shoppings_customers_coupons_tickets_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of coupon ticket",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of coupon ticket",
             "$ref": "#/$defs/IShoppingCouponTicket.ICreate"
           }
         },
@@ -4597,10 +4469,10 @@
     {
       "name": "shoppings_customers_coupons_tickets_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingCouponTicket.IRequest"
           }
         },
@@ -4632,7 +4504,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -4645,7 +4516,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -4685,10 +4555,10 @@
     {
       "name": "shoppings_customers_deposits_charges_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the deposit charge",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the deposit charge",
             "$ref": "#/$defs/IShoppingDepositCharge.ICreate"
           }
         },
@@ -4715,10 +4585,10 @@
     {
       "name": "shoppings_customers_deposits_charges_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingDepositCharge.IRequest"
           }
         },
@@ -4764,7 +4634,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -4777,7 +4646,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -4953,7 +4821,6 @@
     {
       "name": "shoppings_customers_deposits_charges_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Value to change",
         "type": "object",
         "properties": {
           "id": {
@@ -4961,6 +4828,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Value to change",
             "$ref": "#/$defs/IShoppingDepositCharge.ICreate"
           }
         },
@@ -5024,7 +4892,6 @@
     {
       "name": "shoppings_customers_deposits_charges_publish_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the publish",
         "type": "object",
         "properties": {
           "chargeId": {
@@ -5032,6 +4899,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the publish",
             "$ref": "#/$defs/IShoppingDepositChargePublish.ICreate"
           }
         },
@@ -5063,10 +4931,10 @@
     {
       "name": "shoppings_customers_deposits_histories_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingDepositHistory.IRequest"
           }
         },
@@ -5114,7 +4982,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -5127,7 +4994,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -5289,10 +5155,10 @@
     {
       "name": "shoppings_customers_mileages_histories_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingMileageHistory.IRequest"
           }
         },
@@ -5340,7 +5206,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -5353,7 +5218,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -5515,10 +5379,10 @@
     {
       "name": "shoppings_customers_carts_commodities_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the commodity",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the commodity",
             "$ref": "#/$defs/IShoppingCartCommodity.ICreate"
           }
         },
@@ -5532,12 +5396,10 @@
             "type": "object",
             "properties": {
               "sale_id": {
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stocks": {
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -5545,12 +5407,10 @@
                 }
               },
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.\n\n\n@minimum 1",
                 "type": "integer"
               },
               "accumulate": {
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created.",
                 "anyOf": [
                   {
@@ -5573,17 +5433,14 @@
             "type": "object",
             "properties": {
               "unit_id": {
-                "title": "Target unit's {@link IShoppingSaleUnit.id}",
                 "description": "Target unit's {@link IShoppingSaleUnit.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property.\n\n\n@format uuid",
                 "type": "string"
               },
               "choices": {
-                "title": "Creation information of the choices for each descriptive option",
                 "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array.",
                 "type": "array",
                 "items": {
@@ -5591,7 +5448,6 @@
                 }
               },
               "quantity": {
-                "title": "Quantity of the stock to purchase",
                 "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}.\n\n\n@minimum 1",
                 "type": "integer"
               }
@@ -5608,12 +5464,10 @@
             "type": "object",
             "properties": {
               "option_id": {
-                "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                 "description": "Target option's {@link IShoppingSaleUnitOption.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "value": {
-                "title": "Written value about the option",
                 "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer.",
                 "anyOf": [
                   {
@@ -5643,10 +5497,10 @@
     {
       "name": "shoppings_customers_carts_commodities_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingCartCommodity.IRequest"
           }
         },
@@ -5710,7 +5564,6 @@
                 }
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -5723,7 +5576,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -6082,7 +5934,6 @@
     {
       "name": "shoppings_customers_carts_commodities_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the commodity (volume)",
         "type": "object",
         "properties": {
           "id": {
@@ -6090,6 +5941,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the commodity (volume)",
             "$ref": "#/$defs/IShoppingCartCommodity.IUpdate"
           }
         },
@@ -6104,7 +5956,6 @@
             "type": "object",
             "properties": {
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.\n\n\n@minimum 1",
                 "type": "integer"
               }
@@ -6156,10 +6007,10 @@
     {
       "name": "shoppings_customers_carts_commodities_discountable",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info for discountable",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info for discountable",
             "$ref": "#/$defs/IShoppingCartDiscountable.IRequest"
           }
         },
@@ -6202,12 +6053,10 @@
             "type": "object",
             "properties": {
               "sale_id": {
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stocks": {
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -6215,12 +6064,10 @@
                 }
               },
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.\n\n\n@minimum 1",
                 "type": "integer"
               },
               "accumulate": {
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created.",
                 "anyOf": [
                   {
@@ -6243,17 +6090,14 @@
             "type": "object",
             "properties": {
               "unit_id": {
-                "title": "Target unit's {@link IShoppingSaleUnit.id}",
                 "description": "Target unit's {@link IShoppingSaleUnit.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property.\n\n\n@format uuid",
                 "type": "string"
               },
               "choices": {
-                "title": "Creation information of the choices for each descriptive option",
                 "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array.",
                 "type": "array",
                 "items": {
@@ -6261,7 +6105,6 @@
                 }
               },
               "quantity": {
-                "title": "Quantity of the stock to purchase",
                 "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}.\n\n\n@minimum 1",
                 "type": "integer"
               }
@@ -6278,12 +6121,10 @@
             "type": "object",
             "properties": {
               "option_id": {
-                "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                 "description": "Target option's {@link IShoppingSaleUnitOption.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "value": {
-                "title": "Written value about the option",
                 "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer.",
                 "anyOf": [
                   {
@@ -6313,10 +6154,10 @@
     {
       "name": "shoppings_customers_orders_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the order",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the order",
             "$ref": "#/$defs/IShoppingOrder.ICreate"
           }
         },
@@ -6330,7 +6171,6 @@
             "type": "object",
             "properties": {
               "goods": {
-                "title": "List of goods in the order",
                 "description": "List of goods in the order.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -6338,7 +6178,6 @@
                 }
               },
               "name": {
-                "title": "Representative name of the order",
                 "description": "Representative name of the order.\n\nIf omit, the name will be generated automatically.",
                 "anyOf": [
                   {
@@ -6359,12 +6198,10 @@
             "type": "object",
             "properties": {
               "commodity_id": {
-                "title": "Target shopping cart commodity's {@link IShoppingCartCommodity.id}",
                 "description": "Target shopping cart commodity's {@link IShoppingCartCommodity.id}.\n\n`commodity_id` is the primary key of the {@link IShoppingCartCommodity}\nentity, which is the basis of the good to be created. In other words,\nit is the primary key of the shopping cart commodity that the customer\nhas selected and applied for the order.\n\n\n@format uuid",
                 "type": "string"
               },
               "volume": {
-                "title": "Volume of the good",
                 "description": "Volume of the good.\n\nThe value multiplied to {@link IShoppingCartCommodityStock.quantity}.\nIt's purpose is exactly same with {@link IShoppingCartCommodity.volume},\nbut rewritten because the {@link IShoppingCartCommodity} records are reusable\nuntil payment.\n\n\n@minimum 0",
                 "type": "integer"
               }
@@ -6381,10 +6218,10 @@
     {
       "name": "shoppings_customers_orders_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingOrder.IRequest"
           }
         },
@@ -6431,7 +6268,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -6444,7 +6280,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -6810,10 +6645,10 @@
     {
       "name": "shoppings_customers_orders_direct",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the order without a shopping cart composition",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the order without a shopping cart composition",
             "$ref": "#/$defs/IShoppingCartCommodity.ICreate"
           }
         },
@@ -6827,12 +6662,10 @@
             "type": "object",
             "properties": {
               "sale_id": {
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stocks": {
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -6840,12 +6673,10 @@
                 }
               },
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.\n\n\n@minimum 1",
                 "type": "integer"
               },
               "accumulate": {
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created.",
                 "anyOf": [
                   {
@@ -6868,17 +6699,14 @@
             "type": "object",
             "properties": {
               "unit_id": {
-                "title": "Target unit's {@link IShoppingSaleUnit.id}",
                 "description": "Target unit's {@link IShoppingSaleUnit.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property.\n\n\n@format uuid",
                 "type": "string"
               },
               "choices": {
-                "title": "Creation information of the choices for each descriptive option",
                 "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array.",
                 "type": "array",
                 "items": {
@@ -6886,7 +6714,6 @@
                 }
               },
               "quantity": {
-                "title": "Quantity of the stock to purchase",
                 "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}.\n\n\n@minimum 1",
                 "type": "integer"
               }
@@ -6903,12 +6730,10 @@
             "type": "object",
             "properties": {
               "option_id": {
-                "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                 "description": "Target option's {@link IShoppingSaleUnitOption.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "value": {
-                "title": "Written value about the option",
                 "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer.",
                 "anyOf": [
                   {
@@ -6992,7 +6817,6 @@
     {
       "name": "shoppings_customers_orders_discountable",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info for discountable",
         "type": "object",
         "properties": {
           "id": {
@@ -7000,6 +6824,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info for discountable",
             "$ref": "#/$defs/IShoppingOrderDiscountable.IRequest"
           }
         },
@@ -7038,7 +6863,6 @@
     {
       "name": "shoppings_customers_orders_discount",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Discount info",
         "type": "object",
         "properties": {
           "id": {
@@ -7046,6 +6870,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Discount info",
             "$ref": "#/$defs/IShoppingOrderPrice.ICreate"
           }
         },
@@ -7126,7 +6951,6 @@
     {
       "name": "shoppings_customers_orders_publish_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the publish",
         "type": "object",
         "properties": {
           "orderId": {
@@ -7134,6 +6958,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the publish",
             "$ref": "#/$defs/IShoppingOrderPublish.ICreate"
           }
         },
@@ -7144,15 +6969,14 @@
         "additionalProperties": false,
         "$defs": {
           "IShoppingOrderPublish.ICreate": {
-            "description": "Creation info of the publish.\n\n### Description of {@link address} property:\n\n> Address to receive.",
+            "description": "Creation info of the publish.",
             "type": "object",
             "properties": {
               "address": {
-                "title": "Address to receive",
+                "description": "Address to receive.",
                 "$ref": "#/$defs/IShoppingAddress.ICreate"
               },
               "vendor": {
-                "title": "Payment identifier from the payment vendor service",
                 "description": "Payment identifier from the payment vendor service.\n\nIf the order has been discounted for entire order price, then no need\nto send payment vendor info. Instead, you just configure the `null`\nvalue to this property.",
                 "anyOf": [
                   {
@@ -7173,47 +6997,38 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number to contact",
                 "description": "Mobile number to contact.\n\n\n@pattern ^[0-9]*$",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the address",
                 "description": "Representative name of the address.\n\nSometimes be receiver's name, and sometimes be place name.",
                 "type": "string"
               },
               "country": {
-                "title": "Country name",
                 "description": "Country name.",
                 "type": "string"
               },
               "province": {
-                "title": "Province name",
                 "description": "Province name.",
                 "type": "string"
               },
               "city": {
-                "title": "City name",
                 "description": "City name.",
                 "type": "string"
               },
               "department": {
-                "title": "Department name",
                 "description": "Department name.",
                 "type": "string"
               },
               "possession": {
-                "title": "Detailed address containing street name, building number, and room number",
                 "description": "Detailed address containing street name, building number, and room number.",
                 "type": "string"
               },
               "zip_code": {
-                "title": "Zip code, or postal code",
                 "description": "Zip code, or postal code.",
                 "type": "string"
               },
               "special_note": {
-                "title": "Special description if required",
                 "description": "Special description if required.",
                 "anyOf": [
                   {
@@ -7242,13 +7057,11 @@
             "type": "object",
             "properties": {
               "code": {
-                "title": "The vendor code who will receive the payment",
                 "description": "The vendor code who will receive the payment.",
                 "x-wrtn-payment-vendor": true,
                 "type": "string"
               },
               "uid": {
-                "title": "The payment uid",
                 "description": "The payment uid.",
                 "x-wrtn-payment-uid": true,
                 "type": "string"
@@ -7284,10 +7097,10 @@
     {
       "name": "shoppings_customers_sales_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSale.IRequest"
           }
         },
@@ -7301,7 +7114,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -7350,7 +7162,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -7363,7 +7174,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -7403,7 +7213,6 @@
     {
       "name": "shoppings_customers_sales_questions_comments_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -7415,6 +7224,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -7430,7 +7240,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -7440,12 +7249,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -7463,12 +7270,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -7481,7 +7286,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -7499,7 +7303,6 @@
     {
       "name": "shoppings_customers_sales_questions_comments_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -7511,6 +7314,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.IRequest"
           }
         },
@@ -7553,7 +7357,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -7566,7 +7369,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -7652,7 +7454,6 @@
     {
       "name": "shoppings_customers_sales_questions_comments_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -7668,6 +7469,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -7684,7 +7486,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -7694,12 +7495,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -7717,12 +7516,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -7735,7 +7532,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -7753,7 +7549,6 @@
     {
       "name": "shoppings_customers_sales_questions_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the question",
         "type": "object",
         "properties": {
           "saleId": {
@@ -7761,6 +7556,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the question",
             "$ref": "#/$defs/IShoppingSaleQuestion.ICreate"
           }
         },
@@ -7775,12 +7571,10 @@
             "type": "object",
             "properties": {
               "secret": {
-                "title": "Whether the question article is secret or not",
                 "description": "Whether the question article is secret or not.\n\nIf secret article, only the writer customer and related seller can see\nthe detailed content.",
                 "type": "boolean"
               },
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -7790,17 +7584,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -7820,12 +7611,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -7838,7 +7627,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -7879,7 +7667,6 @@
     {
       "name": "shoppings_customers_sales_questions_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the question",
         "type": "object",
         "properties": {
           "saleId": {
@@ -7891,6 +7678,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the question",
             "$ref": "#/$defs/IBbsArticle.ICreate"
           }
         },
@@ -7906,7 +7694,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -7916,17 +7703,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -7945,12 +7729,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -7963,7 +7745,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -7981,7 +7762,6 @@
     {
       "name": "shoppings_customers_sales_reviews_comments_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -7993,6 +7773,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -8008,7 +7789,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -8018,12 +7798,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8041,12 +7819,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -8059,7 +7835,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -8077,7 +7852,6 @@
     {
       "name": "shoppings_customers_sales_reviews_comments_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8089,6 +7863,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.IRequest"
           }
         },
@@ -8131,7 +7906,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -8144,7 +7918,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -8230,7 +8003,6 @@
     {
       "name": "shoppings_customers_sales_reviews_comments_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8246,6 +8018,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -8262,7 +8035,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -8272,12 +8044,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8295,12 +8065,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -8313,7 +8081,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -8331,7 +8098,6 @@
     {
       "name": "shoppings_customers_sales_reviews_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the review",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8339,6 +8105,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the review",
             "$ref": "#/$defs/IShoppingSaleReview.ICreate"
           }
         },
@@ -8353,17 +8120,14 @@
             "type": "object",
             "properties": {
               "good_id": {
-                "title": "Target good's {@link IShoppingOrderGood.id}",
                 "description": "Target good's {@link IShoppingOrderGood.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "score": {
-                "title": "Score of the review",
                 "description": "Score of the review.\n\n\n@minimum 0\n@maximum 100",
                 "type": "number"
               },
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -8373,17 +8137,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8404,12 +8165,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -8422,7 +8181,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -8440,7 +8198,6 @@
     {
       "name": "shoppings_customers_sales_reviews_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8448,6 +8205,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleReview.IRequest"
           }
         },
@@ -8462,7 +8220,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "anyOf": [
                   {
@@ -8474,7 +8231,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -8503,7 +8259,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -8516,7 +8271,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -8671,7 +8425,6 @@
     {
       "name": "shoppings_customers_sales_reviews_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the review",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8683,6 +8436,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the review",
             "$ref": "#/$defs/IShoppingSaleReview.IUpdate"
           }
         },
@@ -8698,12 +8452,10 @@
             "type": "object",
             "properties": {
               "score": {
-                "title": "Score of the review",
                 "description": "Score of the review.\n\n\n@minimum 0\n@maximum 100",
                 "type": "number"
               },
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -8713,17 +8465,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8743,12 +8492,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -8761,7 +8508,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -8779,7 +8525,6 @@
     {
       "name": "shoppings_customers_sales_reviews_abridges",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8787,6 +8532,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleReview.IRequest"
           }
         },
@@ -8801,7 +8547,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "anyOf": [
                   {
@@ -8813,7 +8558,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -8842,7 +8586,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -8855,7 +8598,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -8987,7 +8729,6 @@
     {
       "name": "shoppings_customers_sales_snapshots_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Requestion info of pagination",
         "type": "object",
         "properties": {
           "saleId": {
@@ -8995,6 +8736,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Requestion info of pagination",
             "$ref": "#/$defs/IPage.IRequest"
           }
         },
@@ -9009,7 +8751,6 @@
             "type": "object",
             "properties": {
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -9022,7 +8763,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -9154,10 +8894,10 @@
     {
       "name": "shoppings_customers_systematic_channels_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingChannel.IRequest"
           }
         },
@@ -9202,7 +8942,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -9215,7 +8954,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -9263,10 +9001,10 @@
     {
       "name": "shoppings_customers_systematic_channels_hierarchical",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingChannel.IRequest"
           }
         },
@@ -9311,7 +9049,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -9324,7 +9061,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -9408,10 +9144,10 @@
     {
       "name": "shoppings_customers_systematic_sections_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSection.IRequest"
           }
         },
@@ -9456,7 +9192,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -9469,7 +9204,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -9564,10 +9298,10 @@
     {
       "name": "shoppings_sellers_authenticate_join",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Joining request info",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Joining request info",
             "$ref": "#/$defs/IShoppingSeller.IJoin"
           }
         },
@@ -9588,10 +9322,10 @@
     {
       "name": "shoppings_sellers_authenticate_login",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Login request info",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Login request info",
             "$ref": "#/$defs/IShoppingMember.ILogin"
           }
         },
@@ -9605,12 +9339,10 @@
             "type": "object",
             "properties": {
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.\n\n\n@format email",
                 "type": "string"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -9627,10 +9359,10 @@
     {
       "name": "shoppings_sellers_deliveries_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of delivery",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of delivery",
             "$ref": "#/$defs/IShoppingDelivery.ICreate"
           }
         },
@@ -9644,7 +9376,6 @@
             "type": "object",
             "properties": {
               "pieces": {
-                "title": "List of pieces of the delivery",
                 "description": "List of pieces of the delivery.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -9652,7 +9383,6 @@
                 }
               },
               "journeys": {
-                "title": "List of journeys of the delivery",
                 "description": "List of journeys of the delivery.\n\nThis is initial data, and it is also possible to accumulate journey data\nafter the delivery creation.",
                 "type": "array",
                 "items": {
@@ -9660,7 +9390,6 @@
                 }
               },
               "shippers": {
-                "title": "List of shippers of the delivery",
                 "description": "List of shippers of the delivery.",
                 "type": "array",
                 "items": {
@@ -9679,22 +9408,18 @@
             "type": "object",
             "properties": {
               "publish_id": {
-                "title": "Target order's {@link IShoppingOrderPublish.id}",
                 "description": "Target order's {@link IShoppingOrderPublish.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "good_id": {
-                "title": "Target good's {@link IShoppingOrderGood.id}",
                 "description": "Target good's {@link IShoppingOrderGood.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\n\n@format uuid",
                 "type": "string"
               },
               "quantity": {
-                "title": "Quantity of the stock",
                 "description": "Quantity of the stock.\n\nIt can be precision value to express split shipping.\n\n\n@minimum 0",
                 "type": "number"
               }
@@ -9711,7 +9436,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of journey",
                 "description": "Type of journey.\n\n- preparing\n- manufacturing\n- shipping\n- delivering",
                 "type": "string",
                 "enum": [
@@ -9722,7 +9446,6 @@
                 ]
               },
               "title": {
-                "title": "Title of journey",
                 "description": "Title of journey.",
                 "anyOf": [
                   {
@@ -9734,7 +9457,6 @@
                 ]
               },
               "description": {
-                "title": "Description of journey",
                 "description": "Description of journey.",
                 "anyOf": [
                   {
@@ -9746,7 +9468,6 @@
                 ]
               },
               "started_at": {
-                "title": "Start time of the journey",
                 "description": "Start time of the journey.",
                 "anyOf": [
                   {
@@ -9759,7 +9480,6 @@
                 ]
               },
               "completed_at": {
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey.",
                 "anyOf": [
                   {
@@ -9813,10 +9533,10 @@
     {
       "name": "shoppings_sellers_deliveries_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingDelivery.IRequest"
           }
         },
@@ -9846,7 +9566,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -9859,7 +9578,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -9899,10 +9617,10 @@
     {
       "name": "shoppings_sellers_deliveries_incompletes",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> List of target orders' ",
         "type": "object",
         "properties": {
           "body": {
+            "description": "List of target orders' ",
             "$ref": "#/$defs/IShoppingDeliveryPiece.IRequest"
           }
         },
@@ -9933,7 +9651,6 @@
     {
       "name": "shoppings_sellers_deliveries_journeys_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the journey",
         "type": "object",
         "properties": {
           "deliveryId": {
@@ -9941,6 +9658,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the journey",
             "$ref": "#/$defs/IShoppingDeliveryJourney.ICreate"
           }
         },
@@ -9955,7 +9673,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of journey",
                 "description": "Type of journey.\n\n- preparing\n- manufacturing\n- shipping\n- delivering",
                 "type": "string",
                 "enum": [
@@ -9966,7 +9683,6 @@
                 ]
               },
               "title": {
-                "title": "Title of journey",
                 "description": "Title of journey.",
                 "anyOf": [
                   {
@@ -9978,7 +9694,6 @@
                 ]
               },
               "description": {
-                "title": "Description of journey",
                 "description": "Description of journey.",
                 "anyOf": [
                   {
@@ -9990,7 +9705,6 @@
                 ]
               },
               "started_at": {
-                "title": "Start time of the journey",
                 "description": "Start time of the journey.",
                 "anyOf": [
                   {
@@ -10003,7 +9717,6 @@
                 ]
               },
               "completed_at": {
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey.",
                 "anyOf": [
                   {
@@ -10031,7 +9744,6 @@
     {
       "name": "shoppings_sellers_deliveries_journeys_complete",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Completion time of the journey",
         "type": "object",
         "properties": {
           "deliveryId": {
@@ -10043,6 +9755,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Completion time of the journey",
             "$ref": "#/$defs/IShoppingDeliveryJourney.IComplete"
           }
         },
@@ -10058,7 +9771,6 @@
             "type": "object",
             "properties": {
               "completed_at": {
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey.",
                 "anyOf": [
                   {
@@ -10105,7 +9817,6 @@
     {
       "name": "shoppings_sellers_deliveries_shippers_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the shipper",
         "type": "object",
         "properties": {
           "deliveryId": {
@@ -10113,6 +9824,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the shipper",
             "$ref": "#/$defs/IShoppingDeliveryShipper.ICreate"
           }
         },
@@ -10155,10 +9867,10 @@
     {
       "name": "shoppings_sellers_coupons_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the coupon",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the coupon",
             "$ref": "#/$defs/IShoppingCoupon.ICreate"
           }
         },
@@ -10168,11 +9880,10 @@
         "additionalProperties": false,
         "$defs": {
           "IShoppingCoupon.ICreate": {
-            "description": "Creation information of the coupon.\n\n### Description of {@link restriction} property:\n\n> Restriction information.",
+            "description": "Creation information of the coupon.",
             "type": "object",
             "properties": {
               "discount": {
-                "title": "Discount information",
                 "description": "Discount information.",
                 "anyOf": [
                   {
@@ -10184,11 +9895,10 @@
                 ]
               },
               "restriction": {
-                "title": "Restriction information",
+                "description": "Restriction information.",
                 "$ref": "#/$defs/IShoppingCouponRestriction"
               },
               "criterias": {
-                "title": "List of criteria information",
                 "description": "List of criteria information.",
                 "type": "array",
                 "items": {
@@ -10209,7 +9919,6 @@
                 }
               },
               "disposable_codes": {
-                "title": "Disposable codes for the coupon",
                 "description": "Disposable codes for the coupon.",
                 "type": "array",
                 "items": {
@@ -10217,12 +9926,10 @@
                 }
               },
               "name": {
-                "title": "Representative name of the coupon",
                 "description": "Representative name of the coupon.",
                 "type": "string"
               },
               "opened_at": {
-                "title": "Opening time of the coupon",
                 "description": "Opening time of the coupon.",
                 "anyOf": [
                   {
@@ -10235,7 +9942,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the coupon",
                 "description": "Closing time of the coupon.\n\nTickets cannot be issued after this time.\n\nHowever, previously issued tickets can still be used until their\nexpiration date.",
                 "anyOf": [
                   {
@@ -10263,7 +9969,6 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as amount",
                 "description": "Discount unit as amount.\n\nIt means the order price would be discounted by the amount value.",
                 "type": "string",
                 "enum": [
@@ -10271,12 +9976,10 @@
                 ]
               },
               "value": {
-                "title": "Discount value as amount",
                 "description": "Discount value as amount.",
                 "type": "number"
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "anyOf": [
                   {
@@ -10289,7 +9992,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order. This property would be meaningful\nonly when the {@link multiplicative} is `true`.",
                 "anyOf": [
                   {
@@ -10302,7 +10004,6 @@
                 ]
               },
               "multiplicative": {
-                "title": "Multiplicative or not",
                 "description": "Multiplicative or not.\n\nIf this property is `true`, the discount value would be multiplied\nto the {@link IShoppingCartCommodity.volume} or\n{@link IShoppingOrderGood.volume} value. Also, in that case,\nthe {@link limit} property would be meaningful.",
                 "type": "boolean"
               }
@@ -10320,7 +10021,6 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as percent",
                 "description": "Discount unit as percent.\n\nIt means the order price would be discounted by the percent value.",
                 "type": "string",
                 "enum": [
@@ -10328,12 +10028,10 @@
                 ]
               },
               "value": {
-                "title": "Discount value as percent",
                 "description": "Discount value as percent.\n\n\n@minimum 0\n@maximum 100",
                 "type": "number"
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "anyOf": [
                   {
@@ -10346,7 +10044,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order.",
                 "anyOf": [
                   {
@@ -10371,7 +10068,6 @@
             "type": "object",
             "properties": {
               "access": {
-                "title": "Access level of coupon",
                 "description": "Access level of coupon.\n\n- public: possible to find from public API\n- private: unable to find from public API\n  - arbitrarily assigned by the seller or administrator\n  - issued from one-time link",
                 "type": "string",
                 "enum": [
@@ -10380,12 +10076,10 @@
                 ]
               },
               "exclusive": {
-                "title": "Exclusivity or not",
                 "description": "Exclusivity or not.\n\nAn exclusive discount coupon refers to a discount coupon that has an\nexclusive relationship with other discount coupons and can only be\nused alone. That is, when an exclusive discount coupon is used, no\nother discount coupon can be used for the same\n{@link IShoppingOrder order} or {@link IShoppingOrderGood good}.\n\nPlease note that this exclusive attribute is a very different concept\nfrom multiplicative, which means whether the same coupon can be\nmultiplied and applied to multiple coupons of the same order, so\nplease do not confuse them.",
                 "type": "boolean"
               },
               "volume": {
-                "title": "Limited quantity issued",
                 "description": "Limited quantity issued.\n\nIf there is a limit to the quantity issued, it becomes impossible\nto issue tickets exceeding this value.\n\nIn other words, the concept of N coupons being issued on\na first-come, first-served basis is created.",
                 "anyOf": [
                   {
@@ -10398,7 +10092,6 @@
                 ]
               },
               "volume_per_citizen": {
-                "title": "Limited quantity issued per person",
                 "description": "Limited quantity issued per person.\n\nAs a limit to the total amount of issuance per person, it is\ncommon to assign 1 to limit duplicate issuance to the same citizen,\nor to use the NULL value to set no limit.\n\nOf course, by assigning a value of N, the total amount issued\nto the same citizen can be limited.",
                 "anyOf": [
                   {
@@ -10411,7 +10104,6 @@
                 ]
               },
               "expired_in": {
-                "title": "Expiration day(s) value",
                 "description": "Expiration day(s) value.\n\nThe concept of expiring N days after a discount coupon ticket is issued.\n\nTherefore, customers must use the ticket within N days, if possible,\nfrom the time it is issued.",
                 "anyOf": [
                   {
@@ -10424,7 +10116,6 @@
                 ]
               },
               "expired_at": {
-                "title": "Expiration date",
                 "description": "Expiration date.\n\nA concept that expires after YYYY-MM-DD after a discount coupon ticket\nis issued.\n\nDouble restrictions are possible with expired_in, of which the one\nwith the shorter expiration date is used.",
                 "anyOf": [
                   {
@@ -10451,7 +10142,6 @@
             "type": "object",
             "properties": {
               "section_codes": {
-                "title": "List of target section's {@link IShoppingSection.code}s",
                 "description": "List of target section's {@link IShoppingSection.code}s.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -10483,7 +10173,6 @@
             "type": "object",
             "properties": {
               "seller_ids": {
-                "title": "List of target seller's {@link IShoppingSeller.id}s",
                 "description": "List of target seller's {@link IShoppingSeller.id}s.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -10516,7 +10205,6 @@
             "type": "object",
             "properties": {
               "sale_ids": {
-                "title": "List of target sale's {@link IShoppingSale.id}s",
                 "description": "List of target sale's {@link IShoppingSale.id}s.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -10549,7 +10237,6 @@
             "type": "object",
             "properties": {
               "funnels": {
-                "title": "List of target funnels",
                 "description": "List of target funnels.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -10588,7 +10275,6 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "type": "string",
                 "enum": [
@@ -10597,7 +10283,6 @@
                 ]
               },
               "value": {
-                "title": "Target value",
                 "description": "Target value.",
                 "type": "string"
               }
@@ -10612,7 +10297,6 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "type": "string",
                 "enum": [
@@ -10620,12 +10304,10 @@
                 ]
               },
               "key": {
-                "title": "Target variable's key",
                 "description": "Target variable's key.",
                 "type": "string"
               },
               "value": {
-                "title": "Target variable's value",
                 "description": "Target variable's value.",
                 "type": "string"
               }
@@ -10643,10 +10325,10 @@
     {
       "name": "shoppings_sellers_coupons_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingCoupon.IRequest"
           }
         },
@@ -10696,7 +10378,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -10709,7 +10390,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -10783,10 +10463,10 @@
     {
       "name": "shoppings_sellers_orders_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingOrder.IRequest"
           }
         },
@@ -10833,7 +10513,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -10846,7 +10525,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -11230,10 +10908,10 @@
     {
       "name": "shoppings_sellers_sales_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the sale",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Creation info of the sale",
             "$ref": "#/$defs/IShoppingSale.ICreate"
           }
         },
@@ -11243,16 +10921,14 @@
         "additionalProperties": false,
         "$defs": {
           "IShoppingSale.ICreate": {
-            "description": "Creation information of sale.\n\n### Description of {@link content} property:\n\n> Description and image content describing the sale.",
+            "description": "Creation information of sale.",
             "type": "object",
             "properties": {
               "section_code": {
-                "title": "Belonged section's {@link IShoppingSection.code}",
                 "description": "Belonged section's {@link IShoppingSection.code}.",
                 "type": "string"
               },
               "status": {
-                "title": "Initial status of the sale",
                 "description": "Initial status of the sale.\n\n`null` or `undefined`: No restriction\n`paused`: Starts with {@link ITimestamps.paused_at paused} status\n`suspended`: Starts with {@link ITimestamps.suspended_at suspended} status",
                 "anyOf": [
                   {
@@ -11268,7 +10944,6 @@
                 ]
               },
               "opened_at": {
-                "title": "Opening time of the sale",
                 "description": "Opening time of the sale.",
                 "anyOf": [
                   {
@@ -11281,7 +10956,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the sale",
                 "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever.",
                 "anyOf": [
                   {
@@ -11294,11 +10968,10 @@
                 ]
               },
               "content": {
-                "title": "Description and image content describing the sale",
+                "description": "Description and image content describing the sale.",
                 "$ref": "#/$defs/IShoppingSaleContent.ICreate"
               },
               "units": {
-                "title": "List of units",
                 "description": "List of units.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -11306,7 +10979,6 @@
                 }
               },
               "tags": {
-                "title": "List of search tags",
                 "description": "List of search tags.",
                 "type": "array",
                 "items": {
@@ -11314,7 +10986,6 @@
                 }
               },
               "category_codes": {
-                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
                 "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale.",
                 "type": "array",
                 "items": {
@@ -11374,12 +11045,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -11392,7 +11061,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -11408,7 +11076,6 @@
             "type": "object",
             "properties": {
               "options": {
-                "title": "List of options",
                 "description": "List of options.",
                 "type": "array",
                 "items": {
@@ -11423,7 +11090,6 @@
                 }
               },
               "stocks": {
-                "title": "List of final stocks",
                 "description": "List of final stocks.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -11431,17 +11097,14 @@
                 }
               },
               "name": {
-                "title": "Representative name of the unit",
                 "description": "Representative name of the unit.",
                 "type": "string"
               },
               "primary": {
-                "title": "Whether the unit is primary or not",
                 "description": "Whether the unit is primary or not.\n\nJust a labeling value.",
                 "type": "boolean"
               },
               "required": {
-                "title": "Whether the unit is required or not",
                 "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
                 "type": "boolean"
               }
@@ -11459,7 +11122,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Discriminant for the type of selectable option",
                 "description": "Discriminant for the type of selectable option.",
                 "type": "string",
                 "enum": [
@@ -11467,17 +11129,14 @@
                 ]
               },
               "name": {
-                "title": "Represents the name of the option",
                 "description": "Represents the name of the option.",
                 "type": "string"
               },
               "variable": {
-                "title": "Whether the option is variable or not",
                 "description": "Whether the option is variable or not.\n\nWhen type of current option is \"select\", this attribute means whether\nselecting different candidate value affects the final stock or not.",
                 "type": "boolean"
               },
               "candidates": {
-                "title": "List of candidate values",
                 "description": "List of candidate values.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -11497,7 +11156,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Represents the name of the candidate value",
                 "description": "Represents the name of the candidate value.",
                 "type": "string"
               }
@@ -11511,7 +11169,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of descriptive option",
                 "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
                 "type": "string",
                 "enum": [
@@ -11521,7 +11178,6 @@
                 ]
               },
               "name": {
-                "title": "Readable name of the option",
                 "description": "Readable name of the option.",
                 "type": "string"
               }
@@ -11532,25 +11188,22 @@
             ]
           },
           "IShoppingSaleUnitStock.ICreate": {
-            "description": "Creation information of the stock.\n\n### Description of {@link price} property:\n\n> Price of the stock.",
+            "description": "Creation information of the stock.",
             "type": "object",
             "properties": {
               "name": {
-                "title": "Representative name of the stock",
                 "description": "Representative name of the stock.",
                 "type": "string"
               },
               "price": {
-                "title": "Price of the stock",
+                "description": "Price of the stock.",
                 "$ref": "#/$defs/IShoppingPrice"
               },
               "quantity": {
-                "title": "Initial inventory quantity",
                 "description": "Initial inventory quantity.\n\n\n@minimum 1",
                 "type": "integer"
               },
               "choices": {
-                "title": "List of choices",
                 "description": "List of choices.\n\nWhich candidate values being chosen for each option.",
                 "type": "array",
                 "items": {
@@ -11570,12 +11223,10 @@
             "type": "object",
             "properties": {
               "nominal": {
-                "title": "Nominal price",
                 "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.\n\n\n@minimum 0",
                 "type": "number"
               },
               "real": {
-                "title": "Real price to pay",
                 "description": "Real price to pay.\n\n\n@minimum 0",
                 "type": "number"
               }
@@ -11610,10 +11261,10 @@
     {
       "name": "shoppings_sellers_sales_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSale.IRequest"
           }
         },
@@ -11627,7 +11278,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -11676,7 +11326,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -11689,7 +11338,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -11729,7 +11377,6 @@
     {
       "name": "shoppings_sellers_sales_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> New information of the sale",
         "type": "object",
         "properties": {
           "id": {
@@ -11737,6 +11384,7 @@
             "type": "string"
           },
           "body": {
+            "description": "New information of the sale",
             "$ref": "#/$defs/IShoppingSaleSnapshot.ICreate"
           }
         },
@@ -11747,15 +11395,14 @@
         "additionalProperties": false,
         "$defs": {
           "IShoppingSaleSnapshot.ICreate": {
-            "description": "Creation information of the snapshot.\n\n### Description of {@link content} property:\n\n> Description and image content describing the sale.",
+            "description": "Creation information of the snapshot.",
             "type": "object",
             "properties": {
               "content": {
-                "title": "Description and image content describing the sale",
+                "description": "Description and image content describing the sale.",
                 "$ref": "#/$defs/IShoppingSaleContent.ICreate"
               },
               "units": {
-                "title": "List of units",
                 "description": "List of units.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -11763,7 +11410,6 @@
                 }
               },
               "tags": {
-                "title": "List of search tags",
                 "description": "List of search tags.",
                 "type": "array",
                 "items": {
@@ -11771,7 +11417,6 @@
                 }
               },
               "category_codes": {
-                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
                 "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale.",
                 "type": "array",
                 "items": {
@@ -11828,12 +11473,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -11846,7 +11489,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -11862,7 +11504,6 @@
             "type": "object",
             "properties": {
               "options": {
-                "title": "List of options",
                 "description": "List of options.",
                 "type": "array",
                 "items": {
@@ -11877,7 +11518,6 @@
                 }
               },
               "stocks": {
-                "title": "List of final stocks",
                 "description": "List of final stocks.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -11885,17 +11525,14 @@
                 }
               },
               "name": {
-                "title": "Representative name of the unit",
                 "description": "Representative name of the unit.",
                 "type": "string"
               },
               "primary": {
-                "title": "Whether the unit is primary or not",
                 "description": "Whether the unit is primary or not.\n\nJust a labeling value.",
                 "type": "boolean"
               },
               "required": {
-                "title": "Whether the unit is required or not",
                 "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
                 "type": "boolean"
               }
@@ -11913,7 +11550,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Discriminant for the type of selectable option",
                 "description": "Discriminant for the type of selectable option.",
                 "type": "string",
                 "enum": [
@@ -11921,17 +11557,14 @@
                 ]
               },
               "name": {
-                "title": "Represents the name of the option",
                 "description": "Represents the name of the option.",
                 "type": "string"
               },
               "variable": {
-                "title": "Whether the option is variable or not",
                 "description": "Whether the option is variable or not.\n\nWhen type of current option is \"select\", this attribute means whether\nselecting different candidate value affects the final stock or not.",
                 "type": "boolean"
               },
               "candidates": {
-                "title": "List of candidate values",
                 "description": "List of candidate values.\n\n\n@minItems 1",
                 "type": "array",
                 "items": {
@@ -11951,7 +11584,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Represents the name of the candidate value",
                 "description": "Represents the name of the candidate value.",
                 "type": "string"
               }
@@ -11965,7 +11597,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of descriptive option",
                 "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
                 "type": "string",
                 "enum": [
@@ -11975,7 +11606,6 @@
                 ]
               },
               "name": {
-                "title": "Readable name of the option",
                 "description": "Readable name of the option.",
                 "type": "string"
               }
@@ -11986,25 +11616,22 @@
             ]
           },
           "IShoppingSaleUnitStock.ICreate": {
-            "description": "Creation information of the stock.\n\n### Description of {@link price} property:\n\n> Price of the stock.",
+            "description": "Creation information of the stock.",
             "type": "object",
             "properties": {
               "name": {
-                "title": "Representative name of the stock",
                 "description": "Representative name of the stock.",
                 "type": "string"
               },
               "price": {
-                "title": "Price of the stock",
+                "description": "Price of the stock.",
                 "$ref": "#/$defs/IShoppingPrice"
               },
               "quantity": {
-                "title": "Initial inventory quantity",
                 "description": "Initial inventory quantity.\n\n\n@minimum 1",
                 "type": "integer"
               },
               "choices": {
-                "title": "List of choices",
                 "description": "List of choices.\n\nWhich candidate values being chosen for each option.",
                 "type": "array",
                 "items": {
@@ -12024,12 +11651,10 @@
             "type": "object",
             "properties": {
               "nominal": {
-                "title": "Nominal price",
                 "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.\n\n\n@minimum 0",
                 "type": "number"
               },
               "real": {
-                "title": "Real price to pay",
                 "description": "Real price to pay.\n\n\n@minimum 0",
                 "type": "number"
               }
@@ -12064,7 +11689,6 @@
     {
       "name": "shoppings_sellers_sales_open",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> New opening and closing time",
         "type": "object",
         "properties": {
           "id": {
@@ -12072,6 +11696,7 @@
             "type": "string"
           },
           "body": {
+            "description": "New opening and closing time",
             "$ref": "#/$defs/IShoppingSale.IUpdateOpeningTime"
           }
         },
@@ -12086,7 +11711,6 @@
             "type": "object",
             "properties": {
               "opened_at": {
-                "title": "Opening time of the sale",
                 "description": "Opening time of the sale.",
                 "anyOf": [
                   {
@@ -12099,7 +11723,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the sale",
                 "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever.",
                 "anyOf": [
                   {
@@ -12196,7 +11819,6 @@
     {
       "name": "shoppings_sellers_sales_questions_answer_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the answer article",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12208,6 +11830,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the answer article",
             "$ref": "#/$defs/IBbsArticle.ICreate"
           }
         },
@@ -12223,7 +11846,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -12233,17 +11855,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -12262,12 +11881,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -12280,7 +11897,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -12298,7 +11914,6 @@
     {
       "name": "shoppings_sellers_sales_questions_answer_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the answer article",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12310,6 +11925,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the answer article",
             "$ref": "#/$defs/IBbsArticle.ICreate"
           }
         },
@@ -12325,7 +11941,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -12335,17 +11950,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -12364,12 +11976,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -12382,7 +11992,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -12400,7 +12009,6 @@
     {
       "name": "shoppings_sellers_sales_questions_comments_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12412,6 +12020,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -12427,7 +12036,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -12437,12 +12045,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -12460,12 +12066,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -12478,7 +12082,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -12496,7 +12099,6 @@
     {
       "name": "shoppings_sellers_sales_questions_comments_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12508,6 +12110,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.IRequest"
           }
         },
@@ -12550,7 +12153,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -12563,7 +12165,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -12649,7 +12250,6 @@
     {
       "name": "shoppings_sellers_sales_questions_comments_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12665,6 +12265,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -12681,7 +12282,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -12691,12 +12291,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -12714,12 +12312,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -12732,7 +12328,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -12773,7 +12368,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_answer_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the answer article",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12785,6 +12379,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the answer article",
             "$ref": "#/$defs/IBbsArticle.ICreate"
           }
         },
@@ -12800,7 +12395,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -12810,17 +12404,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -12839,12 +12430,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -12857,7 +12446,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -12875,7 +12463,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_answer_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the answer article",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12887,6 +12474,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the answer article",
             "$ref": "#/$defs/IBbsArticle.ICreate"
           }
         },
@@ -12902,7 +12490,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -12912,17 +12499,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -12941,12 +12525,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -12959,7 +12541,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -12977,7 +12558,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_comments_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Creation info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -12989,6 +12569,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Creation info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -13004,7 +12585,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -13014,12 +12594,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13037,12 +12615,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -13055,7 +12631,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -13073,7 +12648,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_comments_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13085,6 +12659,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.IRequest"
           }
         },
@@ -13127,7 +12702,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -13140,7 +12714,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -13226,7 +12799,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_comments_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info of the inquiry comment",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13242,6 +12814,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info of the inquiry comment",
             "$ref": "#/$defs/IShoppingSaleInquiryComment.ICreate"
           }
         },
@@ -13258,7 +12831,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "type": "string",
                 "enum": [
@@ -13268,12 +12840,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13291,12 +12861,10 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
                 "type": "string"
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "anyOf": [
                   {
@@ -13309,7 +12877,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.\n\n\n@format uri\n@contentMediaType image/*",
                 "type": "string"
               }
@@ -13327,7 +12894,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13335,6 +12901,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleReview.IRequest"
           }
         },
@@ -13349,7 +12916,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "anyOf": [
                   {
@@ -13361,7 +12927,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -13390,7 +12955,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -13403,7 +12967,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -13535,7 +13098,6 @@
     {
       "name": "shoppings_sellers_sales_reviews_abridges",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13543,6 +13105,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleReview.IRequest"
           }
         },
@@ -13557,7 +13120,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "anyOf": [
                   {
@@ -13569,7 +13131,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "anyOf": [
                   {
@@ -13598,7 +13159,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -13611,7 +13171,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -13789,7 +13348,6 @@
     {
       "name": "shoppings_sellers_sales_snapshots_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Requestion info of pagination",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13797,6 +13355,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Requestion info of pagination",
             "$ref": "#/$defs/IPage.IRequest"
           }
         },
@@ -13811,7 +13370,6 @@
             "type": "object",
             "properties": {
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -13824,7 +13382,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -13892,7 +13449,6 @@
     {
       "name": "shoppings_sellers_sales_units_stocks_supplements_create",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Create info of the supplement",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13908,6 +13464,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Create info of the supplement",
             "$ref": "#/$defs/IShoppingSaleUnitStockSupplement.ICreate"
           }
         },
@@ -13924,7 +13481,6 @@
             "type": "object",
             "properties": {
               "value": {
-                "title": "Supplemented quantity",
                 "description": "Supplemented quantity.\n\n\n@minimum 0",
                 "type": "integer"
               }
@@ -13940,7 +13496,6 @@
     {
       "name": "shoppings_sellers_sales_units_stocks_supplements_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "saleId": {
@@ -13956,6 +13511,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSaleUnitStockSupplement.IRequest"
           }
         },
@@ -13972,7 +13528,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sortable columns",
                 "description": "Sortable columns.",
                 "anyOf": [
                   {
@@ -13991,7 +13546,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -14004,7 +13558,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -14026,7 +13579,6 @@
     {
       "name": "shoppings_sellers_sales_units_stocks_supplements_update",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Update info (quantity) of the supplement",
         "type": "object",
         "properties": {
           "saleId": {
@@ -14046,6 +13598,7 @@
             "type": "string"
           },
           "body": {
+            "description": "Update info (quantity) of the supplement",
             "$ref": "#/$defs/IShoppingSaleUnitStockSupplement.ICreate"
           }
         },
@@ -14063,7 +13616,6 @@
             "type": "object",
             "properties": {
               "value": {
-                "title": "Supplemented quantity",
                 "description": "Supplemented quantity.\n\n\n@minimum 0",
                 "type": "integer"
               }
@@ -14176,10 +13728,10 @@
     {
       "name": "shoppings_sellers_systematic_channels_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingChannel.IRequest"
           }
         },
@@ -14224,7 +13776,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -14237,7 +13788,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -14285,10 +13835,10 @@
     {
       "name": "shoppings_sellers_systematic_channels_hierarchical",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingChannel.IRequest"
           }
         },
@@ -14333,7 +13883,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -14346,7 +13895,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -14430,10 +13978,10 @@
     {
       "name": "shoppings_sellers_systematic_sections_index",
       "parameters": {
-        "description": "### Description of {@link body} property:\n\n> Request info of pagination, searching and sorting",
         "type": "object",
         "properties": {
           "body": {
+            "description": "Request info of pagination, searching and sorting",
             "$ref": "#/$defs/IShoppingSection.IRequest"
           }
         },
@@ -14478,7 +14026,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "anyOf": [
                   {
@@ -14491,7 +14038,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "anyOf": [
                   {
@@ -14576,7 +14122,7 @@
   "options": {
     "reference": true,
     "strict": false,
-    "maxLength": null
+    "maxLength": 64
   },
   "errors": []
 }

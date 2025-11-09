@@ -36,7 +36,7 @@ export namespace GeminiSchemaComposer {
         ...props,
         config: {
           reference: props.config.reference,
-          constraint: false,
+          constraint: true,
         },
       });
     if (result.success === false) return result;
@@ -71,7 +71,7 @@ export namespace GeminiSchemaComposer {
         ...props,
         config: {
           reference: props.config.reference,
-          constraint: false,
+          constraint: true,
         },
       });
     if (result.success === false) return result;
@@ -556,7 +556,7 @@ export namespace GeminiSchemaComposer {
     };
     visit(props.schema);
 
-    const result = {
+    return {
       ...attribute,
       ...(union.length === 0
         ? { type: undefined }
@@ -583,8 +583,6 @@ export namespace GeminiSchemaComposer {
                     }
                   : undefined,
             }),
-    };
-    console.log("result", props.schema, result);
-    return result;
+    } satisfies OpenApi.IJsonSchema;
   };
 }

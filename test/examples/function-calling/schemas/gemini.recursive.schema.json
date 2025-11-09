@@ -18,8 +18,9 @@
       "type": "object",
       "properties": {
         "code": {
-          "description": "Identifier code of the category.\n\n\n@pattern ^[a-z0-9_]+$",
-          "type": "string"
+          "description": "Identifier code of the category.",
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
         },
         "name": {
           "description": "Name of the category.",

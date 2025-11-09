@@ -1,6 +1,38 @@
 {
   "trial": 3,
   "success": false,
+  "data": {
+    "categories": [
+      "electronics",
+      "electronics > desktops",
+      "electronics > laptops",
+      "electronics > laptops > ultrabooks",
+      "electronics > laptops > macbooks",
+      "electronics > laptops > desknotes",
+      "electronics > laptops > 2 in 1 laptops",
+      "electronics > tablets",
+      "electronics > tablets > ipads",
+      "electronics > tablets > android tablets",
+      "electronics > tablets > windows tablets",
+      "electronics > smart phones",
+      "electronics > smart phones > mini smartphones",
+      "electronics > smart phones > phablets",
+      "electronics > smart phones > gaming smartphones",
+      "electronics > smart phones > rugged smartphones",
+      "electronics > smart phones > foldable smartphones",
+      "electronics > smart watches",
+      "electronics > smart glasses",
+      "electronics > cameras",
+      "electronics > televisions",
+      "furnitures",
+      "accessories",
+      "accessories > jewelry",
+      "accessories > clothing",
+      "accessories > shoes",
+      "clothes",
+      "others"
+    ]
+  },
   "errors": [
     {
       "path": "$input.categories[0]",
@@ -10,102 +42,102 @@
     {
       "path": "$input.categories[1]",
       "expected": "IShoppingCategory",
-      "value": "desktops"
+      "value": "electronics > desktops"
     },
     {
       "path": "$input.categories[2]",
       "expected": "IShoppingCategory",
-      "value": "laptops"
+      "value": "electronics > laptops"
     },
     {
       "path": "$input.categories[3]",
       "expected": "IShoppingCategory",
-      "value": "ultrabooks"
+      "value": "electronics > laptops > ultrabooks"
     },
     {
       "path": "$input.categories[4]",
       "expected": "IShoppingCategory",
-      "value": "macbooks"
+      "value": "electronics > laptops > macbooks"
     },
     {
       "path": "$input.categories[5]",
       "expected": "IShoppingCategory",
-      "value": "desknotes"
+      "value": "electronics > laptops > desknotes"
     },
     {
       "path": "$input.categories[6]",
       "expected": "IShoppingCategory",
-      "value": "2 in 1 laptops"
+      "value": "electronics > laptops > 2 in 1 laptops"
     },
     {
       "path": "$input.categories[7]",
       "expected": "IShoppingCategory",
-      "value": "tablets"
+      "value": "electronics > tablets"
     },
     {
       "path": "$input.categories[8]",
       "expected": "IShoppingCategory",
-      "value": "ipads"
+      "value": "electronics > tablets > ipads"
     },
     {
       "path": "$input.categories[9]",
       "expected": "IShoppingCategory",
-      "value": "android tablets"
+      "value": "electronics > tablets > android tablets"
     },
     {
       "path": "$input.categories[10]",
       "expected": "IShoppingCategory",
-      "value": "windows tablets"
+      "value": "electronics > tablets > windows tablets"
     },
     {
       "path": "$input.categories[11]",
       "expected": "IShoppingCategory",
-      "value": "smart phones"
+      "value": "electronics > smart phones"
     },
     {
       "path": "$input.categories[12]",
       "expected": "IShoppingCategory",
-      "value": "mini smartphones"
+      "value": "electronics > smart phones > mini smartphones"
     },
     {
       "path": "$input.categories[13]",
       "expected": "IShoppingCategory",
-      "value": "phablets"
+      "value": "electronics > smart phones > phablets"
     },
     {
       "path": "$input.categories[14]",
       "expected": "IShoppingCategory",
-      "value": "gaming smartphones"
+      "value": "electronics > smart phones > gaming smartphones"
     },
     {
       "path": "$input.categories[15]",
       "expected": "IShoppingCategory",
-      "value": "rugged smartphones"
+      "value": "electronics > smart phones > rugged smartphones"
     },
     {
       "path": "$input.categories[16]",
       "expected": "IShoppingCategory",
-      "value": "foldable smartphones"
+      "value": "electronics > smart phones > foldable smartphones"
     },
     {
       "path": "$input.categories[17]",
       "expected": "IShoppingCategory",
-      "value": "smart watches"
+      "value": "electronics > smart watches"
     },
     {
       "path": "$input.categories[18]",
       "expected": "IShoppingCategory",
-      "value": "smart glasses"
+      "value": "electronics > smart glasses"
     },
     {
       "path": "$input.categories[19]",
       "expected": "IShoppingCategory",
-      "value": "cameras"
+      "value": "electronics > cameras"
     },
     {
       "path": "$input.categories[20]",
       "expected": "IShoppingCategory",
-      "value": "televisions"
+      "value": "electronics > televisions"
     },
     {
       "path": "$input.categories[21]",
@@ -120,17 +152,17 @@
     {
       "path": "$input.categories[23]",
       "expected": "IShoppingCategory",
-      "value": "jewelry"
+      "value": "accessories > jewelry"
     },
     {
       "path": "$input.categories[24]",
       "expected": "IShoppingCategory",
-      "value": "clothing"
+      "value": "accessories > clothing"
     },
     {
       "path": "$input.categories[25]",
       "expected": "IShoppingCategory",
-      "value": "shoes"
+      "value": "accessories > shoes"
     },
     {
       "path": "$input.categories[26]",
@@ -142,37 +174,5 @@
       "expected": "IShoppingCategory",
       "value": "others"
     }
-  ],
-  "data": {
-    "categories": [
-      "electronics",
-      "desktops",
-      "laptops",
-      "ultrabooks",
-      "macbooks",
-      "desknotes",
-      "2 in 1 laptops",
-      "tablets",
-      "ipads",
-      "android tablets",
-      "windows tablets",
-      "smart phones",
-      "mini smartphones",
-      "phablets",
-      "gaming smartphones",
-      "rugged smartphones",
-      "foldable smartphones",
-      "smart watches",
-      "smart glasses",
-      "cameras",
-      "televisions",
-      "furnitures",
-      "accessories",
-      "jewelry",
-      "clothing",
-      "shoes",
-      "clothes",
-      "others"
-    ]
-  }
+  ]
 }

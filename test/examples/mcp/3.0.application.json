@@ -72,12 +72,10 @@
               "email": {
                 "type": "string",
                 "format": "email",
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them."
               },
               "password": {
                 "type": "string",
-                "title": "Password of the member account",
                 "description": "Password of the member account."
               }
             },
@@ -114,31 +112,26 @@
                         "enum": [
                           "amount"
                         ],
-                        "title": "Discount unit as amount",
                         "description": "Discount unit as amount.\n\nIt means the order price would be discounted by the amount value."
                       },
                       "value": {
                         "type": "number",
-                        "title": "Discount value as amount",
                         "description": "Discount value as amount."
                       },
                       "threshold": {
                         "type": "number",
                         "minimum": 0,
                         "nullable": true,
-                        "title": "Minimum purchase amount for discount",
                         "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value."
                       },
                       "limit": {
                         "type": "number",
                         "exclusiveMinimum": 0,
                         "nullable": true,
-                        "title": "Maximum amount available for discount",
                         "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order. This property would be meaningful\nonly when the {@link multiplicative} is `true`."
                       },
                       "multiplicative": {
                         "type": "boolean",
-                        "title": "Multiplicative or not",
                         "description": "Multiplicative or not.\n\nIf this property is `true`, the discount value would be multiplied\nto the {@link IShoppingCartCommodity.volume} or\n{@link IShoppingOrderGood.volume} value. Also, in that case,\nthe {@link limit} property would be meaningful."
                       }
                     },
@@ -160,28 +153,24 @@
                         "enum": [
                           "percent"
                         ],
-                        "title": "Discount unit as percent",
                         "description": "Discount unit as percent.\n\nIt means the order price would be discounted by the percent value."
                       },
                       "value": {
                         "type": "number",
                         "minimum": 0,
                         "maximum": 100,
-                        "title": "Discount value as percent",
                         "description": "Discount value as percent."
                       },
                       "threshold": {
                         "type": "number",
                         "minimum": 0,
                         "nullable": true,
-                        "title": "Minimum purchase amount for discount",
                         "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value."
                       },
                       "limit": {
                         "type": "number",
                         "exclusiveMinimum": 0,
                         "nullable": true,
-                        "title": "Maximum amount available for discount",
                         "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order."
                       }
                     },
@@ -195,7 +184,6 @@
                     "additionalProperties": false
                   }
                 ],
-                "title": "Discount information",
                 "description": "Discount information."
               },
               "restriction": {
@@ -207,40 +195,34 @@
                       "public",
                       "private"
                     ],
-                    "title": "Access level of coupon",
                     "description": "Access level of coupon.\n\n- public: possible to find from public API\n- private: unable to find from public API\n  - arbitrarily assigned by the seller or administrator\n  - issued from one-time link"
                   },
                   "exclusive": {
                     "type": "boolean",
-                    "title": "Exclusivity or not",
                     "description": "Exclusivity or not.\n\nAn exclusive discount coupon refers to a discount coupon that has an\nexclusive relationship with other discount coupons and can only be\nused alone. That is, when an exclusive discount coupon is used, no\nother discount coupon can be used for the same\n{@link IShoppingOrder order} or {@link IShoppingOrderGood good}.\n\nPlease note that this exclusive attribute is a very different concept\nfrom multiplicative, which means whether the same coupon can be\nmultiplied and applied to multiple coupons of the same order, so\nplease do not confuse them."
                   },
                   "volume": {
                     "type": "integer",
                     "minimum": 0,
                     "nullable": true,
-                    "title": "Limited quantity issued",
                     "description": "Limited quantity issued.\n\nIf there is a limit to the quantity issued, it becomes impossible\nto issue tickets exceeding this value.\n\nIn other words, the concept of N coupons being issued on\na first-come, first-served basis is created."
                   },
                   "volume_per_citizen": {
                     "type": "integer",
                     "minimum": 0,
                     "nullable": true,
-                    "title": "Limited quantity issued per person",
                     "description": "Limited quantity issued per person.\n\nAs a limit to the total amount of issuance per person, it is\ncommon to assign 1 to limit duplicate issuance to the same citizen,\nor to use the NULL value to set no limit.\n\nOf course, by assigning a value of N, the total amount issued\nto the same citizen can be limited."
                   },
                   "expired_in": {
                     "type": "integer",
                     "minimum": 0,
                     "nullable": true,
-                    "title": "Expiration day(s) value",
                     "description": "Expiration day(s) value.\n\nThe concept of expiring N days after a discount coupon ticket is issued.\n\nTherefore, customers must use the ticket within N days, if possible,\nfrom the time it is issued."
                   },
                   "expired_at": {
                     "type": "string",
                     "format": "date-time",
                     "nullable": true,
-                    "title": "Expiration date",
                     "description": "Expiration date.\n\nA concept that expires after YYYY-MM-DD after a discount coupon ticket\nis issued.\n\nDouble restrictions are possible with expired_in, of which the one\nwith the shorter expiration date is used."
                   }
                 },
@@ -268,7 +250,6 @@
                             "type": "string"
                           },
                           "minItems": 1,
-                          "title": "List of target section's {@link IShoppingSection.code}s",
                           "description": "List of target section's {@link IShoppingSection.code}s."
                         },
                         "type": {
@@ -303,7 +284,6 @@
                             "format": "uuid"
                           },
                           "minItems": 1,
-                          "title": "List of target seller's {@link IShoppingSeller.id}s",
                           "description": "List of target seller's {@link IShoppingSeller.id}s."
                         },
                         "type": {
@@ -338,7 +318,6 @@
                             "format": "uuid"
                           },
                           "minItems": 1,
-                          "title": "List of target sale's {@link IShoppingSale.id}s",
                           "description": "List of target sale's {@link IShoppingSale.id}s."
                         },
                         "type": {
@@ -379,12 +358,10 @@
                                       "url",
                                       "referrer"
                                     ],
-                                    "title": "Kind of funnel restriction",
                                     "description": "Kind of funnel restriction."
                                   },
                                   "value": {
                                     "type": "string",
-                                    "title": "Target value",
                                     "description": "Target value."
                                   }
                                 },
@@ -403,17 +380,14 @@
                                     "enum": [
                                       "variable"
                                     ],
-                                    "title": "Kind of funnel restriction",
                                     "description": "Kind of funnel restriction."
                                   },
                                   "key": {
                                     "type": "string",
-                                    "title": "Target variable's key",
                                     "description": "Target variable's key."
                                   },
                                   "value": {
                                     "type": "string",
-                                    "title": "Target variable's value",
                                     "description": "Target variable's value."
                                   }
                                 },
@@ -428,7 +402,6 @@
                             ]
                           },
                           "minItems": 1,
-                          "title": "List of target funnels",
                           "description": "List of target funnels."
                         },
                         "type": {
@@ -455,7 +428,6 @@
                     }
                   ]
                 },
-                "title": "List of criteria information",
                 "description": "List of criteria information."
               },
               "disposable_codes": {
@@ -463,26 +435,22 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "Disposable codes for the coupon",
                 "description": "Disposable codes for the coupon."
               },
               "name": {
                 "type": "string",
-                "title": "Representative name of the coupon",
                 "description": "Representative name of the coupon."
               },
               "opened_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Opening time of the coupon",
                 "description": "Opening time of the coupon."
               },
               "closed_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Closing time of the coupon",
                 "description": "Closing time of the coupon.\n\nTickets cannot be issued after this time.\n\nHowever, previously issued tickets can still be used until their\nexpiration date."
               }
             },
@@ -551,14 +519,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -697,14 +663,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -866,14 +830,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -1048,14 +1010,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -1291,14 +1251,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -1380,21 +1338,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -1453,12 +1408,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -1469,7 +1422,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -1477,14 +1429,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -1496,7 +1446,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -1571,14 +1520,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -1656,12 +1603,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -1672,7 +1617,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -1680,14 +1624,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -1699,7 +1641,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -1771,12 +1712,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -1787,7 +1726,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -1795,14 +1733,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -1814,7 +1750,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -1889,14 +1824,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -1974,12 +1907,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -1990,7 +1921,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -1998,14 +1928,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -2017,7 +1945,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -2106,8 +2033,7 @@
                 "required": [],
                 "additionalProperties": false,
                 "description": "Search conditions.",
-                "nullable": true,
-                "title": "Search conditions"
+                "nullable": true
               },
               "sort": {
                 "type": "array",
@@ -2129,21 +2055,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -2226,8 +2149,7 @@
                 "required": [],
                 "additionalProperties": false,
                 "description": "Search conditions.",
-                "nullable": true,
-                "title": "Search conditions"
+                "nullable": true
               },
               "sort": {
                 "type": "array",
@@ -2249,21 +2171,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -2321,14 +2240,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -2409,17 +2326,14 @@
                 "type": "string",
                 "format": "uuid",
                 "nullable": true,
-                "title": "Parent category's ID",
                 "description": "Parent category's ID."
               },
               "code": {
                 "type": "string",
-                "title": "Identifier code of the category",
                 "description": "Identifier code of the category.\n\nThe code must be unique in the channel."
               },
               "name": {
                 "type": "string",
-                "title": "Representative name of the category",
                 "description": "Representative name of the category.\n\nThe name must be unique within the parent category. If no parent exists,\nthen the name must be unique within the channel between no parent\ncategories."
               }
             },
@@ -2500,17 +2414,14 @@
                 "type": "string",
                 "format": "uuid",
                 "nullable": true,
-                "title": "Parent category's ID",
                 "description": "Parent category's ID."
               },
               "code": {
                 "type": "string",
-                "title": "Identifier code of the category",
                 "description": "Identifier code of the category.\n\nThe code must be unique in the channel."
               },
               "name": {
                 "type": "string",
-                "title": "Representative name of the category",
                 "description": "Representative name of the category.\n\nThe name must be unique within the parent category. If no parent exists,\nthen the name must be unique within the channel between no parent\ncategories."
               }
             },
@@ -2547,7 +2458,6 @@
               "keep": {
                 "type": "string",
                 "format": "uuid",
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record."
               },
               "absorbed": {
@@ -2556,7 +2466,6 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging."
               }
             },
@@ -2609,12 +2518,10 @@
             "properties": {
               "code": {
                 "type": "string",
-                "title": "Identifier code",
                 "description": "Identifier code."
               },
               "name": {
                 "type": "string",
-                "title": "Name of the channel",
                 "description": "Name of the channel."
               }
             },
@@ -2676,14 +2583,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -2732,7 +2637,6 @@
             "properties": {
               "name": {
                 "type": "string",
-                "title": "Name of the channel",
                 "description": "Name of the channel."
               }
             },
@@ -2762,7 +2666,6 @@
               "keep": {
                 "type": "string",
                 "format": "uuid",
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record."
               },
               "absorbed": {
@@ -2771,7 +2674,6 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging."
               }
             },
@@ -2833,14 +2735,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -2883,12 +2783,10 @@
             "properties": {
               "code": {
                 "type": "string",
-                "title": "Identifier code",
                 "description": "Identifier code."
               },
               "name": {
                 "type": "string",
-                "title": "Representative name of the section",
                 "description": "Representative name of the section."
               }
             },
@@ -2950,14 +2848,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -3006,7 +2902,6 @@
             "properties": {
               "name": {
                 "type": "string",
-                "title": "Representative name of the section",
                 "description": "Representative name of the section."
               }
             },
@@ -3036,7 +2931,6 @@
               "keep": {
                 "type": "string",
                 "format": "uuid",
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record."
               },
               "absorbed": {
@@ -3045,7 +2939,6 @@
                   "type": "string",
                   "format": "uuid"
                 },
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging."
               }
             },
@@ -3127,7 +3020,6 @@
             "properties": {
               "nickname": {
                 "type": "string",
-                "title": "Nickname that uniquely identifies the member",
                 "description": "Nickname that uniquely identifies the member."
               },
               "citizen": {
@@ -3137,13 +3029,11 @@
                     "type": "string",
                     "pattern": "^[0-9]*$",
                     "x-wrtn-payment-order-mobile": true,
-                    "title": "Mobile number",
                     "description": "Mobile number."
                   },
                   "name": {
                     "type": "string",
                     "x-wrtn-payment-order-citizen": true,
-                    "title": "Real name, or equivalent nickname",
                     "description": "Real name, or equivalent nickname."
                   }
                 },
@@ -3153,18 +3043,15 @@
                 ],
                 "description": "Citizen information.",
                 "additionalProperties": false,
-                "nullable": true,
-                "title": "Citizen information"
+                "nullable": true
               },
               "email": {
                 "type": "string",
                 "format": "email",
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them."
               },
               "password": {
                 "type": "string",
-                "title": "Password of the member account",
                 "description": "Password of the member account."
               }
             },
@@ -3196,12 +3083,10 @@
               "email": {
                 "type": "string",
                 "format": "email",
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them."
               },
               "password": {
                 "type": "string",
-                "title": "Password of the member account",
                 "description": "Password of the member account."
               }
             },
@@ -3232,13 +3117,11 @@
                 "type": "string",
                 "pattern": "^[0-9]*$",
                 "x-wrtn-payment-order-mobile": true,
-                "title": "Mobile number",
                 "description": "Mobile number."
               },
               "name": {
                 "type": "string",
                 "x-wrtn-payment-order-citizen": true,
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname."
               }
             },
@@ -3272,13 +3155,11 @@
                     "type": "string",
                     "pattern": "^[0-9]*$",
                     "x-wrtn-payment-order-mobile": true,
-                    "title": "Mobile number",
                     "description": "Mobile number."
                   },
                   "name": {
                     "type": "string",
                     "x-wrtn-payment-order-citizen": true,
-                    "title": "Real name, or equivalent nickname",
                     "description": "Real name, or equivalent nickname."
                   }
                 },
@@ -3288,27 +3169,22 @@
                 ],
                 "description": "Citizen activation info.",
                 "additionalProperties": false,
-                "nullable": true,
-                "title": "Citizen activation info"
+                "nullable": true
               },
               "application": {
                 "type": "string",
-                "title": "Identifier code of the external service",
                 "description": "Identifier code of the external service.\n\nIt can be same with {@link IShoppingChannel.code} in common."
               },
               "uid": {
                 "type": "string",
-                "title": "Identifier key of external user from the external system",
                 "description": "Identifier key of external user from the external system."
               },
               "nickname": {
                 "type": "string",
-                "title": "Nickname of external user in the external system",
                 "description": "Nickname of external user in the external system."
               },
               "password": {
                 "type": "string",
-                "title": "Password of external user from the external system",
                 "description": "Password of external user from the external system.\n\nThis is a password issued to the user by an external service,\nand is by no means the actual user password. However, for\n{@link IShoppingCustomer customers} who entered the same\napplication and code as the current external system user, this is\nto determine whether to view this as a correct external system\nuser or a violation."
               },
               "data": {
@@ -3344,12 +3220,10 @@
             "properties": {
               "oldbie": {
                 "type": "string",
-                "title": "Current password",
                 "description": "Current password."
               },
               "newbie": {
                 "type": "string",
-                "title": "The new password to change",
                 "description": "The new password to change."
               }
             },
@@ -3413,14 +3287,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -3505,14 +3377,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -3675,14 +3545,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -3905,14 +3773,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -4043,14 +3909,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -4105,7 +3969,6 @@
               "sale_id": {
                 "type": "string",
                 "format": "uuid",
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}."
               },
               "stocks": {
@@ -4116,13 +3979,11 @@
                     "unit_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target unit's {@link IShoppingSaleUnit.id}",
                       "description": "Target unit's {@link IShoppingSaleUnit.id}."
                     },
                     "stock_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                       "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property."
                     },
                     "choices": {
@@ -4133,7 +3994,6 @@
                           "option_id": {
                             "type": "string",
                             "format": "uuid",
-                            "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                             "description": "Target option's {@link IShoppingSaleUnitOption.id}."
                           },
                           "value": {
@@ -4151,7 +4011,6 @@
                                 "nullable": true
                               }
                             ],
-                            "title": "Written value about the option",
                             "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer."
                           }
                         },
@@ -4162,13 +4021,11 @@
                         "description": "Description of the current {@link IShoppingCartCommodityStockChoice.ICreate} type:\n\n> Creation information of the choice for each option (of descriptive).\n> \n> When target option is {@link IShoppingSaleUnitDescriptiveOption}\n> type, then you have to compose this choice structure with\n> {@link value} specification.\n> \n> Otherwise when target option is {@link IShoppingSaleUnitSelectableOption}\n> type, you don't need to compose this choice structure. Just fill only\n> the {@link IShoppingCartCommodityStock.ICreate.stock_id} property.",
                         "additionalProperties": false
                       },
-                      "title": "Creation information of the choices for each descriptive option",
                       "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array."
                     },
                     "quantity": {
                       "type": "integer",
                       "minimum": 1,
-                      "title": "Quantity of the stock to purchase",
                       "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}."
                     }
                   },
@@ -4182,19 +4039,16 @@
                   "additionalProperties": false
                 },
                 "minItems": 1,
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased."
               },
               "volume": {
                 "type": "integer",
                 "minimum": 1,
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values."
               },
               "accumulate": {
                 "type": "boolean",
                 "nullable": true,
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created."
               }
             },
@@ -4447,14 +4301,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -4504,7 +4356,6 @@
               "volume": {
                 "type": "integer",
                 "minimum": 1,
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values."
               }
             },
@@ -4583,7 +4434,6 @@
                     "sale_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target sale's {@link IShoppingSale.id}",
                       "description": "Target sale's {@link IShoppingSale.id}."
                     },
                     "stocks": {
@@ -4594,13 +4444,11 @@
                           "unit_id": {
                             "type": "string",
                             "format": "uuid",
-                            "title": "Target unit's {@link IShoppingSaleUnit.id}",
                             "description": "Target unit's {@link IShoppingSaleUnit.id}."
                           },
                           "stock_id": {
                             "type": "string",
                             "format": "uuid",
-                            "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                             "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property."
                           },
                           "choices": {
@@ -4611,7 +4459,6 @@
                                 "option_id": {
                                   "type": "string",
                                   "format": "uuid",
-                                  "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                                   "description": "Target option's {@link IShoppingSaleUnitOption.id}."
                                 },
                                 "value": {
@@ -4629,7 +4476,6 @@
                                       "nullable": true
                                     }
                                   ],
-                                  "title": "Written value about the option",
                                   "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer."
                                 }
                               },
@@ -4640,13 +4486,11 @@
                               "description": "Description of the current {@link IShoppingCartCommodityStockChoice.ICreate} type:\n\n> Creation information of the choice for each option (of descriptive).\n> \n> When target option is {@link IShoppingSaleUnitDescriptiveOption}\n> type, then you have to compose this choice structure with\n> {@link value} specification.\n> \n> Otherwise when target option is {@link IShoppingSaleUnitSelectableOption}\n> type, you don't need to compose this choice structure. Just fill only\n> the {@link IShoppingCartCommodityStock.ICreate.stock_id} property.",
                               "additionalProperties": false
                             },
-                            "title": "Creation information of the choices for each descriptive option",
                             "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array."
                           },
                           "quantity": {
                             "type": "integer",
                             "minimum": 1,
-                            "title": "Quantity of the stock to purchase",
                             "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}."
                           }
                         },
@@ -4660,19 +4504,16 @@
                         "additionalProperties": false
                       },
                       "minItems": 1,
-                      "title": "List of the stocks to be purchased",
                       "description": "List of the stocks to be purchased."
                     },
                     "volume": {
                       "type": "integer",
                       "minimum": 1,
-                      "title": "Volume of the commodity to purchase",
                       "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values."
                     },
                     "accumulate": {
                       "type": "boolean",
                       "nullable": true,
-                      "title": "Whether to accumulate the volume or not",
                       "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created."
                     }
                   },
@@ -4717,13 +4558,11 @@
                     "commodity_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target shopping cart commodity's {@link IShoppingCartCommodity.id}",
                       "description": "Target shopping cart commodity's {@link IShoppingCartCommodity.id}.\n\n`commodity_id` is the primary key of the {@link IShoppingCartCommodity}\nentity, which is the basis of the good to be created. In other words,\nit is the primary key of the shopping cart commodity that the customer\nhas selected and applied for the order."
                     },
                     "volume": {
                       "type": "integer",
                       "minimum": 0,
-                      "title": "Volume of the good",
                       "description": "Volume of the good.\n\nThe value multiplied to {@link IShoppingCartCommodityStock.quantity}.\nIt's purpose is exactly same with {@link IShoppingCartCommodity.volume},\nbut rewritten because the {@link IShoppingCartCommodity} records are reusable\nuntil payment."
                     }
                   },
@@ -4735,13 +4574,11 @@
                   "additionalProperties": false
                 },
                 "minItems": 1,
-                "title": "List of goods in the order",
                 "description": "List of goods in the order."
               },
               "name": {
                 "type": "string",
                 "nullable": true,
-                "title": "Representative name of the order",
                 "description": "Representative name of the order.\n\nIf omit, the name will be generated automatically."
               }
             },
@@ -4961,14 +4798,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -4995,7 +4830,6 @@
               "sale_id": {
                 "type": "string",
                 "format": "uuid",
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}."
               },
               "stocks": {
@@ -5006,13 +4840,11 @@
                     "unit_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target unit's {@link IShoppingSaleUnit.id}",
                       "description": "Target unit's {@link IShoppingSaleUnit.id}."
                     },
                     "stock_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                       "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property."
                     },
                     "choices": {
@@ -5023,7 +4855,6 @@
                           "option_id": {
                             "type": "string",
                             "format": "uuid",
-                            "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                             "description": "Target option's {@link IShoppingSaleUnitOption.id}."
                           },
                           "value": {
@@ -5041,7 +4872,6 @@
                                 "nullable": true
                               }
                             ],
-                            "title": "Written value about the option",
                             "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer."
                           }
                         },
@@ -5052,13 +4882,11 @@
                         "description": "Description of the current {@link IShoppingCartCommodityStockChoice.ICreate} type:\n\n> Creation information of the choice for each option (of descriptive).\n> \n> When target option is {@link IShoppingSaleUnitDescriptiveOption}\n> type, then you have to compose this choice structure with\n> {@link value} specification.\n> \n> Otherwise when target option is {@link IShoppingSaleUnitSelectableOption}\n> type, you don't need to compose this choice structure. Just fill only\n> the {@link IShoppingCartCommodityStock.ICreate.stock_id} property.",
                         "additionalProperties": false
                       },
-                      "title": "Creation information of the choices for each descriptive option",
                       "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array."
                     },
                     "quantity": {
                       "type": "integer",
                       "minimum": 1,
-                      "title": "Quantity of the stock to purchase",
                       "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}."
                     }
                   },
@@ -5072,19 +4900,16 @@
                   "additionalProperties": false
                 },
                 "minItems": 1,
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased."
               },
               "volume": {
                 "type": "integer",
                 "minimum": 1,
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values."
               },
               "accumulate": {
                 "type": "boolean",
                 "nullable": true,
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created."
               }
             },
@@ -5300,48 +5125,39 @@
                   "mobile": {
                     "type": "string",
                     "pattern": "^[0-9]*$",
-                    "title": "Mobile number to contact",
                     "description": "Mobile number to contact."
                   },
                   "name": {
                     "type": "string",
-                    "title": "Representative name of the address",
                     "description": "Representative name of the address.\n\nSometimes be receiver's name, and sometimes be place name."
                   },
                   "country": {
                     "type": "string",
-                    "title": "Country name",
                     "description": "Country name."
                   },
                   "province": {
                     "type": "string",
-                    "title": "Province name",
                     "description": "Province name."
                   },
                   "city": {
                     "type": "string",
-                    "title": "City name",
                     "description": "City name."
                   },
                   "department": {
                     "type": "string",
-                    "title": "Department name",
                     "description": "Department name."
                   },
                   "possession": {
                     "type": "string",
-                    "title": "Detailed address containing street name, building number, and room number",
                     "description": "Detailed address containing street name, building number, and room number."
                   },
                   "zip_code": {
                     "type": "string",
-                    "title": "Zip code, or postal code",
                     "description": "Zip code, or postal code."
                   },
                   "special_note": {
                     "type": "string",
                     "nullable": true,
-                    "title": "Special description if required",
                     "description": "Special description if required."
                   }
                 },
@@ -5365,13 +5181,11 @@
                   "code": {
                     "type": "string",
                     "x-wrtn-payment-vendor": true,
-                    "title": "The vendor code who will receive the payment",
                     "description": "The vendor code who will receive the payment."
                   },
                   "uid": {
                     "type": "string",
                     "x-wrtn-payment-uid": true,
-                    "title": "The payment uid",
                     "description": "The payment uid."
                   }
                 },
@@ -5381,8 +5195,7 @@
                 ],
                 "description": "Payment identifier from the payment vendor service.\n\nIf the order has been discounted for entire order price, then no need\nto send payment vendor info. Instead, you just configure the `null`\nvalue to this property.",
                 "additionalProperties": false,
-                "nullable": true,
-                "title": "Payment identifier from the payment vendor service"
+                "nullable": true
               }
             },
             "required": [
@@ -5467,21 +5280,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -5540,12 +5350,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -5556,7 +5364,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -5564,14 +5371,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -5583,7 +5388,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -5658,14 +5462,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -5743,12 +5545,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -5759,7 +5559,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -5767,14 +5566,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -5786,7 +5583,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -5824,7 +5620,6 @@
             "properties": {
               "secret": {
                 "type": "boolean",
-                "title": "Whether the question article is secret or not",
                 "description": "Whether the question article is secret or not.\n\nIf secret article, only the writer customer and related seller can see\nthe detailed content."
               },
               "format": {
@@ -5834,17 +5629,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -5855,7 +5647,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -5863,14 +5654,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -5882,7 +5671,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -5954,17 +5742,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -5975,7 +5760,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -5983,14 +5767,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -6002,7 +5784,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -6050,12 +5831,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -6066,7 +5845,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -6074,14 +5852,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -6093,7 +5869,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -6168,14 +5943,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -6253,12 +6026,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -6269,7 +6040,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -6277,14 +6047,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -6296,7 +6064,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -6335,14 +6102,12 @@
               "good_id": {
                 "type": "string",
                 "format": "uuid",
-                "title": "Target good's {@link IShoppingOrderGood.id}",
                 "description": "Target good's {@link IShoppingOrderGood.id}."
               },
               "score": {
                 "type": "number",
                 "minimum": 0,
                 "maximum": 100,
-                "title": "Score of the review",
                 "description": "Score of the review."
               },
               "format": {
@@ -6352,17 +6117,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -6373,7 +6135,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -6381,14 +6142,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -6400,7 +6159,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -6490,8 +6248,7 @@
                 "required": [],
                 "additionalProperties": false,
                 "description": "Search conditions.",
-                "nullable": true,
-                "title": "Search conditions"
+                "nullable": true
               },
               "sort": {
                 "type": "array",
@@ -6513,21 +6270,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -6590,7 +6344,6 @@
                 "type": "number",
                 "minimum": 0,
                 "maximum": 100,
-                "title": "Score of the review",
                 "description": "Score of the review."
               },
               "format": {
@@ -6600,17 +6353,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -6621,7 +6371,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -6629,14 +6378,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -6648,7 +6395,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -6738,8 +6484,7 @@
                 "required": [],
                 "additionalProperties": false,
                 "description": "Search conditions.",
-                "nullable": true,
-                "title": "Search conditions"
+                "nullable": true
               },
               "sort": {
                 "type": "array",
@@ -6761,21 +6506,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -6809,14 +6551,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -6987,14 +6727,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -7053,14 +6791,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -7154,14 +6890,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -7253,12 +6987,10 @@
               "email": {
                 "type": "string",
                 "format": "email",
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them."
               },
               "password": {
                 "type": "string",
-                "title": "Password of the member account",
                 "description": "Password of the member account."
               }
             },
@@ -7293,25 +7025,21 @@
                     "publish_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target order's {@link IShoppingOrderPublish.id}",
                       "description": "Target order's {@link IShoppingOrderPublish.id}."
                     },
                     "good_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target good's {@link IShoppingOrderGood.id}",
                       "description": "Target good's {@link IShoppingOrderGood.id}."
                     },
                     "stock_id": {
                       "type": "string",
                       "format": "uuid",
-                      "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                       "description": "Target stock's {@link IShoppingSaleUnitStock.id}."
                     },
                     "quantity": {
                       "type": "number",
                       "minimum": 0,
-                      "title": "Quantity of the stock",
                       "description": "Quantity of the stock.\n\nIt can be precision value to express split shipping."
                     }
                   },
@@ -7325,7 +7053,6 @@
                   "additionalProperties": false
                 },
                 "minItems": 1,
-                "title": "List of pieces of the delivery",
                 "description": "List of pieces of the delivery."
               },
               "journeys": {
@@ -7341,33 +7068,28 @@
                         "shipping",
                         "delivering"
                       ],
-                      "title": "Type of journey",
                       "description": "Type of journey.\n\n- preparing\n- manufacturing\n- shipping\n- delivering"
                     },
                     "title": {
                       "type": "string",
                       "nullable": true,
-                      "title": "Title of journey",
                       "description": "Title of journey."
                     },
                     "description": {
                       "type": "string",
                       "nullable": true,
-                      "title": "Description of journey",
                       "description": "Description of journey."
                     },
                     "started_at": {
                       "type": "string",
                       "format": "date-time",
                       "nullable": true,
-                      "title": "Start time of the journey",
                       "description": "Start time of the journey."
                     },
                     "completed_at": {
                       "type": "string",
                       "format": "date-time",
                       "nullable": true,
-                      "title": "Completion time of the journey",
                       "description": "Completion time of the journey."
                     }
                   },
@@ -7381,7 +7103,6 @@
                   "description": "Description of the current {@link IShoppingDeliveryJourney.ICreate} type:\n\n> Creation information of the delivery journey.\n\n------------------------------\n\nDescription of the parent {@link IShoppingDeliveryJourney} type:\n\n> Journey of delivery.\n> \n> `IShoppingDeliveryJourney` is a subsidiary entity of {@link IShoppingDelivery},\n> describing each journey of the delivery. For reference, the word journey\n> means each step of the delivery process, such as preparing, shipping, and\n> delivering {@link IShoppingOrderGood goods} to the\n> {@link IShoppingCustomer customer}.",
                   "additionalProperties": false
                 },
-                "title": "List of journeys of the delivery",
                 "description": "List of journeys of the delivery.\n\nThis is initial data, and it is also possible to accumulate journey data\nafter the delivery creation."
               },
               "shippers": {
@@ -7408,7 +7129,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IShoppingDeliveryShipper.ICreate}"
                 },
-                "title": "List of shippers of the delivery",
                 "description": "List of shippers of the delivery."
               }
             },
@@ -7451,14 +7171,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -7543,33 +7261,28 @@
                   "shipping",
                   "delivering"
                 ],
-                "title": "Type of journey",
                 "description": "Type of journey.\n\n- preparing\n- manufacturing\n- shipping\n- delivering"
               },
               "title": {
                 "type": "string",
                 "nullable": true,
-                "title": "Title of journey",
                 "description": "Title of journey."
               },
               "description": {
                 "type": "string",
                 "nullable": true,
-                "title": "Description of journey",
                 "description": "Description of journey."
               },
               "started_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Start time of the journey",
                 "description": "Start time of the journey."
               },
               "completed_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey."
               }
             },
@@ -7614,7 +7327,6 @@
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey."
               }
             },
@@ -7717,31 +7429,26 @@
                         "enum": [
                           "amount"
                         ],
-                        "title": "Discount unit as amount",
                         "description": "Discount unit as amount.\n\nIt means the order price would be discounted by the amount value."
                       },
                       "value": {
                         "type": "number",
-                        "title": "Discount value as amount",
                         "description": "Discount value as amount."
                       },
                       "threshold": {
                         "type": "number",
                         "minimum": 0,
                         "nullable": true,
-                        "title": "Minimum purchase amount for discount",
                         "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value."
                       },
                       "limit": {
                         "type": "number",
                         "exclusiveMinimum": 0,
                         "nullable": true,
-                        "title": "Maximum amount available for discount",
                         "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order. This property would be meaningful\nonly when the {@link multiplicative} is `true`."
                       },
                       "multiplicative": {
                         "type": "boolean",
-                        "title": "Multiplicative or not",
                         "description": "Multiplicative or not.\n\nIf this property is `true`, the discount value would be multiplied\nto the {@link IShoppingCartCommodity.volume} or\n{@link IShoppingOrderGood.volume} value. Also, in that case,\nthe {@link limit} property would be meaningful."
                       }
                     },
@@ -7763,28 +7470,24 @@
                         "enum": [
                           "percent"
                         ],
-                        "title": "Discount unit as percent",
                         "description": "Discount unit as percent.\n\nIt means the order price would be discounted by the percent value."
                       },
                       "value": {
                         "type": "number",
                         "minimum": 0,
                         "maximum": 100,
-                        "title": "Discount value as percent",
                         "description": "Discount value as percent."
                       },
                       "threshold": {
                         "type": "number",
                         "minimum": 0,
                         "nullable": true,
-                        "title": "Minimum purchase amount for discount",
                         "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value."
                       },
                       "limit": {
                         "type": "number",
                         "exclusiveMinimum": 0,
                         "nullable": true,
-                        "title": "Maximum amount available for discount",
                         "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order."
                       }
                     },
@@ -7798,7 +7501,6 @@
                     "additionalProperties": false
                   }
                 ],
-                "title": "Discount information",
                 "description": "Discount information."
               },
               "restriction": {
@@ -7810,40 +7512,34 @@
                       "public",
                       "private"
                     ],
-                    "title": "Access level of coupon",
                     "description": "Access level of coupon.\n\n- public: possible to find from public API\n- private: unable to find from public API\n  - arbitrarily assigned by the seller or administrator\n  - issued from one-time link"
                   },
                   "exclusive": {
                     "type": "boolean",
-                    "title": "Exclusivity or not",
                     "description": "Exclusivity or not.\n\nAn exclusive discount coupon refers to a discount coupon that has an\nexclusive relationship with other discount coupons and can only be\nused alone. That is, when an exclusive discount coupon is used, no\nother discount coupon can be used for the same\n{@link IShoppingOrder order} or {@link IShoppingOrderGood good}.\n\nPlease note that this exclusive attribute is a very different concept\nfrom multiplicative, which means whether the same coupon can be\nmultiplied and applied to multiple coupons of the same order, so\nplease do not confuse them."
                   },
                   "volume": {
                     "type": "integer",
                     "minimum": 0,
                     "nullable": true,
-                    "title": "Limited quantity issued",
                     "description": "Limited quantity issued.\n\nIf there is a limit to the quantity issued, it becomes impossible\nto issue tickets exceeding this value.\n\nIn other words, the concept of N coupons being issued on\na first-come, first-served basis is created."
                   },
                   "volume_per_citizen": {
                     "type": "integer",
                     "minimum": 0,
                     "nullable": true,
-                    "title": "Limited quantity issued per person",
                     "description": "Limited quantity issued per person.\n\nAs a limit to the total amount of issuance per person, it is\ncommon to assign 1 to limit duplicate issuance to the same citizen,\nor to use the NULL value to set no limit.\n\nOf course, by assigning a value of N, the total amount issued\nto the same citizen can be limited."
                   },
                   "expired_in": {
                     "type": "integer",
                     "minimum": 0,
                     "nullable": true,
-                    "title": "Expiration day(s) value",
                     "description": "Expiration day(s) value.\n\nThe concept of expiring N days after a discount coupon ticket is issued.\n\nTherefore, customers must use the ticket within N days, if possible,\nfrom the time it is issued."
                   },
                   "expired_at": {
                     "type": "string",
                     "format": "date-time",
                     "nullable": true,
-                    "title": "Expiration date",
                     "description": "Expiration date.\n\nA concept that expires after YYYY-MM-DD after a discount coupon ticket\nis issued.\n\nDouble restrictions are possible with expired_in, of which the one\nwith the shorter expiration date is used."
                   }
                 },
@@ -7871,7 +7567,6 @@
                             "type": "string"
                           },
                           "minItems": 1,
-                          "title": "List of target section's {@link IShoppingSection.code}s",
                           "description": "List of target section's {@link IShoppingSection.code}s."
                         },
                         "type": {
@@ -7906,7 +7601,6 @@
                             "format": "uuid"
                           },
                           "minItems": 1,
-                          "title": "List of target seller's {@link IShoppingSeller.id}s",
                           "description": "List of target seller's {@link IShoppingSeller.id}s."
                         },
                         "type": {
@@ -7941,7 +7635,6 @@
                             "format": "uuid"
                           },
                           "minItems": 1,
-                          "title": "List of target sale's {@link IShoppingSale.id}s",
                           "description": "List of target sale's {@link IShoppingSale.id}s."
                         },
                         "type": {
@@ -7982,12 +7675,10 @@
                                       "url",
                                       "referrer"
                                     ],
-                                    "title": "Kind of funnel restriction",
                                     "description": "Kind of funnel restriction."
                                   },
                                   "value": {
                                     "type": "string",
-                                    "title": "Target value",
                                     "description": "Target value."
                                   }
                                 },
@@ -8006,17 +7697,14 @@
                                     "enum": [
                                       "variable"
                                     ],
-                                    "title": "Kind of funnel restriction",
                                     "description": "Kind of funnel restriction."
                                   },
                                   "key": {
                                     "type": "string",
-                                    "title": "Target variable's key",
                                     "description": "Target variable's key."
                                   },
                                   "value": {
                                     "type": "string",
-                                    "title": "Target variable's value",
                                     "description": "Target variable's value."
                                   }
                                 },
@@ -8031,7 +7719,6 @@
                             ]
                           },
                           "minItems": 1,
-                          "title": "List of target funnels",
                           "description": "List of target funnels."
                         },
                         "type": {
@@ -8058,7 +7745,6 @@
                     }
                   ]
                 },
-                "title": "List of criteria information",
                 "description": "List of criteria information."
               },
               "disposable_codes": {
@@ -8066,26 +7752,22 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "Disposable codes for the coupon",
                 "description": "Disposable codes for the coupon."
               },
               "name": {
                 "type": "string",
-                "title": "Representative name of the coupon",
                 "description": "Representative name of the coupon."
               },
               "opened_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Opening time of the coupon",
                 "description": "Opening time of the coupon."
               },
               "closed_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Closing time of the coupon",
                 "description": "Closing time of the coupon.\n\nTickets cannot be issued after this time.\n\nHowever, previously issued tickets can still be used until their\nexpiration date."
               }
             },
@@ -8154,14 +7836,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -8413,14 +8093,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -8464,7 +8142,6 @@
             "properties": {
               "section_code": {
                 "type": "string",
-                "title": "Belonged section's {@link IShoppingSection.code}",
                 "description": "Belonged section's {@link IShoppingSection.code}."
               },
               "status": {
@@ -8474,21 +8151,18 @@
                   "suspended"
                 ],
                 "nullable": true,
-                "title": "Initial status of the sale",
                 "description": "Initial status of the sale.\n\n`null` or `undefined`: No restriction\n`paused`: Starts with {@link ITimestamps.paused_at paused} status\n`suspended`: Starts with {@link ITimestamps.suspended_at suspended} status"
               },
               "opened_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Opening time of the sale",
                 "description": "Opening time of the sale."
               },
               "closed_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Closing time of the sale",
                 "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever."
               },
               "content": {
@@ -8516,7 +8190,6 @@
                         "name": {
                           "type": "string",
                           "maxLength": 255,
-                          "title": "File name, except extension",
                           "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                         },
                         "extension": {
@@ -8524,14 +8197,12 @@
                           "minLength": 1,
                           "maxLength": 8,
                           "nullable": true,
-                          "title": "Extension",
                           "description": "Extension.\n\nPossible to omit like `README` case."
                         },
                         "url": {
                           "type": "string",
                           "format": "uri",
                           "contentMediaType": "image/*",
-                          "title": "URL path of the real file",
                           "description": "URL path of the real file."
                         }
                       },
@@ -8552,7 +8223,6 @@
                         "name": {
                           "type": "string",
                           "maxLength": 255,
-                          "title": "File name, except extension",
                           "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                         },
                         "extension": {
@@ -8560,14 +8230,12 @@
                           "minLength": 1,
                           "maxLength": 8,
                           "nullable": true,
-                          "title": "Extension",
                           "description": "Extension.\n\nPossible to omit like `README` case."
                         },
                         "url": {
                           "type": "string",
                           "format": "uri",
                           "contentMediaType": "image/*",
-                          "title": "URL path of the real file",
                           "description": "URL path of the real file."
                         }
                       },
@@ -8608,17 +8276,14 @@
                                 "enum": [
                                   "select"
                                 ],
-                                "title": "Discriminant for the type of selectable option",
                                 "description": "Discriminant for the type of selectable option."
                               },
                               "name": {
                                 "type": "string",
-                                "title": "Represents the name of the option",
                                 "description": "Represents the name of the option."
                               },
                               "variable": {
                                 "type": "boolean",
-                                "title": "Whether the option is variable or not",
                                 "description": "Whether the option is variable or not.\n\nWhen type of current option is \"select\", this attribute means whether\nselecting different candidate value affects the final stock or not."
                               },
                               "candidates": {
@@ -8628,7 +8293,6 @@
                                   "properties": {
                                     "name": {
                                       "type": "string",
-                                      "title": "Represents the name of the candidate value",
                                       "description": "Represents the name of the candidate value."
                                     }
                                   },
@@ -8639,7 +8303,6 @@
                                   "additionalProperties": false
                                 },
                                 "minItems": 1,
-                                "title": "List of candidate values",
                                 "description": "List of candidate values."
                               }
                             },
@@ -8662,12 +8325,10 @@
                                   "number",
                                   "boolean"
                                 ],
-                                "title": "Type of descriptive option",
                                 "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing."
                               },
                               "name": {
                                 "type": "string",
-                                "title": "Readable name of the option",
                                 "description": "Readable name of the option."
                               }
                             },
@@ -8680,7 +8341,6 @@
                           }
                         ]
                       },
-                      "title": "List of options",
                       "description": "List of options."
                     },
                     "stocks": {
@@ -8690,7 +8350,6 @@
                         "properties": {
                           "name": {
                             "type": "string",
-                            "title": "Representative name of the stock",
                             "description": "Representative name of the stock."
                           },
                           "price": {
@@ -8699,13 +8358,11 @@
                               "nominal": {
                                 "type": "number",
                                 "minimum": 0,
-                                "title": "Nominal price",
                                 "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount."
                               },
                               "real": {
                                 "type": "number",
                                 "minimum": 0,
-                                "title": "Real price to pay",
                                 "description": "Real price to pay."
                               }
                             },
@@ -8719,7 +8376,6 @@
                           "quantity": {
                             "type": "integer",
                             "minimum": 1,
-                            "title": "Initial inventory quantity",
                             "description": "Initial inventory quantity."
                           },
                           "choices": {
@@ -8745,7 +8401,6 @@
                               "description": "Description of the current {@link IShoppingSaleUnitStockChoice.ICreate} type:\n\n> Creation information of stock choice.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStockChoice} type:\n\n> Selection information of final stock.\n> \n> `IShoppingSaleUnitStockChoice` is an entity that represents which\n> {@link IShoppingSaleUnitSelectableOption option} of each variable \"select\"\n> type was selected for each {@link IShoppingSaleUnitStock stock} and which\n> {@link IShoppingSaleUnitOptionCandidate candidate value} was selected within\n> it.\n> \n> Of course, if the bound {@link IShoppingSaleUnit unit} does not have any\n> options, this entity can also be ignored.",
                               "additionalProperties": false
                             },
-                            "title": "List of choices",
                             "description": "List of choices.\n\nWhich candidate values being chosen for each option."
                           }
                         },
@@ -8759,22 +8414,18 @@
                         "additionalProperties": false
                       },
                       "minItems": 1,
-                      "title": "List of final stocks",
                       "description": "List of final stocks."
                     },
                     "name": {
                       "type": "string",
-                      "title": "Representative name of the unit",
                       "description": "Representative name of the unit."
                     },
                     "primary": {
                       "type": "boolean",
-                      "title": "Whether the unit is primary or not",
                       "description": "Whether the unit is primary or not.\n\nJust a labeling value."
                     },
                     "required": {
                       "type": "boolean",
-                      "title": "Whether the unit is required or not",
                       "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case."
                     }
                   },
@@ -8789,7 +8440,6 @@
                   "additionalProperties": false
                 },
                 "minItems": 1,
-                "title": "List of units",
                 "description": "List of units."
               },
               "tags": {
@@ -8797,7 +8447,6 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "List of search tags",
                 "description": "List of search tags."
               },
               "category_codes": {
@@ -8805,7 +8454,6 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
                 "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale."
               }
             },
@@ -8877,21 +8525,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -8963,7 +8608,6 @@
                         "name": {
                           "type": "string",
                           "maxLength": 255,
-                          "title": "File name, except extension",
                           "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                         },
                         "extension": {
@@ -8971,14 +8615,12 @@
                           "minLength": 1,
                           "maxLength": 8,
                           "nullable": true,
-                          "title": "Extension",
                           "description": "Extension.\n\nPossible to omit like `README` case."
                         },
                         "url": {
                           "type": "string",
                           "format": "uri",
                           "contentMediaType": "image/*",
-                          "title": "URL path of the real file",
                           "description": "URL path of the real file."
                         }
                       },
@@ -8999,7 +8641,6 @@
                         "name": {
                           "type": "string",
                           "maxLength": 255,
-                          "title": "File name, except extension",
                           "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                         },
                         "extension": {
@@ -9007,14 +8648,12 @@
                           "minLength": 1,
                           "maxLength": 8,
                           "nullable": true,
-                          "title": "Extension",
                           "description": "Extension.\n\nPossible to omit like `README` case."
                         },
                         "url": {
                           "type": "string",
                           "format": "uri",
                           "contentMediaType": "image/*",
-                          "title": "URL path of the real file",
                           "description": "URL path of the real file."
                         }
                       },
@@ -9055,17 +8694,14 @@
                                 "enum": [
                                   "select"
                                 ],
-                                "title": "Discriminant for the type of selectable option",
                                 "description": "Discriminant for the type of selectable option."
                               },
                               "name": {
                                 "type": "string",
-                                "title": "Represents the name of the option",
                                 "description": "Represents the name of the option."
                               },
                               "variable": {
                                 "type": "boolean",
-                                "title": "Whether the option is variable or not",
                                 "description": "Whether the option is variable or not.\n\nWhen type of current option is \"select\", this attribute means whether\nselecting different candidate value affects the final stock or not."
                               },
                               "candidates": {
@@ -9075,7 +8711,6 @@
                                   "properties": {
                                     "name": {
                                       "type": "string",
-                                      "title": "Represents the name of the candidate value",
                                       "description": "Represents the name of the candidate value."
                                     }
                                   },
@@ -9086,7 +8721,6 @@
                                   "additionalProperties": false
                                 },
                                 "minItems": 1,
-                                "title": "List of candidate values",
                                 "description": "List of candidate values."
                               }
                             },
@@ -9109,12 +8743,10 @@
                                   "number",
                                   "boolean"
                                 ],
-                                "title": "Type of descriptive option",
                                 "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing."
                               },
                               "name": {
                                 "type": "string",
-                                "title": "Readable name of the option",
                                 "description": "Readable name of the option."
                               }
                             },
@@ -9127,7 +8759,6 @@
                           }
                         ]
                       },
-                      "title": "List of options",
                       "description": "List of options."
                     },
                     "stocks": {
@@ -9137,7 +8768,6 @@
                         "properties": {
                           "name": {
                             "type": "string",
-                            "title": "Representative name of the stock",
                             "description": "Representative name of the stock."
                           },
                           "price": {
@@ -9146,13 +8776,11 @@
                               "nominal": {
                                 "type": "number",
                                 "minimum": 0,
-                                "title": "Nominal price",
                                 "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount."
                               },
                               "real": {
                                 "type": "number",
                                 "minimum": 0,
-                                "title": "Real price to pay",
                                 "description": "Real price to pay."
                               }
                             },
@@ -9166,7 +8794,6 @@
                           "quantity": {
                             "type": "integer",
                             "minimum": 1,
-                            "title": "Initial inventory quantity",
                             "description": "Initial inventory quantity."
                           },
                           "choices": {
@@ -9192,7 +8819,6 @@
                               "description": "Description of the current {@link IShoppingSaleUnitStockChoice.ICreate} type:\n\n> Creation information of stock choice.\n\n------------------------------\n\nDescription of the parent {@link IShoppingSaleUnitStockChoice} type:\n\n> Selection information of final stock.\n> \n> `IShoppingSaleUnitStockChoice` is an entity that represents which\n> {@link IShoppingSaleUnitSelectableOption option} of each variable \"select\"\n> type was selected for each {@link IShoppingSaleUnitStock stock} and which\n> {@link IShoppingSaleUnitOptionCandidate candidate value} was selected within\n> it.\n> \n> Of course, if the bound {@link IShoppingSaleUnit unit} does not have any\n> options, this entity can also be ignored.",
                               "additionalProperties": false
                             },
-                            "title": "List of choices",
                             "description": "List of choices.\n\nWhich candidate values being chosen for each option."
                           }
                         },
@@ -9206,22 +8832,18 @@
                         "additionalProperties": false
                       },
                       "minItems": 1,
-                      "title": "List of final stocks",
                       "description": "List of final stocks."
                     },
                     "name": {
                       "type": "string",
-                      "title": "Representative name of the unit",
                       "description": "Representative name of the unit."
                     },
                     "primary": {
                       "type": "boolean",
-                      "title": "Whether the unit is primary or not",
                       "description": "Whether the unit is primary or not.\n\nJust a labeling value."
                     },
                     "required": {
                       "type": "boolean",
-                      "title": "Whether the unit is required or not",
                       "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case."
                     }
                   },
@@ -9236,7 +8858,6 @@
                   "additionalProperties": false
                 },
                 "minItems": 1,
-                "title": "List of units",
                 "description": "List of units."
               },
               "tags": {
@@ -9244,7 +8865,6 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "List of search tags",
                 "description": "List of search tags."
               },
               "category_codes": {
@@ -9252,7 +8872,6 @@
                 "items": {
                   "type": "string"
                 },
-                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
                 "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale."
               }
             },
@@ -9291,14 +8910,12 @@
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Opening time of the sale",
                 "description": "Opening time of the sale."
               },
               "closed_at": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "title": "Closing time of the sale",
                 "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever."
               }
             },
@@ -9415,17 +9032,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -9436,7 +9050,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -9444,14 +9057,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -9463,7 +9074,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -9511,17 +9121,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -9532,7 +9139,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -9540,14 +9146,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -9559,7 +9163,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -9607,12 +9210,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -9623,7 +9224,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -9631,14 +9231,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -9650,7 +9248,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -9725,14 +9322,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -9810,12 +9405,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -9826,7 +9419,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -9834,14 +9426,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -9853,7 +9443,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -9925,17 +9514,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -9946,7 +9532,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -9954,14 +9539,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -9973,7 +9556,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -10021,17 +9603,14 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "title": {
                 "type": "string",
-                "title": "Title of article",
                 "description": "Title of article."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of article",
                 "description": "Content body of article."
               },
               "files": {
@@ -10042,7 +9621,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -10050,14 +9628,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -10069,7 +9645,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -10117,12 +9692,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -10133,7 +9706,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -10141,14 +9713,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -10160,7 +9730,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -10235,14 +9804,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -10320,12 +9887,10 @@
                   "md",
                   "txt"
                 ],
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`."
               },
               "body": {
                 "type": "string",
-                "title": "Content body of comment",
                 "description": "Content body of comment."
               },
               "files": {
@@ -10336,7 +9901,6 @@
                     "name": {
                       "type": "string",
                       "maxLength": 255,
-                      "title": "File name, except extension",
                       "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string."
                     },
                     "extension": {
@@ -10344,14 +9908,12 @@
                       "minLength": 1,
                       "maxLength": 8,
                       "nullable": true,
-                      "title": "Extension",
                       "description": "Extension.\n\nPossible to omit like `README` case."
                     },
                     "url": {
                       "type": "string",
                       "format": "uri",
                       "contentMediaType": "image/*",
-                      "title": "URL path of the real file",
                       "description": "URL path of the real file."
                     }
                   },
@@ -10363,7 +9925,6 @@
                   "additionalProperties": false,
                   "description": "Current Type: {@link IAttachmentFile.ICreate}\n\n------------------------------\n\nDescription of the parent {@link IAttachmentFile} type:\n\n> Attachment File.\n> \n> Every attachment files that are managed in current system.\n> \n> For reference, it is possible to omit one of file {@link name}\n> or {@link extension} like `.gitignore` or `README` case, but not\n> possible to omit both of them."
                 },
-                "title": "List of attachment files",
                 "description": "List of attachment files."
               }
             },
@@ -10452,8 +10013,7 @@
                 "required": [],
                 "additionalProperties": false,
                 "description": "Search conditions.",
-                "nullable": true,
-                "title": "Search conditions"
+                "nullable": true
               },
               "sort": {
                 "type": "array",
@@ -10475,21 +10035,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -10572,8 +10129,7 @@
                 "required": [],
                 "additionalProperties": false,
                 "description": "Search conditions.",
-                "nullable": true,
-                "title": "Search conditions"
+                "nullable": true
               },
               "sort": {
                 "type": "array",
@@ -10595,21 +10151,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sorting conditions",
                 "description": "Sorting conditions."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -10691,14 +10244,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -10789,7 +10340,6 @@
               "value": {
                 "type": "integer",
                 "minimum": 0,
-                "title": "Supplemented quantity",
                 "description": "Supplemented quantity."
               }
             },
@@ -10843,21 +10393,18 @@
                   ]
                 },
                 "nullable": true,
-                "title": "Sortable columns",
                 "description": "Sortable columns."
               },
               "page": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -10907,7 +10454,6 @@
               "value": {
                 "type": "integer",
                 "minimum": 0,
-                "title": "Supplemented quantity",
                 "description": "Supplemented quantity."
               }
             },
@@ -11071,14 +10617,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -11137,14 +10681,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -11238,14 +10780,12 @@
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Page number",
                 "description": "Page number."
               },
               "limit": {
                 "type": "integer",
                 "minimum": 0,
                 "nullable": true,
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page."
               }
             },
@@ -11298,9 +10838,9 @@
     }
   ],
   "options": {
-    "constraint": true,
     "recursive": 3,
-    "maxLength": null
+    "constraint": true,
+    "maxLength": 64
   },
   "errors": []
 }
