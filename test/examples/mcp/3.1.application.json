@@ -90,13 +90,11 @@
             "type": "object",
             "properties": {
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.",
                 "type": "string",
                 "format": "email"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -130,7 +128,6 @@
             "type": "object",
             "properties": {
               "discount": {
-                "title": "Discount information",
                 "description": "Discount information.",
                 "oneOf": [
                   {
@@ -142,12 +139,10 @@
                 ]
               },
               "restriction": {
-                "title": "Restriction information",
                 "description": "Restriction information.",
                 "$ref": "#/$defs/IShoppingCouponRestriction"
               },
               "criterias": {
-                "title": "List of criteria information",
                 "description": "List of criteria information.",
                 "type": "array",
                 "items": {
@@ -168,7 +163,6 @@
                 }
               },
               "disposable_codes": {
-                "title": "Disposable codes for the coupon",
                 "description": "Disposable codes for the coupon.",
                 "type": "array",
                 "items": {
@@ -176,12 +170,10 @@
                 }
               },
               "name": {
-                "title": "Representative name of the coupon",
                 "description": "Representative name of the coupon.",
                 "type": "string"
               },
               "opened_at": {
-                "title": "Opening time of the coupon",
                 "description": "Opening time of the coupon.",
                 "oneOf": [
                   {
@@ -194,7 +186,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the coupon",
                 "description": "Closing time of the coupon.\n\nTickets cannot be issued after this time.\n\nHowever, previously issued tickets can still be used until their\nexpiration date.",
                 "oneOf": [
                   {
@@ -222,17 +213,14 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as amount",
                 "description": "Discount unit as amount.\n\nIt means the order price would be discounted by the amount value.",
                 "const": "amount"
               },
               "value": {
-                "title": "Discount value as amount",
                 "description": "Discount value as amount.",
                 "type": "number"
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "oneOf": [
                   {
@@ -245,7 +233,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order. This property would be meaningful\nonly when the {@link multiplicative} is `true`.",
                 "oneOf": [
                   {
@@ -258,7 +245,6 @@
                 ]
               },
               "multiplicative": {
-                "title": "Multiplicative or not",
                 "description": "Multiplicative or not.\n\nIf this property is `true`, the discount value would be multiplied\nto the {@link IShoppingCartCommodity.volume} or\n{@link IShoppingOrderGood.volume} value. Also, in that case,\nthe {@link limit} property would be meaningful.",
                 "type": "boolean"
               }
@@ -276,19 +262,16 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as percent",
                 "description": "Discount unit as percent.\n\nIt means the order price would be discounted by the percent value.",
                 "const": "percent"
               },
               "value": {
-                "title": "Discount value as percent",
                 "description": "Discount value as percent.",
                 "type": "number",
                 "minimum": 0,
                 "maximum": 100
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "oneOf": [
                   {
@@ -301,7 +284,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order.",
                 "oneOf": [
                   {
@@ -326,7 +308,6 @@
             "type": "object",
             "properties": {
               "access": {
-                "title": "Access level of coupon",
                 "description": "Access level of coupon.\n\n- public: possible to find from public API\n- private: unable to find from public API\n  - arbitrarily assigned by the seller or administrator\n  - issued from one-time link",
                 "oneOf": [
                   {
@@ -338,12 +319,10 @@
                 ]
               },
               "exclusive": {
-                "title": "Exclusivity or not",
                 "description": "Exclusivity or not.\n\nAn exclusive discount coupon refers to a discount coupon that has an\nexclusive relationship with other discount coupons and can only be\nused alone. That is, when an exclusive discount coupon is used, no\nother discount coupon can be used for the same\n{@link IShoppingOrder order} or {@link IShoppingOrderGood good}.\n\nPlease note that this exclusive attribute is a very different concept\nfrom multiplicative, which means whether the same coupon can be\nmultiplied and applied to multiple coupons of the same order, so\nplease do not confuse them.",
                 "type": "boolean"
               },
               "volume": {
-                "title": "Limited quantity issued",
                 "description": "Limited quantity issued.\n\nIf there is a limit to the quantity issued, it becomes impossible\nto issue tickets exceeding this value.\n\nIn other words, the concept of N coupons being issued on\na first-come, first-served basis is created.",
                 "oneOf": [
                   {
@@ -356,7 +335,6 @@
                 ]
               },
               "volume_per_citizen": {
-                "title": "Limited quantity issued per person",
                 "description": "Limited quantity issued per person.\n\nAs a limit to the total amount of issuance per person, it is\ncommon to assign 1 to limit duplicate issuance to the same citizen,\nor to use the NULL value to set no limit.\n\nOf course, by assigning a value of N, the total amount issued\nto the same citizen can be limited.",
                 "oneOf": [
                   {
@@ -369,7 +347,6 @@
                 ]
               },
               "expired_in": {
-                "title": "Expiration day(s) value",
                 "description": "Expiration day(s) value.\n\nThe concept of expiring N days after a discount coupon ticket is issued.\n\nTherefore, customers must use the ticket within N days, if possible,\nfrom the time it is issued.",
                 "oneOf": [
                   {
@@ -382,7 +359,6 @@
                 ]
               },
               "expired_at": {
-                "title": "Expiration date",
                 "description": "Expiration date.\n\nA concept that expires after YYYY-MM-DD after a discount coupon ticket\nis issued.\n\nDouble restrictions are possible with expired_in, of which the one\nwith the shorter expiration date is used.",
                 "oneOf": [
                   {
@@ -409,7 +385,6 @@
             "type": "object",
             "properties": {
               "section_codes": {
-                "title": "List of target section's {@link IShoppingSection.code}s",
                 "description": "List of target section's {@link IShoppingSection.code}s.",
                 "type": "array",
                 "items": {
@@ -442,7 +417,6 @@
             "type": "object",
             "properties": {
               "seller_ids": {
-                "title": "List of target seller's {@link IShoppingSeller.id}s",
                 "description": "List of target seller's {@link IShoppingSeller.id}s.",
                 "type": "array",
                 "items": {
@@ -476,7 +450,6 @@
             "type": "object",
             "properties": {
               "sale_ids": {
-                "title": "List of target sale's {@link IShoppingSale.id}s",
                 "description": "List of target sale's {@link IShoppingSale.id}s.",
                 "type": "array",
                 "items": {
@@ -510,7 +483,6 @@
             "type": "object",
             "properties": {
               "funnels": {
-                "title": "List of target funnels",
                 "description": "List of target funnels.",
                 "type": "array",
                 "items": {
@@ -550,7 +522,6 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "oneOf": [
                   {
@@ -562,7 +533,6 @@
                 ]
               },
               "value": {
-                "title": "Target value",
                 "description": "Target value.",
                 "type": "string"
               }
@@ -577,17 +547,14 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "const": "variable"
               },
               "key": {
-                "title": "Target variable's key",
                 "description": "Target variable's key.",
                 "type": "string"
               },
               "value": {
-                "title": "Target variable's value",
                 "description": "Target variable's value.",
                 "type": "string"
               }
@@ -681,7 +648,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -694,7 +660,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -871,7 +836,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -884,7 +848,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -1114,7 +1077,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -1127,7 +1089,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -1340,7 +1301,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -1353,7 +1313,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -1546,7 +1505,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -1559,7 +1517,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -1960,7 +1917,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -2072,7 +2028,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -2085,7 +2040,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -2155,7 +2109,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -2170,12 +2123,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2193,13 +2144,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -2213,7 +2162,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -2292,7 +2240,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -2305,7 +2252,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -2429,7 +2375,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -2444,12 +2389,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2467,13 +2410,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -2487,7 +2428,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -2561,7 +2501,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -2576,12 +2515,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2599,13 +2536,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -2619,7 +2554,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -2698,7 +2632,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -2711,7 +2644,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -2835,7 +2767,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -2850,12 +2781,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -2873,13 +2802,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -2893,7 +2820,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -2936,7 +2862,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "oneOf": [
                   {
@@ -2948,7 +2873,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -3000,7 +2924,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -3013,7 +2936,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -3170,7 +3092,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "oneOf": [
                   {
@@ -3182,7 +3103,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -3234,7 +3154,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -3247,7 +3166,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -3429,7 +3347,6 @@
             "type": "object",
             "properties": {
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -3442,7 +3359,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -3536,7 +3452,6 @@
             "type": "object",
             "properties": {
               "parent_id": {
-                "title": "Parent category's ID",
                 "description": "Parent category's ID.",
                 "oneOf": [
                   {
@@ -3549,12 +3464,10 @@
                 ]
               },
               "code": {
-                "title": "Identifier code of the category",
                 "description": "Identifier code of the category.\n\nThe code must be unique in the channel.",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the category",
                 "description": "Representative name of the category.\n\nThe name must be unique within the parent category. If no parent exists,\nthen the name must be unique within the channel between no parent\ncategories.",
                 "type": "string"
               }
@@ -3641,7 +3554,6 @@
             "type": "object",
             "properties": {
               "parent_id": {
-                "title": "Parent category's ID",
                 "description": "Parent category's ID.",
                 "oneOf": [
                   {
@@ -3654,12 +3566,10 @@
                 ]
               },
               "code": {
-                "title": "Identifier code of the category",
                 "description": "Identifier code of the category.\n\nThe code must be unique in the channel.",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the category",
                 "description": "Representative name of the category.\n\nThe name must be unique within the parent category. If no parent exists,\nthen the name must be unique within the channel between no parent\ncategories.",
                 "type": "string"
               }
@@ -3699,13 +3609,11 @@
             "type": "object",
             "properties": {
               "keep": {
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record.",
                 "type": "string",
                 "format": "uuid"
               },
               "absorbed": {
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging.",
                 "type": "array",
                 "items": {
@@ -3767,12 +3675,10 @@
             "type": "object",
             "properties": {
               "code": {
-                "title": "Identifier code",
                 "description": "Identifier code.",
                 "type": "string"
               },
               "name": {
-                "title": "Name of the channel",
                 "description": "Name of the channel.",
                 "type": "string"
               }
@@ -3848,7 +3754,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -3861,7 +3766,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -3951,7 +3855,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Name of the channel",
                 "description": "Name of the channel.",
                 "type": "string"
               }
@@ -3984,13 +3887,11 @@
             "type": "object",
             "properties": {
               "keep": {
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record.",
                 "type": "string",
                 "format": "uuid"
               },
               "absorbed": {
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging.",
                 "type": "array",
                 "items": {
@@ -4070,7 +3971,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -4083,7 +3983,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -4166,12 +4065,10 @@
             "type": "object",
             "properties": {
               "code": {
-                "title": "Identifier code",
                 "description": "Identifier code.",
                 "type": "string"
               },
               "name": {
-                "title": "Representative name of the section",
                 "description": "Representative name of the section.",
                 "type": "string"
               }
@@ -4247,7 +4144,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -4260,7 +4156,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -4350,7 +4245,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Representative name of the section",
                 "description": "Representative name of the section.",
                 "type": "string"
               }
@@ -4383,13 +4277,11 @@
             "type": "object",
             "properties": {
               "keep": {
-                "title": "Target record to keep after merging",
                 "description": "Target record to keep after merging.\n\nAfter merge process, {@link absorbed} records would be merged into\nthis {@link keep} record.",
                 "type": "string",
                 "format": "uuid"
               },
               "absorbed": {
-                "title": "To be absorbed to {@link keep} after merging",
                 "description": "To be absorbed to {@link keep} after merging.",
                 "type": "array",
                 "items": {
@@ -4486,12 +4378,10 @@
             "type": "object",
             "properties": {
               "nickname": {
-                "title": "Nickname that uniquely identifies the member",
                 "description": "Nickname that uniquely identifies the member.",
                 "type": "string"
               },
               "citizen": {
-                "title": "Citizen information",
                 "description": "Citizen information.",
                 "oneOf": [
                   {
@@ -4503,13 +4393,11 @@
                 ]
               },
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.",
                 "type": "string",
                 "format": "email"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -4526,14 +4414,12 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number",
                 "description": "Mobile number.",
                 "x-wrtn-payment-order-mobile": true,
                 "type": "string",
                 "pattern": "^[0-9]*$"
               },
               "name": {
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname.",
                 "x-wrtn-payment-order-citizen": true,
                 "type": "string"
@@ -4568,13 +4454,11 @@
             "type": "object",
             "properties": {
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.",
                 "type": "string",
                 "format": "email"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -4608,14 +4492,12 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number",
                 "description": "Mobile number.",
                 "x-wrtn-payment-order-mobile": true,
                 "type": "string",
                 "pattern": "^[0-9]*$"
               },
               "name": {
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname.",
                 "x-wrtn-payment-order-citizen": true,
                 "type": "string"
@@ -4650,7 +4532,6 @@
             "type": "object",
             "properties": {
               "citizen": {
-                "title": "Citizen activation info",
                 "description": "Citizen activation info.",
                 "oneOf": [
                   {
@@ -4662,22 +4543,18 @@
                 ]
               },
               "application": {
-                "title": "Identifier code of the external service",
                 "description": "Identifier code of the external service.\n\nIt can be same with {@link IShoppingChannel.code} in common.",
                 "type": "string"
               },
               "uid": {
-                "title": "Identifier key of external user from the external system",
                 "description": "Identifier key of external user from the external system.",
                 "type": "string"
               },
               "nickname": {
-                "title": "Nickname of external user in the external system",
                 "description": "Nickname of external user in the external system.",
                 "type": "string"
               },
               "password": {
-                "title": "Password of external user from the external system",
                 "description": "Password of external user from the external system.\n\nThis is a password issued to the user by an external service,\nand is by no means the actual user password. However, for\n{@link IShoppingCustomer customers} who entered the same\napplication and code as the current external system user, this is\nto determine whether to view this as a correct external system\nuser or a violation.",
                 "type": "string"
               },
@@ -4699,14 +4576,12 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number",
                 "description": "Mobile number.",
                 "x-wrtn-payment-order-mobile": true,
                 "type": "string",
                 "pattern": "^[0-9]*$"
               },
               "name": {
-                "title": "Real name, or equivalent nickname",
                 "description": "Real name, or equivalent nickname.",
                 "x-wrtn-payment-order-citizen": true,
                 "type": "string"
@@ -4741,12 +4616,10 @@
             "type": "object",
             "properties": {
               "oldbie": {
-                "title": "Current password",
                 "description": "Current password.",
                 "type": "string"
               },
               "newbie": {
-                "title": "The new password to change",
                 "description": "The new password to change.",
                 "type": "string"
               }
@@ -4839,7 +4712,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -4852,7 +4724,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -4981,7 +4852,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -4994,7 +4864,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -5129,7 +4998,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -5142,7 +5010,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -5503,7 +5370,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -5516,7 +5382,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -5747,7 +5612,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -5760,7 +5624,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -5939,13 +5802,11 @@
             "type": "object",
             "properties": {
               "sale_id": {
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stocks": {
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased.",
                 "type": "array",
                 "items": {
@@ -5954,13 +5815,11 @@
                 "minItems": 1
               },
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.",
                 "type": "integer",
                 "minimum": 1
               },
               "accumulate": {
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created.",
                 "oneOf": [
                   {
@@ -5983,19 +5842,16 @@
             "type": "object",
             "properties": {
               "unit_id": {
-                "title": "Target unit's {@link IShoppingSaleUnit.id}",
                 "description": "Target unit's {@link IShoppingSaleUnit.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property.",
                 "type": "string",
                 "format": "uuid"
               },
               "choices": {
-                "title": "Creation information of the choices for each descriptive option",
                 "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array.",
                 "type": "array",
                 "items": {
@@ -6003,7 +5859,6 @@
                 }
               },
               "quantity": {
-                "title": "Quantity of the stock to purchase",
                 "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}.",
                 "type": "integer",
                 "minimum": 1
@@ -6021,13 +5876,11 @@
             "type": "object",
             "properties": {
               "option_id": {
-                "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                 "description": "Target option's {@link IShoppingSaleUnitOption.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "value": {
-                "title": "Written value about the option",
                 "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer.",
                 "oneOf": [
                   {
@@ -6203,7 +6056,6 @@
                 }
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -6216,7 +6068,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -6598,7 +6449,6 @@
             "type": "object",
             "properties": {
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.",
                 "type": "integer",
                 "minimum": 1
@@ -6699,13 +6549,11 @@
             "type": "object",
             "properties": {
               "sale_id": {
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stocks": {
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased.",
                 "type": "array",
                 "items": {
@@ -6714,13 +6562,11 @@
                 "minItems": 1
               },
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.",
                 "type": "integer",
                 "minimum": 1
               },
               "accumulate": {
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created.",
                 "oneOf": [
                   {
@@ -6743,19 +6589,16 @@
             "type": "object",
             "properties": {
               "unit_id": {
-                "title": "Target unit's {@link IShoppingSaleUnit.id}",
                 "description": "Target unit's {@link IShoppingSaleUnit.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property.",
                 "type": "string",
                 "format": "uuid"
               },
               "choices": {
-                "title": "Creation information of the choices for each descriptive option",
                 "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array.",
                 "type": "array",
                 "items": {
@@ -6763,7 +6606,6 @@
                 }
               },
               "quantity": {
-                "title": "Quantity of the stock to purchase",
                 "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}.",
                 "type": "integer",
                 "minimum": 1
@@ -6781,13 +6623,11 @@
             "type": "object",
             "properties": {
               "option_id": {
-                "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                 "description": "Target option's {@link IShoppingSaleUnitOption.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "value": {
-                "title": "Written value about the option",
                 "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer.",
                 "oneOf": [
                   {
@@ -6834,7 +6674,6 @@
             "type": "object",
             "properties": {
               "goods": {
-                "title": "List of goods in the order",
                 "description": "List of goods in the order.",
                 "type": "array",
                 "items": {
@@ -6843,7 +6682,6 @@
                 "minItems": 1
               },
               "name": {
-                "title": "Representative name of the order",
                 "description": "Representative name of the order.\n\nIf omit, the name will be generated automatically.",
                 "oneOf": [
                   {
@@ -6864,13 +6702,11 @@
             "type": "object",
             "properties": {
               "commodity_id": {
-                "title": "Target shopping cart commodity's {@link IShoppingCartCommodity.id}",
                 "description": "Target shopping cart commodity's {@link IShoppingCartCommodity.id}.\n\n`commodity_id` is the primary key of the {@link IShoppingCartCommodity}\nentity, which is the basis of the good to be created. In other words,\nit is the primary key of the shopping cart commodity that the customer\nhas selected and applied for the order.",
                 "type": "string",
                 "format": "uuid"
               },
               "volume": {
-                "title": "Volume of the good",
                 "description": "Volume of the good.\n\nThe value multiplied to {@link IShoppingCartCommodityStock.quantity}.\nIt's purpose is exactly same with {@link IShoppingCartCommodity.volume},\nbut rewritten because the {@link IShoppingCartCommodity} records are reusable\nuntil payment.",
                 "type": "integer",
                 "minimum": 0
@@ -6953,7 +6789,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -6966,7 +6801,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -7348,13 +7182,11 @@
             "type": "object",
             "properties": {
               "sale_id": {
-                "title": "Target sale's {@link IShoppingSale.id}",
                 "description": "Target sale's {@link IShoppingSale.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stocks": {
-                "title": "List of the stocks to be purchased",
                 "description": "List of the stocks to be purchased.",
                 "type": "array",
                 "items": {
@@ -7363,13 +7195,11 @@
                 "minItems": 1
               },
               "volume": {
-                "title": "Volume of the commodity to purchase",
                 "description": "Volume of the commodity to purchase.\n\nA value indicating how many sets would be multiplied to the children\n{@link IShoppingSaleUnitStock.IInvert.quantity} values.",
                 "type": "integer",
                 "minimum": 1
               },
               "accumulate": {
-                "title": "Whether to accumulate the volume or not",
                 "description": "Whether to accumulate the volume or not.\n\nIf this attribute is not `false` and there's same commodity that\ncomposed with same stocks and options, then the volume will be\naccumulated to the existed one.\n\nOtherwise, duplicated commodity would be newly created.",
                 "oneOf": [
                   {
@@ -7392,19 +7222,16 @@
             "type": "object",
             "properties": {
               "unit_id": {
-                "title": "Target unit's {@link IShoppingSaleUnit.id}",
                 "description": "Target unit's {@link IShoppingSaleUnit.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.\n\nIt must be matched with the {@link choices} property.",
                 "type": "string",
                 "format": "uuid"
               },
               "choices": {
-                "title": "Creation information of the choices for each descriptive option",
                 "description": "Creation information of the choices for each descriptive option.\n\nIf target option is not of descriptive but of selective, then\nthis property must be an empty array.",
                 "type": "array",
                 "items": {
@@ -7412,7 +7239,6 @@
                 }
               },
               "quantity": {
-                "title": "Quantity of the stock to purchase",
                 "description": "Quantity of the stock to purchase.\n\nThis value is multiplied by the {@link IShoppingCartCommodity.volume}.",
                 "type": "integer",
                 "minimum": 1
@@ -7430,13 +7256,11 @@
             "type": "object",
             "properties": {
               "option_id": {
-                "title": "Target option's {@link IShoppingSaleUnitOption.id}",
                 "description": "Target option's {@link IShoppingSaleUnitOption.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "value": {
-                "title": "Written value about the option",
                 "description": "Written value about the option.\n\nWhen target option's type is 'descriptive', then you have to\nfill this property with the written value by the customer.",
                 "oneOf": [
                   {
@@ -7685,12 +7509,10 @@
             "type": "object",
             "properties": {
               "address": {
-                "title": "Address to receive",
                 "description": "Address to receive.",
                 "$ref": "#/$defs/IShoppingAddress.ICreate"
               },
               "vendor": {
-                "title": "Payment identifier from the payment vendor service",
                 "description": "Payment identifier from the payment vendor service.\n\nIf the order has been discounted for entire order price, then no need\nto send payment vendor info. Instead, you just configure the `null`\nvalue to this property.",
                 "oneOf": [
                   {
@@ -7711,48 +7533,39 @@
             "type": "object",
             "properties": {
               "mobile": {
-                "title": "Mobile number to contact",
                 "description": "Mobile number to contact.",
                 "type": "string",
                 "pattern": "^[0-9]*$"
               },
               "name": {
-                "title": "Representative name of the address",
                 "description": "Representative name of the address.\n\nSometimes be receiver's name, and sometimes be place name.",
                 "type": "string"
               },
               "country": {
-                "title": "Country name",
                 "description": "Country name.",
                 "type": "string"
               },
               "province": {
-                "title": "Province name",
                 "description": "Province name.",
                 "type": "string"
               },
               "city": {
-                "title": "City name",
                 "description": "City name.",
                 "type": "string"
               },
               "department": {
-                "title": "Department name",
                 "description": "Department name.",
                 "type": "string"
               },
               "possession": {
-                "title": "Detailed address containing street name, building number, and room number",
                 "description": "Detailed address containing street name, building number, and room number.",
                 "type": "string"
               },
               "zip_code": {
-                "title": "Zip code, or postal code",
                 "description": "Zip code, or postal code.",
                 "type": "string"
               },
               "special_note": {
-                "title": "Special description if required",
                 "description": "Special description if required.",
                 "oneOf": [
                   {
@@ -7781,13 +7594,11 @@
             "type": "object",
             "properties": {
               "code": {
-                "title": "The vendor code who will receive the payment",
                 "description": "The vendor code who will receive the payment.",
                 "x-wrtn-payment-vendor": true,
                 "type": "string"
               },
               "uid": {
-                "title": "The payment uid",
                 "description": "The payment uid.",
                 "x-wrtn-payment-uid": true,
                 "type": "string"
@@ -7841,7 +7652,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -7953,7 +7763,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -7966,7 +7775,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -8036,7 +7844,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -8051,12 +7858,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8074,13 +7879,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -8094,7 +7897,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -8173,7 +7975,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -8186,7 +7987,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -8310,7 +8110,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -8325,12 +8124,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8348,13 +8145,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -8368,7 +8163,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -8411,12 +8205,10 @@
             "type": "object",
             "properties": {
               "secret": {
-                "title": "Whether the question article is secret or not",
                 "description": "Whether the question article is secret or not.\n\nIf secret article, only the writer customer and related seller can see\nthe detailed content.",
                 "type": "boolean"
               },
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -8431,17 +8223,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8461,13 +8250,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -8481,7 +8268,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -8555,7 +8341,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -8570,17 +8355,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8599,13 +8381,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -8619,7 +8399,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -8668,7 +8447,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -8683,12 +8461,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8706,13 +8482,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -8726,7 +8500,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -8805,7 +8578,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -8818,7 +8590,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -8942,7 +8713,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -8957,12 +8727,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -8980,13 +8748,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -9000,7 +8766,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -9043,20 +8808,17 @@
             "type": "object",
             "properties": {
               "good_id": {
-                "title": "Target good's {@link IShoppingOrderGood.id}",
                 "description": "Target good's {@link IShoppingOrderGood.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "score": {
-                "title": "Score of the review",
                 "description": "Score of the review.",
                 "type": "number",
                 "minimum": 0,
                 "maximum": 100
               },
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -9071,17 +8833,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -9102,13 +8861,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -9122,7 +8879,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -9165,7 +8921,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "oneOf": [
                   {
@@ -9177,7 +8932,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -9229,7 +8983,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -9242,7 +8995,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -9430,14 +9182,12 @@
             "type": "object",
             "properties": {
               "score": {
-                "title": "Score of the review",
                 "description": "Score of the review.",
                 "type": "number",
                 "minimum": 0,
                 "maximum": 100
               },
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -9452,17 +9202,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -9482,13 +9229,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -9502,7 +9247,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -9545,7 +9289,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "oneOf": [
                   {
@@ -9557,7 +9300,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -9609,7 +9351,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -9622,7 +9363,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -9779,7 +9519,6 @@
             "type": "object",
             "properties": {
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -9792,7 +9531,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -9989,7 +9727,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -10002,7 +9739,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -10109,7 +9845,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -10122,7 +9857,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -10266,7 +10000,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -10279,7 +10012,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -10416,13 +10148,11 @@
             "type": "object",
             "properties": {
               "email": {
-                "title": "Email address of member",
                 "description": "Email address of member.\n\nIf the member has multiple email addresses, just use one of them.",
                 "type": "string",
                 "format": "email"
               },
               "password": {
-                "title": "Password of the member account",
                 "description": "Password of the member account.",
                 "type": "string"
               }
@@ -10456,7 +10186,6 @@
             "type": "object",
             "properties": {
               "pieces": {
-                "title": "List of pieces of the delivery",
                 "description": "List of pieces of the delivery.",
                 "type": "array",
                 "items": {
@@ -10465,7 +10194,6 @@
                 "minItems": 1
               },
               "journeys": {
-                "title": "List of journeys of the delivery",
                 "description": "List of journeys of the delivery.\n\nThis is initial data, and it is also possible to accumulate journey data\nafter the delivery creation.",
                 "type": "array",
                 "items": {
@@ -10473,7 +10201,6 @@
                 }
               },
               "shippers": {
-                "title": "List of shippers of the delivery",
                 "description": "List of shippers of the delivery.",
                 "type": "array",
                 "items": {
@@ -10492,25 +10219,21 @@
             "type": "object",
             "properties": {
               "publish_id": {
-                "title": "Target order's {@link IShoppingOrderPublish.id}",
                 "description": "Target order's {@link IShoppingOrderPublish.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "good_id": {
-                "title": "Target good's {@link IShoppingOrderGood.id}",
                 "description": "Target good's {@link IShoppingOrderGood.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "stock_id": {
-                "title": "Target stock's {@link IShoppingSaleUnitStock.id}",
                 "description": "Target stock's {@link IShoppingSaleUnitStock.id}.",
                 "type": "string",
                 "format": "uuid"
               },
               "quantity": {
-                "title": "Quantity of the stock",
                 "description": "Quantity of the stock.\n\nIt can be precision value to express split shipping.",
                 "type": "number",
                 "minimum": 0
@@ -10528,7 +10251,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of journey",
                 "description": "Type of journey.\n\n- preparing\n- manufacturing\n- shipping\n- delivering",
                 "oneOf": [
                   {
@@ -10546,7 +10268,6 @@
                 ]
               },
               "title": {
-                "title": "Title of journey",
                 "description": "Title of journey.",
                 "oneOf": [
                   {
@@ -10558,7 +10279,6 @@
                 ]
               },
               "description": {
-                "title": "Description of journey",
                 "description": "Description of journey.",
                 "oneOf": [
                   {
@@ -10570,7 +10290,6 @@
                 ]
               },
               "started_at": {
-                "title": "Start time of the journey",
                 "description": "Start time of the journey.",
                 "oneOf": [
                   {
@@ -10583,7 +10302,6 @@
                 ]
               },
               "completed_at": {
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey.",
                 "oneOf": [
                   {
@@ -10673,7 +10391,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -10686,7 +10403,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -10784,7 +10500,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of journey",
                 "description": "Type of journey.\n\n- preparing\n- manufacturing\n- shipping\n- delivering",
                 "oneOf": [
                   {
@@ -10802,7 +10517,6 @@
                 ]
               },
               "title": {
-                "title": "Title of journey",
                 "description": "Title of journey.",
                 "oneOf": [
                   {
@@ -10814,7 +10528,6 @@
                 ]
               },
               "description": {
-                "title": "Description of journey",
                 "description": "Description of journey.",
                 "oneOf": [
                   {
@@ -10826,7 +10539,6 @@
                 ]
               },
               "started_at": {
-                "title": "Start time of the journey",
                 "description": "Start time of the journey.",
                 "oneOf": [
                   {
@@ -10839,7 +10551,6 @@
                 ]
               },
               "completed_at": {
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey.",
                 "oneOf": [
                   {
@@ -10896,7 +10607,6 @@
             "type": "object",
             "properties": {
               "completed_at": {
-                "title": "Completion time of the journey",
                 "description": "Completion time of the journey.",
                 "oneOf": [
                   {
@@ -11013,7 +10723,6 @@
             "type": "object",
             "properties": {
               "discount": {
-                "title": "Discount information",
                 "description": "Discount information.",
                 "oneOf": [
                   {
@@ -11025,12 +10734,10 @@
                 ]
               },
               "restriction": {
-                "title": "Restriction information",
                 "description": "Restriction information.",
                 "$ref": "#/$defs/IShoppingCouponRestriction"
               },
               "criterias": {
-                "title": "List of criteria information",
                 "description": "List of criteria information.",
                 "type": "array",
                 "items": {
@@ -11051,7 +10758,6 @@
                 }
               },
               "disposable_codes": {
-                "title": "Disposable codes for the coupon",
                 "description": "Disposable codes for the coupon.",
                 "type": "array",
                 "items": {
@@ -11059,12 +10765,10 @@
                 }
               },
               "name": {
-                "title": "Representative name of the coupon",
                 "description": "Representative name of the coupon.",
                 "type": "string"
               },
               "opened_at": {
-                "title": "Opening time of the coupon",
                 "description": "Opening time of the coupon.",
                 "oneOf": [
                   {
@@ -11077,7 +10781,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the coupon",
                 "description": "Closing time of the coupon.\n\nTickets cannot be issued after this time.\n\nHowever, previously issued tickets can still be used until their\nexpiration date.",
                 "oneOf": [
                   {
@@ -11105,17 +10808,14 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as amount",
                 "description": "Discount unit as amount.\n\nIt means the order price would be discounted by the amount value.",
                 "const": "amount"
               },
               "value": {
-                "title": "Discount value as amount",
                 "description": "Discount value as amount.",
                 "type": "number"
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "oneOf": [
                   {
@@ -11128,7 +10828,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order. This property would be meaningful\nonly when the {@link multiplicative} is `true`.",
                 "oneOf": [
                   {
@@ -11141,7 +10840,6 @@
                 ]
               },
               "multiplicative": {
-                "title": "Multiplicative or not",
                 "description": "Multiplicative or not.\n\nIf this property is `true`, the discount value would be multiplied\nto the {@link IShoppingCartCommodity.volume} or\n{@link IShoppingOrderGood.volume} value. Also, in that case,\nthe {@link limit} property would be meaningful.",
                 "type": "boolean"
               }
@@ -11159,19 +10857,16 @@
             "type": "object",
             "properties": {
               "unit": {
-                "title": "Discount unit as percent",
                 "description": "Discount unit as percent.\n\nIt means the order price would be discounted by the percent value.",
                 "const": "percent"
               },
               "value": {
-                "title": "Discount value as percent",
                 "description": "Discount value as percent.",
                 "type": "number",
                 "minimum": 0,
                 "maximum": 100
               },
               "threshold": {
-                "title": "Minimum purchase amount for discount",
                 "description": "Minimum purchase amount for discount.\n\nWhen setting this value, discount coupons cannot be applied to\norder totals that are less than this value.",
                 "oneOf": [
                   {
@@ -11184,7 +10879,6 @@
                 ]
               },
               "limit": {
-                "title": "Maximum amount available for discount",
                 "description": "Maximum amount available for discount.\n\nWhen this value is set, no further discount will be given no\nmatter how much you order.",
                 "oneOf": [
                   {
@@ -11209,7 +10903,6 @@
             "type": "object",
             "properties": {
               "access": {
-                "title": "Access level of coupon",
                 "description": "Access level of coupon.\n\n- public: possible to find from public API\n- private: unable to find from public API\n  - arbitrarily assigned by the seller or administrator\n  - issued from one-time link",
                 "oneOf": [
                   {
@@ -11221,12 +10914,10 @@
                 ]
               },
               "exclusive": {
-                "title": "Exclusivity or not",
                 "description": "Exclusivity or not.\n\nAn exclusive discount coupon refers to a discount coupon that has an\nexclusive relationship with other discount coupons and can only be\nused alone. That is, when an exclusive discount coupon is used, no\nother discount coupon can be used for the same\n{@link IShoppingOrder order} or {@link IShoppingOrderGood good}.\n\nPlease note that this exclusive attribute is a very different concept\nfrom multiplicative, which means whether the same coupon can be\nmultiplied and applied to multiple coupons of the same order, so\nplease do not confuse them.",
                 "type": "boolean"
               },
               "volume": {
-                "title": "Limited quantity issued",
                 "description": "Limited quantity issued.\n\nIf there is a limit to the quantity issued, it becomes impossible\nto issue tickets exceeding this value.\n\nIn other words, the concept of N coupons being issued on\na first-come, first-served basis is created.",
                 "oneOf": [
                   {
@@ -11239,7 +10930,6 @@
                 ]
               },
               "volume_per_citizen": {
-                "title": "Limited quantity issued per person",
                 "description": "Limited quantity issued per person.\n\nAs a limit to the total amount of issuance per person, it is\ncommon to assign 1 to limit duplicate issuance to the same citizen,\nor to use the NULL value to set no limit.\n\nOf course, by assigning a value of N, the total amount issued\nto the same citizen can be limited.",
                 "oneOf": [
                   {
@@ -11252,7 +10942,6 @@
                 ]
               },
               "expired_in": {
-                "title": "Expiration day(s) value",
                 "description": "Expiration day(s) value.\n\nThe concept of expiring N days after a discount coupon ticket is issued.\n\nTherefore, customers must use the ticket within N days, if possible,\nfrom the time it is issued.",
                 "oneOf": [
                   {
@@ -11265,7 +10954,6 @@
                 ]
               },
               "expired_at": {
-                "title": "Expiration date",
                 "description": "Expiration date.\n\nA concept that expires after YYYY-MM-DD after a discount coupon ticket\nis issued.\n\nDouble restrictions are possible with expired_in, of which the one\nwith the shorter expiration date is used.",
                 "oneOf": [
                   {
@@ -11292,7 +10980,6 @@
             "type": "object",
             "properties": {
               "section_codes": {
-                "title": "List of target section's {@link IShoppingSection.code}s",
                 "description": "List of target section's {@link IShoppingSection.code}s.",
                 "type": "array",
                 "items": {
@@ -11325,7 +11012,6 @@
             "type": "object",
             "properties": {
               "seller_ids": {
-                "title": "List of target seller's {@link IShoppingSeller.id}s",
                 "description": "List of target seller's {@link IShoppingSeller.id}s.",
                 "type": "array",
                 "items": {
@@ -11359,7 +11045,6 @@
             "type": "object",
             "properties": {
               "sale_ids": {
-                "title": "List of target sale's {@link IShoppingSale.id}s",
                 "description": "List of target sale's {@link IShoppingSale.id}s.",
                 "type": "array",
                 "items": {
@@ -11393,7 +11078,6 @@
             "type": "object",
             "properties": {
               "funnels": {
-                "title": "List of target funnels",
                 "description": "List of target funnels.",
                 "type": "array",
                 "items": {
@@ -11433,7 +11117,6 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "oneOf": [
                   {
@@ -11445,7 +11128,6 @@
                 ]
               },
               "value": {
-                "title": "Target value",
                 "description": "Target value.",
                 "type": "string"
               }
@@ -11460,17 +11142,14 @@
             "type": "object",
             "properties": {
               "kind": {
-                "title": "Kind of funnel restriction",
                 "description": "Kind of funnel restriction.",
                 "const": "variable"
               },
               "key": {
-                "title": "Target variable's key",
                 "description": "Target variable's key.",
                 "type": "string"
               },
               "value": {
-                "title": "Target variable's value",
                 "description": "Target variable's value.",
                 "type": "string"
               }
@@ -11564,7 +11243,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -11577,7 +11255,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -11716,7 +11393,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -11729,7 +11405,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -12130,12 +11805,10 @@
             "type": "object",
             "properties": {
               "section_code": {
-                "title": "Belonged section's {@link IShoppingSection.code}",
                 "description": "Belonged section's {@link IShoppingSection.code}.",
                 "type": "string"
               },
               "status": {
-                "title": "Initial status of the sale",
                 "description": "Initial status of the sale.\n\n`null` or `undefined`: No restriction\n`paused`: Starts with {@link ITimestamps.paused_at paused} status\n`suspended`: Starts with {@link ITimestamps.suspended_at suspended} status",
                 "oneOf": [
                   {
@@ -12150,7 +11823,6 @@
                 ]
               },
               "opened_at": {
-                "title": "Opening time of the sale",
                 "description": "Opening time of the sale.",
                 "oneOf": [
                   {
@@ -12163,7 +11835,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the sale",
                 "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever.",
                 "oneOf": [
                   {
@@ -12176,12 +11847,10 @@
                 ]
               },
               "content": {
-                "title": "Description and image content describing the sale",
                 "description": "Description and image content describing the sale.",
                 "$ref": "#/$defs/IShoppingSaleContent.ICreate"
               },
               "units": {
-                "title": "List of units",
                 "description": "List of units.",
                 "type": "array",
                 "items": {
@@ -12190,7 +11859,6 @@
                 "minItems": 1
               },
               "tags": {
-                "title": "List of search tags",
                 "description": "List of search tags.",
                 "type": "array",
                 "items": {
@@ -12198,7 +11866,6 @@
                 }
               },
               "category_codes": {
-                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
                 "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale.",
                 "type": "array",
                 "items": {
@@ -12263,13 +11930,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -12283,7 +11948,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -12301,7 +11965,6 @@
             "type": "object",
             "properties": {
               "options": {
-                "title": "List of options",
                 "description": "List of options.",
                 "type": "array",
                 "items": {
@@ -12316,7 +11979,6 @@
                 }
               },
               "stocks": {
-                "title": "List of final stocks",
                 "description": "List of final stocks.",
                 "type": "array",
                 "items": {
@@ -12325,17 +11987,14 @@
                 "minItems": 1
               },
               "name": {
-                "title": "Representative name of the unit",
                 "description": "Representative name of the unit.",
                 "type": "string"
               },
               "primary": {
-                "title": "Whether the unit is primary or not",
                 "description": "Whether the unit is primary or not.\n\nJust a labeling value.",
                 "type": "boolean"
               },
               "required": {
-                "title": "Whether the unit is required or not",
                 "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
                 "type": "boolean"
               }
@@ -12353,22 +12012,18 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Discriminant for the type of selectable option",
                 "description": "Discriminant for the type of selectable option.",
                 "const": "select"
               },
               "name": {
-                "title": "Represents the name of the option",
                 "description": "Represents the name of the option.",
                 "type": "string"
               },
               "variable": {
-                "title": "Whether the option is variable or not",
                 "description": "Whether the option is variable or not.\n\nWhen type of current option is \"select\", this attribute means whether\nselecting different candidate value affects the final stock or not.",
                 "type": "boolean"
               },
               "candidates": {
-                "title": "List of candidate values",
                 "description": "List of candidate values.",
                 "type": "array",
                 "items": {
@@ -12389,7 +12044,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Represents the name of the candidate value",
                 "description": "Represents the name of the candidate value.",
                 "type": "string"
               }
@@ -12403,7 +12057,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of descriptive option",
                 "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
                 "oneOf": [
                   {
@@ -12418,7 +12071,6 @@
                 ]
               },
               "name": {
-                "title": "Readable name of the option",
                 "description": "Readable name of the option.",
                 "type": "string"
               }
@@ -12433,23 +12085,19 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Representative name of the stock",
                 "description": "Representative name of the stock.",
                 "type": "string"
               },
               "price": {
-                "title": "Price of the stock",
                 "description": "Price of the stock.",
                 "$ref": "#/$defs/IShoppingPrice"
               },
               "quantity": {
-                "title": "Initial inventory quantity",
                 "description": "Initial inventory quantity.",
                 "type": "integer",
                 "minimum": 1
               },
               "choices": {
-                "title": "List of choices",
                 "description": "List of choices.\n\nWhich candidate values being chosen for each option.",
                 "type": "array",
                 "items": {
@@ -12469,13 +12117,11 @@
             "type": "object",
             "properties": {
               "nominal": {
-                "title": "Nominal price",
                 "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.",
                 "type": "number",
                 "minimum": 0
               },
               "real": {
-                "title": "Real price to pay",
                 "description": "Real price to pay.",
                 "type": "number",
                 "minimum": 0
@@ -12530,7 +12176,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -12642,7 +12287,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -12655,7 +12299,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -12719,12 +12362,10 @@
             "type": "object",
             "properties": {
               "content": {
-                "title": "Description and image content describing the sale",
                 "description": "Description and image content describing the sale.",
                 "$ref": "#/$defs/IShoppingSaleContent.ICreate"
               },
               "units": {
-                "title": "List of units",
                 "description": "List of units.",
                 "type": "array",
                 "items": {
@@ -12733,7 +12374,6 @@
                 "minItems": 1
               },
               "tags": {
-                "title": "List of search tags",
                 "description": "List of search tags.",
                 "type": "array",
                 "items": {
@@ -12741,7 +12381,6 @@
                 }
               },
               "category_codes": {
-                "title": "List of target categories' {@link IShoppingChannelCategory.code}s",
                 "description": "List of target categories' {@link IShoppingChannelCategory.code}s.\n\nIf empty, it means all categories of the channel is listing the sale.",
                 "type": "array",
                 "items": {
@@ -12803,13 +12442,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -12823,7 +12460,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -12841,7 +12477,6 @@
             "type": "object",
             "properties": {
               "options": {
-                "title": "List of options",
                 "description": "List of options.",
                 "type": "array",
                 "items": {
@@ -12856,7 +12491,6 @@
                 }
               },
               "stocks": {
-                "title": "List of final stocks",
                 "description": "List of final stocks.",
                 "type": "array",
                 "items": {
@@ -12865,17 +12499,14 @@
                 "minItems": 1
               },
               "name": {
-                "title": "Representative name of the unit",
                 "description": "Representative name of the unit.",
                 "type": "string"
               },
               "primary": {
-                "title": "Whether the unit is primary or not",
                 "description": "Whether the unit is primary or not.\n\nJust a labeling value.",
                 "type": "boolean"
               },
               "required": {
-                "title": "Whether the unit is required or not",
                 "description": "Whether the unit is required or not.\n\nWhen the unit is required, the customer must select the unit. If do not\nselect, customer can't buy it.\n\nFor example, if there's a sale \"Macbook Set\" and one of the unit is the\n\"Main Body\", is it possible to buy the \"Macbook Set\" without the\n\"Main Body\" unit? This property is for that case.",
                 "type": "boolean"
               }
@@ -12893,22 +12524,18 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Discriminant for the type of selectable option",
                 "description": "Discriminant for the type of selectable option.",
                 "const": "select"
               },
               "name": {
-                "title": "Represents the name of the option",
                 "description": "Represents the name of the option.",
                 "type": "string"
               },
               "variable": {
-                "title": "Whether the option is variable or not",
                 "description": "Whether the option is variable or not.\n\nWhen type of current option is \"select\", this attribute means whether\nselecting different candidate value affects the final stock or not.",
                 "type": "boolean"
               },
               "candidates": {
-                "title": "List of candidate values",
                 "description": "List of candidate values.",
                 "type": "array",
                 "items": {
@@ -12929,7 +12556,6 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Represents the name of the candidate value",
                 "description": "Represents the name of the candidate value.",
                 "type": "string"
               }
@@ -12943,7 +12569,6 @@
             "type": "object",
             "properties": {
               "type": {
-                "title": "Type of descriptive option",
                 "description": "Type of descriptive option.\n\nWhich typed value should be written when purchasing.",
                 "oneOf": [
                   {
@@ -12958,7 +12583,6 @@
                 ]
               },
               "name": {
-                "title": "Readable name of the option",
                 "description": "Readable name of the option.",
                 "type": "string"
               }
@@ -12973,23 +12597,19 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "Representative name of the stock",
                 "description": "Representative name of the stock.",
                 "type": "string"
               },
               "price": {
-                "title": "Price of the stock",
                 "description": "Price of the stock.",
                 "$ref": "#/$defs/IShoppingPrice"
               },
               "quantity": {
-                "title": "Initial inventory quantity",
                 "description": "Initial inventory quantity.",
                 "type": "integer",
                 "minimum": 1
               },
               "choices": {
-                "title": "List of choices",
                 "description": "List of choices.\n\nWhich candidate values being chosen for each option.",
                 "type": "array",
                 "items": {
@@ -13009,13 +12629,11 @@
             "type": "object",
             "properties": {
               "nominal": {
-                "title": "Nominal price",
                 "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.",
                 "type": "number",
                 "minimum": 0
               },
               "real": {
-                "title": "Real price to pay",
                 "description": "Real price to pay.",
                 "type": "number",
                 "minimum": 0
@@ -13076,7 +12694,6 @@
             "type": "object",
             "properties": {
               "opened_at": {
-                "title": "Opening time of the sale",
                 "description": "Opening time of the sale.",
                 "oneOf": [
                   {
@@ -13089,7 +12706,6 @@
                 ]
               },
               "closed_at": {
-                "title": "Closing time of the sale",
                 "description": "Closing time of the sale.\n\nIf this value is `null`, the sale be continued forever.",
                 "oneOf": [
                   {
@@ -13219,7 +12835,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -13234,17 +12849,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13263,13 +12875,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -13283,7 +12893,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -13332,7 +12941,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -13347,17 +12955,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13376,13 +12981,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -13396,7 +12999,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -13445,7 +13047,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -13460,12 +13061,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13483,13 +13082,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -13503,7 +13100,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -13582,7 +13178,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -13595,7 +13190,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -13719,7 +13313,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -13734,12 +13327,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13757,13 +13348,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -13777,7 +13366,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -13851,7 +13439,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -13866,17 +13453,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -13895,13 +13479,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -13915,7 +13497,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -13964,7 +13545,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -13979,17 +13559,14 @@
                 ]
               },
               "title": {
-                "title": "Title of article",
                 "description": "Title of article.",
                 "type": "string"
               },
               "body": {
-                "title": "Content body of article",
                 "description": "Content body of article.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -14008,13 +13585,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -14028,7 +13603,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -14077,7 +13651,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -14092,12 +13665,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -14115,13 +13686,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -14135,7 +13704,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -14214,7 +13782,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -14227,7 +13794,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -14351,7 +13917,6 @@
             "type": "object",
             "properties": {
               "format": {
-                "title": "Format of body",
                 "description": "Format of body.\n\nSame meaning with extension like `html`, `md`, `txt`.",
                 "oneOf": [
                   {
@@ -14366,12 +13931,10 @@
                 ]
               },
               "body": {
-                "title": "Content body of comment",
                 "description": "Content body of comment.",
                 "type": "string"
               },
               "files": {
-                "title": "List of attachment files",
                 "description": "List of attachment files.",
                 "type": "array",
                 "items": {
@@ -14389,13 +13952,11 @@
             "type": "object",
             "properties": {
               "name": {
-                "title": "File name, except extension",
                 "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
                 "type": "string",
                 "maxLength": 255
               },
               "extension": {
-                "title": "Extension",
                 "description": "Extension.\n\nPossible to omit like `README` case.",
                 "oneOf": [
                   {
@@ -14409,7 +13970,6 @@
                 ]
               },
               "url": {
-                "title": "URL path of the real file",
                 "description": "URL path of the real file.",
                 "type": "string",
                 "format": "uri",
@@ -14452,7 +14012,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "oneOf": [
                   {
@@ -14464,7 +14023,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -14516,7 +14074,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -14529,7 +14086,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -14686,7 +14242,6 @@
             "type": "object",
             "properties": {
               "search": {
-                "title": "Search conditions",
                 "description": "Search conditions.",
                 "oneOf": [
                   {
@@ -14698,7 +14253,6 @@
                 ]
               },
               "sort": {
-                "title": "Sorting conditions",
                 "description": "Sorting conditions.",
                 "oneOf": [
                   {
@@ -14750,7 +14304,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -14763,7 +14316,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -14970,7 +14522,6 @@
             "type": "object",
             "properties": {
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -14983,7 +14534,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -15090,7 +14640,6 @@
             "type": "object",
             "properties": {
               "value": {
-                "title": "Supplemented quantity",
                 "description": "Supplemented quantity.",
                 "type": "integer",
                 "minimum": 0
@@ -15142,7 +14691,6 @@
             "type": "object",
             "properties": {
               "sort": {
-                "title": "Sortable columns",
                 "description": "Sortable columns.",
                 "oneOf": [
                   {
@@ -15164,7 +14712,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -15177,7 +14724,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -15240,7 +14786,6 @@
             "type": "object",
             "properties": {
               "value": {
-                "title": "Supplemented quantity",
                 "description": "Supplemented quantity.",
                 "type": "integer",
                 "minimum": 0
@@ -15419,7 +14964,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -15432,7 +14976,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -15539,7 +15082,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -15552,7 +15094,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -15696,7 +15237,6 @@
                 ]
               },
               "page": {
-                "title": "Page number",
                 "description": "Page number.",
                 "oneOf": [
                   {
@@ -15709,7 +15249,6 @@
                 ]
               },
               "limit": {
-                "title": "Limitation of records per a page",
                 "description": "Limitation of records per a page.",
                 "oneOf": [
                   {
@@ -15793,9 +15332,9 @@
     }
   ],
   "options": {
-    "constraint": true,
     "reference": true,
-    "maxLength": null
+    "constraint": true,
+    "maxLength": 64
   },
   "errors": []
 }

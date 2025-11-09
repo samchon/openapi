@@ -61,18 +61,20 @@
           "$ref": "#/$defs/IShoppingSaleContent.ICreate"
         },
         "channels": {
-          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.\n\n\n@minItems 1",
+          "description": "List of channels and categories.\n\nWhich channels and categories the sale is registered to.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleChannel.ICreate"
-          }
+          },
+          "minItems": 1
         },
         "units": {
-          "description": "List of units.\n\nRecords about individual product composition information that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.\n\n\n@minItems 1",
+          "description": "List of units.\n\nRecords about individual product composition information that are sold\nin the sale. Each {@link IShoppingSaleUnit unit} record has configurable\n{@link IShoppingSaleUnitOption options},\n{@link IShoppingSaleUnitOptionCandidate candidate} values for each\noption, and {@link IShoppingSaleUnitStock final stocks} determined by\nselecting every candidate values of each option.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleUnit.ICreate"
-          }
+          },
+          "minItems": 1
         },
         "tags": {
           "description": "List of search tags.",
@@ -137,8 +139,9 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.\n\n\n@maxLength 255",
-          "type": "string"
+          "description": "File name, except extension.\n\nIf there's file `.gitignore`, then its name is an empty string.",
+          "type": "string",
+          "maxLength": 255
         },
         "extension": {
           "description": "Extension.\n\nPossible to omit like `README` case.",
@@ -148,13 +151,15 @@
             },
             {
               "type": "string",
-              "description": "@minLength 1\n@maxLength 8"
+              "minLength": 1,
+              "maxLength": 8
             }
           ]
         },
         "url": {
-          "description": "URL path of the real file.\n\n\n@format uri",
-          "type": "string"
+          "description": "URL path of the real file.",
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": [
@@ -196,11 +201,12 @@
           }
         },
         "stocks": {
-          "description": "List of final stocks.\n\n\n@minItems 1",
+          "description": "List of final stocks.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleUnitStock.ICreate"
-          }
+          },
+          "minItems": 1
         },
         "name": {
           "description": "Representative name of the unit.",
@@ -243,11 +249,12 @@
           "type": "boolean"
         },
         "candidates": {
-          "description": "List of candidate values.\n\n\n@minItems 1",
+          "description": "List of candidate values.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/IShoppingSaleUnitOptionCandidate.ICreate"
-          }
+          },
+          "minItems": 1
         }
       },
       "required": [
@@ -283,8 +290,9 @@
           "$ref": "#/$defs/IShoppingPrice"
         },
         "quantity": {
-          "description": "Initial inventory quantity.\n\n\n@minimum 1",
-          "type": "integer"
+          "description": "Initial inventory quantity.",
+          "type": "integer",
+          "minimum": 1
         },
         "choices": {
           "description": "List of choices.\n\nWhich candidate values being chosen for each option.",
@@ -306,12 +314,14 @@
       "type": "object",
       "properties": {
         "nominal": {
-          "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.\n\n\n@minimum 0",
-          "type": "number"
+          "description": "Nominal price.\n\nThis is not {@link real real price} to pay, but just a nominal price to show.\nIf this value is greater than the {@link real real price}, it would be shown\nlike {@link IShoppingSeller seller} is giving a discount.",
+          "type": "number",
+          "minimum": 0
         },
         "real": {
-          "description": "Real price to pay.\n\n\n@minimum 0",
-          "type": "number"
+          "description": "Real price to pay.",
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
@@ -324,12 +334,14 @@
       "type": "object",
       "properties": {
         "option_index": {
-          "description": "Target option's index number in\n{@link IShoppingSaleUnit.ICreate.options}.\n\n\n@minimum 0",
-          "type": "integer"
+          "description": "Target option's index number in\n{@link IShoppingSaleUnit.ICreate.options}.",
+          "type": "integer",
+          "minimum": 0
         },
         "candidate_index": {
-          "description": "Target candidate's index number in\n{@link IShoppingSaleUnitSelectableOption.ICreate.candidates}.\n\n\n@minimum 0",
-          "type": "integer"
+          "description": "Target candidate's index number in\n{@link IShoppingSaleUnitSelectableOption.ICreate.candidates}.",
+          "type": "integer",
+          "minimum": 0
         }
       },
       "required": [

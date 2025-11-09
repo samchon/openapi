@@ -3,11 +3,12 @@
   "type": "object",
   "properties": {
     "name": {
-      "description": "@default John Doe",
-      "type": "string"
+      "type": "string",
+      "default": "John Doe"
     },
     "age": {
-      "type": "number"
+      "type": "number",
+      "default": 42
     }
   },
   "required": [
