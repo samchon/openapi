@@ -3,54 +3,60 @@ import fs from "fs";
 import typia from "typia";
 
 import { TestGlobal } from "../../../TestGlobal";
+import { LlmApplicationFactory } from "../../../utils/LlmApplicationFactory";
 import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 
 export const test_chatgpt_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "openai/gpt-4.1",
-    application: typia.llm.application<IApplication, "chatgpt">(),
+    model: "chatgpt",
   });
 
 export const test_claude_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "anthropic/claude-sonnet-4.5",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
 export const test_deepseek_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "deepseek/deepseek-v3.1-terminus:exacto",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
 export const test_gemini_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "google/gemini-2.5-pro",
-    application: typia.llm.application<IApplication, "gemini">(),
+    model: "gemini",
   });
 
 export const test_llama_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "meta-llama/llama-3.3-70b-instruct",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
 export const test_qwen_function_calling_optional = () =>
   validate_chatgpt_function_calling_optional({
     vendor: "qwen/qwen3-next-80b-a3b-instruct",
-    application: typia.llm.application<IApplication, "claude">(),
+    model: "claude",
   });
 
-const validate_chatgpt_function_calling_optional = <
+const validate_chatgpt_function_calling_optional = async <
   Model extends ILlmSchema.Model,
 >(props: {
   vendor: string;
-  application: ILlmApplication<Model>;
-}) =>
-  LlmFunctionCaller.test({
+  model: Model;
+}) => {
+  const application: ILlmApplication<Model> =
+    LlmApplicationFactory.convert<Model>({
+      model: props.model,
+      application: typia.json.application<IApplication>(),
+    });
+  return await LlmFunctionCaller.test({
     vendor: props.vendor,
-    model: props.application.model,
-    function: props.application.functions[0],
+    model: props.model,
+    function: application.functions[0],
     texts: [
       {
         role: "assistant",
@@ -64,7 +70,7 @@ const validate_chatgpt_function_calling_optional = <
     handleParameters: async (parameters) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/schemas/${props.application.model}.optional.schema.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/schemas/${props.model}.optional.schema.json`,
           JSON.stringify(parameters, null, 2),
           "utf8",
         );
@@ -72,12 +78,13 @@ const validate_chatgpt_function_calling_optional = <
     handleCompletion: async (input) => {
       if (process.argv.includes("--file"))
         await fs.promises.writeFile(
-          `${TestGlobal.ROOT}/examples/function-calling/arguments/${props.application.model}.optional.input.json`,
+          `${TestGlobal.ROOT}/examples/function-calling/arguments/${props.model}.optional.input.json`,
           JSON.stringify(input, null, 2),
           "utf8",
         );
     },
   });
+};
 
 interface IApplication {
   /** Register a membership. */
