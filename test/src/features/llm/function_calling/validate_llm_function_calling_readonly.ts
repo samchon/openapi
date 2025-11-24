@@ -97,7 +97,7 @@ const SYSTEM_MESSAGE = `You are a helpful assistant for function calling.`;
 const USER_MESSAGE = `
   A new member wants to participate.
 
-  The member's id is "${v4()}, and the account's email is "john@doe.com".
+  The member's id is "${v4()}", and the account's email is "john@doe.com".
   The account has been created at "2023-01-01T00:00:00.000Z" 
   and the member's name is "John Doe".
 `;
