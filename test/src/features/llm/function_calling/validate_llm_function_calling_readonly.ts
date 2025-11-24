@@ -79,6 +79,7 @@ const validate_llm_function_calling_readonly = async <
     ],
     handleParameters: async () => {},
     handleCompletion: async () => {},
+    strict: (props.config as any)?.strict,
   });
 };
 
