@@ -194,6 +194,8 @@ export namespace SwaggerV2Downgrader {
       const attribute: SwaggerV2.IJsonSchema.__IAttribute = {
         title: input.title,
         description: input.description,
+        deprecated: input.deprecated,
+        readOnly: input.readOnly,
         example: input.example,
         examples: input.examples ? Object.values(input.examples) : undefined,
         ...Object.fromEntries(
