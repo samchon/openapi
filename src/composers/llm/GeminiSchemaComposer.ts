@@ -101,6 +101,9 @@ export namespace GeminiSchemaComposer {
     const attribute: IJsonSchemaAttribute = {
       title: props.schema.title,
       description: props.schema.description,
+      deprecated: props.schema.deprecated,
+      readOnly: props.schema.readOnly,
+      writeOnly: props.schema.writeOnly,
       example: props.schema.example,
       examples: props.schema.examples,
       ...Object.fromEntries(
@@ -463,13 +466,16 @@ export namespace GeminiSchemaComposer {
     const attribute: IJsonSchemaAttribute = {
       title: props.schema.title,
       description: props.schema.description,
+      deprecated: props.schema.deprecated,
+      readOnly: props.schema.readOnly,
+      writeOnly: props.schema.writeOnly,
+      example: props.schema.example,
+      examples: props.schema.examples,
       ...Object.fromEntries(
         Object.entries(props.schema).filter(
           ([key, value]) => key.startsWith("x-") && value !== undefined,
         ),
       ),
-      example: props.schema.example,
-      examples: props.schema.examples,
     };
 
     const next = (schema: IGeminiSchema): OpenApi.IJsonSchema =>

@@ -15,6 +15,7 @@ export namespace LlmFunctionCaller {
     handleParameters?: (
       parameters: ILlmSchema.ModelParameters[Model],
     ) => Promise<void>;
+    strict?: boolean;
   }
 
   export const test = async <Model extends ILlmSchema.Model>(
@@ -82,6 +83,7 @@ export namespace LlmFunctionCaller {
               name: props.function.name,
               description: props.function.description,
               parameters: props.function.parameters as Record<string, any>,
+              strict: props.strict,
             },
           },
         ],

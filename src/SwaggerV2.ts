@@ -241,7 +241,7 @@ export namespace SwaggerV2 {
       "x-nullable"?: boolean;
     }
     export interface __IAttribute
-      extends Omit<IJsonSchemaAttribute, "examples"> {
+      extends Omit<IJsonSchemaAttribute, "examples" | "writeOnly"> {
       examples?: any[];
     }
   }

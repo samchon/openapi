@@ -87,6 +87,9 @@ export namespace LlmSchemaV3_1Composer {
     const attribute: IJsonSchemaAttribute = {
       title: props.schema.title,
       description: props.schema.description,
+      deprecated: props.schema.deprecated,
+      readOnly: props.schema.readOnly,
+      writeOnly: props.schema.writeOnly,
       example: props.schema.example,
       examples: props.schema.examples,
       ...Object.fromEntries(
