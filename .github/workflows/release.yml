@@ -3,12 +3,12 @@ name: release
 on:
   release:
     types: [created]
+permissions:
+  id-token: write
+  contents: read
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,3 +21,5 @@ jobs:
         run: pnpm run build
       - name: Publish to npm
         run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
