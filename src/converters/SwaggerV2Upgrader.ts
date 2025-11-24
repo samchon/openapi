@@ -272,15 +272,17 @@ export namespace SwaggerV2Upgrader {
       const attribute: IJsonSchemaAttribute = {
         title: input.title,
         description: input.description,
+        deprecated: input.deprecated,
+        readOnly: input.readOnly,
+        example: input.example,
+        examples: input.examples
+          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
+          : undefined,
         ...Object.fromEntries(
           Object.entries(input).filter(
             ([key, value]) => key.startsWith("x-") && value !== undefined,
           ),
         ),
-        example: input.example,
-        examples: input.examples
-          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
-          : undefined,
       };
       const visit = (schema: SwaggerV2.IJsonSchema): void => {
         // NULLABLE PROPERTY

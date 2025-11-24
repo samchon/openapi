@@ -253,15 +253,18 @@ export namespace OpenApiV3Upgrader {
       const attribute: IJsonSchemaAttribute = {
         title: input.title,
         description: input.description,
+        deprecated: input.deprecated,
+        readOnly: input.readOnly,
+        writeOnly: input.writeOnly,
+        example: input.example,
+        examples: Array.isArray(input.examples)
+          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
+          : input.examples,
         ...Object.fromEntries(
           Object.entries(input).filter(
             ([key, value]) => key.startsWith("x-") && value !== undefined,
           ),
         ),
-        example: input.example,
-        examples: Array.isArray(input.examples)
-          ? Object.fromEntries(input.examples.map((v, i) => [`v${i}`, v]))
-          : input.examples,
       };
       const visit = (schema: OpenApiV3.IJsonSchema): void => {
         // NULLABLE PROPERTY

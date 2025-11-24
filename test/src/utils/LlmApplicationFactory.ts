@@ -14,21 +14,21 @@ export namespace LlmApplicationFactory {
   export const convert = <Model extends ILlmSchema.Model>(props: {
     model: Model;
     application: IJsonSchemaApplication;
+    config?: ILlmSchema.IConfig<Model>;
   }): ILlmApplication<Model> => {
-    const options: ILlmSchema.IConfig<Model> = LlmSchemaComposer.defaultConfig(
-      props.model,
-    );
+    const config: ILlmSchema.IConfig<Model> =
+      props.config ?? LlmSchemaComposer.defaultConfig(props.model);
     return {
       model: props.model,
       functions: props.application.functions.map((func) =>
         convertFunction({
           model: props.model,
-          options: options,
+          options: config,
           components: props.application.components,
           function: func,
         }),
       ),
-      options,
+      options: config,
     };
   };
 

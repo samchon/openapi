@@ -183,6 +183,9 @@ export namespace OpenApiV3Downgrader {
       const attribute: OpenApiV3.IJsonSchema.__IAttribute = {
         title: input.title,
         description: input.description,
+        deprecated: input.deprecated,
+        readOnly: input.readOnly,
+        writeOnly: input.writeOnly,
         example: input.example,
         examples: input.examples,
         ...Object.fromEntries(
