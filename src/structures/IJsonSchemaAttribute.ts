@@ -65,6 +65,10 @@ export interface IJsonSchemaAttribute {
 
   /** List of example values as key-value pairs. */
   examples?: Record<string, any>;
+
+  readOnly?: boolean;
+
+  writeOnly?: boolean;
 }
 export namespace IJsonSchemaAttribute {
   /** Common attributes for boolean types. */
