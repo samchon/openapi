@@ -1,78 +1,96 @@
-import { IChatGptSchema } from "./IChatGptSchema";
-import { IClaudeSchema } from "./IClaudeSchema";
-import { IGeminiSchema } from "./IGeminiSchema";
-import { ILlmSchemaV3 } from "./ILlmSchemaV3";
-import { ILlmSchemaV3_1 } from "./ILlmSchemaV3_1";
+import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 
-/**
- * The schemas for the LLM function calling.
- *
- * `ILlmSchema` is a union type collecting every schema for LLM function calling.
- * Select a proper schema type according to the LLM provider you're using.
- *
- * {@link IChatGptSchema} is designed for OpenAI models. It is fully compatible
- * with OpenAI's strict mode, handling its restrictions by utilizing JSDoc tags
- * in the `description` property to support full JSON schema specifications
- * despite OpenAI's constraints.
- *
- * {@link IClaudeSchema} is the most recommended option as it most closely follows
- * the JSON schema standard with the most concise types and accurate expressions.
- * Claude has no JSON schema specification restrictions, making it ideal when
- * you're unsure about your AI model's requirements.
- *
- * {@link IGeminiSchema} is implemented according to the Gemini guide documentation.
- * Prior to November 2025, it had severe limitations, but now supports nearly all
- * JSON schema specifications.
- *
- * {@link ILlmSchemaV3} and {@link ILlmSchemaV3_1} are middle layer schemas for
- * advanced users who need direct control over OpenAPI v3.0 or v3.1 specifications.
- *
- * @author Jeongho Nam - https://github.com/samchon
- * @template Model Type of the LLM model
- * @reference https://platform.openai.com/docs/guides/function-calling
- * @reference https://platform.openai.com/docs/guides/structured-outputs
- */
-export type ILlmSchema<Model extends ILlmSchema.Model = ILlmSchema.Model> =
-  ILlmSchema.ModelSchema[Model];
-
+export type ILlmSchema =
+  | ILlmSchema.IBoolean
+  | ILlmSchema.IInteger
+  | ILlmSchema.INumber
+  | ILlmSchema.IString
+  | ILlmSchema.IArray
+  | ILlmSchema.IObject
+  | ILlmSchema.IReference
+  | ILlmSchema.IAnyOf
+  | ILlmSchema.INull
+  | ILlmSchema.IUnknown;
 export namespace ILlmSchema {
-  export type Model = "chatgpt" | "claude" | "gemini" | "3.0" | "3.1";
-  export interface ModelConfig {
-    chatgpt: IChatGptSchema.IConfig;
-    claude: IClaudeSchema.IConfig;
-    gemini: IGeminiSchema.IConfig;
-    "3.0": ILlmSchemaV3.IConfig;
-    "3.1": ILlmSchemaV3_1.IConfig;
-  }
-  export interface ModelParameters {
-    chatgpt: IChatGptSchema.IParameters;
-    claude: IClaudeSchema.IParameters;
-    gemini: IGeminiSchema.IParameters;
-    "3.0": ILlmSchemaV3.IParameters;
-    "3.1": ILlmSchemaV3_1.IParameters;
-  }
-  export interface ModelSchema {
-    chatgpt: IChatGptSchema;
-    claude: IClaudeSchema;
-    gemini: IGeminiSchema;
-    "3.0": ILlmSchemaV3;
-    "3.1": ILlmSchemaV3_1;
+  export interface IConfig {
+    /**
+     * Whether to allow reference type in everywhere.
+     *
+     * If you configure this property to `false`, most of reference types
+     * represented by {@link ILlmSchema.IReference} would be escaped to a plain
+     * type unless recursive type case.
+     *
+     * This is because the lower version of AI does not understand the reference
+     * type well, and even the modern version of AI sometimes occur the
+     * hallucination (Gemini).
+     *
+     * However, the reference type makes the schema size smaller, so that
+     * reduces the LLM token cost. Therefore, if you're using the modern version
+     * of AI, and want to reduce the LLM token cost, you can configure this
+     * property to `true`.
+     *
+     * @default true
+     */
+    reference?: boolean;
+
+    /**
+     * Whether to apply the strict mode.
+     *
+     * If you configure this property to `true`, the OpenAI function calling
+     * does not allow optional properties and dynamic key typed properties in
+     * the {@link IChatGptSchema.IObject} type. Instead, it increases the success
+     * rate of the function calling.
+     *
+     * By the way, if you utilize the {@link typia.validate} function and give
+     * its validation feedback to the OpenAI, its performance is much better
+     * than the strict mode.
+     *
+     * Therefore, I recommend you to just turn off the strict mode and utilize
+     * the {@link typia.validate} function instead.
+     *
+     * @default false
+     */
+    strict?: boolean;
   }
 
-  /**
-   * Type of function parameters.
-   *
-   * `ILlmSchema.IParameters` is a type defining a function's parameters as a
-   * keyworded object type.
-   *
-   * It also can be utilized for the structured output metadata.
-   *
-   * @reference https://platform.openai.com/docs/guides/structured-outputs
-   */
-  export type IParameters<Model extends ILlmSchema.Model = ILlmSchema.Model> =
-    ILlmSchema.ModelParameters[Model];
+  export interface IParameters extends Omit<IObject, "additionalProperties"> {
+    $defs: Record<string, ILlmSchema>;
+    additionalProperties: false;
+  }
 
-  /** Configuration for the LLM schema composition. */
-  export type IConfig<Model extends ILlmSchema.Model = ILlmSchema.Model> =
-    ILlmSchema.ModelConfig[Model];
+  export interface IBoolean extends IJsonSchemaAttribute.IBoolean {}
+  export interface IInteger extends IJsonSchemaAttribute.IInteger {}
+  export interface INumber extends IJsonSchemaAttribute.INumber {}
+  export interface IString extends IJsonSchemaAttribute.IString {}
+  export interface IArray extends IJsonSchemaAttribute.IArray {}
+  export interface IObject extends IJsonSchemaAttribute.IObject {}
+  export interface IReference extends IJsonSchemaAttribute {}
+
+  export interface IAnyOf extends IJsonSchemaAttribute {
+    /** List of the union types. */
+    anyOf: Exclude<ILlmSchema, ILlmSchema.IAnyOf>[];
+
+    /** Discriminator info of the union type. */
+    "x-discriminator"?: IAnyOf.IDiscriminator;
+  }
+  export namespace IAnyOf {
+    /** Discriminator info of the union type. */
+    export interface IDiscriminator {
+      /** Property name for the discriminator. */
+      propertyName: string;
+
+      /**
+       * Mapping of discriminator values to schema names.
+       *
+       * This property is valid only for {@link IReference} typed
+       * {@link IAnyOf.anyOf} elements. Therefore, the `key` of `mapping` is the
+       * discriminator value, and the `value` of `mapping` is the schema name
+       * like `#/components/schemas/SomeObject`.
+       */
+      mapping?: Record<string, string>;
+    }
+  }
+
+  export interface INull extends IJsonSchemaAttribute.INull {}
+  export interface IUnknown extends IJsonSchemaAttribute.IUnknown {}
 }
