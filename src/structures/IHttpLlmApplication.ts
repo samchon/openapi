@@ -60,10 +60,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
-export interface IHttpLlmApplication<Model extends ILlmSchema.Model> {
-  /** Model of the target LLM. */
-  model: Model;
-
+export interface IHttpLlmApplication {
   /**
    * List of function metadata.
    *
@@ -72,63 +69,62 @@ export interface IHttpLlmApplication<Model extends ILlmSchema.Model> {
    * When you want to execute the function with LLM constructed arguments, you
    * can do it through {@link LlmFetcher.execute} function.
    */
-  functions: IHttpLlmFunction<Model>[];
+  functions: IHttpLlmFunction[];
 
   /** List of errors occurred during the composition. */
   errors: IHttpLlmApplication.IError[];
 
   /** Configuration for the application. */
-  options: IHttpLlmApplication.IOptions<Model>;
+  options: IHttpLlmApplication.IOptions;
 }
 export namespace IHttpLlmApplication {
   /** Options for the HTTP LLM application schema composition. */
-  export type IOptions<Model extends ILlmSchema.Model> =
-    ILlmSchema.ModelConfig[Model] & {
-      /**
-       * Separator function for the parameters.
-       *
-       * When composing parameter arguments through LLM function call, there can
-       * be a case that some parameters must be composed by human, or LLM cannot
-       * understand the parameter.
-       *
-       * For example, if the parameter type has configured
-       * {@link IGeminiSchema.IString.contentMediaType} which indicates file
-       * uploading, it must be composed by human, not by LLM (Large Language
-       * Model).
-       *
-       * In that case, if you configure this property with a function that
-       * predicating whether the schema value must be composed by human or not,
-       * the parameters would be separated into two parts.
-       *
-       * - {@link ILlmFunction.separated.llm}
-       * - {@link ILlmFunction.separated.human}
-       *
-       * When writing the function, note that returning value `true` means to be
-       * a human composing the value, and `false` means to LLM composing the
-       * value. Also, when predicating the schema, it would better to utilize
-       * the {@link GeminiTypeChecker} like features.
-       *
-       * @default null
-       * @param schema Schema to be separated.
-       * @returns Whether the schema value must be composed by human or not.
-       */
-      separate?: null | ((schema: ILlmSchema.ModelSchema[Model]) => boolean);
+  export interface IOptions extends ILlmSchema.IConfig {
+    /**
+     * Separator function for the parameters.
+     *
+     * When composing parameter arguments through LLM function call, there can
+     * be a case that some parameters must be composed by human, or LLM cannot
+     * understand the parameter.
+     *
+     * For example, if the parameter type has configured
+     * {@link IGeminiSchema.IString.contentMediaType} which indicates file
+     * uploading, it must be composed by human, not by LLM (Large Language
+     * Model).
+     *
+     * In that case, if you configure this property with a function that
+     * predicating whether the schema value must be composed by human or not,
+     * the parameters would be separated into two parts.
+     *
+     * - {@link ILlmFunction.separated.llm}
+     * - {@link ILlmFunction.separated.human}
+     *
+     * When writing the function, note that returning value `true` means to be a
+     * human composing the value, and `false` means to LLM composing the value.
+     * Also, when predicating the schema, it would better to utilize the
+     * {@link GeminiTypeChecker} like features.
+     *
+     * @default null
+     * @param schema Schema to be separated.
+     * @returns Whether the schema value must be composed by human or not.
+     */
+    separate?: null | ((schema: ILlmSchema) => boolean);
 
-      /**
-       * Maximum length of function name.
-       *
-       * When a function name is longer than this value, it will be truncated.
-       *
-       * If not possible to truncate due to the duplication, the function name
-       * would be modified to randomly generated (UUID v4).
-       *
-       * @default 64
-       */
-      maxLength?: number;
+    /**
+     * Maximum length of function name.
+     *
+     * When a function name is longer than this value, it will be truncated.
+     *
+     * If not possible to truncate due to the duplication, the function name
+     * would be modified to randomly generated (UUID v4).
+     *
+     * @default 64
+     */
+    maxLength?: number;
 
-      /** Whether to disallow superfluous properties or not. */
-      equals?: boolean;
-    };
+    /** Whether to disallow superfluous properties or not. */
+    equals?: boolean;
+  }
 
   /** Error occurred in the composition. */
   export interface IError {
