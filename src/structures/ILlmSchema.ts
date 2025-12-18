@@ -403,9 +403,9 @@ export namespace ILlmSchema {
    *
    * `IAnyOf` represents a union type in TypeScript (`A | B | C`).
    *
-   * For reference, even if your Swagger (or OpenAPI) document defines `anyOf`
-   * instead of `oneOf`, {@link ILlmSchema} forcibly converts it to `anyOf`
-   * type.
+   * For reference, even if your Swagger (or OpenAPI) document defines `oneOf`
+   * instead of `anyOf`, {@link ILlmSchema} forcibly converts it to the
+   * `anyOf`-based {@link ILlmSchema.IAnyOf} type.
    */
   export interface IAnyOf extends IJsonSchemaAttribute {
     /** List of the union types. */
