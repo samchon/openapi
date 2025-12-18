@@ -1,97 +1,789 @@
+import { OpenApi } from "../OpenApi";
+import { IJsonSchemaAttribute } from "../structures/IJsonSchemaAttribute";
+import { ILlmFunction } from "../structures/ILlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
-import { ChatGptTypeChecker } from "../utils/ChatGptTypeChecker";
-import { ClaudeTypeChecker } from "../utils/ClaudeTypeChecker";
-import { DeepSeekTypeChecker } from "../utils/DeepSeekTypeChecker";
+import { IOpenApiSchemaError } from "../structures/IOpenApiSchemaError";
+import { IResult } from "../structures/IResult";
 import { GeminiTypeChecker } from "../utils/GeminiTypeChecker";
-import { LlamaTypeChecker } from "../utils/LlamaTypeChecker";
-import { LlmTypeCheckerV3 } from "../utils/LlmTypeCheckerV3";
-import { LlmTypeCheckerV3_1 } from "../utils/LlmTypeCheckerV3_1";
-import { ChatGptSchemaComposer } from "./llm/ChatGptSchemaComposer";
-import { ClaudeSchemaComposer } from "./llm/ClaudeSchemaComposer";
-import { GeminiSchemaComposer } from "./llm/GeminiSchemaComposer";
-import { LlmSchemaV3Composer } from "./llm/LlmSchemaV3Composer";
-import { LlmSchemaV3_1Composer } from "./llm/LlmSchemaV3_1Composer";
+import { NamingConvention } from "../utils/NamingConvention";
+import { OpenApiConstraintShifter } from "../utils/OpenApiConstraintShifter";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
+import { OpenApiValidator } from "../utils/OpenApiValidator";
+import { JsonDescriptionUtil } from "../utils/internal/JsonDescriptionUtil";
+import { LlmDescriptionInverter } from "./llm/LlmDescriptionInverter";
+import { LlmParametersFinder } from "./llm/LlmParametersComposer";
 
 export namespace LlmSchemaComposer {
-  export const parameters = <Model extends ILlmSchema.Model>(model: Model) =>
-    PARAMETERS_CASTERS[model];
+  /* -----------------------------------------------------------
+    CONVERTERS
+  ----------------------------------------------------------- */
+  export const parameters = (props: {
+    config: ILlmSchema.IConfig;
+    components: OpenApi.IComponents;
+    schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
+    accessor?: string;
+    refAccessor?: string;
+  }): IResult<ILlmSchema.IParameters, IOpenApiSchemaError> => {
+    const config: Required<ILlmSchema.IConfig> = getConfig(props.config);
+    const entity: IResult<OpenApi.IJsonSchema.IObject, IOpenApiSchemaError> =
+      LlmParametersFinder.parameters({
+        ...props,
+        method: "LlmSchemaComposer.parameters",
+      });
+    if (entity.success === false) return entity;
 
-  export const schema = <Model extends ILlmSchema.Model>(model: Model) =>
-    SCHEMA_CASTERS[model];
+    const $defs: Record<string, ILlmSchema> = {};
+    const result: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
+      ...props,
+      config,
+      $defs,
+      schema: entity.value,
+    });
+    if (result.success === false) return result;
+    return {
+      success: true,
+      value: {
+        ...(result.value as ILlmSchema.IObject),
+        additionalProperties: false,
+        $defs,
+        description: OpenApiTypeChecker.isReference(props.schema)
+          ? JsonDescriptionUtil.cascade({
+              prefix: "#/components/schemas/",
+              components: props.components,
+              schema: props.schema,
+              escape: true,
+            })
+          : result.value.description,
+      } satisfies ILlmSchema.IParameters,
+    };
+  };
 
-  export const defaultConfig = <Model extends ILlmSchema.Model>(model: Model) =>
-    DEFAULT_CONFIGS[model];
+  export const schema = (props: {
+    config: ILlmSchema.IConfig;
+    components: OpenApi.IComponents;
+    $defs: Record<string, ILlmSchema>;
+    schema: OpenApi.IJsonSchema;
+    accessor?: string;
+    refAccessor?: string;
+  }): IResult<ILlmSchema, IOpenApiSchemaError> => {
+    const config = getConfig(props.config);
+    const union: Array<ILlmSchema> = [];
+    const attribute: IJsonSchemaAttribute = {
+      title: props.schema.title,
+      description: props.schema.description,
+      deprecated: props.schema.deprecated,
+      readOnly: props.schema.readOnly,
+      writeOnly: props.schema.writeOnly,
+      example: props.schema.example,
+      examples: props.schema.examples,
+      ...Object.fromEntries(
+        Object.entries(props.schema).filter(
+          ([key, value]) => key.startsWith("x-") && value !== undefined,
+        ),
+      ),
+    };
 
-  export const typeChecker = <Model extends ILlmSchema.Model>(model: Model) =>
-    TYPE_CHECKERS[model];
+    const reasons: IOpenApiSchemaError.IReason[] = [];
+    OpenApiTypeChecker.visit({
+      closure: (next, accessor) => {
+        if (config.strict === true) {
+          // STRICT MODE VALIDATION
+          reasons.push(...validateStrict(next, accessor));
+        }
+        if (OpenApiTypeChecker.isTuple(next))
+          reasons.push({
+            schema: next,
+            accessor: accessor,
+            message: `LLM does not allow tuple type.`,
+          });
+        else if (OpenApiTypeChecker.isReference(next)) {
+          // UNABLE TO FIND MATCHED REFERENCE
+          const key = next.$ref.split("#/components/schemas/")[1];
+          if (props.components.schemas?.[key] === undefined)
+            reasons.push({
+              schema: next,
+              accessor: accessor,
+              message: `unable to find reference type ${JSON.stringify(key)}.`,
+            });
+        }
+      },
+      components: props.components,
+      schema: props.schema,
+      accessor: props.accessor,
+      refAccessor: props.refAccessor,
+    });
+    if (reasons.length > 0)
+      return {
+        success: false,
+        error: {
+          method: "LlmSchemaComposer.schema",
+          message: "Failed to compose LLM schema",
+          reasons,
+        },
+      };
 
-  export const separateParameters = <Model extends ILlmSchema.Model>(
-    model: Model,
-  ) => SEPARATE_PARAMETERS[model];
+    const visit = (input: OpenApi.IJsonSchema): void => {
+      if (OpenApiTypeChecker.isOneOf(input)) {
+        // UNION TYPE
+        input.oneOf.forEach(visit);
+      } else if (OpenApiTypeChecker.isReference(input)) {
+        // REFERENCE TYPE
+        const key: string = input.$ref.split("#/components/schemas/")[1];
+        const target: OpenApi.IJsonSchema | undefined =
+          props.components.schemas?.[key];
+        if (target === undefined)
+          return; // UNREACHABLE
+        else if (
+          // KEEP THE REFERENCE TYPE
+          config.reference === true ||
+          OpenApiTypeChecker.isRecursiveReference({
+            components: props.components,
+            schema: input,
+          })
+        ) {
+          const out = () => {
+            union.push({
+              ...input,
+              $ref: `#/$defs/${key}`,
+            });
+          };
+          if (props.$defs[key] !== undefined) {
+            out();
+            return;
+          }
+          props.$defs[key] = {};
+          const converted: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
+            config,
+            components: props.components,
+            $defs: props.$defs,
+            schema: target,
+            refAccessor: props.refAccessor,
+            accessor: `${props.refAccessor ?? "$def"}[${JSON.stringify(key)}]`,
+          });
+          if (converted.success === false) return; // UNREACHABLE
+          props.$defs[key] = converted.value;
+          out();
+        } else {
+          // DISCARD THE REFERENCE TYPE
+          const length: number = union.length;
+          visit(target);
+          if (length === union.length - 1 && union[union.length - 1] !== null)
+            union[union.length - 1] = {
+              ...union[union.length - 1]!,
+              description: JsonDescriptionUtil.cascade({
+                prefix: "#/components/schemas/",
+                components: props.components,
+                schema: input,
+                escape: true,
+              }),
+            };
+          else
+            attribute.description = JsonDescriptionUtil.cascade({
+              prefix: "#/components/schemas/",
+              components: props.components,
+              schema: input,
+              escape: true,
+            });
+        }
+      } else if (OpenApiTypeChecker.isObject(input)) {
+        // OBJECT TYPE
+        const properties: Record<string, ILlmSchema> = Object.fromEntries(
+          Object.entries(input.properties ?? {})
+            .map(([key, value]) => {
+              const converted: IResult<ILlmSchema, IOpenApiSchemaError> =
+                schema({
+                  config,
+                  components: props.components,
+                  $defs: props.$defs,
+                  schema: value,
+                  refAccessor: props.refAccessor,
+                  accessor: `${props.accessor ?? "$input.schema"}.properties[${JSON.stringify(key)}]`,
+                });
+              if (converted.success === false) {
+                reasons.push(...converted.error.reasons);
+                return [key, null];
+              }
+              return [key, converted.value];
+            })
+            .filter(([, value]) => value !== null),
+        );
+        if (Object.values(properties).some((v) => v === null)) return;
 
-  export const invert = <Model extends ILlmSchema.Model>(model: Model) =>
-    INVERTS[model];
+        const additionalProperties: ILlmSchema | boolean | undefined = (() => {
+          if (
+            typeof input.additionalProperties === "object" &&
+            input.additionalProperties !== null
+          ) {
+            const converted: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
+              config,
+              components: props.components,
+              $defs: props.$defs,
+              schema: input.additionalProperties,
+              refAccessor: props.refAccessor,
+              accessor: `${props.accessor ?? "$input.schema"}.additionalProperties`,
+            });
+            if (converted.success === false) {
+              reasons.push(...converted.error.reasons);
+              return undefined;
+            }
+            return converted.value;
+          }
+          return config.strict === true
+            ? false
+            : input.additionalProperties;
+        })();
+        if (additionalProperties === undefined) return;
 
-  /** @internal */
-  export const isDefs = <Model extends ILlmSchema.Model>(
-    model: Model,
-  ): boolean => IS_DEFS[model]();
+        union.push({
+          ...input,
+          properties,
+          additionalProperties,
+          required: input.required ?? [],
+        });
+      } else if (OpenApiTypeChecker.isArray(input)) {
+        // ARRAY TYPE
+        const items: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
+          config,
+          components: props.components,
+          $defs: props.$defs,
+          schema: input.items,
+          refAccessor: props.refAccessor,
+          accessor: `${props.accessor ?? "$input.schema"}.items`,
+        });
+        if (items.success === false) {
+          reasons.push(...items.error.reasons);
+          return;
+        }
+        union.push(
+          OpenApiConstraintShifter.shiftArray({
+            ...input,
+            items: items.value,
+          }),
+        );
+      } else if (OpenApiTypeChecker.isString(input))
+        union.push(OpenApiConstraintShifter.shiftString({ ...input }));
+      else if (
+        OpenApiTypeChecker.isNumber(input) ||
+        OpenApiTypeChecker.isInteger(input)
+      )
+        union.push(OpenApiConstraintShifter.shiftNumeric({ ...input }));
+      else if (OpenApiTypeChecker.isTuple(input))
+        return; // UNREACHABLE
+      else union.push({ ...input });
+    };
+
+    const visitConstant = (input: OpenApi.IJsonSchema): void => {
+      const insert = (value: any): void => {
+        const matched:
+          | ILlmSchema.IString
+          | ILlmSchema.INumber
+          | ILlmSchema.IBoolean
+          | undefined = union.find(
+          (u) =>
+            (u as (IJsonSchemaAttribute & { type: string }) | undefined)
+              ?.type === typeof value,
+        ) as ILlmSchema.IString | undefined;
+        if (matched !== undefined) {
+          matched.enum ??= [];
+          matched.enum.push(value);
+        } else
+          union.push({
+            type: typeof value as "number",
+            enum: [value],
+          });
+      };
+      if (OpenApiTypeChecker.isConstant(input)) insert(input.const);
+      else if (OpenApiTypeChecker.isOneOf(input))
+        input.oneOf.forEach(visitConstant);
+    };
+
+    visit(props.schema);
+    visitConstant(props.schema);
+
+    if (reasons.length > 0)
+      return {
+        success: false,
+        error: {
+          method: "LlmSchemaComposer.schema",
+          message: "Failed to compose LLM schema",
+          reasons,
+        },
+      };
+    else if (union.length === 0)
+      return {
+        success: true,
+        value: {
+          ...attribute,
+          type: undefined,
+        },
+      };
+    else if (union.length === 1)
+      return {
+        success: true,
+        value: {
+          ...attribute,
+          ...union[0],
+          description: union[0].description ?? attribute.description,
+        },
+      };
+    return {
+      success: true,
+      value: {
+        ...attribute,
+        anyOf: union,
+        "x-discriminator":
+          OpenApiTypeChecker.isOneOf(props.schema) &&
+          props.schema.discriminator !== undefined &&
+          props.schema.oneOf.length === union.length &&
+          union.every(
+            (e) =>
+              GeminiTypeChecker.isReference(e) || GeminiTypeChecker.isNull(e),
+          )
+            ? {
+                propertyName: props.schema.discriminator.propertyName,
+                mapping:
+                  props.schema.discriminator.mapping !== undefined
+                    ? Object.fromEntries(
+                        Object.entries(props.schema.discriminator.mapping).map(
+                          ([key, value]) => [
+                            key,
+                            `#/$defs/${value.split("/").at(-1)}`,
+                          ],
+                        ),
+                      )
+                    : undefined,
+              }
+            : undefined,
+      },
+    };
+  };
+
+  /* -----------------------------------------------------------
+    SEPARATORS
+  ----------------------------------------------------------- */
+  export const separate = (props: {
+    parameters: ILlmSchema.IParameters;
+    predicate: (schema: ILlmSchema) => boolean;
+    convention?: (key: string, type: "llm" | "human") => string;
+    equals?: boolean;
+  }): ILlmFunction.ISeparated => {
+    const convention =
+      props.convention ??
+      ((key, type) => `${key}.${NamingConvention.capitalize(type)}`);
+    const [llm, human] = separateObject({
+      predicate: props.predicate,
+      convention,
+      $defs: props.parameters.$defs,
+      schema: props.parameters,
+    });
+    if (llm === null || human === null)
+      return {
+        llm: (llm as ILlmSchema.IParameters | null) ?? {
+          type: "object",
+          properties: {} as Record<string, ILlmSchema>,
+          required: [],
+          additionalProperties: false,
+          $defs: {},
+        },
+        human: human as ILlmSchema.IParameters | null,
+      };
+    const output: ILlmFunction.ISeparated = {
+      llm: {
+        ...llm,
+        $defs: Object.fromEntries(
+          Object.entries(props.parameters.$defs).filter(([key]) =>
+            key.endsWith(".Llm"),
+          ),
+        ),
+        additionalProperties: false,
+      },
+      human: {
+        ...human,
+        $defs: Object.fromEntries(
+          Object.entries(props.parameters.$defs).filter(([key]) =>
+            key.endsWith(".Human"),
+          ),
+        ),
+        additionalProperties: false,
+      },
+    };
+    for (const key of Object.keys(props.parameters.$defs))
+      if (key.endsWith(".Llm") === false && key.endsWith(".Human") === false)
+        delete props.parameters.$defs[key];
+    if (Object.keys(output.llm.properties).length !== 0) {
+      const components: OpenApi.IComponents = {};
+      output.validate = OpenApiValidator.create({
+        components,
+        schema: invert({
+          components,
+          schema: output.llm,
+          $defs: output.llm.$defs,
+        }),
+        required: true,
+        equals: props.equals,
+      });
+    }
+    return output;
+  };
+
+  const separateStation = (props: {
+    predicate: (schema: ILlmSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchema>;
+    schema: ILlmSchema;
+  }): [ILlmSchema | null, ILlmSchema | null] => {
+    if (props.predicate(props.schema) === true) return [null, props.schema];
+    else if (
+      GeminiTypeChecker.isUnknown(props.schema) ||
+      GeminiTypeChecker.isAnyOf(props.schema)
+    )
+      return [props.schema, null];
+    else if (GeminiTypeChecker.isObject(props.schema))
+      return separateObject({
+        predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
+        schema: props.schema,
+      });
+    else if (GeminiTypeChecker.isArray(props.schema))
+      return separateArray({
+        predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
+        schema: props.schema,
+      });
+    else if (GeminiTypeChecker.isReference(props.schema))
+      return separateReference({
+        predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
+        schema: props.schema,
+      });
+    return [props.schema, null];
+  };
+
+  const separateArray = (props: {
+    predicate: (schema: ILlmSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchema>;
+    schema: ILlmSchema.IArray;
+  }): [ILlmSchema.IArray | null, ILlmSchema.IArray | null] => {
+    const [x, y] = separateStation({
+      predicate: props.predicate,
+      convention: props.convention,
+      $defs: props.$defs,
+      schema: props.schema.items,
+    });
+    return [
+      x !== null
+        ? {
+            ...props.schema,
+            items: x,
+          }
+        : null,
+      y !== null
+        ? {
+            ...props.schema,
+            items: y,
+          }
+        : null,
+    ];
+  };
+
+  const separateObject = (props: {
+    $defs: Record<string, ILlmSchema>;
+    predicate: (schema: ILlmSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    schema: ILlmSchema.IObject;
+  }): [ILlmSchema.IObject | null, ILlmSchema.IObject | null] => {
+    // EMPTY OBJECT
+    if (
+      Object.keys(props.schema.properties ?? {}).length === 0 &&
+      !!props.schema.additionalProperties === false
+    )
+      return [props.schema, null];
+
+    const llm = {
+      ...props.schema,
+      properties: {} as Record<string, ILlmSchema>,
+      additionalProperties: props.schema.additionalProperties,
+    } satisfies ILlmSchema.IObject;
+    const human = {
+      ...props.schema,
+      properties: {} as Record<string, ILlmSchema>,
+    } satisfies ILlmSchema.IObject;
+
+    for (const [key, value] of Object.entries(props.schema.properties ?? {})) {
+      const [x, y] = separateStation({
+        predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
+        schema: value,
+      });
+      if (x !== null) llm.properties[key] = x;
+      if (y !== null) human.properties[key] = y;
+    }
+    if (
+      typeof props.schema.additionalProperties === "object" &&
+      props.schema.additionalProperties !== null
+    ) {
+      const [dx, dy] = separateStation({
+        predicate: props.predicate,
+        convention: props.convention,
+        $defs: props.$defs,
+        schema: props.schema.additionalProperties,
+      });
+      llm.additionalProperties = dx ?? false;
+      human.additionalProperties = dy ?? false;
+    }
+    return [
+      !!Object.keys(llm.properties).length || !!llm.additionalProperties
+        ? shrinkRequired(llm)
+        : null,
+      !!Object.keys(human.properties).length || human.additionalProperties
+        ? shrinkRequired(human)
+        : null,
+    ];
+  };
+
+  const separateReference = (props: {
+    predicate: (schema: ILlmSchema) => boolean;
+    convention: (key: string, type: "llm" | "human") => string;
+    $defs: Record<string, ILlmSchema>;
+    schema: ILlmSchema.IReference;
+  }): [ILlmSchema.IReference | null, ILlmSchema.IReference | null] => {
+    const key: string = props.schema.$ref.split("#/$defs/")[1];
+    const humanKey: string = props.convention(key, "human");
+    const llmKey: string = props.convention(key, "llm");
+
+    // FIND EXISTING
+    if (props.$defs?.[humanKey] || props.$defs?.[llmKey])
+      return [
+        props.$defs?.[llmKey]
+          ? {
+              ...props.schema,
+              $ref: `#/$defs/${llmKey}`,
+            }
+          : null,
+        props.$defs?.[humanKey]
+          ? {
+              ...props.schema,
+              $ref: `#/$defs/${humanKey}`,
+            }
+          : null,
+      ];
+
+    // PRE-ASSIGNMENT
+    props.$defs![llmKey] = {};
+    props.$defs![humanKey] = {};
+
+    // DO COMPOSE
+    const schema: ILlmSchema = props.$defs?.[key]!;
+    const [llm, human] = separateStation({
+      predicate: props.predicate,
+      convention: props.convention,
+      $defs: props.$defs,
+      schema,
+    });
+    if (llm !== null) Object.assign(props.$defs[llmKey], llm);
+    if (human !== null) Object.assign(props.$defs[humanKey], human);
+
+    // ONLY ONE
+    if (llm === null || human === null) {
+      delete props.$defs[llmKey];
+      delete props.$defs[humanKey];
+      return llm === null ? [null, props.schema] : [props.schema, null];
+    }
+
+    // BOTH OF THEM
+    return [
+      llm !== null
+        ? {
+            ...props.schema,
+            $ref: `#/$defs/${llmKey}`,
+          }
+        : null,
+      human !== null
+        ? {
+            ...props.schema,
+            $ref: `#/$defs/${humanKey}`,
+          }
+        : null,
+    ];
+  };
+
+  const shrinkRequired = (s: ILlmSchema.IObject): ILlmSchema.IObject => {
+    s.required = s.required.filter((key) => s.properties?.[key] !== undefined);
+    return s;
+  };
+
+  /* -----------------------------------------------------------
+    INVERTERS
+  ----------------------------------------------------------- */
+  export const invert = (props: {
+    components: OpenApi.IComponents;
+    schema: ILlmSchema;
+    $defs: Record<string, ILlmSchema>;
+  }): OpenApi.IJsonSchema => {
+    const union: OpenApi.IJsonSchema[] = [];
+    const attribute: IJsonSchemaAttribute = {
+      title: props.schema.title,
+      description: props.schema.description,
+      deprecated: props.schema.deprecated,
+      readOnly: props.schema.readOnly,
+      writeOnly: props.schema.writeOnly,
+      example: props.schema.example,
+      examples: props.schema.examples,
+      ...Object.fromEntries(
+        Object.entries(props.schema).filter(
+          ([key, value]) => key.startsWith("x-") && value !== undefined,
+        ),
+      ),
+    };
+
+    const next = (schema: ILlmSchema): OpenApi.IJsonSchema =>
+      invert({
+        components: props.components,
+        $defs: props.$defs,
+        schema,
+      });
+    const visit = (schema: ILlmSchema): void => {
+      if (GeminiTypeChecker.isArray(schema))
+        union.push({
+          ...schema,
+          ...LlmDescriptionInverter.array(schema.description),
+          items: next(schema.items),
+        });
+      else if (GeminiTypeChecker.isObject(schema))
+        union.push({
+          ...schema,
+          properties: Object.fromEntries(
+            Object.entries(schema.properties).map(([key, value]) => [
+              key,
+              next(value),
+            ]),
+          ),
+          additionalProperties:
+            typeof schema.additionalProperties === "object" &&
+            schema.additionalProperties !== null
+              ? next(schema.additionalProperties)
+              : schema.additionalProperties,
+        });
+      else if (GeminiTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
+      else if (GeminiTypeChecker.isReference(schema)) {
+        const key: string = schema.$ref.split("#/$defs/")[1];
+        if (props.components.schemas?.[key] === undefined) {
+          props.components.schemas ??= {};
+          props.components.schemas[key] = {};
+          props.components.schemas[key] = next(props.$defs[key] ?? {});
+        }
+        union.push({
+          ...schema,
+          $ref: `#/components/schemas/${key}`,
+        });
+      } else if (GeminiTypeChecker.isBoolean(schema))
+        if (!!schema.enum?.length)
+          schema.enum.forEach((v) =>
+            union.push({
+              const: v,
+            }),
+          );
+        else union.push(schema);
+      else if (
+        GeminiTypeChecker.isInteger(schema) ||
+        GeminiTypeChecker.isNumber(schema)
+      )
+        if (!!schema.enum?.length)
+          schema.enum.forEach((v) =>
+            union.push({
+              const: v,
+            }),
+          );
+        else
+          union.push({
+            ...schema,
+            ...LlmDescriptionInverter.numeric(schema.description),
+            ...{ enum: undefined },
+          });
+      else if (GeminiTypeChecker.isString(schema))
+        if (!!schema.enum?.length)
+          schema.enum.forEach((v) =>
+            union.push({
+              const: v,
+            }),
+          );
+        else
+          union.push({
+            ...schema,
+            ...LlmDescriptionInverter.string(schema.description),
+            ...{ enum: undefined },
+          });
+      else
+        union.push({
+          ...schema,
+        });
+    };
+    visit(props.schema);
+
+    return {
+      ...attribute,
+      ...(union.length === 0
+        ? { type: undefined }
+        : union.length === 1
+          ? { ...union[0] }
+          : {
+              oneOf: union.map((u) => ({ ...u, nullable: undefined })),
+              discriminator:
+                GeminiTypeChecker.isAnyOf(props.schema) &&
+                props.schema["x-discriminator"] !== undefined
+                  ? {
+                      propertyName:
+                        props.schema["x-discriminator"].propertyName,
+                      mapping:
+                        props.schema["x-discriminator"].mapping !== undefined
+                          ? Object.fromEntries(
+                              Object.entries(
+                                props.schema["x-discriminator"].mapping,
+                              ).map(([key, value]) => [
+                                key,
+                                `#/components/schemas/${value.split("/").at(-1)}`,
+                              ]),
+                            )
+                          : undefined,
+                    }
+                  : undefined,
+            }),
+    } satisfies OpenApi.IJsonSchema;
+  };
 }
 
-const PARAMETERS_CASTERS = {
-  chatgpt: ChatGptSchemaComposer.parameters,
-  claude: ClaudeSchemaComposer.parameters,
-  gemini: GeminiSchemaComposer.parameters,
-  "3.0": LlmSchemaV3Composer.parameters,
-  "3.1": LlmSchemaV3_1Composer.parameters,
-};
+const getConfig = (
+  config: ILlmSchema.IConfig | undefined,
+): Required<ILlmSchema.IConfig> => ({
+  reference: config?.reference ?? true,
+  strict: config?.strict ?? false,
+});
 
-const SCHEMA_CASTERS = {
-  chatgpt: ChatGptSchemaComposer.schema,
-  claude: ClaudeSchemaComposer.schema,
-  gemini: GeminiSchemaComposer.schema,
-  "3.0": LlmSchemaV3Composer.schema,
-  "3.1": LlmSchemaV3_1Composer.schema,
-};
-
-const SEPARATE_PARAMETERS = {
-  chatgpt: ChatGptSchemaComposer.separateParameters,
-  claude: ClaudeSchemaComposer.separateParameters,
-  gemini: GeminiSchemaComposer.separateParameters,
-  "3.0": LlmSchemaV3Composer.separateParameters,
-  "3.1": LlmSchemaV3_1Composer.separateParameters,
-};
-
-const INVERTS = {
-  chatgpt: ChatGptSchemaComposer.invert,
-  claude: ClaudeSchemaComposer.invert,
-  gemini: GeminiSchemaComposer.invert,
-  "3.0": LlmSchemaV3Composer.invert,
-  "3.1": LlmSchemaV3_1Composer.invert,
-};
-
-const DEFAULT_CONFIGS = {
-  chatgpt: ChatGptSchemaComposer.DEFAULT_CONFIG,
-  claude: ClaudeSchemaComposer.DEFAULT_CONFIG,
-  gemini: GeminiSchemaComposer.DEFAULT_CONFIG,
-  "3.0": LlmSchemaV3Composer.DEFAULT_CONFIG,
-  "3.1": LlmSchemaV3_1Composer.DEFAULT_CONFIG,
-};
-
-const TYPE_CHECKERS = {
-  chatgpt: ChatGptTypeChecker,
-  claude: ClaudeTypeChecker,
-  deepseek: DeepSeekTypeChecker,
-  gemini: GeminiTypeChecker,
-  llama: LlamaTypeChecker,
-  "3.0": LlmTypeCheckerV3,
-  "3.1": LlmTypeCheckerV3_1,
-};
-
-const IS_DEFS = {
-  chatgpt: () => ChatGptSchemaComposer.IS_DEFS,
-  claude: () => ClaudeSchemaComposer.IS_DEFS,
-  gemini: () => GeminiSchemaComposer.IS_DEFS,
-  "3.0": () => LlmSchemaV3Composer.IS_DEFS,
-  "3.1": () => LlmSchemaV3_1Composer.IS_DEFS,
+const validateStrict = (
+  schema: OpenApi.IJsonSchema,
+  accessor: string,
+): IOpenApiSchemaError.IReason[] => {
+  const reasons: IOpenApiSchemaError.IReason[] = [];
+  if (OpenApiTypeChecker.isObject(schema)) {
+    if (!!schema.additionalProperties)
+      reasons.push({
+        schema: schema,
+        accessor: `${accessor}.additionalProperties`,
+        message:
+          "LLM does not allow additionalProperties in strict mode, the dynamic key typed object.",
+      });
+    for (const key of Object.keys(schema.properties ?? {}))
+      if (schema.required?.includes(key) === false)
+        reasons.push({
+          schema: schema,
+          accessor: `${accessor}.properties.${key}`,
+          message: "LLM does not allow optional properties in strict mode.",
+        });
+  }
+  return reasons;
 };

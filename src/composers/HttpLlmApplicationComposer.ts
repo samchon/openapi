@@ -229,7 +229,7 @@ export namespace HttpLlmComposer {
       name,
       parameters: llmParameters.value,
       separated: props.config.separate
-        ? (LlmSchemaComposer.separateParameters(props.model)({
+        ? (LlmSchemaComposer.separate(props.model)({
             predicate: props.config.separate as any,
             parameters:
               llmParameters.value satisfies ILlmSchema.ModelParameters[Model] as any,
