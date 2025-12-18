@@ -378,7 +378,7 @@ export namespace ILlmSchema {
   /**
    * Reference type directing to named schema.
    *
-   * If {@link IConfig.strict} mode, its other properties like {@link description}
+   * If {@link IConfig.strict} mode is enabled, its other properties like {@link description}
    * would be disabled. Instead, the description would be placed in the parent
    * type. For example, if this reference type is used as a property of an
    * object, the description would be placed in the object place.
