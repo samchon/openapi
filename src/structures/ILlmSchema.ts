@@ -335,8 +335,8 @@ export namespace ILlmSchema {
      * - `true`: `Record<string, any>`
      * - `ILlmSchema`: `Record<string, T>`
      *
-     * Note: When {@link IConfig.strict} mode is enabled, this property is
-     * always fixed to `false`, meaning no additional properties are allowed.
+     * Note: When {@link IConfig.strict} mode is enabled, this property is always
+     * fixed to `false`, meaning no additional properties are allowed.
      */
     additionalProperties?: ILlmSchema | boolean;
 
@@ -378,10 +378,11 @@ export namespace ILlmSchema {
   /**
    * Reference type directing to named schema.
    *
-   * If {@link IConfig.strict} mode is enabled, its other properties like {@link description}
-   * would be disabled. Instead, the description would be placed in the parent
-   * type. For example, if this reference type is used as a property of an
-   * object, the description would be placed in the object place.
+   * If {@link IConfig.strict} mode is enabled, its other properties like
+   * {@link description} would be disabled. Instead, the description would be
+   * placed in the parent type. For example, if this reference type is used as a
+   * property of an object, the description would be placed in the object
+   * place.
    */
   export interface IReference extends IJsonSchemaAttribute {
     /**
