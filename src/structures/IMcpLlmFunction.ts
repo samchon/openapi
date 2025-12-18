@@ -30,7 +30,7 @@ import { IValidation } from "./IValidation";
  * @author Jeongho Nam - https://github.com/samchon
  * @author Byeongjin Oh - https://github.com/sunrabbit123
  */
-export interface IMcpLlmFunction<Model extends ILlmSchema.Model> {
+export interface IMcpLlmFunction {
   /**
    * Representative name of the function.
    *
@@ -45,14 +45,14 @@ export interface IMcpLlmFunction<Model extends ILlmSchema.Model> {
    * purpose of the function to LLMs (Large Language Models). LLMs use this
    * description to determine which function to call.
    *
-   * Also, when the LLM converses with the user, the `description` explains
-   * the function to the user. Therefore, the `description` property has the
-   * highest priority and should be carefully considered.
+   * Also, when the LLM converses with the user, the `description` explains the
+   * function to the user. Therefore, the `description` property has the highest
+   * priority and should be carefully considered.
    */
   description?: string | undefined;
 
   /** Parameters of the function. */
-  parameters: ILlmSchema.IParameters<Model>;
+  parameters: ILlmSchema.IParameters;
 
   /**
    * Validate function of the arguments.

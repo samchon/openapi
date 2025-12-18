@@ -27,22 +27,16 @@ import { IValidation } from "./IValidation";
  * @author Jeongho Nam - https://github.com/samchon
  * @reference https://platform.openai.com/docs/guides/function-calling
  */
-export interface ILlmApplication<
-  Model extends ILlmSchema.Model,
-  Class extends object = any,
-> {
-  /** Model of the LLM. */
-  model: Model;
-
+export interface ILlmApplication<Class extends object = any> {
   /**
    * List of function metadata.
    *
    * List of function metadata that can be used for the LLM function call.
    */
-  functions: ILlmFunction<Model>[];
+  functions: ILlmFunction[];
 
   /** Configuration for the application. */
-  options: ILlmApplication.IOptions<Model, Class>;
+  options: ILlmApplication.IOptions<Class>;
 
   /**
    * Class type, the source of the LLM application.
@@ -54,10 +48,8 @@ export interface ILlmApplication<
 }
 export namespace ILlmApplication {
   /** Options for application composition. */
-  export type IOptions<
-    Model extends ILlmSchema.Model,
-    Class extends object = any,
-  > = ILlmSchema.ModelConfig[Model] & {
+  export interface IOptions<Class extends object = any>
+    extends ILlmSchema.IConfig {
     /**
      * Separator function for the parameters.
      *
@@ -86,7 +78,7 @@ export namespace ILlmApplication {
      * @param schema Schema to be separated.
      * @returns Whether the schema value must be composed by human or not.
      */
-    separate?: null | ((schema: ILlmSchema.ModelSchema[Model]) => boolean);
+    separate?: null | ((schema: ILlmSchema) => boolean);
 
     /**
      * Custom validation functions for specific class methods.
@@ -113,7 +105,7 @@ export namespace ILlmApplication {
      * @default null
      */
     validate?: null | Partial<ILlmApplication.IValidationHook<Class>>;
-  };
+  }
 
   /**
    * Type for custom validation function hooks.

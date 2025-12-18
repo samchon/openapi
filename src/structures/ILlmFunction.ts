@@ -24,7 +24,7 @@ import { IValidation } from "./IValidation";
  * @template Model Type of the LLM model
  * @reference https://platform.openai.com/docs/guides/function-calling
  */
-export interface ILlmFunction<Model extends ILlmSchema.Model> {
+export interface ILlmFunction {
   /**
    * Representative name of the function.
    *
@@ -33,14 +33,14 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
   name: string;
 
   /** List of parameter types. */
-  parameters: ILlmSchema.ModelParameters[Model];
+  parameters: ILlmSchema.IParameters;
 
   /**
    * Collection of separated parameters.
    *
    * Filled only when {@link ILlmApplication.IOptions.separate} is configured.
    */
-  separated?: ILlmFunction.ISeparated<Model>;
+  separated?: ILlmFunction.ISeparated;
 
   /**
    * Expected return type.
@@ -48,7 +48,7 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
    * If the function returns nothing (`void`), the `output` value would be
    * `undefined`.
    */
-  output?: ILlmSchema.ModelSchema[Model];
+  output?: ILlmSchema | undefined;
 
   /**
    * Description of the function.
@@ -57,9 +57,9 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
    * purpose of the function to LLMs (Large Language Models). LLMs use this
    * description to determine which function to call.
    *
-   * Also, when the LLM converses with the user, the `description` explains
-   * the function to the user. Therefore, the `description` property has the
-   * highest priority and should be carefully considered.
+   * Also, when the LLM converses with the user, the `description` explains the
+   * function to the user. Therefore, the `description` property has the highest
+   * priority and should be carefully considered.
    */
   description?: string | undefined;
 
@@ -112,17 +112,17 @@ export interface ILlmFunction<Model extends ILlmSchema.Model> {
 }
 export namespace ILlmFunction {
   /** Collection of separated parameters. */
-  export interface ISeparated<Model extends ILlmSchema.Model> {
+  export interface ISeparated {
     /**
      * Parameters that would be composed by the LLM.
      *
      * Even though no property exists in the LLM side, the `llm` property would
      * have at least empty object type.
      */
-    llm: ILlmSchema.ModelParameters[Model];
+    llm: ILlmSchema.IParameters;
 
     /** Parameters that would be composed by the human. */
-    human: ILlmSchema.ModelParameters[Model] | null;
+    human: ILlmSchema.IParameters | null;
 
     /**
      * Validate function of the separated arguments.

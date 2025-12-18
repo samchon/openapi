@@ -1,4 +1,3 @@
-import { ILlmSchema } from "./ILlmSchema";
 import { IMcpLlmApplication } from "./IMcpLlmApplication";
 
 /**
@@ -60,7 +59,7 @@ import { IMcpLlmApplication } from "./IMcpLlmApplication";
  * @author Byeongjin Oh - https://github.com/sunrabbit123
  * @reference https://wrtnlabs.io/agentica/docs/core/controller/mcp/
  */
-export interface IMcpLlmController<Model extends ILlmSchema.Model> {
+export interface IMcpLlmController {
   /** Protocol discriminator. */
   protocol: "mcp";
 
@@ -68,8 +67,7 @@ export interface IMcpLlmController<Model extends ILlmSchema.Model> {
   name: string;
 
   /** Application schema of function calling. */
-  application: IMcpLlmApplication<Model>;
-
+  application: IMcpLlmApplication;
   /**
    * MCP client for connection.
    *

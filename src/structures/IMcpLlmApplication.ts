@@ -27,42 +27,38 @@ import { IMcpLlmFunction } from "./IMcpLlmFunction";
  * @author Jeongho Nam - https://github.com/samchon
  * @author Byeongjin Oh - https://github.com/sunrabbit123
  */
-export interface IMcpLlmApplication<Model extends ILlmSchema.Model> {
-  /** Model of the target LLM. */
-  model: Model;
-
+export interface IMcpLlmApplication {
   /**
    * List of function metadata.
    *
    * List of function metadata that can be used for the LLM function call.
    */
-  functions: IMcpLlmFunction<Model>[];
+  functions: IMcpLlmFunction[];
 
   /** List of errors occurred during the composition. */
   errors: IMcpLlmApplication.IError[];
 
   /** Configuration for the application. */
-  options: IMcpLlmApplication.IOptions<Model>;
+  options: IMcpLlmApplication.IOptions;
 }
 export namespace IMcpLlmApplication {
   /** Options for the HTTP LLM application schema composition. */
-  export type IOptions<Model extends ILlmSchema.Model> =
-    ILlmSchema.ModelConfig[Model] & {
-      /**
-       * Maximum length of function name.
-       *
-       * When a function name is longer than this value, it will be truncated.
-       *
-       * If not possible to truncate due to the duplication, the function name
-       * would be modified to randomly generated (UUID v4).
-       *
-       * @default 64
-       */
-      maxLength?: number;
+  export interface IOptions extends ILlmSchema.IConfig {
+    /**
+     * Maximum length of function name.
+     *
+     * When a function name is longer than this value, it will be truncated.
+     *
+     * If not possible to truncate due to the duplication, the function name
+     * would be modified to randomly generated (UUID v4).
+     *
+     * @default 64
+     */
+    maxLength?: number;
 
-      /** Whether to disallow superfluous properties or not. */
-      equals?: boolean;
-    };
+    /** Whether to disallow superfluous properties or not. */
+    equals?: boolean;
+  }
 
   /** Error occurred in the composition. */
   export interface IError {

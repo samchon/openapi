@@ -2,7 +2,6 @@ import { IHttpConnection } from "./IHttpConnection";
 import { IHttpLlmApplication } from "./IHttpLlmApplication";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpResponse } from "./IHttpResponse";
-import { ILlmSchema } from "./ILlmSchema";
 
 /**
  * Controller of HTTP LLM function calling.
@@ -60,7 +59,7 @@ import { ILlmSchema } from "./ILlmSchema";
  * @template Model Type of the LLM model
  * @reference https://wrtnlabs.io/agentica/docs/core/controller/swagger/
  */
-export interface IHttpLlmController<Model extends ILlmSchema.Model> {
+export interface IHttpLlmController {
   /** Protocol discriminator. */
   protocol: "http";
 
@@ -68,7 +67,7 @@ export interface IHttpLlmController<Model extends ILlmSchema.Model> {
   name: string;
 
   /** Application schema of function calling. */
-  application: IHttpLlmApplication<Model>;
+  application: IHttpLlmApplication;
 
   /**
    * Connection to the server.
@@ -93,10 +92,10 @@ export interface IHttpLlmController<Model extends ILlmSchema.Model> {
         connection: IHttpConnection;
 
         /** Application schema. */
-        application: IHttpLlmApplication<Model>;
+        application: IHttpLlmApplication;
 
         /** Function schema. */
-        function: IHttpLlmFunction<Model>;
+        function: IHttpLlmFunction;
 
         /**
          * Arguments of the function calling.
