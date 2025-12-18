@@ -1,5 +1,52 @@
 import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
 
+/**
+ * Type schema info for LLM (Large Language Model) function calling.
+ *
+ * ## Overview
+ *
+ * `ILlmSchema` is a type schema info for LLM function calling, designed to be
+ * compatible with multiple LLM providers while following the JSON schema
+ * specification.
+ *
+ * ## Specification
+ *
+ * `ILlmSchema` basically follows the JSON schema definition of the OpenAPI v3.1
+ * specification; {@link OpenApiV3_1.IJsonSchema}.
+ *
+ * However, it deviates from the standard JSON schema specification and omits
+ * many features to ensure compatibility across different LLM providers and
+ * their function calling requirements.
+ *
+ * ## Differences from OpenAPI v3.1
+ *
+ * Here is the list of how `ILlmSchema` is different with the OpenAPI v3.1 JSON
+ * schema:
+ *
+ * - Decompose mixed type: {@link OpenApiV3_1.IJsonSchema.IMixed}
+ * - Resolve nullable property:
+ *   {@link OpenApiV3_1.IJsonSchema.__ISignificant.nullable}
+ * - Tuple type is banned: {@link OpenApiV3_1.IJsonSchema.ITuple.prefixItems}
+ * - Constant type is banned: {@link OpenApiV3_1.IJsonSchema.IConstant}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IOneOf} to {@link ILlmSchema.IAnyOf}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IAllOf} to {@link ILlmSchema.IObject}
+ * - Merge {@link OpenApiV3_1.IJsonSchema.IRecursiveReference} to
+ *   {@link ILlmSchema.IReference}
+ *
+ * ## Differences from OpenApi.IJsonSchema
+ *
+ * Compared to {@link OpenApi.IJsonSchema}, the emended JSON schema
+ * specification:
+ *
+ * - {@link ILlmSchema.IAnyOf} instead of {@link OpenApi.IJsonSchema.IOneOf}
+ * - {@link ILlmSchema.IParameters.$defs} instead of
+ *   {@link OpenApi.IJsonSchema.IComponents.schemas}
+ * - Do not support {@link OpenApi.IJsonSchema.ITuple} type
+ * - {@link ILlmSchema.properties} and {@link ILlmSchema.required} are always
+ *   defined
+ *
+ * @author Jeongho Nam - https://github.com/samchon
+ */
 export type ILlmSchema =
   | ILlmSchema.IBoolean
   | ILlmSchema.IInteger
@@ -12,6 +59,7 @@ export type ILlmSchema =
   | ILlmSchema.INull
   | ILlmSchema.IUnknown;
 export namespace ILlmSchema {
+  /** Configuration for the LLM schema composition. */
   export interface IConfig {
     /**
      * Whether to allow reference type in everywhere.
@@ -20,13 +68,13 @@ export namespace ILlmSchema {
      * represented by {@link ILlmSchema.IReference} would be escaped to a plain
      * type unless recursive type comes.
      *
-     * This is because the lower version of AI does not understand the reference
-     * type well, and even the modern version of AI sometimes occur the
-     * hallucination (ex: Google Gemini).
+     * This is because some LLM models do not understand the reference type
+     * well, and even the modern version of LLM sometimes occur the
+     * hallucination.
      *
      * However, the reference type makes the schema size smaller, so that
      * reduces the LLM token cost. Therefore, if you're using the modern version
-     * of AI, and want to reduce the LLM token cost, you can configure this
+     * of LLM, and want to reduce the LLM token cost, you can configure this
      * property to `true`.
      *
      * @default true
@@ -36,14 +84,16 @@ export namespace ILlmSchema {
     /**
      * Whether to apply the strict mode.
      *
-     * If you configure this property to `true`, the OpenAI function calling
-     * does not allow optional properties and dynamic key typed properties in
-     * the {@link IChatGptSchema.IObject} type. Instead, it increases the success
-     * rate of the function calling.
+     * If you configure this property to `true`, the LLM function calling does
+     * not allow optional properties and dynamic key typed properties in the
+     * {@link ILlmSchema.IObject} type. In other words, when strict mode is
+     * enabled, {@link ILlmSchema.IObject.additionalProperties} is fixed to
+     * `false`, and every property must be {@link ILlmSchema.IObject.required}.
      *
-     * By the way, if you utilize the {@link typia.validate} function and give
-     * its validation feedback to the OpenAI, its performance is much better
-     * than the strict mode.
+     * However, the strict mode actually shows lower performance in practice. If
+     * you utilize the {@link typia.validate} function and give its validation
+     * feedback to the LLM, the performance is much better than the strict
+     * mode.
      *
      * Therefore, I recommend you to just turn off the strict mode and utilize
      * the {@link typia.validate} function instead.
@@ -53,12 +103,21 @@ export namespace ILlmSchema {
     strict?: boolean;
   }
 
+  /**
+   * Type for function parameters.
+   *
+   * `ILlmSchema.IParameters` defines a function's parameters as a keyword
+   * object type, where each property represents a named parameter.
+   *
+   * It can also be used for structured output metadata to define the expected
+   * format of LLM responses.
+   */
   export interface IParameters extends Omit<IObject, "additionalProperties"> {
     /**
      * Collection of the named types.
      *
      * This record would be filled when {@link IConfig.reference} is `true`, or
-     * recurisve type comes.
+     * recursive type comes.
      */
     $defs: Record<string, ILlmSchema>;
 
@@ -267,6 +326,9 @@ export namespace ILlmSchema {
      *
      * - `true`: `Record<string, any>`
      * - `ILlmSchema`: `Record<string, T>`
+     *
+     * Note: When {@link IConfig.strict} mode is enabled, this property is
+     * always fixed to `false`, meaning no additional properties are allowed.
      */
     additionalProperties?: ILlmSchema | boolean;
 
