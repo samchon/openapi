@@ -24,11 +24,11 @@ import { ILlmApplication } from "./ILlmApplication";
  *     model: "gpt-4o-mini",
  *   },
  *   controllers: [
- *     typia.llm.controller<ReactNativeFileSystem, "chatgpt">(
+ *     typia.llm.controller<ReactNativeFileSystem>(
  *       "filesystem",
  *       new ReactNativeFileSystem(),
  *     ),
- *     typia.llm.controller<ReactNativeGallery, "chatgpt">(
+ *     typia.llm.controller<ReactNativeGallery>(
  *       "gallery",
  *       new ReactNativeGallery(),
  *     ),
@@ -47,7 +47,6 @@ import { ILlmApplication } from "./ILlmApplication";
  * - {@link IMcpLlmController} for MCP
  *
  * @author Jeongho Nam - https://github.com/samchon
- * @template Model Type of the LLM model
  * @template Class Class type of the function executor
  * @reference https://typia.io/docs/llm/controller/
  * @reference https://wrtnlabs.io/agentica/docs/core/controller/typescript/

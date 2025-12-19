@@ -40,7 +40,6 @@ import { IMcpLlmApplication } from "./IMcpLlmApplication";
  *   controllers: [
  *     await assertMcpController({
  *       name: "calculator",
- *       model: "chatgpt",
  *       client,
  *     }),
  *   ],

@@ -19,11 +19,7 @@ import { IValidation } from "./IValidation";
  *
  * For reference, different between `IHttpLlmFunction` and its origin source
  * {@link OpenApi.IOperation} is, `IHttpLlmFunction` has converted every type
- * schema information from {@link OpenApi.IJsonSchema} to {@link ILlmSchemaV3} to
- * escape {@link OpenApi.IJsonSchema.IReference reference types}, and downgrade
- * the version of the JSON schema to OpenAPI 3.0. It's because LLM function call
- * feature cannot understand both reference types and OpenAPI 3.1
- * specification.
+ * schema information from {@link OpenApi.IJsonSchema} to {@link ILlmSchema}.
  *
  * Additionally, the properties' rule is:
  *
@@ -93,7 +89,7 @@ export interface IHttpLlmFunction {
    *
    * If you've configured {@link IHttpLlmApplication.IConfig.keyword} as `true`,
    * number of {@link IHttpLlmFunction.parameters} are always 1 and the first
-   * parameter's type is always {@link ILlmSchemaV3.IObject}. The properties'
+   * parameter's type is always {@link ILlmSchema.IObject}. The properties'
    * rule is:
    *
    * - `pathParameters`: Path parameters of {@link IHttpMigrateRoute.parameters}

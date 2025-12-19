@@ -21,7 +21,6 @@ import { IValidation } from "./IValidation";
  * [`typia`](https://github.com/samchon/typia) library.
  *
  * @author Jeongho Nam - https://github.com/samchon
- * @template Model Type of the LLM model
  * @reference https://platform.openai.com/docs/guides/function-calling
  */
 export interface ILlmFunction {

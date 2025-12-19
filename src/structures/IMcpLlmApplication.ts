@@ -12,10 +12,10 @@ import { IMcpLlmFunction } from "./IMcpLlmFunction";
  * construction.
  *
  * About each function of MCP server, there can be {@link errors} during the
- * composition, if the target {@link model} does not support the function's
- * {@link IMcpLlmFunction.parameters} type. For example, Google Gemini model does
- * not support union type, so that the function containing the union type would
- * be placed into the {@link errors} list instead of {@link functions}.
+ * composition, if the function's {@link IMcpLlmFunction.parameters} type has
+ * some unsupported types for the LLM function calling. In that case, the
+ * function would be placed into the {@link errors} list instead of
+ * {@link functions}.
  *
  * Also, each function has its own {@link IMcpLlmFunction.validate} function for
  * correcting AI agent's mistakes, and this is the reason why `@samchon/openapi`

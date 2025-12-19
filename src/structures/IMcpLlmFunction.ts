@@ -72,14 +72,6 @@ export interface IMcpLlmFunction {
    * rate soars to 99% at the second trial, and I've never failed at the third
    * trial.
    *
-   * > If you've {@link separated} parameters, use the
-   * > {@link IMcpLlmFunction.ISeparated.validate} function instead when validating
-   * > the LLM composed arguments.
-   *
-   * > In that case, This `validate` function would be meaningful only when you've
-   * > merged the LLM and human composed arguments by
-   * > {@link McpLlm.mergeParameters} function.
-   *
    * @param args Arguments to validate
    * @returns Validation result
    */
