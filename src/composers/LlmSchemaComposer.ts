@@ -76,14 +76,14 @@ export namespace LlmSchemaComposer {
     });
 
   const transform = (props: {
-    config?: Partial<ILlmSchema.IConfig> | undefined;
+    config: ILlmSchema.IConfig;
     components: OpenApi.IComponents;
     $defs: Record<string, ILlmSchema>;
     schema: OpenApi.IJsonSchema;
     accessor?: string;
     refAccessor?: string;
   }): IResult<ILlmSchema, IOpenApiSchemaError> => {
-    const config: ILlmSchema.IConfig = getConfig(props.config);
+    // PREPARE ASSETS
     const union: Array<ILlmSchema> = [];
     const attribute: IJsonSchemaAttribute = {
       title: props.schema.title,
@@ -100,10 +100,11 @@ export namespace LlmSchemaComposer {
       ),
     };
 
+    // VALIDADTE SCHEMA
     const reasons: IOpenApiSchemaError.IReason[] = [];
     OpenApiTypeChecker.visit({
       closure: (next, accessor) => {
-        if (config.strict === true) {
+        if (props.config.strict === true) {
           // STRICT MODE VALIDATION
           reasons.push(...validateStrict(next, accessor));
         }
@@ -151,7 +152,7 @@ export namespace LlmSchemaComposer {
         if (target === undefined) return;
         else if (
           // KEEP THE REFERENCE TYPE
-          config.reference === true ||
+          props.config.reference === true ||
           OpenApiTypeChecker.isRecursiveReference({
             components: props.components,
             schema: input,
@@ -168,7 +169,7 @@ export namespace LlmSchemaComposer {
           props.$defs[key] = {};
           const converted: IResult<ILlmSchema, IOpenApiSchemaError> = transform(
             {
-              config,
+              config: props.config,
               components: props.components,
               $defs: props.$defs,
               schema: target,
@@ -208,7 +209,7 @@ export namespace LlmSchemaComposer {
             .map(([key, value]) => {
               const converted: IResult<ILlmSchema, IOpenApiSchemaError> =
                 transform({
-                  config,
+                  config: props.config,
                   components: props.components,
                   $defs: props.$defs,
                   schema: value,
@@ -233,7 +234,7 @@ export namespace LlmSchemaComposer {
             ) {
               const converted: IResult<ILlmSchema, IOpenApiSchemaError> =
                 transform({
-                  config,
+                  config: props.config,
                   components: props.components,
                   $defs: props.$defs,
                   schema: input.additionalProperties,
@@ -246,7 +247,9 @@ export namespace LlmSchemaComposer {
               }
               return converted.value;
             }
-            return config.strict === true ? false : input.additionalProperties;
+            return props.config.strict === true
+              ? false
+              : input.additionalProperties;
           })();
         if (additionalProperties === null) return;
         union.push({
@@ -258,7 +261,7 @@ export namespace LlmSchemaComposer {
       } else if (OpenApiTypeChecker.isArray(input)) {
         // ARRAY TYPE
         const items: IResult<ILlmSchema, IOpenApiSchemaError> = transform({
-          config,
+          config: props.config,
           components: props.components,
           $defs: props.$defs,
           schema: input.items,
@@ -270,7 +273,7 @@ export namespace LlmSchemaComposer {
           return;
         }
         union.push(
-          config.strict
+          props.config.strict === true
             ? OpenApiConstraintShifter.shiftArray({
                 ...input,
                 items: items.value,
@@ -279,7 +282,7 @@ export namespace LlmSchemaComposer {
         );
       } else if (OpenApiTypeChecker.isString(input))
         union.push(
-          config.strict
+          props.config.strict === true
             ? OpenApiConstraintShifter.shiftString({ ...input })
             : input,
         );
@@ -288,7 +291,7 @@ export namespace LlmSchemaComposer {
         OpenApiTypeChecker.isInteger(input)
       )
         union.push(
-          config.strict
+          props.config.strict === true
             ? OpenApiConstraintShifter.shiftNumeric({ ...input })
             : input,
         );
