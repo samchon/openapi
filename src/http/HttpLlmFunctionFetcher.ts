@@ -2,25 +2,20 @@ import type { HttpLlm } from "../HttpLlm";
 import type { HttpMigration } from "../HttpMigration";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
 import { IHttpResponse } from "../structures/IHttpResponse";
-import { ILlmSchema } from "../structures/ILlmSchema";
 import { HttpMigrateRouteFetcher } from "./HttpMigrateRouteFetcher";
 
 export namespace HttpLlmFunctionFetcher {
-  export const execute = <Model extends ILlmSchema.Model>(
-    props: HttpLlm.IFetchProps<Model>,
-  ): Promise<unknown> =>
-    HttpMigrateRouteFetcher.execute(getFetchArguments<Model>("execute", props));
+  export const execute = (props: HttpLlm.IFetchProps): Promise<unknown> =>
+    HttpMigrateRouteFetcher.execute(getFetchArguments("execute", props));
 
-  export const propagate = <Model extends ILlmSchema.Model>(
-    props: HttpLlm.IFetchProps<Model>,
+  export const propagate = (
+    props: HttpLlm.IFetchProps,
   ): Promise<IHttpResponse> =>
-    HttpMigrateRouteFetcher.propagate(
-      getFetchArguments<Model>("propagate", props),
-    );
+    HttpMigrateRouteFetcher.propagate(getFetchArguments("propagate", props));
 
-  const getFetchArguments = <Model extends ILlmSchema.Model>(
+  const getFetchArguments = (
     from: string,
-    props: HttpLlm.IFetchProps<Model>,
+    props: HttpLlm.IFetchProps,
   ): HttpMigration.IFetchProps => {
     const route: IHttpMigrateRoute = props.function.route();
     const input: Record<string, any> = props.input;

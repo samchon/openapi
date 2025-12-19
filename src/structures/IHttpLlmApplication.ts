@@ -12,7 +12,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  * {@link OpenApi.IDocument OpenAPI document} and its
  * {@link OpenApi.IOperation operation} metadata. It also contains
  * {@link IHttpLlmApplication.errors failed operations}, and adjusted
- * {@link IHttpLlmApplication.options options} during the `IHttpLlmApplication`
+ * {@link IHttpLlmApplication.config options} during the `IHttpLlmApplication`
  * construction.
  *
  * About the {@link OpenApi.IOperation API operations}, they are converted to
@@ -42,7 +42,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  * must be composed by Human, not by LLM. File uploading feature or some
  * sensitive information like secret key (password) are the examples. In that
  * case, you can separate the function parameters to both LLM and Human sides by
- * configuring the {@link IHttpLlmApplication.IOptions.separate} property. The
+ * configuring the {@link IHttpLlmApplication.IConfig.separate} property. The
  * separated parameters are assigned to the {@link IHttpLlmFunction.separated}
  * property.
  *
@@ -53,7 +53,7 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  * continue the next conversation based on the return value.
  *
  * Additionally, if you've configured
- * {@link IHttpLlmApplication.IOptions.separate}, so that the parameters are
+ * {@link IHttpLlmApplication.IConfig.separate}, so that the parameters are
  * separated to Human and LLM sides, you can merge these human and LLM sides'
  * parameters into one through {@link HttpLlm.mergeParameters} before the actual
  * LLM function call execution.
@@ -75,11 +75,11 @@ export interface IHttpLlmApplication {
   errors: IHttpLlmApplication.IError[];
 
   /** Configuration for the application. */
-  options: IHttpLlmApplication.IOptions;
+  config: IHttpLlmApplication.IConfig;
 }
 export namespace IHttpLlmApplication {
   /** Options for the HTTP LLM application schema composition. */
-  export interface IOptions extends ILlmSchema.IConfig {
+  export interface IConfig extends ILlmSchema.IConfig {
     /**
      * Separator function for the parameters.
      *
@@ -108,7 +108,7 @@ export namespace IHttpLlmApplication {
      * @param schema Schema to be separated.
      * @returns Whether the schema value must be composed by human or not.
      */
-    separate?: null | ((schema: ILlmSchema) => boolean);
+    separate: null | ((schema: ILlmSchema) => boolean);
 
     /**
      * Maximum length of function name.
@@ -120,10 +120,14 @@ export namespace IHttpLlmApplication {
      *
      * @default 64
      */
-    maxLength?: number;
+    maxLength: number;
 
-    /** Whether to disallow superfluous properties or not. */
-    equals?: boolean;
+    /**
+     * Whether to disallow superfluous properties or not.
+     *
+     * @default false
+     */
+    equals: boolean;
   }
 
   /** Error occurred in the composition. */
