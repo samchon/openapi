@@ -118,7 +118,7 @@ export namespace HttpLlm {
    *
    * By the way, if you've configured the
    * {@link IHttpLlmApplication.IConfig.separate}, so that the parameters are
-   * separated to human and LLM sides, you have to merge these humand and LLM
+   * separated to human and LLM sides, you have to merge these human and LLM
    * sides' parameters into one through {@link HttpLlm.mergeParameters}
    * function.
    *
