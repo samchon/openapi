@@ -1,5 +1,5 @@
-import { OpenApi } from "../../OpenApi";
-import { OpenApiExclusiveEmender } from "../../utils/OpenApiExclusiveEmender";
+import { OpenApi } from "../OpenApi";
+import { OpenApiExclusiveEmender } from "../utils/OpenApiExclusiveEmender";
 
 export namespace LlmDescriptionInverter {
   export const numeric = (

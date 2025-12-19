@@ -1,7 +1,7 @@
-import { OpenApi } from "../../OpenApi";
-import { IOpenApiSchemaError } from "../../structures/IOpenApiSchemaError";
-import { IResult } from "../../structures/IResult";
-import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { OpenApi } from "../OpenApi";
+import { IOpenApiSchemaError } from "../structures/IOpenApiSchemaError";
+import { IResult } from "../structures/IResult";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 /** @internal */
 export namespace LlmParametersFinder {

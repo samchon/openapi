@@ -1,7 +1,7 @@
-import { IHttpMigrateRoute } from "../../structures/IHttpMigrateRoute";
-import { EndpointUtil } from "../../utils/EndpointUtil";
-import { Escaper } from "../../utils/Escaper";
-import { MapUtil } from "../../utils/MapUtil";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
+import { EndpointUtil } from "../utils/EndpointUtil";
+import { Escaper } from "../utils/Escaper";
+import { MapUtil } from "../utils/MapUtil";
 
 export namespace HttpMigrateRouteAccessor {
   export const overwrite = (routes: IHttpMigrateRoute[]): void => {

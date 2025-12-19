@@ -1,7 +1,7 @@
-import { OpenApi } from "../../OpenApi";
-import { IHttpMigrateApplication } from "../../structures/IHttpMigrateApplication";
-import { IHttpMigrateRoute } from "../../structures/IHttpMigrateRoute";
-import { EndpointUtil } from "../../utils/EndpointUtil";
+import { OpenApi } from "../OpenApi";
+import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
+import { EndpointUtil } from "../utils/EndpointUtil";
 import { HttpMigrateRouteAccessor } from "./HttpMigrateRouteAccessor";
 import { HttpMigrateRouteComposer } from "./HttpMigrateRouteComposer";
 
