@@ -48,8 +48,8 @@ export namespace HttpLlm {
       | OpenApiV3.IDocument
       | OpenApiV3_1.IDocument;
 
-    /** Options for the LLM function calling schema conversion. */
-    options?: Partial<IHttpLlmApplication.IConfig>;
+    /** Configuration for the LLM function calling schema conversion. */
+    config?: Partial<IHttpLlmApplication.IConfig>;
   }
 
   /**
@@ -81,11 +81,11 @@ export namespace HttpLlm {
     return HttpLlmComposer.application({
       migrate,
       config: {
-        reference: props.options?.reference ?? true,
-        strict: props.options?.strict ?? false,
-        separate: props.options?.separate ?? null,
-        maxLength: props.options?.maxLength ?? 64,
-        equals: props.options?.equals ?? false,
+        reference: props.config?.reference ?? true,
+        strict: props.config?.strict ?? false,
+        separate: props.config?.separate ?? null,
+        maxLength: props.config?.maxLength ?? 64,
+        equals: props.config?.equals ?? false,
       },
     });
   };

@@ -12,8 +12,8 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  * {@link OpenApi.IDocument OpenAPI document} and its
  * {@link OpenApi.IOperation operation} metadata. It also contains
  * {@link IHttpLlmApplication.errors failed operations}, and adjusted
- * {@link IHttpLlmApplication.config options} during the `IHttpLlmApplication`
- * construction.
+ * {@link IHttpLlmApplication.config configuration} during the
+ * `IHttpLlmApplication` construction.
  *
  * About the {@link OpenApi.IOperation API operations}, they are converted to
  * {@link IHttpLlmFunction} type which represents LLM function calling schema. By
@@ -78,7 +78,7 @@ export interface IHttpLlmApplication {
   config: IHttpLlmApplication.IConfig;
 }
 export namespace IHttpLlmApplication {
-  /** Options for the HTTP LLM application schema composition. */
+  /** Configuration for the HTTP LLM application schema composition. */
   export interface IConfig extends ILlmSchema.IConfig {
     /**
      * Separator function for the parameters.

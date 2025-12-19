@@ -22,9 +22,9 @@ export namespace LlmDataMerger {
    * Combine LLM and human arguments into one.
    *
    * When you compose {@link IHttpLlmApplication} with
-   * {@link IHttpLlmApplication.IOptions.separate} option, then the arguments
-   * of the target function would be separated into two parts; LLM (Large
-   * Language Model) and human.
+   * {@link IHttpLlmApplication.IConfig.separate} option, then the arguments of
+   * the target function would be separated into two parts; LLM (Large Language
+   * Model) and human.
    *
    * In that case, you can combine both LLM and human composed arguments into
    * one by utilizing this {@link LlmDataMerger.parameters} function, referencing

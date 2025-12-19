@@ -38,7 +38,7 @@ export interface ILlmFunction {
   /**
    * Collection of separated parameters.
    *
-   * Filled only when {@link ILlmApplication.IOptions.separate} is configured.
+   * Filled only when {@link ILlmApplication.IConfig.separate} is configured.
    */
   separated?: ILlmFunction.ISeparated;
 

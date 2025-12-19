@@ -29,15 +29,8 @@ import { OpenApiValidator } from "./utils/OpenApiValidator";
  * @author Jeongho Nam - https://github.com/samchon
  */
 export namespace McpLlm {
-  /**
-   * Properties for the LLM function calling application composer.
-   *
-   * @template Model Target LLM model
-   */
-  export interface IApplicationProps<Model extends ILlmSchema.Model> {
-    /** Target LLM model. */
-    model: Model;
-
+  /** Properties for the LLM function calling application composer. */
+  export interface IApplicationProps {
     /**
      * List of tools.
      *
@@ -49,8 +42,8 @@ export namespace McpLlm {
      */
     tools: Array<IMcpTool>;
 
-    /** Options for the LLM function calling schema conversion. */
-    options?: Partial<IMcpLlmApplication.IOptions<Model>>;
+    /** Configuration for the LLM function calling schema conversion. */
+    config?: Partial<IMcpLlmApplication.IConfig>;
   }
 
   /**
@@ -72,19 +65,14 @@ export namespace McpLlm {
    * @param props Properties for composition
    * @returns LLM function calling application
    */
-  export const application = <Model extends ILlmSchema.Model>(
-    props: IApplicationProps<Model>,
-  ): IMcpLlmApplication<Model> => {
-    const options: IMcpLlmApplication.IOptions<Model> = {
-      ...Object.fromEntries(
-        Object.entries(LlmSchemaComposer.defaultConfig(props.model)).map(
-          ([key, value]) =>
-            [key, (props.options as any)?.[key] ?? value] as const,
-        ),
-      ),
-      maxLength: props.options?.maxLength ?? 64,
-    } as IMcpLlmApplication.IOptions<Model>;
-    const functions: IMcpLlmFunction<Model>[] = [];
+  export const application = (props: IApplicationProps): IMcpLlmApplication => {
+    const config: IMcpLlmApplication.IConfig = {
+      reference: props.config?.reference ?? true,
+      strict: props.config?.strict ?? false,
+      maxLength: props.config?.maxLength ?? 64,
+      equals: props.config?.equals ?? false,
+    };
+    const functions: IMcpLlmFunction[] = [];
     const errors: IMcpLlmApplication.IError[] = [];
 
     props.tools.forEach((tool, i) => {
@@ -114,17 +102,15 @@ export namespace McpLlm {
       }
 
       // CONVERT TO LLM PARAMETERS
-      const parameters: IResult<
-        ILlmSchema.IParameters<Model>,
-        IOpenApiSchemaError
-      > = LlmSchemaComposer.parameters(props.model)({
-        config: options as any,
-        components,
-        schema: schema as
-          | OpenApi.IJsonSchema.IObject
-          | OpenApi.IJsonSchema.IReference,
-        accessor: `$input.tools[${i}].inputSchema`,
-      }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+      const parameters: IResult<ILlmSchema.IParameters, IOpenApiSchemaError> =
+        LlmSchemaComposer.parameters({
+          config,
+          components,
+          schema: schema as
+            | OpenApi.IJsonSchema.IObject
+            | OpenApi.IJsonSchema.IReference,
+          accessor: `$input.tools[${i}].inputSchema`,
+        });
       if (parameters.success)
         functions.push({
           name: tool.name,
@@ -134,7 +120,7 @@ export namespace McpLlm {
             components,
             schema,
             required: true,
-            equals: options.equals,
+            equals: config.equals,
           }),
         });
       else
@@ -149,9 +135,8 @@ export namespace McpLlm {
         });
     });
     return {
-      model: props.model,
       functions,
-      options,
+      config,
       errors,
     };
   };

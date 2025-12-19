@@ -14,15 +14,15 @@ import { IValidation } from "./IValidation";
  * composed by Human, not by LLM. File uploading feature or some sensitive
  * information like secret key (password) are the examples. In that case, you
  * can separate the function parameters to both LLM and human sides by
- * configuring the {@link ILlmApplication.IOptions.separate} property. The
+ * configuring the {@link ILlmApplication.IConfig.separate} property. The
  * separated parameters are assigned to the {@link ILlmFunction.separated}
  * property.
  *
  * For reference, when both LLM and Human filled parameter values to call, you
  * can merge them by calling the {@link HttpLlm.mergeParameters} function. In
- * other words, if you've configured the
- * {@link ILlmApplication.IOptions.separate} property, you have to merge the
- * separated parameters before the function call execution.
+ * other words, if you've configured the {@link ILlmApplication.IConfig.separate}
+ * property, you have to merge the separated parameters before the function call
+ * execution.
  *
  * @author Jeongho Nam - https://github.com/samchon
  * @reference https://platform.openai.com/docs/guides/function-calling
@@ -36,7 +36,7 @@ export interface ILlmApplication<Class extends object = any> {
   functions: ILlmFunction[];
 
   /** Configuration for the application. */
-  options: ILlmApplication.IOptions<Class>;
+  config: ILlmApplication.IConfig<Class>;
 
   /**
    * Class type, the source of the LLM application.
@@ -47,8 +47,8 @@ export interface ILlmApplication<Class extends object = any> {
   __class?: Class | undefined;
 }
 export namespace ILlmApplication {
-  /** Options for application composition. */
-  export interface IOptions<Class extends object = any>
+  /** Configuration for application composition. */
+  export interface IConfig<Class extends object = any>
     extends ILlmSchema.IConfig {
     /**
      * Separator function for the parameters.
