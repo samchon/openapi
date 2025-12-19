@@ -1,8 +1,8 @@
-import { OpenApi } from "../../OpenApi";
-import { IHttpMigrateRoute } from "../../structures/IHttpMigrateRoute";
-import { EndpointUtil } from "../../utils/EndpointUtil";
-import { Escaper } from "../../utils/Escaper";
-import { OpenApiTypeChecker } from "../../utils/OpenApiTypeChecker";
+import { OpenApi } from "../OpenApi";
+import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
+import { EndpointUtil } from "../utils/EndpointUtil";
+import { Escaper } from "../utils/Escaper";
+import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 
 export namespace HttpMigrateRouteComposer {
   export interface IProps {

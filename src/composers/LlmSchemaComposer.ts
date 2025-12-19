@@ -10,8 +10,8 @@ import { OpenApiConstraintShifter } from "../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
 import { OpenApiValidator } from "../utils/OpenApiValidator";
 import { JsonDescriptionUtil } from "../utils/internal/JsonDescriptionUtil";
-import { LlmDescriptionInverter } from "./llm/LlmDescriptionInverter";
-import { LlmParametersFinder } from "./llm/LlmParametersComposer";
+import { LlmDescriptionInverter } from "./LlmDescriptionInverter";
+import { LlmParametersFinder } from "./LlmParametersComposer";
 
 export namespace LlmSchemaComposer {
   /* -----------------------------------------------------------

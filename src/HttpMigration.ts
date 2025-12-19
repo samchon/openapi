@@ -2,7 +2,7 @@ import { OpenApi } from "./OpenApi";
 import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
-import { HttpMigrateApplicationComposer } from "./composers/migrate/HttpMigrateApplicationComposer";
+import { HttpMigrateApplicationComposer } from "./composers/HttpMigrateApplicationComposer";
 import { HttpMigrateRouteFetcher } from "./http/HttpMigrateRouteFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";

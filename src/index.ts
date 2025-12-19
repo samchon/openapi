@@ -29,49 +29,25 @@ export * from "./HttpMigration";
 //----
 // LLM
 //----
-// VALIDATIONS
+// CONTROLLERS
+export * from "./structures/IHttpLlmController";
+export * from "./structures/IHttpLlmApplication";
+export * from "./structures/IHttpLlmFunction";
+export * from "./structures/ILlmController";
+export * from "./structures/ILlmFunction";
+export * from "./structures/ILlmApplication";
+export * from "./structures/IMcpLlmApplication";
+export * from "./structures/IMcpLlmController";
+export * from "./structures/IMcpLlmFunction";
+export * from "./structures/IMcpTool";
+
+// SCHEMA
+export * from "./structures/ILlmSchema";
 export * from "./structures/IOpenApiSchemaError";
 export * from "./structures/IResult";
 export * from "./structures/IValidation";
 
-// CONTROLLERS
-export * from "./structures/IHttpLlmController";
-export * from "./structures/ILlmController";
-export * from "./structures/IMcpLlmController";
-
-// APPLICATIONS
-export * from "./structures/IHttpLlmApplication";
-export * from "./structures/IHttpLlmFunction";
-export * from "./structures/ILlmApplication";
-export * from "./structures/ILlmFunction";
-
-// SCHEMAS
-export * from "./structures/IChatGptSchema";
-export * from "./structures/IClaudeSchema";
-export * from "./structures/IGeminiSchema";
-export * from "./structures/ILlmSchema";
-export * from "./structures/ILlmSchemaV3";
-export * from "./structures/ILlmSchemaV3_1";
-
-// TYPE CHECKERS
-export * from "./utils/ChatGptTypeChecker";
-export * from "./utils/ClaudeTypeChecker";
-export * from "./utils/DeepSeekTypeChecker";
-export * from "./utils/GeminiTypeChecker";
-export * from "./utils/LlamaTypeChecker";
-export * from "./utils/LlmTypeCheckerV3";
-export * from "./utils/LlmTypeCheckerV3_1";
-export * from "./utils/LlmTypeChecker";
-
 // FACADE
 export * from "./HttpLlm";
-
-//----
-// MCP
-//----
 export * from "./McpLlm";
-
-export * from "./structures/IMcpLlmApplication";
-export * from "./structures/IMcpLlmFunction";
-
-export * from "./structures/IMcpTool";
+export * from "./utils/LlmTypeChecker";
