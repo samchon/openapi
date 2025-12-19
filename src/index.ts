@@ -29,8 +29,6 @@ export * from "./HttpMigration";
 //----
 // LLM
 //----
-// STRUCTURES
-
 // CONTROLLERS
 export * from "./structures/IHttpLlmController";
 export * from "./structures/IHttpLlmApplication";
