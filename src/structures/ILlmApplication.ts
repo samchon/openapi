@@ -78,7 +78,7 @@ export namespace ILlmApplication {
      * @param schema Schema to be separated.
      * @returns Whether the schema value must be composed by human or not.
      */
-    separate?: null | ((schema: ILlmSchema) => boolean);
+    separate: null | ((schema: ILlmSchema) => boolean);
 
     /**
      * Custom validation functions for specific class methods.
@@ -104,7 +104,7 @@ export namespace ILlmApplication {
      *
      * @default null
      */
-    validate?: null | Partial<ILlmApplication.IValidationHook<Class>>;
+    validate: null | Partial<ILlmApplication.IValidationHook<Class>>;
   }
 
   /**
