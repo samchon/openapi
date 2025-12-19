@@ -45,6 +45,24 @@ import { IJsonSchemaAttribute } from "./IJsonSchemaAttribute";
  * - {@link ILlmSchema.properties} and {@link ILlmSchema.required} are always
  *   defined
  *
+ * ## Strict Mode
+ *
+ * When {@link ILlmSchema.IConfig.strict} mode is enabled, the schema
+ * transformation follows OpenAI's structured output requirements:
+ *
+ * - Every {@link ILlmSchema.IObject.additionalProperties} is forced to `false`
+ * - Every property in {@link ILlmSchema.IObject.properties} becomes
+ *   {@link ILlmSchema.IObject.required}
+ * - All constraint properties are removed from the schema and moved to
+ *   {@link IJsonSchemaAttribute.description} in a JSDoc-like format:
+ *
+ *   - Numeric constraints: `minimum`, `maximum`, `exclusiveMinimum`,
+ *       `exclusiveMaximum`, `multipleOf`
+ *   - String constraints: `minLength`, `maxLength`, `pattern`, `format`,
+ *       `contentMediaType`
+ *   - Array constraints: `minItems`, `maxItems`, `uniqueItems`
+ *   - Example: `@minimum 0`, `@maximum 100`, `@format uuid`
+ *
  * @author Jeongho Nam - https://github.com/samchon
  */
 export type ILlmSchema =

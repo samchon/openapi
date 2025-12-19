@@ -7,8 +7,8 @@ import { IValidation } from "./IValidation";
  *
  * `ILlmApplication` is a data structure representing a collection of
  * {@link ILlmFunction LLM function calling schemas}, composed from a native
- * TypeScript class (or interface) type by the `typia.llm.application<App,
- * Model>()` function.
+ * TypeScript class (or interface) type by the `typia.llm.application<App>()`
+ * function.
  *
  * Also, there can be some parameters (or their nested properties) which must be
  * composed by Human, not by LLM. File uploading feature or some sensitive
@@ -58,7 +58,7 @@ export namespace ILlmApplication {
      * understand the parameter.
      *
      * For example, if the parameter type has configured
-     * {@link IGeminiSchema.IString.contentMediaType} which indicates file
+     * {@link ILlmSchema.IString.contentMediaType} which indicates file
      * uploading, it must be composed by human, not by LLM (Large Language
      * Model).
      *
@@ -72,7 +72,7 @@ export namespace ILlmApplication {
      * When writing the function, note that returning value `true` means to be a
      * human composing the value, and `false` means to LLM composing the value.
      * Also, when predicating the schema, it would better to utilize the
-     * {@link GeminiTypeChecker} like features.
+     * {@link LlmTypeChecker} like features.
      *
      * @default null
      * @param schema Schema to be separated.

@@ -2,7 +2,6 @@ import { OpenApi } from "../OpenApi";
 import { IHttpLlmFunction } from "./IHttpLlmFunction";
 import { IHttpMigrateRoute } from "./IHttpMigrateRoute";
 import { ILlmSchema } from "./ILlmSchema";
-import { ILlmSchemaV3 } from "./ILlmSchemaV3";
 
 /**
  * Application of LLM function call from OpenAPI document.
@@ -19,10 +18,9 @@ import { ILlmSchemaV3 } from "./ILlmSchemaV3";
  * {@link IHttpLlmFunction} type which represents LLM function calling schema. By
  * the way, if there're some types which does not supported by LLM, the
  * operation would be failed and pushed into the
- * {@link IHttpLlmApplication.errors}. Otherwise not, the operation would be
+ * {@link IHttpLlmApplication.errors}. Otherwise, the operation would be
  * successfully converted to {@link IHttpLlmFunction} and its type schemas are
- * downgraded to {@link OpenApiV3.IJsonSchema} and converted to
- * {@link ILlmSchemaV3}.
+ * converted to {@link ILlmSchema}.
  *
  * For reference, the arguments type is composed by below rule.
  *
@@ -88,7 +86,7 @@ export namespace IHttpLlmApplication {
      * understand the parameter.
      *
      * For example, if the parameter type has configured
-     * {@link IGeminiSchema.IString.contentMediaType} which indicates file
+     * {@link ILlmSchema.IString.contentMediaType} which indicates file
      * uploading, it must be composed by human, not by LLM (Large Language
      * Model).
      *
@@ -102,7 +100,7 @@ export namespace IHttpLlmApplication {
      * When writing the function, note that returning value `true` means to be a
      * human composing the value, and `false` means to LLM composing the value.
      * Also, when predicating the schema, it would better to utilize the
-     * {@link GeminiTypeChecker} like features.
+     * {@link LlmTypeChecker} like features.
      *
      * @default null
      * @param schema Schema to be separated.
