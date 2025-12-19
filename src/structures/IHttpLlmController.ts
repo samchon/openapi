@@ -30,12 +30,11 @@ import { IHttpResponse } from "./IHttpResponse";
  *     {
  *       protocol: "http",
  *       name: "shopping",
- *       application: HttpLlm.application(
- *         model: "chatgpt",
+ *       application: HttpLlm.application({
  *         document: await fetch(
  *           "https://shopping-be.wrtn.io/editor/swagger.json",
  *         ).then((r) => r.json()),
- *       ),
+ *       }),
  *       connection: {
  *         host: "https://shopping-be.wrtn.io",
  *         headers: {
@@ -56,7 +55,6 @@ import { IHttpResponse } from "./IHttpResponse";
  * - {@link ILlmController} for TypeScript
  *
  * @author Jeongho Nam - https://github.com/samchon
- * @template Model Type of the LLM model
  * @reference https://wrtnlabs.io/agentica/docs/core/controller/swagger/
  */
 export interface IHttpLlmController {
