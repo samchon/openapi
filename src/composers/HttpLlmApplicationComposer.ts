@@ -3,7 +3,6 @@ import { IHttpLlmApplication } from "../structures/IHttpLlmApplication";
 import { IHttpLlmFunction } from "../structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "../structures/IHttpMigrateApplication";
 import { IHttpMigrateRoute } from "../structures/IHttpMigrateRoute";
-import { ILlmFunction } from "../structures/ILlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
 import { IOpenApiSchemaError } from "../structures/IOpenApiSchemaError";
 import { IResult } from "../structures/IResult";
@@ -11,12 +10,18 @@ import { OpenApiValidator } from "../utils/OpenApiValidator";
 import { LlmSchemaComposer } from "./LlmSchemaComposer";
 
 export namespace HttpLlmComposer {
-  export const application = <Model extends ILlmSchema.Model>(props: {
-    model: Model;
+  export const application = (props: {
     migrate: IHttpMigrateApplication;
-    options: IHttpLlmApplication.IOptions<Model>;
-  }): IHttpLlmApplication<Model> => {
+    config?: Partial<IHttpLlmApplication.IConfig>;
+  }): IHttpLlmApplication => {
     // COMPOSE FUNCTIONS
+    const config: IHttpLlmApplication.IConfig = {
+      separate: props.config?.separate ?? null,
+      maxLength: props.config?.maxLength ?? 64,
+      equals: props.config?.equals ?? false,
+      reference: props.config?.reference ?? true,
+      strict: props.config?.strict ?? false,
+    };
     const errors: IHttpLlmApplication.IError[] = props.migrate.errors
       .filter((e) => e.operation()["x-samchon-human"] !== true)
       .map((e) => ({
@@ -26,7 +31,7 @@ export namespace HttpLlmComposer {
         operation: () => e.operation(),
         route: () => undefined,
       }));
-    const functions: IHttpLlmFunction<Model>[] = props.migrate.routes
+    const functions: IHttpLlmFunction[] = props.migrate.routes
       .filter((e) => e.operation()["x-samchon-human"] !== true)
       .map((route, i) => {
         if (route.method === "head") {
@@ -54,11 +59,10 @@ export namespace HttpLlmComposer {
           return null;
         }
         const localErrors: string[] = [];
-        const func: IHttpLlmFunction<Model> | null = composeFunction<Model>({
-          model: props.model,
-          config: props.options,
+        const func: IHttpLlmFunction | null = composeFunction({
           components: props.migrate.document().components,
-          route: route,
+          config,
+          route,
           errors: localErrors,
           index: i,
         });
@@ -72,26 +76,24 @@ export namespace HttpLlmComposer {
           });
         return func;
       })
-      .filter((v): v is IHttpLlmFunction<Model> => v !== null);
+      .filter((v): v is IHttpLlmFunction => v !== null);
 
-    const app: IHttpLlmApplication<Model> = {
-      model: props.model,
-      options: props.options,
+    const app: IHttpLlmApplication = {
+      config,
       functions,
       errors,
     };
-    shorten(app, props.options?.maxLength ?? 64);
+    shorten(app, props.config?.maxLength ?? 64);
     return app;
   };
 
-  const composeFunction = <Model extends ILlmSchema.Model>(props: {
-    model: Model;
+  const composeFunction = (props: {
     components: OpenApi.IComponents;
     route: IHttpMigrateRoute;
-    config: IHttpLlmApplication.IOptions<Model>;
+    config: IHttpLlmApplication.IConfig;
     errors: string[];
     index: number;
-  }): IHttpLlmFunction<Model> | null => {
+  }): IHttpLlmFunction | null => {
     // METADATA
     const endpoint: string = `$input.paths[${JSON.stringify(props.route.path)}][${JSON.stringify(props.route.method)}]`;
     const operation: OpenApi.IOperation = props.route.operation();
@@ -173,29 +175,25 @@ export namespace HttpLlmComposer {
     };
     parameters.required = Object.keys(parameters.properties ?? {});
 
-    const llmParameters: IResult<
-      ILlmSchema.IParameters<Model>,
-      IOpenApiSchemaError
-    > = LlmSchemaComposer.parameters(props.model)({
-      config: props.config as any,
-      components: props.components,
-      schema: parameters,
-      accessor: `${endpoint}.parameters`,
-    }) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+    const llmParameters: IResult<ILlmSchema.IParameters, IOpenApiSchemaError> =
+      LlmSchemaComposer.parameters({
+        config: props.config,
+        components: props.components,
+        schema: parameters,
+        accessor: `${endpoint}.parameters`,
+      });
 
     // RETURN VALUE
-    const output: IResult<ILlmSchema<Model>, IOpenApiSchemaError> | undefined =
-      props.route.success
-        ? (LlmSchemaComposer.schema(props.model)({
-            config: props.config as any,
-            components: props.components,
-            schema: props.route.success.schema,
-            accessor: `${endpoint}.responses[${JSON.stringify(props.route.success.status)}][${JSON.stringify(props.route.success.type)}].schema`,
-            $defs: llmParameters.success
-              ? (llmParameters.value as any).$defs!
-              : {},
-          }) as IResult<ILlmSchema<Model>, IOpenApiSchemaError>)
-        : undefined;
+    const output: IResult<ILlmSchema, IOpenApiSchemaError> | undefined = props
+      .route.success
+      ? LlmSchemaComposer.schema({
+          config: props.config,
+          components: props.components,
+          schema: props.route.success.schema,
+          accessor: `${endpoint}.responses[${JSON.stringify(props.route.success.status)}][${JSON.stringify(props.route.success.type)}].schema`,
+          $defs: llmParameters.success ? llmParameters.value.$defs : {},
+        })
+      : undefined;
 
     //----
     // CONVERSION
@@ -229,12 +227,11 @@ export namespace HttpLlmComposer {
       name,
       parameters: llmParameters.value,
       separated: props.config.separate
-        ? (LlmSchemaComposer.separate(props.model)({
-            predicate: props.config.separate as any,
-            parameters:
-              llmParameters.value satisfies ILlmSchema.ModelParameters[Model] as any,
+        ? LlmSchemaComposer.separate({
+            predicate: props.config.separate,
+            parameters: llmParameters.value,
             equals: props.config.equals ?? false,
-          }) as ILlmFunction.ISeparated<Model>)
+          })
         : undefined,
       output: output?.value,
       description: description[0],
@@ -251,12 +248,12 @@ export namespace HttpLlmComposer {
     };
   };
 
-  export const shorten = <Model extends ILlmSchema.Model>(
-    app: IHttpLlmApplication<Model>,
+  export const shorten = (
+    app: IHttpLlmApplication,
     limit: number = 64,
   ): void => {
     const dictionary: Set<string> = new Set();
-    const longFunctions: IHttpLlmFunction<Model>[] = [];
+    const longFunctions: IHttpLlmFunction[] = [];
     for (const func of app.functions) {
       dictionary.add(func.name);
       if (func.name.length > limit) {

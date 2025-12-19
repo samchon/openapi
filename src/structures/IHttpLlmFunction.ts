@@ -87,7 +87,7 @@ export interface IHttpLlmFunction {
   /**
    * List of parameter types.
    *
-   * If you've configured {@link IHttpLlmApplication.IOptions.keyword} as `true`,
+   * If you've configured {@link IHttpLlmApplication.IConfig.keyword} as `true`,
    * number of {@link IHttpLlmFunction.parameters} are always 1 and the first
    * parameter's type is always {@link ILlmSchema.IObject}. The properties'
    * rule is:
@@ -120,8 +120,7 @@ export interface IHttpLlmFunction {
   /**
    * Collection of separated parameters.
    *
-   * Filled only when {@link IHttpLlmApplication.IOptions.separate} is
-   * configured.
+   * Filled only when {@link IHttpLlmApplication.IConfig.separate} is configured.
    */
   separated?: IHttpLlmFunction.ISeparated;
 

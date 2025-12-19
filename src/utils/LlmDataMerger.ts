@@ -1,5 +1,4 @@
 import { ILlmFunction } from "../structures/ILlmFunction";
-import { ILlmSchema } from "../structures/ILlmSchema";
 
 /**
  * Data combiner for LLM function call.
@@ -8,9 +7,9 @@ import { ILlmSchema } from "../structures/ILlmSchema";
  */
 export namespace LlmDataMerger {
   /** Properties of {@link parameters} function. */
-  export interface IProps<Model extends ILlmSchema.Model> {
+  export interface IProps {
     /** Target function to call. */
-    function: ILlmFunction<Model>;
+    function: ILlmFunction;
 
     /** Arguments composed by LLM (Large Language Model). */
     llm: object | null;
@@ -22,25 +21,23 @@ export namespace LlmDataMerger {
   /**
    * Combine LLM and human arguments into one.
    *
-   * When you composes {@link IOpenAiDocument} with
-   * {@link IOpenAiDocument.IOptions.separate} option, then the arguments of the
-   * target function would be separated into two parts; LLM (Large Language
+   * When you compose {@link IHttpLlmApplication} with
+   * {@link IHttpLlmApplication.IConfig.separate} option, then the arguments of
+   * the target function would be separated into two parts; LLM (Large Language
    * Model) and human.
    *
    * In that case, you can combine both LLM and human composed arguments into
    * one by utilizing this {@link LlmDataMerger.parameters} function, referencing
-   * the target function metadata {@link IOpenAiFunction.separated}.
+   * the target function metadata {@link ILlmFunction.separated}.
    *
    * @param props Properties to combine LLM and human arguments with metadata.
    * @returns Combined arguments
    */
-  export const parameters = <Model extends ILlmSchema.Model>(
-    props: IProps<Model>,
-  ): object => {
+  export const parameters = (props: IProps): object => {
     const separated = props.function.separated;
     if (separated === undefined)
       throw new Error(
-        "Error on OpenAiDataComposer.parameters(): the function parameters are not separated.",
+        "Error on LlmDataMerger.parameters(): the function parameters are not separated.",
       );
     return value(props.llm, props.human) as object;
   };

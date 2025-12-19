@@ -4,7 +4,6 @@ import { OpenApiV3 } from "./OpenApiV3";
 import { OpenApiV3_1 } from "./OpenApiV3_1";
 import { SwaggerV2 } from "./SwaggerV2";
 import { HttpLlmComposer } from "./composers/HttpLlmApplicationComposer";
-import { LlmSchemaComposer } from "./composers/LlmSchemaComposer";
 import { HttpLlmFunctionFetcher } from "./http/HttpLlmFunctionFetcher";
 import { IHttpConnection } from "./structures/IHttpConnection";
 import { IHttpLlmApplication } from "./structures/IHttpLlmApplication";
@@ -12,7 +11,6 @@ import { IHttpLlmFunction } from "./structures/IHttpLlmFunction";
 import { IHttpMigrateApplication } from "./structures/IHttpMigrateApplication";
 import { IHttpResponse } from "./structures/IHttpResponse";
 import { ILlmFunction } from "./structures/ILlmFunction";
-import { ILlmSchema } from "./structures/ILlmSchema";
 import { LlmDataMerger } from "./utils/LlmDataMerger";
 
 /**
@@ -30,11 +28,10 @@ import { LlmDataMerger } from "./utils/LlmDataMerger";
  * {@link HttpLlm.propagate HttpLlm.propagate()}.
  *
  * By the way, if you have configured the
- * {@link IHttpLlmApplication.IOptions.separate} option to separate the
- * parameters into human and LLM sides, you can merge these human and LLM sides'
- * parameters into one through
- * {@link HttpLlm.mergeParameters HttpLlm.mergeParameters()} before the actual
- * LLM function call execution.
+ * {@link IHttpLlmApplication.IConfig.separate} option to separate the parameters
+ * into human and LLM sides, you can merge these human and LLM sides' parameters
+ * into one through {@link HttpLlm.mergeParameters HttpLlm.mergeParameters()}
+ * before the actual LLM function call execution.
  *
  * @author Jeongho Nam - https://github.com/samchon
  */
@@ -42,15 +39,8 @@ export namespace HttpLlm {
   /* -----------------------------------------------------------
     COMPOSERS
   ----------------------------------------------------------- */
-  /**
-   * Properties for the LLM function calling application composer.
-   *
-   * @template Model Target LLM model
-   */
-  export interface IApplicationProps<Model extends ILlmSchema.Model> {
-    /** Target LLM model. */
-    model: Model;
-
+  /** Properties for the LLM function calling application composer. */
+  export interface IApplicationProps {
     /** OpenAPI document to convert. */
     document:
       | OpenApi.IDocument
@@ -58,8 +48,8 @@ export namespace HttpLlm {
       | OpenApiV3.IDocument
       | OpenApiV3_1.IDocument;
 
-    /** Options for the LLM function calling schema conversion. */
-    options?: Partial<IHttpLlmApplication.IOptions<Model>>;
+    /** Configuration for the LLM function calling schema conversion. */
+    config?: Partial<IHttpLlmApplication.IConfig>;
   }
 
   /**
@@ -72,44 +62,31 @@ export namespace HttpLlm {
    * converted to the {@link IHttpLlmFunction LLM function} type, and they would
    * be used for the LLM function calling.
    *
-   * If you have configured the {@link IHttpLlmApplication.IOptions.separate}
+   * If you have configured the {@link IHttpLlmApplication.IConfig.separate}
    * option, every parameters in the {@link IHttpLlmFunction} would be separated
    * into both human and LLM sides. In that case, you can merge these human and
    * LLM sides' parameters into one through {@link HttpLlm.mergeParameters}
    * before the actual LLM function call execution.
    *
-   * Additionally, if you have configured the
-   * {@link IHttpLlmApplication.IOptions.keyword} as `true`, the number of
-   * {@link IHttpLlmFunction.parameters} are always 1 and the first parameter
-   * type is always {@link ILlmSchemaV3.IObject}. I recommend this option because
-   * LLM can understand the keyword arguments more easily.
-   *
    * @param props Properties for composition
    * @returns LLM function calling application
    */
-  export const application = <Model extends ILlmSchema.Model>(
-    props: IApplicationProps<Model>,
-  ): IHttpLlmApplication<Model> => {
+  export const application = (
+    props: IApplicationProps,
+  ): IHttpLlmApplication => {
     // MIGRATE
     const migrate: IHttpMigrateApplication = HttpMigration.application(
       props.document,
     );
-    const defaultConfig: ILlmSchema.IConfig<Model> =
-      LlmSchemaComposer.defaultConfig(props.model);
-    return HttpLlmComposer.application<Model>({
+    return HttpLlmComposer.application({
       migrate,
-      model: props.model,
-      options: {
-        ...Object.fromEntries(
-          Object.entries(defaultConfig).map(
-            ([key, value]) =>
-              [key, (props.options as any)?.[key] ?? value] as const,
-          ),
-        ),
-        separate: props.options?.separate ?? null,
-        maxLength: props.options?.maxLength ?? 64,
-        equals: props.options?.equals ?? false,
-      } as any as IHttpLlmApplication.IOptions<Model>,
+      config: {
+        reference: props.config?.reference ?? true,
+        strict: props.config?.strict ?? false,
+        separate: props.config?.separate ?? null,
+        maxLength: props.config?.maxLength ?? 64,
+        equals: props.config?.equals ?? false,
+      },
     });
   };
 
@@ -117,12 +94,12 @@ export namespace HttpLlm {
     FETCHERS
   ----------------------------------------------------------- */
   /** Properties for the LLM function call. */
-  export interface IFetchProps<Model extends ILlmSchema.Model> {
+  export interface IFetchProps {
     /** Application of the LLM function calling. */
-    application: IHttpLlmApplication<Model>;
+    application: IHttpLlmApplication;
 
     /** LLM function schema to call. */
-    function: IHttpLlmFunction<ILlmSchema.Model>;
+    function: IHttpLlmFunction;
 
     /** Connection info to the HTTP server. */
     connection: IHttpConnection;
@@ -140,16 +117,12 @@ export namespace HttpLlm {
    * sometimes).
    *
    * By the way, if you've configured the
-   * {@link IHttpLlmApplication.IOptions.separate}, so that the parameters are
-   * separated to human and LLM sides, you have to merge these humand and LLM
+   * {@link IHttpLlmApplication.IConfig.separate}, so that the parameters are
+   * separated to human and LLM sides, you have to merge these human and LLM
    * sides' parameters into one through {@link HttpLlm.mergeParameters}
    * function.
    *
-   * About the {@link IHttpLlmApplication.IOptions.keyword} option, don't worry
-   * anything. This `HttmLlm.execute()` function will automatically recognize
-   * the keyword arguments and convert them to the proper sequence.
-   *
-   * For reference, if the target API endpoinnt responds none 200/201 status,
+   * For reference, if the target API endpoint responds none 200/201 status,
    * this would be considered as an error and the {@link HttpError} would be
    * thrown. Otherwise you don't want such rule, you can use the
    * {@link HttpLlm.propagate} function instead.
@@ -158,9 +131,8 @@ export namespace HttpLlm {
    * @returns Return value (response body) from the API endpoint
    * @throws HttpError when the API endpoint responds none 200/201 status
    */
-  export const execute = <Model extends ILlmSchema.Model>(
-    props: IFetchProps<Model>,
-  ): Promise<unknown> => HttpLlmFunctionFetcher.execute<Model>(props);
+  export const execute = (props: IFetchProps): Promise<unknown> =>
+    HttpLlmFunctionFetcher.execute(props);
 
   /**
    * Propagate the LLM function call.
@@ -171,14 +143,10 @@ export namespace HttpLlm {
    * sometimes).
    *
    * By the way, if you've configured the
-   * {@link IHttpLlmApplication.IOptions.separate}, so that the parameters are
+   * {@link IHttpLlmApplication.IConfig.separate}, so that the parameters are
    * separated to human and LLM sides, you have to merge these humand and LLM
    * sides' parameters into one through {@link HttpLlm.mergeParameters}
    * function.
-   *
-   * About the {@link IHttpLlmApplication.IOptions.keyword} option, don't worry
-   * anything. This `HttmLlm.propagate()` function will automatically recognize
-   * the keyword arguments and convert them to the proper sequence.
    *
    * For reference, the propagation means always returning the response from the
    * API endpoint, even if the status is not 200/201. This is useful when you
@@ -188,17 +156,16 @@ export namespace HttpLlm {
    * @returns Response from the API endpoint
    * @throws Error only when the connection is failed
    */
-  export const propagate = <Model extends ILlmSchema.Model>(
-    props: IFetchProps<Model>,
-  ): Promise<IHttpResponse> => HttpLlmFunctionFetcher.propagate<Model>(props);
+  export const propagate = (props: IFetchProps): Promise<IHttpResponse> =>
+    HttpLlmFunctionFetcher.propagate(props);
 
   /* -----------------------------------------------------------
     MERGERS
   ----------------------------------------------------------- */
   /** Properties for the parameters' merging. */
-  export interface IMergeProps<Model extends ILlmSchema.Model> {
+  export interface IMergeProps {
     /** Metadata of the target function. */
-    function: ILlmFunction<Model>;
+    function: ILlmFunction;
 
     /** Arguments composed by the LLM. */
     llm: object | null;
@@ -210,22 +177,21 @@ export namespace HttpLlm {
   /**
    * Merge the parameters.
    *
-   * If you've configured the {@link IHttpLlmApplication.IOptions.separate}
+   * If you've configured the {@link IHttpLlmApplication.IConfig.separate}
    * option, so that the parameters are separated to human and LLM sides, you
    * can merge these humand and LLM sides' parameters into one through this
    * `HttpLlm.mergeParameters()` function before the actual LLM function call
-   * wexecution.
+   * execution.
    *
    * On contrary, if you've not configured the
-   * {@link IHttpLlmApplication.IOptions.separate} option, this function would
+   * {@link IHttpLlmApplication.IConfig.separate} option, this function would
    * throw an error.
    *
    * @param props Properties for the parameters' merging
    * @returns Merged parameter values
    */
-  export const mergeParameters = <Model extends ILlmSchema.Model>(
-    props: IMergeProps<Model>,
-  ): object => LlmDataMerger.parameters(props);
+  export const mergeParameters = (props: IMergeProps): object =>
+    LlmDataMerger.parameters(props);
 
   /**
    * Merge two values.
