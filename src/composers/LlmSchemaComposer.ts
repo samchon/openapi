@@ -18,13 +18,13 @@ export namespace LlmSchemaComposer {
     CONVERTERS
   ----------------------------------------------------------- */
   export const parameters = (props: {
-    config: ILlmSchema.IConfig;
+    config?: Partial<ILlmSchema.IConfig>;
     components: OpenApi.IComponents;
     schema: OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference;
     accessor?: string;
     refAccessor?: string;
   }): IResult<ILlmSchema.IParameters, IOpenApiSchemaError> => {
-    const config: Required<ILlmSchema.IConfig> = getConfig(props.config);
+    const config: ILlmSchema.IConfig = getConfig(props.config);
     const entity: IResult<OpenApi.IJsonSchema.IObject, IOpenApiSchemaError> =
       LlmParametersFinder.parameters({
         ...props,
@@ -33,7 +33,7 @@ export namespace LlmSchemaComposer {
     if (entity.success === false) return entity;
 
     const $defs: Record<string, ILlmSchema> = {};
-    const result: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
+    const result: IResult<ILlmSchema, IOpenApiSchemaError> = transform({
       ...props,
       config,
       $defs,
@@ -65,8 +65,25 @@ export namespace LlmSchemaComposer {
     schema: OpenApi.IJsonSchema;
     accessor?: string;
     refAccessor?: string;
+  }): IResult<ILlmSchema, IOpenApiSchemaError> =>
+    transform({
+      config: getConfig(props.config),
+      components: props.components,
+      $defs: props.$defs,
+      schema: props.schema,
+      accessor: props.accessor,
+      refAccessor: props.refAccessor,
+    });
+
+  const transform = (props: {
+    config?: Partial<ILlmSchema.IConfig> | undefined;
+    components: OpenApi.IComponents;
+    $defs: Record<string, ILlmSchema>;
+    schema: OpenApi.IJsonSchema;
+    accessor?: string;
+    refAccessor?: string;
   }): IResult<ILlmSchema, IOpenApiSchemaError> => {
-    const config = getConfig(props.config);
+    const config: ILlmSchema.IConfig = getConfig(props.config);
     const union: Array<ILlmSchema> = [];
     const attribute: IJsonSchemaAttribute = {
       title: props.schema.title,
@@ -92,13 +109,13 @@ export namespace LlmSchemaComposer {
         }
         if (OpenApiTypeChecker.isTuple(next))
           reasons.push({
+            accessor,
             schema: next,
-            accessor: accessor,
             message: `LLM does not allow tuple type.`,
           });
         else if (OpenApiTypeChecker.isReference(next)) {
           // UNABLE TO FIND MATCHED REFERENCE
-          const key = next.$ref.split("#/components/schemas/")[1];
+          const key: string = next.$ref.split("#/components/schemas/")[1];
           if (props.components.schemas?.[key] === undefined)
             reasons.push({
               schema: next,
@@ -122,17 +139,16 @@ export namespace LlmSchemaComposer {
         },
       };
 
-    const visit = (input: OpenApi.IJsonSchema): void => {
+    const visit = (input: OpenApi.IJsonSchema, accessor: string): void => {
       if (OpenApiTypeChecker.isOneOf(input)) {
         // UNION TYPE
-        input.oneOf.forEach(visit);
+        input.oneOf.forEach((s, i) => visit(s, `${accessor}.oneOf[${i}]`));
       } else if (OpenApiTypeChecker.isReference(input)) {
         // REFERENCE TYPE
         const key: string = input.$ref.split("#/components/schemas/")[1];
         const target: OpenApi.IJsonSchema | undefined =
           props.components.schemas?.[key];
-        if (target === undefined)
-          return; // UNREACHABLE
+        if (target === undefined) return;
         else if (
           // KEEP THE REFERENCE TYPE
           config.reference === true ||
@@ -147,26 +163,26 @@ export namespace LlmSchemaComposer {
               $ref: `#/$defs/${key}`,
             });
           };
-          if (props.$defs[key] !== undefined) {
-            out();
-            return;
-          }
+          if (props.$defs[key] !== undefined) return out();
+
           props.$defs[key] = {};
-          const converted: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
-            config,
-            components: props.components,
-            $defs: props.$defs,
-            schema: target,
-            refAccessor: props.refAccessor,
-            accessor: `${props.refAccessor ?? "$def"}[${JSON.stringify(key)}]`,
-          });
+          const converted: IResult<ILlmSchema, IOpenApiSchemaError> = transform(
+            {
+              config,
+              components: props.components,
+              $defs: props.$defs,
+              schema: target,
+              refAccessor: props.refAccessor,
+              accessor: `${props.refAccessor ?? "$def"}[${JSON.stringify(key)}]`,
+            },
+          );
           if (converted.success === false) return; // UNREACHABLE
           props.$defs[key] = converted.value;
-          out();
+          return out();
         } else {
           // DISCARD THE REFERENCE TYPE
           const length: number = union.length;
-          visit(target);
+          visit(target, accessor);
           if (length === union.length - 1 && union[union.length - 1] !== null)
             union[union.length - 1] = {
               ...union[union.length - 1]!,
@@ -191,7 +207,7 @@ export namespace LlmSchemaComposer {
           Object.entries(input.properties ?? {})
             .map(([key, value]) => {
               const converted: IResult<ILlmSchema, IOpenApiSchemaError> =
-                schema({
+                transform({
                   config,
                   components: props.components,
                   $defs: props.$defs,
@@ -209,31 +225,30 @@ export namespace LlmSchemaComposer {
         );
         if (Object.values(properties).some((v) => v === null)) return;
 
-        const additionalProperties: ILlmSchema | boolean | undefined = (() => {
-          if (
-            typeof input.additionalProperties === "object" &&
-            input.additionalProperties !== null
-          ) {
-            const converted: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
-              config,
-              components: props.components,
-              $defs: props.$defs,
-              schema: input.additionalProperties,
-              refAccessor: props.refAccessor,
-              accessor: `${props.accessor ?? "$input.schema"}.additionalProperties`,
-            });
-            if (converted.success === false) {
-              reasons.push(...converted.error.reasons);
-              return undefined;
+        const additionalProperties: ILlmSchema | boolean | undefined | null =
+          (() => {
+            if (
+              typeof input.additionalProperties === "object" &&
+              input.additionalProperties !== null
+            ) {
+              const converted: IResult<ILlmSchema, IOpenApiSchemaError> =
+                transform({
+                  config,
+                  components: props.components,
+                  $defs: props.$defs,
+                  schema: input.additionalProperties,
+                  refAccessor: props.refAccessor,
+                  accessor: `${accessor}.additionalProperties`,
+                });
+              if (converted.success === false) {
+                reasons.push(...converted.error.reasons);
+                return null;
+              }
+              return converted.value;
             }
-            return converted.value;
-          }
-          return config.strict === true
-            ? false
-            : input.additionalProperties;
-        })();
-        if (additionalProperties === undefined) return;
-
+            return config.strict === true ? false : input.additionalProperties;
+          })();
+        if (additionalProperties === null) return;
         union.push({
           ...input,
           properties,
@@ -242,31 +257,41 @@ export namespace LlmSchemaComposer {
         });
       } else if (OpenApiTypeChecker.isArray(input)) {
         // ARRAY TYPE
-        const items: IResult<ILlmSchema, IOpenApiSchemaError> = schema({
+        const items: IResult<ILlmSchema, IOpenApiSchemaError> = transform({
           config,
           components: props.components,
           $defs: props.$defs,
           schema: input.items,
           refAccessor: props.refAccessor,
-          accessor: `${props.accessor ?? "$input.schema"}.items`,
+          accessor: `${accessor}.items`,
         });
         if (items.success === false) {
           reasons.push(...items.error.reasons);
           return;
         }
         union.push(
-          OpenApiConstraintShifter.shiftArray({
-            ...input,
-            items: items.value,
-          }),
+          config.strict
+            ? OpenApiConstraintShifter.shiftArray({
+                ...input,
+                items: items.value,
+              })
+            : items.value,
         );
       } else if (OpenApiTypeChecker.isString(input))
-        union.push(OpenApiConstraintShifter.shiftString({ ...input }));
+        union.push(
+          config.strict
+            ? OpenApiConstraintShifter.shiftString({ ...input })
+            : input,
+        );
       else if (
         OpenApiTypeChecker.isNumber(input) ||
         OpenApiTypeChecker.isInteger(input)
       )
-        union.push(OpenApiConstraintShifter.shiftNumeric({ ...input }));
+        union.push(
+          config.strict
+            ? OpenApiConstraintShifter.shiftNumeric({ ...input })
+            : input,
+        );
       else if (OpenApiTypeChecker.isTuple(input))
         return; // UNREACHABLE
       else union.push({ ...input });
@@ -297,7 +322,7 @@ export namespace LlmSchemaComposer {
         input.oneOf.forEach(visitConstant);
     };
 
-    visit(props.schema);
+    visit(props.schema, props.accessor ?? "$input.schema");
     visitConstant(props.schema);
 
     if (reasons.length > 0)
@@ -758,8 +783,8 @@ export namespace LlmSchemaComposer {
 }
 
 const getConfig = (
-  config: ILlmSchema.IConfig | undefined,
-): Required<ILlmSchema.IConfig> => ({
+  config?: Partial<ILlmSchema.IConfig> | undefined,
+): ILlmSchema.IConfig => ({
   reference: config?.reference ?? true,
   strict: config?.strict ?? false,
 });
