@@ -79,7 +79,7 @@ export namespace ILlmSchema {
      *
      * @default true
      */
-    reference?: boolean;
+    reference: boolean;
 
     /**
      * Whether to apply the strict mode.
@@ -100,7 +100,7 @@ export namespace ILlmSchema {
      *
      * @default false
      */
-    strict?: boolean;
+    strict: boolean;
   }
 
   /**
