@@ -122,7 +122,7 @@ export namespace HttpLlm {
    * sides' parameters into one through {@link HttpLlm.mergeParameters}
    * function.
    *
-   * For reference, if the target API endpoinnt responds none 200/201 status,
+   * For reference, if the target API endpoint responds none 200/201 status,
    * this would be considered as an error and the {@link HttpError} would be
    * thrown. Otherwise you don't want such rule, you can use the
    * {@link HttpLlm.propagate} function instead.
