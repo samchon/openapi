@@ -4,7 +4,7 @@ import { ILlmFunction } from "../structures/ILlmFunction";
 import { ILlmSchema } from "../structures/ILlmSchema";
 import { IOpenApiSchemaError } from "../structures/IOpenApiSchemaError";
 import { IResult } from "../structures/IResult";
-import { GeminiTypeChecker } from "../utils/GeminiTypeChecker";
+import { LlmTypeChecker } from "../utils/LlmTypeChecker";
 import { NamingConvention } from "../utils/NamingConvention";
 import { OpenApiConstraintShifter } from "../utils/OpenApiConstraintShifter";
 import { OpenApiTypeChecker } from "../utils/OpenApiTypeChecker";
@@ -364,8 +364,7 @@ export namespace LlmSchemaComposer {
           props.schema.discriminator !== undefined &&
           props.schema.oneOf.length === union.length &&
           union.every(
-            (e) =>
-              GeminiTypeChecker.isReference(e) || GeminiTypeChecker.isNull(e),
+            (e) => LlmTypeChecker.isReference(e) || LlmTypeChecker.isNull(e),
           )
             ? {
                 propertyName: props.schema.discriminator.propertyName,
@@ -462,25 +461,25 @@ export namespace LlmSchemaComposer {
   }): [ILlmSchema | null, ILlmSchema | null] => {
     if (props.predicate(props.schema) === true) return [null, props.schema];
     else if (
-      GeminiTypeChecker.isUnknown(props.schema) ||
-      GeminiTypeChecker.isAnyOf(props.schema)
+      LlmTypeChecker.isUnknown(props.schema) ||
+      LlmTypeChecker.isAnyOf(props.schema)
     )
       return [props.schema, null];
-    else if (GeminiTypeChecker.isObject(props.schema))
+    else if (LlmTypeChecker.isObject(props.schema))
       return separateObject({
         predicate: props.predicate,
         convention: props.convention,
         $defs: props.$defs,
         schema: props.schema,
       });
-    else if (GeminiTypeChecker.isArray(props.schema))
+    else if (LlmTypeChecker.isArray(props.schema))
       return separateArray({
         predicate: props.predicate,
         convention: props.convention,
         $defs: props.$defs,
         schema: props.schema,
       });
-    else if (GeminiTypeChecker.isReference(props.schema))
+    else if (LlmTypeChecker.isReference(props.schema))
       return separateReference({
         predicate: props.predicate,
         convention: props.convention,
@@ -676,13 +675,13 @@ export namespace LlmSchemaComposer {
         schema,
       });
     const visit = (schema: ILlmSchema): void => {
-      if (GeminiTypeChecker.isArray(schema))
+      if (LlmTypeChecker.isArray(schema))
         union.push({
           ...schema,
           ...LlmDescriptionInverter.array(schema.description),
           items: next(schema.items),
         });
-      else if (GeminiTypeChecker.isObject(schema))
+      else if (LlmTypeChecker.isObject(schema))
         union.push({
           ...schema,
           properties: Object.fromEntries(
@@ -697,8 +696,8 @@ export namespace LlmSchemaComposer {
               ? next(schema.additionalProperties)
               : schema.additionalProperties,
         });
-      else if (GeminiTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
-      else if (GeminiTypeChecker.isReference(schema)) {
+      else if (LlmTypeChecker.isAnyOf(schema)) schema.anyOf.forEach(visit);
+      else if (LlmTypeChecker.isReference(schema)) {
         const key: string = schema.$ref.split("#/$defs/")[1];
         if (props.components.schemas?.[key] === undefined) {
           props.components.schemas ??= {};
@@ -709,7 +708,7 @@ export namespace LlmSchemaComposer {
           ...schema,
           $ref: `#/components/schemas/${key}`,
         });
-      } else if (GeminiTypeChecker.isBoolean(schema))
+      } else if (LlmTypeChecker.isBoolean(schema))
         if (!!schema.enum?.length)
           schema.enum.forEach((v) =>
             union.push({
@@ -718,8 +717,8 @@ export namespace LlmSchemaComposer {
           );
         else union.push(schema);
       else if (
-        GeminiTypeChecker.isInteger(schema) ||
-        GeminiTypeChecker.isNumber(schema)
+        LlmTypeChecker.isInteger(schema) ||
+        LlmTypeChecker.isNumber(schema)
       )
         if (!!schema.enum?.length)
           schema.enum.forEach((v) =>
@@ -733,7 +732,7 @@ export namespace LlmSchemaComposer {
             ...LlmDescriptionInverter.numeric(schema.description),
             ...{ enum: undefined },
           });
-      else if (GeminiTypeChecker.isString(schema))
+      else if (LlmTypeChecker.isString(schema))
         if (!!schema.enum?.length)
           schema.enum.forEach((v) =>
             union.push({
@@ -762,7 +761,7 @@ export namespace LlmSchemaComposer {
           : {
               oneOf: union.map((u) => ({ ...u, nullable: undefined })),
               discriminator:
-                GeminiTypeChecker.isAnyOf(props.schema) &&
+                LlmTypeChecker.isAnyOf(props.schema) &&
                 props.schema["x-discriminator"] !== undefined
                   ? {
                       propertyName:

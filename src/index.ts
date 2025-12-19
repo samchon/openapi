@@ -61,6 +61,7 @@ export * from "./utils/GeminiTypeChecker";
 export * from "./utils/LlamaTypeChecker";
 export * from "./utils/LlmTypeCheckerV3";
 export * from "./utils/LlmTypeCheckerV3_1";
+export * from "./utils/LlmTypeChecker";
 
 // FACADE
 export * from "./HttpLlm";
