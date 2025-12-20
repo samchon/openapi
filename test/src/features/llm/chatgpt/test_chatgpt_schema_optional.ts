@@ -1,5 +1,6 @@
 import { TestValidator } from "@nestia/e2e";
-import { ChatGptSchemaComposer } from "@samchon/openapi/lib/composers/llm/ChatGptSchemaComposer";
+import { ILlmSchema, IOpenApiSchemaError, IResult } from "@samchon/openapi";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia from "typia";
 
 export const test_chatgpt_schema_optional = (): void => {
@@ -9,16 +10,11 @@ export const test_chatgpt_schema_optional = (): void => {
     hobby?: string;
   }
   const collection = typia.json.schemas<[IMember]>();
-  for (const strict of [false, true]) {
-    const result = ChatGptSchemaComposer.schema({
-      config: {
-        reference: false,
-        strict,
-      },
+  const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+    LlmSchemaComposer.schema({
       $defs: {},
       components: collection.components,
       schema: collection.schemas[0],
     });
-    TestValidator.equals("success")(result.success)(!strict);
-  }
+  TestValidator.equals("success")(result.success)(true);
 };

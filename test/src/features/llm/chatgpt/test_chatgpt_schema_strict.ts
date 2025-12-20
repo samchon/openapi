@@ -17,15 +17,11 @@ export const test_chatgpt_schema_strict = (): void => {
     ]
   >();
   const res: IResult<ILlmSchema, IOpenApiSchemaError> =
-    LlmSchemaComposer.schema("chatgpt")({
-      config: {
-        ...LlmSchemaComposer.defaultConfig("chatgpt"),
-        strict: true,
-      },
+    LlmSchemaComposer.schema({
       components: collection.components,
       schema: collection.schemas[0],
       $defs: {},
-    } as any);
+    });
   TestValidator.equals("strict")({
     type: "object",
     additionalProperties: false,

@@ -5,11 +5,7 @@ import typia, { IJsonSchemaCollection, tags } from "typia";
 
 export const test_chatgpt_schema_reference_description = () => {
   const collection: IJsonSchemaCollection = typia.json.schemas<[IMember]>();
-  const result = LlmSchemaComposer.parameters("chatgpt")({
-    config: {
-      reference: true,
-      strict: true,
-    },
+  const result = LlmSchemaComposer.parameters({
     components: collection.components,
     schema: collection.schemas[0]! as OpenApi.IJsonSchema.IReference,
   });
@@ -23,19 +19,6 @@ export const test_chatgpt_schema_reference_description = () => {
   TestValidator.equals("$ref description")(
     result.success === true &&
       result.value.properties.hobby.description === undefined,
-  );
-
-  const nonStrict = LlmSchemaComposer.parameters("chatgpt")({
-    config: {
-      reference: true,
-      strict: false,
-    },
-    components: collection.components,
-    schema: collection.schemas[0]! as OpenApi.IJsonSchema.IReference,
-  });
-  TestValidator.equals("non-strict $ref description")(
-    nonStrict.success === true &&
-      nonStrict.value.properties.hobby.description === "The hobby type.",
   );
 };
 

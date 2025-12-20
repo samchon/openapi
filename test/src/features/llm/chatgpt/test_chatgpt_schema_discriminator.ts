@@ -1,31 +1,28 @@
 import { TestValidator } from "@nestia/e2e";
 import {
-  ChatGptTypeChecker,
-  IChatGptSchema,
+  ILlmSchema,
   IOpenApiSchemaError,
   IResult,
+  LlmTypeChecker,
   OpenApi,
   OpenApiTypeChecker,
 } from "@samchon/openapi";
-import { ChatGptSchemaComposer } from "@samchon/openapi/lib/composers/llm/ChatGptSchemaComposer";
+import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaUnit } from "typia";
 
 export const test_chatgpt_schema_discriminator = (): void => {
-  const $defs: Record<string, IChatGptSchema> = {};
+  const $defs: Record<string, ILlmSchema> = {};
   const unit: IJsonSchemaUnit = typia.json.schema<ICat | IAnt>();
-  const result: IResult<IChatGptSchema, IOpenApiSchemaError> =
-    ChatGptSchemaComposer.schema({
-      config: {
-        reference: true,
-      },
-      $defs: {},
+  const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+    LlmSchemaComposer.schema({
+      $defs,
       components: unit.components,
       schema: unit.schema,
     });
   if (result.success === false) throw new Error("Failed to transform");
   TestValidator.predicate("discriminator")(
     () =>
-      ChatGptTypeChecker.isAnyOf(result.value) &&
+      LlmTypeChecker.isAnyOf(result.value) &&
       result.value["x-discriminator"] !== undefined &&
       result.value["x-discriminator"].mapping !== undefined &&
       Object.values(result.value["x-discriminator"].mapping).every((k) =>
@@ -33,7 +30,7 @@ export const test_chatgpt_schema_discriminator = (): void => {
       ),
   );
 
-  const invert: OpenApi.IJsonSchema = ChatGptSchemaComposer.invert({
+  const invert: OpenApi.IJsonSchema = LlmSchemaComposer.invert({
     components: {},
     $defs,
     schema: result.value,
