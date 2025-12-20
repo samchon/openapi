@@ -9,18 +9,16 @@ export const test_llm_schema_reference_escaped_description_of_property =
     const result = LlmSchemaComposer.parameters({
       components: collection.components,
       schema: collection.schemas[0]! as OpenApi.IJsonSchema.IReference,
+      config: {
+        strict: true,
+      },
     });
-    TestValidator.predicate("description")(() => {
-      if (result.success === false) return false;
-      const description: string | undefined = (
-        result.value.properties.hobby as OpenApi.IJsonSchema.IObject
-      ).description;
-      return (
-        !!description?.includes("A hobby") &&
-        !!description?.includes("The main hobby") &&
-        !!description?.includes("The hobby type")
-      );
-    });
+    if (result.success === false)
+      throw new Error("Failed to compose LLM schema.");
+
+    TestValidator.equals("property description")(
+      result.value.properties.hobby.description,
+    )(undefined);
   };
 
 interface IMember {

@@ -54,15 +54,16 @@ namespace Something {
 const composeSchema = (
   collection: IJsonSchemaCollection,
 ): ILlmSchema.IParameters => {
-  const result: IResult<
-    ILlmSchema.IParameters,
-    IOpenApiSchemaError
-  > = LlmSchemaComposer.parameters({
-    components: collection.components,
-    schema: typia.assert<
-      OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
-    >(collection.schemas[0]),
-  });
+  const result: IResult<ILlmSchema.IParameters, IOpenApiSchemaError> =
+    LlmSchemaComposer.parameters({
+      components: collection.components,
+      schema: typia.assert<
+        OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
+      >(collection.schemas[0]),
+      config: {
+        reference: false,
+      },
+    });
   if (result.success === false) throw new Error("Invalid schema");
   return result.value;
 };

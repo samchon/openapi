@@ -38,6 +38,9 @@ export const test_llm_schema_enum_reference = (): void => {
       components,
       schema,
       $defs: {},
+      config: {
+        reference: false,
+      },
     });
   TestValidator.equals(
     "success",

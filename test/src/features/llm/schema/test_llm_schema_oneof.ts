@@ -8,17 +8,20 @@ export const test_llm_schema_oneof = (): void => {
     typia.json.schemas<[IPoint | ILine | ITriangle | IRectangle]>();
 
   const $defs: Record<string, ILlmSchema> = {};
-  const result: IResult<
-    ILlmSchema,
-    IOpenApiSchemaError
-  > = LlmSchemaComposer.schema({
-    $defs,
-    components: collection.components,
-    schema: collection.schemas[0],
-  });
+  const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+    LlmSchemaComposer.schema({
+      $defs,
+      components: collection.components,
+      schema: collection.schemas[0],
+      config: {
+        reference: false,
+      },
+    });
   TestValidator.equals("success")(result.success);
   TestValidator.equals("anyOf")(["point", "line", "triangle", "rectangle"])(
-    (result as any)?.value?.anyOf?.map((e: any) => e.properties?.type?.enum?.[0]),
+    (result as any)?.value?.anyOf?.map(
+      (e: any) => e.properties?.type?.enum?.[0],
+    ),
   );
 };
 
