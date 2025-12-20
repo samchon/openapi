@@ -59,7 +59,7 @@ export namespace LlmSchemaComposer {
   };
 
   export const schema = (props: {
-    config: ILlmSchema.IConfig;
+    config?: Partial<ILlmSchema.IConfig>;
     components: OpenApi.IComponents;
     $defs: Record<string, ILlmSchema>;
     schema: OpenApi.IJsonSchema;
@@ -782,14 +782,14 @@ export namespace LlmSchemaComposer {
             }),
     } satisfies OpenApi.IJsonSchema;
   };
-}
 
-const getConfig = (
-  config?: Partial<ILlmSchema.IConfig> | undefined,
-): ILlmSchema.IConfig => ({
-  reference: config?.reference ?? true,
-  strict: config?.strict ?? false,
-});
+  export const getConfig = (
+    config?: Partial<ILlmSchema.IConfig> | undefined,
+  ): ILlmSchema.IConfig => ({
+    reference: config?.reference ?? true,
+    strict: config?.strict ?? false,
+  });
+}
 
 const validateStrict = (
   schema: OpenApi.IJsonSchema,

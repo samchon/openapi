@@ -1,25 +1,20 @@
 import { TestValidator } from "@nestia/e2e";
 import {
-  ChatGptTypeChecker,
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
   IMcpLlmApplication,
-  LlamaTypeChecker,
+  LlmTypeChecker,
   McpLlm,
 } from "@samchon/openapi";
 
 export const test_mcp_schema_ref = async (): Promise<void> => {
-  const http: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
-    model: "chatgpt",
+  const http: IHttpLlmApplication = HttpLlm.application({
     document: await fetch(
       "https://raw.githubusercontent.com/samchon/shopping-backend/refs/heads/master/packages/api/swagger.json",
     ).then((r) => r.json()),
-    options: {
-      reference: true,
-    },
   });
-  const func: IHttpLlmFunction<"chatgpt"> | undefined = http.functions.find(
+  const func: IHttpLlmFunction | undefined = http.functions.find(
     (x) =>
       Object.keys(x.parameters.$defs).length !== 0 &&
       Object.keys(x.parameters.properties).length !== 0 &&
@@ -30,17 +25,16 @@ export const test_mcp_schema_ref = async (): Promise<void> => {
   if (func === undefined) throw new Error("Function not found");
 
   const visited: Set<string> = new Set<string>();
-  ChatGptTypeChecker.visit({
+  LlmTypeChecker.visit({
     closure: (schema) => {
-      if (ChatGptTypeChecker.isReference(schema))
+      if (LlmTypeChecker.isReference(schema))
         visited.add(schema.$ref.split("/").pop()!);
     },
     $defs: func.parameters.$defs,
     schema: func.parameters,
   });
 
-  const mcp: IMcpLlmApplication<"chatgpt"> = McpLlm.application({
-    model: "chatgpt",
+  const mcp: IMcpLlmApplication = McpLlm.application({
     tools: [
       {
         name: func.name,
@@ -48,9 +42,6 @@ export const test_mcp_schema_ref = async (): Promise<void> => {
         inputSchema: func.parameters,
       },
     ],
-    options: {
-      reference: true,
-    },
   });
   TestValidator.equals(
     "schema",
@@ -64,12 +55,12 @@ export const test_mcp_schema_ref = async (): Promise<void> => {
 };
 
 const isEmptyBody = ($defs: Record<string, any>, input: any): boolean => {
-  if (LlamaTypeChecker.isReference(input)) {
+  if (LlmTypeChecker.isReference(input)) {
     const name: string = input.$ref.split("/").pop()!;
     return $defs[name] && isEmptyBody($defs, $defs[name]);
   }
   return (
-    LlamaTypeChecker.isObject(input) &&
+    LlmTypeChecker.isObject(input) &&
     Object.keys(input.properties ?? {}).length === 0
   );
 };

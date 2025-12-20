@@ -8,24 +8,7 @@ import {
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
-export const test_chatgpt_schema_tuple = (): void =>
-  validate_llm_schema_tuple("chatgpt");
-
-export const test_claude_schema_tuple = (): void =>
-  validate_llm_schema_tuple("claude");
-
-export const test_gemini_schema_tuple = (): void =>
-  validate_llm_schema_tuple("gemini");
-
-export const test_llm_v30_schema_tuple = (): void =>
-  validate_llm_schema_tuple("3.0");
-
-export const test_llm_v31_schema_tuple = (): void =>
-  validate_llm_schema_tuple("3.1");
-
-const validate_llm_schema_tuple = <Model extends ILlmSchema.Model>(
-  model: Model,
-): void => {
+export const test_llm_schema_tuple = (): void => {
   const collection: IJsonSchemaCollection = typia.json.schemas<
     [
       [string, number],
@@ -44,7 +27,7 @@ const validate_llm_schema_tuple = <Model extends ILlmSchema.Model>(
       }>,
     ]
   >();
-  const v = validate(model)(collection.components);
+  const v = validate(collection.components);
   v(collection.schemas[0])(["$input"]);
   v(collection.schemas[1])([
     `$input.properties["input"]`,
@@ -56,22 +39,16 @@ const validate_llm_schema_tuple = <Model extends ILlmSchema.Model>(
 };
 
 const validate =
-  <Model extends ILlmSchema.Model>(model: Model) =>
   (components: OpenApi.IComponents) =>
   (schema: OpenApi.IJsonSchema) =>
   (expected: string[]): void => {
-    const result: IResult<
-      ILlmSchema.IParameters<Model>,
-      IOpenApiSchemaError
-    > = LlmSchemaComposer.schema(model)({
-      config: LlmSchemaComposer.defaultConfig(
-        model,
-      ) satisfies ILlmSchema.IConfig<Model> as any,
-      accessor: "$input",
-      components,
-      schema,
-      $defs: {},
-    } as any) as IResult<ILlmSchema.IParameters<Model>, IOpenApiSchemaError>;
+    const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+      LlmSchemaComposer.schema({
+        accessor: "$input",
+        components,
+        schema,
+        $defs: {},
+      });
     TestValidator.equals("success")(result.success)(false);
     TestValidator.equals("errors")(
       result.success ? [] : result.error.reasons.map((r) => r.accessor).sort(),

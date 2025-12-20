@@ -1,30 +1,20 @@
 import { TestValidator } from "@nestia/e2e";
 import {
-  ILlmSchemaV3_1,
+  ILlmSchema,
   IOpenApiSchemaError,
   IResult,
-  LlmTypeCheckerV3_1,
+  LlmTypeChecker,
   OpenApi,
   OpenApiTypeChecker,
 } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaUnit } from "typia";
 
-export const test_claude_schema_discriminator = (): void =>
-  validate_llm_schema_discriminator("claude");
-
-export const test_llama_v31_schema_discriminator = (): void =>
-  validate_llm_schema_discriminator("3.1");
-
-const validate_llm_schema_discriminator = (vendor: "claude" | "3.1"): void => {
-  const $defs: Record<string, ILlmSchemaV3_1> = {};
+export const test_llm_schema_discriminator = (): void => {
+  const $defs: Record<string, ILlmSchema> = {};
   const unit: IJsonSchemaUnit = typia.json.schema<ICat | IAnt>();
-  const result: IResult<ILlmSchemaV3_1, IOpenApiSchemaError> =
-    LlmSchemaComposer.schema(vendor)({
-      config: {
-        reference: true,
-        constraint: true,
-      },
+  const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+    LlmSchemaComposer.schema({
       $defs,
       components: unit.components,
       schema: unit.schema,
@@ -32,15 +22,15 @@ const validate_llm_schema_discriminator = (vendor: "claude" | "3.1"): void => {
   if (result.success === false) throw new Error("Failed to transform");
   TestValidator.predicate("discriminator")(
     () =>
-      LlmTypeCheckerV3_1.isOneOf(result.value) &&
-      result.value.discriminator !== undefined &&
-      result.value.discriminator.mapping !== undefined &&
-      Object.values(result.value.discriminator.mapping).every((k) =>
+      LlmTypeChecker.isAnyOf(result.value) &&
+      result.value["x-discriminator"] !== undefined &&
+      result.value["x-discriminator"].mapping !== undefined &&
+      Object.values(result.value["x-discriminator"].mapping).every((k) =>
         k.startsWith("#/$defs/"),
       ),
   );
 
-  const invert: OpenApi.IJsonSchema = LlmSchemaComposer.invert(vendor)({
+  const invert: OpenApi.IJsonSchema = LlmSchemaComposer.invert({
     components: {},
     $defs,
     schema: result.value,

@@ -6,21 +6,16 @@ import { TestGlobal } from "../TestGlobal";
 import { ILlmTextPrompt } from "../dto/ILlmTextPrompt";
 
 export namespace LlmFunctionCaller {
-  export interface IProps<Model extends ILlmSchema.Model> {
+  export interface IProps {
     vendor: string;
-    model: Model;
-    function: ILlmFunction<Model>;
+    function: ILlmFunction;
     texts: ILlmTextPrompt[];
     handleCompletion: (input: any) => Promise<void>;
-    handleParameters?: (
-      parameters: ILlmSchema.ModelParameters[Model],
-    ) => Promise<void>;
+    handleParameters?: (parameters: ILlmSchema.IParameters) => Promise<void>;
     strict?: boolean;
   }
 
-  export const test = async <Model extends ILlmSchema.Model>(
-    props: IProps<Model>,
-  ) => {
+  export const test = async (props: IProps) => {
     if (
       TestGlobal.env.OPENAI_API_KEY === undefined ||
       TestGlobal.env.OPENROUTER_API_KEY === undefined
@@ -41,8 +36,8 @@ export namespace LlmFunctionCaller {
     });
   };
 
-  const step = async <Model extends ILlmSchema.Model>(
-    props: IProps<Model>,
+  const step = async (
+    props: IProps,
     previous?: IValidation.IFailure,
   ): Promise<IValidation<any>> => {
     const client: OpenAI = new OpenAI({
