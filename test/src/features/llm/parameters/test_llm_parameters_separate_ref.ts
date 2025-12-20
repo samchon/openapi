@@ -11,7 +11,7 @@ import typia, { IJsonSchemaCollection, tags } from "typia";
 
 export const test_llm_parameters_separate_ref = (): void => {
   const separator = (schema: ILlmSchema.IParameters) =>
-    LlmSchemaComposer.separateParameters({
+    LlmSchemaComposer.separate({
       predicate: (s) =>
         LlmTypeChecker.isString(s as OpenApi.IJsonSchema.IString) &&
         (s as OpenApi.IJsonSchema.IString).description?.includes(

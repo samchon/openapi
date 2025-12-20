@@ -4,34 +4,32 @@ import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaCompo
 
 export const test_llm_schema_recursive_ref = (): void => {
   const $defs: Record<string, ILlmSchema> = {};
-  const result: IResult<
-    ILlmSchema,
-    IOpenApiSchemaError
-  > = LlmSchemaComposer.schema({
-    $defs,
-    components: {
-      schemas: {
-        Department: {
-          type: "object",
-          properties: {
-            name: {
-              type: "string",
-            },
-            children: {
-              type: "array",
-              items: {
-                $ref: "#/components/schemas/Department",
+  const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+    LlmSchemaComposer.schema({
+      $defs,
+      components: {
+        schemas: {
+          Department: {
+            type: "object",
+            properties: {
+              name: {
+                type: "string",
+              },
+              children: {
+                type: "array",
+                items: {
+                  $ref: "#/components/schemas/Department",
+                },
               },
             },
+            required: ["name", "children"],
           },
-          required: ["name", "children"],
         },
       },
-    },
-    schema: {
-      $ref: "#/components/schemas/Department",
-    },
-  });
+      schema: {
+        $ref: "#/components/schemas/Department",
+      },
+    });
   TestValidator.equals("success")(result.success)(true);
   TestValidator.equals("$defs")({
     Department: {
@@ -49,7 +47,7 @@ export const test_llm_schema_recursive_ref = (): void => {
       },
       required: ["name", "children"],
     },
-  })($defs);
+  } satisfies Record<string, ILlmSchema> as Record<string, ILlmSchema>)($defs);
   TestValidator.equals("schema")(result.success ? result.value : {})({
     $ref: "#/$defs/Department",
   });

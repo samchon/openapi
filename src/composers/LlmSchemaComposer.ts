@@ -278,7 +278,10 @@ export namespace LlmSchemaComposer {
                 ...input,
                 items: items.value,
               })
-            : items.value,
+            : {
+                ...input,
+                items: items.value,
+              },
         );
       } else if (OpenApiTypeChecker.isString(input))
         union.push(

@@ -36,8 +36,7 @@ export const test_issue_104_upgrade_v20_allOf = async (): Promise<void> => {
         );
       }
 
-  const app: IHttpLlmApplication<"claude"> = HttpLlm.application({
-    model: "claude",
+  const app: IHttpLlmApplication = HttpLlm.application({
     document,
   });
   TestValidator.equals("errors")(app.errors.length)(0);

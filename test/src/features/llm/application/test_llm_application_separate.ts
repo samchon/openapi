@@ -14,8 +14,8 @@ import typia from "typia";
 export const test_llm_application_separate = async (): Promise<void> => {
   const application: IHttpLlmApplication = HttpLlm.application({
     document: await document.get(),
-    options: {
-      separate: (schema: any) =>
+    config: {
+      separate: (schema) =>
         LlmTypeChecker.isString(schema as any) &&
         (schema as any)["x-wrtn-secret-key"] !== undefined,
     },

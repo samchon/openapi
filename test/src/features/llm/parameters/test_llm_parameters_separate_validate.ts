@@ -21,11 +21,10 @@ export const test_llm_parameters_separate_validate = (): void => {
       } as any) as IResult<ILlmSchema.IParameters, IOpenApiSchemaError>;
     if (result.success === false) throw new Error("Failed to convert");
 
-    const separated: ILlmFunction.ISeparated =
-      LlmSchemaComposer.separateParameters({
-        parameters: result.value as ILlmSchema.IParameters,
-        predicate: (s: OpenApi.IJsonSchema) => OpenApiTypeChecker.isNumber(s),
-      } as any) as ILlmFunction.ISeparated;
+    const separated: ILlmFunction.ISeparated = LlmSchemaComposer.separate({
+      parameters: result.value as ILlmSchema.IParameters,
+      predicate: (s: OpenApi.IJsonSchema) => OpenApiTypeChecker.isNumber(s),
+    } as any) as ILlmFunction.ISeparated;
     TestValidator.equals(
       "validate",
       (key) => key !== "description",

@@ -1,10 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import {
-  HttpLlm,
-  IHttpLlmApplication,
-  ILlmSchema,
-  OpenApi,
-} from "@samchon/openapi";
+import { HttpLlm, IHttpLlmApplication, OpenApi } from "@samchon/openapi";
 import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_llm_application_tuple = (): void => {

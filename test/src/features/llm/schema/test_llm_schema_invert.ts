@@ -1,15 +1,16 @@
 import { TestValidator } from "@nestia/e2e";
-import { ILlmSchema } from "@samchon/openapi";
+import { ILlmSchema, IOpenApiSchemaError, IResult } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaUnit, tags } from "typia";
 
 export const test_llm_schema_invert = (): void => {
   const assert = (title: string, unit: IJsonSchemaUnit): void => {
-    const result = LlmSchemaComposer.schema({
-      components: unit.components,
-      schema: unit.schema,
-      $defs: {},
-    });
+    const result: IResult<ILlmSchema, IOpenApiSchemaError> =
+      LlmSchemaComposer.schema({
+        components: unit.components,
+        schema: unit.schema,
+        $defs: {},
+      });
     if (result.success === false)
       throw new Error("Failed to compose LLM schema.");
     const inverted = LlmSchemaComposer.invert({

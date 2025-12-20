@@ -1,4 +1,4 @@
-import { ILlmApplication, ILlmSchema } from "@samchon/openapi";
+import { ILlmApplication } from "@samchon/openapi";
 import fs from "fs";
 import typia from "typia";
 

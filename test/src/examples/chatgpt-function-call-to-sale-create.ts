@@ -25,17 +25,15 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
-    model: "chatgpt",
+  const application: IHttpLlmApplication = HttpLlm.application({
     document,
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<"chatgpt"> | undefined =
-    application.functions.find(
-      // (f) => f.name === "llm_selected_function_name"
-      (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
-    );
+  const func: IHttpLlmFunction | undefined = application.functions.find(
+    // (f) => f.name === "llm_selected_function_name"
+    (f) => f.path === "/shoppings/sellers/sale" && f.method === "post",
+  );
   if (func === undefined) throw new Error("No matched function exists.");
 
   // Get arguments by ChatGPT function calling

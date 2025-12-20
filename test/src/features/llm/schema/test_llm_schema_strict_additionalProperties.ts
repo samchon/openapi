@@ -3,7 +3,7 @@ import { ILlmSchema, IOpenApiSchemaError, IResult } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection } from "typia";
 
-export const test_chatgpt_schema_strict = (): void => {
+export const test_llm_schema_strict_additionalProperties = (): void => {
   const collection: IJsonSchemaCollection = typia.json.schemas<
     [
       {
@@ -21,6 +21,9 @@ export const test_chatgpt_schema_strict = (): void => {
       components: collection.components,
       schema: collection.schemas[0],
       $defs: {},
+      config: {
+        strict: true,
+      },
     });
   TestValidator.equals("strict")({
     type: "object",

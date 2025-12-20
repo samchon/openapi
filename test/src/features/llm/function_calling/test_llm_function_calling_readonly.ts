@@ -1,7 +1,7 @@
 import typia, { tags } from "typia";
 import { v4 } from "uuid";
 
-import { ILlmApplication, ILlmSchema } from "../../../../../lib";
+import { ILlmApplication } from "../../../../../lib";
 import { LlmApplicationFactory } from "../../../utils/LlmApplicationFactory";
 import { LlmFunctionCaller } from "../../../utils/LlmFunctionCaller";
 

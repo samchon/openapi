@@ -1,5 +1,5 @@
 import { TestValidator } from "@nestia/e2e";
-import { HttpLlm } from "@samchon/openapi";
+import { HttpLlm, ILlmSchema } from "@samchon/openapi";
 
 export const test_http_llm_merge_parameters = (): void => {
   TestValidator.equals("atomics")(
@@ -16,7 +16,8 @@ export const test_http_llm_merge_parameters = (): void => {
           },
           additionalProperties: false,
           required: ["a", "b", "c", "d"],
-        },
+          $defs: {},
+        } satisfies ILlmSchema.IParameters,
         separated: {
           human: {
             type: "object",
@@ -26,7 +27,8 @@ export const test_http_llm_merge_parameters = (): void => {
             },
             additionalProperties: false,
             required: ["a", "b"],
-          },
+            $defs: {},
+          } satisfies ILlmSchema.IParameters,
           llm: {
             type: "object",
             properties: {
@@ -35,7 +37,8 @@ export const test_http_llm_merge_parameters = (): void => {
             },
             additionalProperties: false,
             required: ["c", "d"],
-          },
+            $defs: {},
+          } satisfies ILlmSchema.IParameters,
         },
         validate: null!,
       },

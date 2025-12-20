@@ -10,8 +10,7 @@ export const test_http_llm_function_multipart = async (): Promise<void> => {
       await fs.promises.readFile(`${TestGlobal.ROOT}/swagger.json`, "utf8"),
     ),
   );
-  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
-    model: "3.0",
+  const application: IHttpLlmApplication = HttpLlm.application({
     document,
   });
   TestValidator.equals("multipart not supported")(

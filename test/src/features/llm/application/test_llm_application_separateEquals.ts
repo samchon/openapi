@@ -3,17 +3,15 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  ILlmSchema,
   IValidation,
   OpenApi,
   OpenApiTypeChecker,
 } from "@samchon/openapi";
-import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 
 export const test_llm_application_separateEquals = (): void => {
   const application: IHttpLlmApplication = HttpLlm.application({
     document,
-    options: {
+    config: {
       equals: true,
       separate: (schema: OpenApi.IJsonSchema) =>
         OpenApiTypeChecker.isNumber(schema),

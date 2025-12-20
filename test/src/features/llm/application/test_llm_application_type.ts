@@ -2,7 +2,6 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   ILlmApplication,
-  ILlmSchema,
   OpenApi,
 } from "@samchon/openapi";
 import fs from "fs";
@@ -13,7 +12,7 @@ import { TestGlobal } from "../../../TestGlobal";
 
 export const test_llm_application_type = (): void => {
   const http: IHttpLlmApplication = application();
-  const classic: ILlmApplication = http;
+  const classic: Omit<ILlmApplication, "config"> = http;
   typia.assert(classic);
 };
 

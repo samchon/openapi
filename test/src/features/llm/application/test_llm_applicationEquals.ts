@@ -3,16 +3,14 @@ import {
   HttpLlm,
   IHttpLlmApplication,
   IHttpLlmFunction,
-  ILlmSchema,
   IValidation,
   OpenApi,
 } from "@samchon/openapi";
-import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 
 export const test_llm_applicationEquals = (): void => {
   const application: IHttpLlmApplication = HttpLlm.application({
     document,
-    options: {
+    config: {
       equals: true,
     },
   });

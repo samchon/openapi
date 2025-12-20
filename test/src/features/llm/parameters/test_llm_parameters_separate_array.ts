@@ -11,7 +11,7 @@ import typia, { IJsonSchemaCollection, tags } from "typia";
 
 export const test_llm_parameters_separate_array = (): void => {
   const separator = (schema: ILlmSchema.IParameters) =>
-    LlmSchemaComposer.separateParameters({
+    LlmSchemaComposer.separate({
       predicate: (s) =>
         LlmTypeChecker.isString(s as OpenApi.IJsonSchema.IString) &&
         (s as OpenApi.IJsonSchema.IString).contentMediaType !== undefined,
@@ -68,18 +68,14 @@ interface IFileUpload {
 }
 interface ICombined extends IMember, IFileUpload {}
 
-const schema = (
-  collection: IJsonSchemaCollection,
-): ILlmSchema.IParameters => {
-  const result: IResult<
-    ILlmSchema.IParameters,
-    IOpenApiSchemaError
-  > = LlmSchemaComposer.parameters({
-    components: collection.components,
-    schema: typia.assert<
-      OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
-    >(collection.schemas[0]),
-  });
+const schema = (collection: IJsonSchemaCollection): ILlmSchema.IParameters => {
+  const result: IResult<ILlmSchema.IParameters, IOpenApiSchemaError> =
+    LlmSchemaComposer.parameters({
+      components: collection.components,
+      schema: typia.assert<
+        OpenApi.IJsonSchema.IObject | OpenApi.IJsonSchema.IReference
+      >(collection.schemas[0]),
+    });
   if (result.success === false) {
     console.log(result.error);
     throw new Error("Invalid schema");

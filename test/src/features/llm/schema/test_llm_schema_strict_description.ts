@@ -3,11 +3,14 @@ import { OpenApi } from "@samchon/openapi";
 import { LlmSchemaComposer } from "@samchon/openapi/lib/composers/LlmSchemaComposer";
 import typia, { IJsonSchemaCollection, tags } from "typia";
 
-export const test_chatgpt_schema_reference_description = () => {
+export const test_llm_schema_strict_description = () => {
   const collection: IJsonSchemaCollection = typia.json.schemas<[IMember]>();
   const result = LlmSchemaComposer.parameters({
     components: collection.components,
     schema: collection.schemas[0]! as OpenApi.IJsonSchema.IReference,
+    config: {
+      strict: true,
+    },
   });
   TestValidator.predicate("type description")(
     result.success === true &&
