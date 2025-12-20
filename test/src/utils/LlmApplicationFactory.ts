@@ -73,7 +73,7 @@ export namespace LlmApplicationFactory {
         $defs: parameters.value.$defs,
       });
     if (output.success === false) {
-      console.log(JSON.stringify(output.error), null, 2);
+      console.log(JSON.stringify(output.error, null, 2));
       throw new Error("Failed to compose output schema.");
     }
     return out(output.value);
