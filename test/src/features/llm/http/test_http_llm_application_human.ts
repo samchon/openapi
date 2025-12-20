@@ -10,10 +10,8 @@ export const test_http_llm_application = async (): Promise<void> => {
       await fs.promises.readFile(`${TestGlobal.ROOT}/swagger.json`, "utf8"),
     ),
   );
-  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
-    model: "3.0",
+  const application: IHttpLlmApplication = HttpLlm.application({
     document,
-    options: {},
   });
 
   const humanSwagger: OpenApi.IDocument = JSON.parse(JSON.stringify(document));
@@ -22,10 +20,8 @@ export const test_http_llm_application = async (): Promise<void> => {
       .post as OpenApi.IOperation
   )["x-samchon-human"] = true;
   const humanDocument: OpenApi.IDocument = OpenApi.convert(humanSwagger as any);
-  const humanApplication: IHttpLlmApplication<"3.0"> = HttpLlm.application({
-    model: "3.0",
+  const humanApplication: IHttpLlmApplication = HttpLlm.application({
     document: humanDocument,
-    options: {},
   });
 
   TestValidator.equals("length")(application.functions.length)(

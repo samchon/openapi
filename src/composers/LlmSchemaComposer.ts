@@ -50,7 +50,10 @@ export namespace LlmSchemaComposer {
           ? JsonDescriptionUtil.cascade({
               prefix: "#/components/schemas/",
               components: props.components,
-              schema: props.schema,
+              schema: {
+                ...props.schema,
+                description: result.value.description,
+              },
               escape: true,
             })
           : result.value.description,
@@ -59,7 +62,7 @@ export namespace LlmSchemaComposer {
   };
 
   export const schema = (props: {
-    config: ILlmSchema.IConfig;
+    config?: Partial<ILlmSchema.IConfig>;
     components: OpenApi.IComponents;
     $defs: Record<string, ILlmSchema>;
     schema: OpenApi.IJsonSchema;
@@ -140,6 +143,30 @@ export namespace LlmSchemaComposer {
         },
       };
 
+    const visitConstant = (input: OpenApi.IJsonSchema): void => {
+      const insert = (value: any): void => {
+        const matched:
+          | ILlmSchema.IString
+          | ILlmSchema.INumber
+          | ILlmSchema.IBoolean
+          | undefined = union.find(
+          (u) =>
+            (u as (IJsonSchemaAttribute & { type: string }) | undefined)
+              ?.type === typeof value,
+        ) as ILlmSchema.IString | undefined;
+        if (matched !== undefined) {
+          matched.enum ??= [];
+          matched.enum.push(value);
+        } else
+          union.push({
+            type: typeof value as "number",
+            enum: [value],
+          });
+      };
+      if (OpenApiTypeChecker.isConstant(input)) insert(input.const);
+      else if (OpenApiTypeChecker.isOneOf(input))
+        input.oneOf.forEach(visitConstant);
+    };
     const visit = (input: OpenApi.IJsonSchema, accessor: string): void => {
       if (OpenApiTypeChecker.isOneOf(input)) {
         // UNION TYPE
@@ -184,7 +211,8 @@ export namespace LlmSchemaComposer {
           // DISCARD THE REFERENCE TYPE
           const length: number = union.length;
           visit(target, accessor);
-          if (length === union.length - 1 && union[union.length - 1] !== null)
+          visitConstant(target);
+          if (length === union.length - 1)
             union[union.length - 1] = {
               ...union[union.length - 1]!,
               description: JsonDescriptionUtil.cascade({
@@ -257,6 +285,10 @@ export namespace LlmSchemaComposer {
           properties,
           additionalProperties,
           required: input.required ?? [],
+          description:
+            props.config.strict === true
+              ? JsonDescriptionUtil.take(input)
+              : input.description,
         });
       } else if (OpenApiTypeChecker.isArray(input)) {
         // ARRAY TYPE
@@ -278,7 +310,10 @@ export namespace LlmSchemaComposer {
                 ...input,
                 items: items.value,
               })
-            : items.value,
+            : {
+                ...input,
+                items: items.value,
+              },
         );
       } else if (OpenApiTypeChecker.isString(input))
         union.push(
@@ -297,36 +332,12 @@ export namespace LlmSchemaComposer {
         );
       else if (OpenApiTypeChecker.isTuple(input))
         return; // UNREACHABLE
-      else union.push({ ...input });
+      else if (OpenApiTypeChecker.isConstant(input) === false)
+        union.push({ ...input });
     };
 
-    const visitConstant = (input: OpenApi.IJsonSchema): void => {
-      const insert = (value: any): void => {
-        const matched:
-          | ILlmSchema.IString
-          | ILlmSchema.INumber
-          | ILlmSchema.IBoolean
-          | undefined = union.find(
-          (u) =>
-            (u as (IJsonSchemaAttribute & { type: string }) | undefined)
-              ?.type === typeof value,
-        ) as ILlmSchema.IString | undefined;
-        if (matched !== undefined) {
-          matched.enum ??= [];
-          matched.enum.push(value);
-        } else
-          union.push({
-            type: typeof value as "number",
-            enum: [value],
-          });
-      };
-      if (OpenApiTypeChecker.isConstant(input)) insert(input.const);
-      else if (OpenApiTypeChecker.isOneOf(input))
-        input.oneOf.forEach(visitConstant);
-    };
-
-    visit(props.schema, props.accessor ?? "$input.schema");
     visitConstant(props.schema);
+    visit(props.schema, props.accessor ?? "$input.schema");
 
     if (reasons.length > 0)
       return {
@@ -339,6 +350,7 @@ export namespace LlmSchemaComposer {
       };
     else if (union.length === 0)
       return {
+        // unknown type
         success: true,
         value: {
           ...attribute,
@@ -347,18 +359,28 @@ export namespace LlmSchemaComposer {
       };
     else if (union.length === 1)
       return {
+        // single type
         success: true,
         value: {
           ...attribute,
           ...union[0],
-          description: union[0].description ?? attribute.description,
+          description:
+            props.config.strict === true && LlmTypeChecker.isReference(union[0])
+              ? undefined
+              : (union[0].description ?? attribute.description),
         },
       };
     return {
       success: true,
       value: {
         ...attribute,
-        anyOf: union,
+        anyOf: union.map((u) => ({
+          ...u,
+          description:
+            props.config.strict === true && LlmTypeChecker.isReference(u)
+              ? undefined
+              : u.description,
+        })),
         "x-discriminator":
           OpenApiTypeChecker.isOneOf(props.schema) &&
           props.schema.discriminator !== undefined &&
@@ -782,14 +804,14 @@ export namespace LlmSchemaComposer {
             }),
     } satisfies OpenApi.IJsonSchema;
   };
-}
 
-const getConfig = (
-  config?: Partial<ILlmSchema.IConfig> | undefined,
-): ILlmSchema.IConfig => ({
-  reference: config?.reference ?? true,
-  strict: config?.strict ?? false,
-});
+  export const getConfig = (
+    config?: Partial<ILlmSchema.IConfig> | undefined,
+  ): ILlmSchema.IConfig => ({
+    reference: config?.reference ?? true,
+    strict: config?.strict ?? false,
+  });
+}
 
 const validateStrict = (
   schema: OpenApi.IJsonSchema,

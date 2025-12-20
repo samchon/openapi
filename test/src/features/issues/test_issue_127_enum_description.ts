@@ -5,8 +5,8 @@ import typia, { IJsonSchemaCollection } from "typia";
 
 export const test_issue_127_enum_description = (): void => {
   const collection: IJsonSchemaCollection = typia.json.schemas<[ISomething]>();
-  const chatgpt = LlmSchemaComposer.parameters("chatgpt")({
-    config: LlmSchemaComposer.defaultConfig("chatgpt"),
+  const chatgpt = LlmSchemaComposer.parameters({
+    config: LlmSchemaComposer.getConfig(),
     components: collection.components,
     schema: collection.schemas[0] as OpenApi.IJsonSchema.IReference,
   });
@@ -17,8 +17,8 @@ export const test_issue_127_enum_description = (): void => {
       : "",
   )("The description.");
 
-  const gemini = LlmSchemaComposer.parameters("gemini")({
-    config: LlmSchemaComposer.defaultConfig("gemini"),
+  const gemini = LlmSchemaComposer.parameters({
+    config: LlmSchemaComposer.getConfig(),
     components: collection.components,
     schema: collection.schemas[0] as OpenApi.IJsonSchema.IReference,
   });

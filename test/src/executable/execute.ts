@@ -23,16 +23,15 @@ const main = async (): Promise<void> => {
   // convert to emended OpenAPI document,
   // and compose LLM function calling application
   const document: OpenApi.IDocument = OpenApi.convert(swagger);
-  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
-    model: "3.0",
+  const application: IHttpLlmApplication = HttpLlm.application({
     document,
   });
 
   // Let's imagine that LLM has selected a function to call
-  const func: IHttpLlmFunction<"3.0"> | undefined = application.functions.find(
+  const func: IHttpLlmFunction | undefined = application.functions.find(
     (f) => f.path === "/bbs/articles" && f.method === "post",
   );
-  typia.assertGuard<IHttpLlmFunction<"3.0">>(func);
+  typia.assertGuard<IHttpLlmFunction>(func);
 
   // actual execution is by yourself
   const article = await HttpLlm.execute({

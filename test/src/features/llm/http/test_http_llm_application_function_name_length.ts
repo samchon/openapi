@@ -8,8 +8,7 @@ export const test_http_llm_application_function_name_length =
         "https://wrtnlabs.github.io/connectors/swagger/swagger.json",
       ).then((res) => res.json()),
     );
-    const application: IHttpLlmApplication<"chatgpt"> = HttpLlm.application({
-      model: "chatgpt",
+    const application: IHttpLlmApplication = HttpLlm.application({
       document,
     });
 

@@ -15,11 +15,10 @@ export const test_http_llm_function_deprecated = async (): Promise<void> => {
       await fs.promises.readFile(`${TestGlobal.ROOT}/swagger.json`, "utf8"),
     ),
   );
-  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
-    model: "3.0",
+  const application: IHttpLlmApplication = HttpLlm.application({
     document,
   });
-  const func: IHttpLlmFunction<"3.0"> | undefined = application.functions.find(
+  const func: IHttpLlmFunction | undefined = application.functions.find(
     (f) => f.method === "get" && f.path === "/nothing",
   );
   TestValidator.equals("deprecated")(func?.deprecated)(true);

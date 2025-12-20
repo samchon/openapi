@@ -15,10 +15,8 @@ export const test_http_llm_application = async (): Promise<void> => {
       await fs.promises.readFile(`${TestGlobal.ROOT}/swagger.json`, "utf8"),
     ),
   );
-  const application: IHttpLlmApplication<"3.0"> = HttpLlm.application({
-    model: "3.0",
+  const application: IHttpLlmApplication = HttpLlm.application({
     document,
-    options: {},
   });
   for (const func of application.functions) {
     const route: IHttpMigrateRoute = func.route();
