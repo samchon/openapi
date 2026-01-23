@@ -1,6 +1,6 @@
 {
   "name": "@samchon/openapi",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "Universal OpenAPI to LLM function calling schemas. Transform any Swagger/OpenAPI document into type-safe schemas for OpenAI, Claude, Qwen, and more.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
