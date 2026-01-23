@@ -316,7 +316,7 @@ export namespace HttpMigrateRouteComposer {
     query: IHttpMigrateRoute.IQuery | null;
     body: IHttpMigrateRoute.IBody | null;
   }): string => {
-    // write basic description combining with summaary
+    // write basic description combining with summary
     let description: string = props.operation.description ?? "";
     if (!!props.operation.summary?.length) {
       const summary: string = props.operation.summary.endsWith(".")
