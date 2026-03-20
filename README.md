@@ -1,4 +1,16 @@
 # `@samchon/openapi`
+
+> **This repository has been archived and is no longer maintained.**
+>
+> All functionality has been merged into [`typia`](https://github.com/samchon/typia) as built-in namespace modules.
+>
+> - OpenAPI → LLM function calling: [`@typia/utils` HTTP LLM](https://typia.io/docs/llm/http/)
+> - TypeScript class → LLM function calling: [`typia.llm.application()`](https://typia.io/docs/llm/application/)
+> - LLM JSON utilities: [`@typia/utils` LLM JSON](https://typia.io/docs/llm/json/)
+> - MCP integration: [`@typia/mcp`](https://typia.io/docs/utilization/mcp/)
+> - Vercel AI SDK: [`@typia/vercel`](https://typia.io/docs/utilization/vercel/)
+> - LangChain: [`@typia/langchain`](https://typia.io/docs/utilization/langchain/)
+
 ```mermaid
 flowchart TB
 subgraph "OpenAPI Specification"
